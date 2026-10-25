@@ -151,7 +151,7 @@ async function main() {
   await db.setting.createMany({
     data: [
       { key: "app.name", value: "رستا" },
-      { key: "app.version", value: "0.2.0" },
+      { key: "app.version", value: "0.3.0" },
       { key: "org.name", value: "شرکت نمونه پارس" },
       { key: "fiscal.taxRate", value: "9" },
       // درگاه‌های پرداخت (فاز ۳ — مثل Areas/OnlinePayment محصول اصلی)
