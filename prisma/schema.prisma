@@ -753,6 +753,8 @@ model Project {
   // باشگاه مشتریان (prjFOCmpCanSee + prjFOCmpCanInsCnvs/CanNotInsCnvs)
   foCmpCanSee     Boolean  @default(false) // نمایش برای مخاطب در باشگاه
   foCmpCanInsCnvs Boolean  @default(true) // امکان درج مذاکره از باشگاه
+  userDepartmentId String? // واحد سازمانی گیرنده تیکت (prjUserDepartmentId)
+  userDepartment   UserDepartment? @relation(fields: [userDepartmentId], references: [id])
   // زمان‌بندی ToDo (prjToDoTime*)
   toDoTime         DateTime? // زمان پیش‌بینی‌شده انجام
   toDoTimeRegister DateTime? // زمان ثبت پیش‌بینی
@@ -846,7 +848,8 @@ model UserDepartment {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  users User[]
+  users    User[]
+  projects Project[] // تیکت‌های ارجاع‌شده به این واحد سازمانی
 }
 
 // ساعت/روز/IP مجاز ورود — UserLoginAllowedTimes (اعمال در ورود)
