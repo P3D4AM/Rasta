@@ -37,6 +37,8 @@ model User {
   activities     Activity[]
   quotations     Quotation[]
   orders         SalesOrder[]
+  stockMovements StockMovement[] @relation("StockMovementUser")
+  ownedPurchases PurchaseOrder[] @relation("PurchaseOwner")
 }
 
 model Role {
@@ -89,6 +91,7 @@ model Company {
   tasks      Task[]
   quotations Quotation[]
   orders     SalesOrder[]
+  purchaseOrders PurchaseOrder[] @relation("PurchaseSupplier")
 }
 
 model Contact {
@@ -198,6 +201,9 @@ model Product {
 
   quotationItems QuotationItem[]
   orderItems     SalesOrderItem[]
+  stockLevels    StockLevel[]
+  stockMovements StockMovement[]
+  purchaseOrderItems PurchaseOrderItem[]
 }
 
 model Quotation {
@@ -287,6 +293,99 @@ model Payment {
   paidAt    DateTime   @default(now())
   note      String?
   createdAt DateTime   @default(now())
+}
+
+// ─────────────────────────── Warehouse & Inventory (Phase 2) ───────────────────────────
+
+model Warehouse {
+  id        String   @id @default(cuid())
+  name      String
+  code      String?  @unique
+  location  String?
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stockLevels   StockLevel[]
+  movementsFrom StockMovement[] @relation("FromWarehouse")
+  movementsTo   StockMovement[] @relation("ToWarehouse")
+  purchaseOrders PurchaseOrder[]
+}
+
+model StockLevel {
+  id          String    @id @default(cuid())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  quantity    Float     @default(0)
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([productId, warehouseId])
+  @@index([warehouseId])
+}
+
+model StockMovement {
+  id             String     @id @default(cuid())
+  type           String // IN | OUT | TRANSFER | ADJUST
+  productId      String
+  product        Product    @relation(fields: [productId], references: [id])
+  fromWarehouseId String?
+  fromWarehouse  Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+  toWarehouseId  String?
+  toWarehouse    Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
+  quantity       Float // IN/OUT/TRANSFER: positive; ADJUST: signed delta
+  unitCost       Float?
+  refType        String? // MANUAL | PURCHASE_ORDER | SALES_ORDER
+  refId          String?
+  note           String?
+  userId         String?
+  user           User?      @relation("StockMovementUser", fields: [userId], references: [id])
+  movedAt        DateTime   @default(now())
+  createdAt      DateTime   @default(now())
+
+  @@index([productId])
+  @@index([toWarehouseId])
+  @@index([fromWarehouseId])
+  @@index([refType, refId])
+}
+
+model PurchaseOrder {
+  id          String     @id @default(cuid())
+  number      Int        @unique
+  supplierId  String
+  supplier    Company    @relation("PurchaseSupplier", fields: [supplierId], references: [id])
+  warehouseId String?
+  warehouse   Warehouse? @relation(fields: [warehouseId], references: [id])
+  issueDate   DateTime   @default(now())
+  expectedAt  DateTime?
+  receivedAt  DateTime?
+  status      String     @default("DRAFT") // DRAFT | ORDERED | RECEIVED | CANCELED
+  note        String?
+  ownerId     String?
+  owner       User?      @relation("PurchaseOwner", fields: [ownerId], references: [id])
+  subtotal    Float      @default(0)
+  taxTotal    Float      @default(0)
+  total       Float      @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  items PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id          String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?      @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float         @default(1)
+  unitPrice   Float         @default(0)
+  taxRate     Float         @default(0)
+  lineTotal   Float         @default(0)
 }
 
 // ─────────────────────────── System ───────────────────────────

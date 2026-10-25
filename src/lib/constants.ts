@@ -10,6 +10,9 @@ export type ModuleKey =
   | "products"
   | "quotations"
   | "orders"
+  | "warehouses"
+  | "inventory"
+  | "purchases"
   | "tasks"
   | "users"
   | "roles"
@@ -28,6 +31,9 @@ export const MODULES: Record<ModuleKey, { label: string; href: string; icon: str
   products: { label: "محصولات", href: "/products", icon: "Package" },
   quotations: { label: "پیش‌فاکتورها", href: "/quotations", icon: "FileText" },
   orders: { label: "فاکتورها", href: "/orders", icon: "ReceiptText" },
+  warehouses: { label: "انبارها", href: "/warehouses", icon: "Warehouse" },
+  inventory: { label: "موجودی و گردش کالا", href: "/inventory", icon: "Boxes" },
+  purchases: { label: "سفارشات خرید", href: "/purchases", icon: "ShoppingCart" },
   reports: { label: "گزارش‌ها", href: "/reports", icon: "BarChart3" },
   users: { label: "کاربران", href: "/settings/users", icon: "UserCog" },
   roles: { label: "نقش‌ها", href: "/settings/roles", icon: "ShieldCheck" },
@@ -125,3 +131,29 @@ export const PAYMENT_METHOD_LABELS: Record<string, string> = {
 };
 
 export const CURRENCY = "ریال";
+
+// ── Stock Movement (Phase 2) ──
+export const MOVEMENT_TYPES = ["IN", "OUT", "TRANSFER", "ADJUST"] as const;
+export const MOVEMENT_TYPE_LABELS: Record<string, string> = {
+  IN: "رسید ورود",
+  OUT: "حواله خروج",
+  TRANSFER: "انتقال بین انبار",
+  ADJUST: "اصلاح موجودی",
+};
+export const MOVEMENT_REF_LABELS: Record<string, string> = {
+  MANUAL: "دستی",
+  PURCHASE_ORDER: "سفارش خرید",
+  SALES_ORDER: "فاکتور فروش",
+};
+
+// ── Purchase Order (Phase 2) ──
+export const PURCHASE_STATUSES = ["DRAFT", "ORDERED", "RECEIVED", "CANCELED"] as const;
+export const PURCHASE_STATUS_LABELS: Record<string, string> = {
+  DRAFT: "پیش‌نویس",
+  ORDERED: "سفارش داده‌شده",
+  RECEIVED: "تحویل‌شده",
+  CANCELED: "لغوشده",
+};
+
+/** آستانه هشدار رو به اتمام شدن موجودی */
+export const LOW_STOCK_THRESHOLD = 5;

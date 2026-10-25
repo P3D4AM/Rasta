@@ -34,6 +34,14 @@ const STYLES: Record<string, string> = {
   PARTNER: "bg-violet-100 text-violet-800",
   SUPPLIER: "bg-cyan-100 text-cyan-800",
   OTHER: "bg-slate-100 text-slate-600",
+  // purchase orders
+  ORDERED: "bg-indigo-100 text-indigo-800",
+  RECEIVED: "bg-emerald-100 text-emerald-800",
+  // stock movements
+  IN: "bg-emerald-100 text-emerald-800",
+  OUT: "bg-rose-100 text-rose-800",
+  TRANSFER: "bg-violet-100 text-violet-800",
+  ADJUST: "bg-amber-100 text-amber-800",
 };
 
 export function StatusBadge({ value, label }: { value: string; label: string }) {

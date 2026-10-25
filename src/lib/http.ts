@@ -75,9 +75,16 @@ export function parseListQuery(req: Request, defaultPageSize = 20): ListQuery {
   return { page, pageSize, search, take: pageSize, skip: (page - 1) * pageSize };
 }
 
-/** Next document number for Quotation/SalesOrder (SQLite has no autoincrement on non-id). */
-export async function nextDocNumber(model: "quotation" | "salesOrder"): Promise<number> {
-  const last = await (model === "quotation" ? db.quotation : db.salesOrder).findFirst({
+/** Next document number for Quotation/SalesOrder/PurchaseOrder (SQLite has no autoincrement on non-id). */
+export async function nextDocNumber(
+  model: "quotation" | "salesOrder" | "purchaseOrder"
+): Promise<number> {
+  const last = await (model === "quotation"
+    ? db.quotation
+    : model === "salesOrder"
+      ? db.salesOrder
+      : db.purchaseOrder
+  ).findFirst({
     orderBy: { number: "desc" },
     select: { number: true },
   });
