@@ -85,3 +85,26 @@ Countermeasure protocol for ALL future sessions:
 2. `git branch --show-current` before EVERY commit
 3. edit + commit + push in the smallest possible window (one atomic Bash when touching files that differ across branches); leave nothing uncommitted
 4. local main may accumulate UUID auto-snapshot commits — NEVER push local main; remote main stays frozen at baseline until owner-approved release
+
+---
+Task ID: 4
+Agent: main (Z.ai)
+Task: Enforce Git workflow (repo P3D4AM/Rasta, work only on develop) + deliver Phase 2 (انبار و خرید)
+
+Work Log:
+- Verified git state: main & develop in sync with origin; confirmed token in local credential store (.gh_credentials, gitignored); switched to develop as the only working branch per owner directive
+- Tried to set GitHub default branch to develop via API — blocked: fine-grained PAT lacks repo Administration permission (owner can switch manually in Settings → Branches)
+- Phase 2 schema: Warehouse, StockLevel (unique product×warehouse), StockMovement (IN/OUT/TRANSFER/ADJUST + refType/refId), PurchaseOrder(+Item) with supplier/warehouse/owner relations
+- Stock engine src/lib/stock.ts: transactional applyMovementTx (validates availability, Persian 409 errors), reverseMovementsTx (cancel restore), issueStockForOrder (sales issue deducts from default warehouse); src/lib/purchase.ts totals helpers
+- New APIs: /api/warehouses (CRUD + soft-deactivate on history), /api/inventory (levels + summary + low-stock threshold 5), /api/stock-movements (history + manual create), /api/purchases + /api/purchases/[id] (GET/PUT/DELETE/PATCH: setStatus | receive → IN movements + RECEIVED)
+- Orders API integration: issue → OUT movements from default warehouse (409 on shortage with product name & current stock); cancel of issued order → movements reversed & stock restored
+- UI: nav group «انبار و خرید» — /warehouses (CRUD dialog, default star, value per warehouse), /inventory (4 summary cards + levels/movements tabs + movement dialog with 4 types + product stock card), /purchases (items editor with cost-prefill, ORDERED→receive flow, read-only view mode); JalaliDateInput gained disabled prop; StatusBadge new colors (ORDERED/RECEIVED/IN/OUT/TRANSFER/ADJUST)
+- Seed: 2 warehouses, 15 historical movements (opening, PO receipt, sales issues, transfers, adjust), 8 stock levels (PRN left at 2 for low-stock demo), 2 POs (RECEIVED + ORDERED), 2 new supplier companies, RBAC modules warehouses/inventory/purchases (manager full, sales view)
+- Bugs fixed during E2E: (1) warehouseId=ALL sentinel leaked into Prisma where → empty tables, (2) purchases page `total` name collision → build error, (3) ESLint OOM on legacy 160MB JS — project-analysis/** now ignored in eslint config
+- E2E (agent-browser, admin login): inventory shows 8 levels + summary; IN movement 81→86; PO 1002 receive → CRT 86→126 & MON 25→35; order issue 126→124 and cancel 124→126; 5000-unit order blocked with «موجودی کافی نیست…» 409; orders/roles pages intact; lint 0 errors
+- Screenshots: docs/screenshots/rasta-phase2-{inventory,purchases,warehouses}.png
+- All work committed & pushed to develop in 5 logical commits
+
+Stage Summary:
+- Phase 2 (انبار و خرید) delivered, E2E-verified and pushed to develop; branch policy: main = release line (untouched), develop = active
+- Next per roadmap: Phase 3 مالی (خزانه/بانک/درگاه پرداخت) — awaiting owner go-ahead
