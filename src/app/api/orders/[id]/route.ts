@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requirePermission, handle, json, apiError } from "@/lib/http";
 import { PAYMENT_METHODS } from "@/lib/constants";
+import { issueStockForOrder, reverseMovementsTx } from "@/lib/stock";
 
 export async function GET(
   _req: Request,
@@ -95,6 +96,19 @@ export async function PATCH(
       if (order.paidTotal > 0 && status === "CANCELED") {
         return apiError("فاکتور دارای پرداخت قابل لغو نیست.", 409);
       }
+
+      // ── Phase 2: warehouse integration ──
+      // Issuing a sales order reserves/deducts stock (OUT movements from the
+      // default warehouse); canceling an issued order returns goods to stock.
+      if (status === "ISSUED" && order.status !== "ISSUED") {
+        await issueStockForOrder(id, user.id);
+      }
+      if (status === "CANCELED" && order.status === "ISSUED") {
+        await db.$transaction(async (tx) => {
+          await reverseMovementsTx(tx, { refType: "SALES_ORDER", refId: id });
+        });
+      }
+
       const updated = await db.salesOrder.update({ where: { id }, data: { status } });
       return json(updated);
     }
