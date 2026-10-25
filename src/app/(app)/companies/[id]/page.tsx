@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight, Phone, Mail, MapPin, Hash, Trash2,
-  Users, Target, PhoneCall, ClipboardList, FileText, ReceiptText,
+  Users, Target, PhoneCall, ClipboardList, FileText, ReceiptText, FolderOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { StatusBadge } from "@/components/rasta/status-badge";
+import { ProjectsPanel } from "@/components/rasta/projects-panel";
 import { api } from "@/hooks/use-list";
 import { formatMoney, formatDate, formatDateTime } from "@/lib/format";
 import {
@@ -140,14 +141,23 @@ export default function CompanyDetailPage({
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="contacts" dir="rtl">
+      <Tabs defaultValue="projects" dir="rtl">
         <TabsList className="mb-4">
+          <TabsTrigger value="projects"><FolderOpen className="w-4 h-4 me-1" />پروژه‌ها</TabsTrigger>
           <TabsTrigger value="contacts"><Users className="w-4 h-4 me-1" />افراد</TabsTrigger>
           <TabsTrigger value="deals"><Target className="w-4 h-4 me-1" />فرصت‌ها</TabsTrigger>
           <TabsTrigger value="activities"><PhoneCall className="w-4 h-4 me-1" />فعالیت‌ها</TabsTrigger>
           <TabsTrigger value="tasks"><ClipboardList className="w-4 h-4 me-1" />وظایف</TabsTrigger>
           <TabsTrigger value="sales"><ReceiptText className="w-4 h-4 me-1" />اسناد فروش</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="projects">
+          <Card>
+            <CardContent className="p-0">
+              <ProjectsPanel companyId={id} />
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="contacts">
           <Card>

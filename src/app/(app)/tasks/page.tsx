@@ -1,7 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Plus, Trash2, CheckCircle2, AlertTriangle } from "lucide-react";
+import Link from "next/link";
+import { BellRing, Ticket } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +38,16 @@ const emptyForm = {
   priority: "NORMAL", assigneeId: "", companyId: "",
 };
 
+type PrjReminder = {
+  id: string; number: number; title: string; remindDate: string | null;
+  companyName: string; isTicket: boolean; ticketStop: boolean;
+  priorityName: string | null; priorityColor: string | null;
+  lastStatusName: string | null; lastStatusPercent: number;
+};
+
 export default function TasksPage() {
+  const [reminders, setReminders] = useState<PrjReminder[]>([]);
+
   const { toast } = useToast();
   const [page, setPage] = useState(1);
   const [searchText, setSearchText] = useState("");
@@ -47,6 +59,14 @@ export default function TasksPage() {
   const [saving, setSaving] = useState(false);
   const [users, setUsers] = useState<{ id: string; firstName: string; lastName: string }[]>([]);
   const [companies, setCompanies] = useState<{ id: string; name: string }[]>([]);
+
+  // کارتابل یادآور پروژه‌ها — بازسازی _PartialReminderProject خود CRMIdeal
+  useEffect(() => {
+    fetch("/api/projects/reminders")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d?.rows) setReminders(d.rows); })
+      .catch(() => {});
+  }, []);
 
   const url = useMemo(
     () => `/api/tasks?page=${page}&search=${encodeURIComponent(search)}&status=${statusFilter}&scope=${scope}`,
@@ -252,6 +272,34 @@ export default function TasksPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* یادآور پروژه‌ها — کارتابل سوم خود محصول (ReminderProject) */}
+      {reminders.length > 0 && (
+        <Card className="mt-6">
+          <CardContent className="p-0">
+            <div className="flex items-center gap-2 px-4 py-3 border-b">
+              <BellRing className="w-4 h-4 text-rose-500" />
+              <h3 className="text-sm font-bold">یادآور پروژه‌ها ({toPersianDigits(reminders.length)})</h3>
+              <span className="text-[11px] text-muted-foreground">پروژه‌های جاری با تاریخ یادآوری رسیده یا گذشته</span>
+            </div>
+            {reminders.map((r) => (
+              <Link key={r.id} href={`/projects/${r.id}`} className="flex items-center gap-3 px-4 py-2.5 border-b last:border-0 hover:bg-muted/40 text-xs">
+                {r.isTicket && <Ticket className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
+                <span className="font-medium">{r.title}</span>
+                <span className="text-muted-foreground">— {r.companyName}</span>
+                {r.priorityName && (
+                  <span className="px-1.5 py-0.5 rounded-full" style={{ backgroundColor: (r.priorityColor ?? "#999") + "22", color: r.priorityColor ?? "#666" }}>
+                    {r.priorityName}
+                  </span>
+                )}
+                <span className="flex-1" />
+                {r.lastStatusName && <span className="text-muted-foreground">{r.lastStatusName} ({toPersianDigits(r.lastStatusPercent)}٪)</span>}
+                <span className="text-rose-600 font-bold shrink-0">{formatDate(r.remindDate)}</span>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
