@@ -76,6 +76,17 @@
   font-display: swap;
 }
 
+/* Font Awesome 4.4 — فونت آیکون خود CRMIdeal (کپی از Content/fonts محصول) */
+@font-face {
+  font-family: "FontAwesome";
+  src: url("/fonts/fontawesome-webfont.woff2?v=4.4.0") format("woff2"),
+    url("/fonts/fontawesome-webfont.woff?v=4.4.0") format("woff"),
+    url("/fonts/fontawesome-webfont.ttf?v=4.4.0") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -248,41 +259,171 @@
     font-feature-settings: normal;
   }
 
-  /* ====== ریل منوی سرمه‌ای (بازسازی #s-m-t) ====== */
+  /* ====== Font Awesome 4.4 — همان فونت آیکون‌های منوی CRMIdeal ======
+     کپی‌شده از Content/fonts/fontawesome-webfont.* خود محصول */
+  .fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .fa-tachometer:before { content: "\f0e4"; }
+  .fa-inbox:before { content: "\f01c"; }
+  .fa-database:before { content: "\f1c0"; }
+  .fa-comments:before { content: "\f086"; }
+  .fa-shopping-cart:before { content: "\f07a"; }
+  .fa-credit-card:before { content: "\f09d"; }
+  .fa-users:before { content: "\f0c0"; }
+  .fa-user:before { content: "\f007"; }
+  .fa-star:before { content: "\f005"; }
+  .fa-star-o:before { content: "\f006"; }
+  .fa-check-square-o:before { content: "\f046"; }
+  .fa-globe:before { content: "\f0ac"; }
+  .fa-list-alt:before { content: "\f022"; }
+  .fa-edit:before { content: "\f044"; }
+  .fa-pie-chart:before { content: "\f200"; }
+  .fa-bullseye:before { content: "\f140"; }
+  .fa-magic:before { content: "\f0d0"; }
+  .fa-life-ring:before { content: "\f1cd"; }
+  .fa-shield:before { content: "\f132"; }
+  .fa-cogs:before { content: "\f085"; }
+  .fa-circle:before { content: "\f111"; }
+  .fa-caret-down:before { content: "\f0d7"; }
+  .fa-caret-left:before { content: "\f0d9"; }
+  .fa-caret-right:before { content: "\f0da"; }
+  .fa-envelope-o:before { content: "\f003"; }
+  .fa-envelope:before { content: "\f0e0"; }
+  .fa-bell:before { content: "\f0f3"; }
+  .fa-bell-o:before { content: "\f0a2"; }
+  .fa-home:before { content: "\f015"; }
+  .fa-search:before { content: "\f002"; }
+  .fa-refresh:before { content: "\f021"; }
+  .fa-close:before { content: "\f00d"; }
+  .fa-gavel:before { content: "\f0e3"; }
+  .fa-toggle-on:before { content: "\f205"; }
+  .fa-lock:before { content: "\f023"; }
+  .fa-image:before { content: "\f03e"; }
+  .fa-power-off:before { content: "\f011"; }
+  .fa-calendar:before { content: "\f073"; }
+  .fa-book:before { content: "\f02d"; }
+  .fa-wrench:before { content: "\f0ad"; }
+  .fa-question-circle:before { content: "\f059"; }
+  .fa-hand-pointer-o:before { content: "\f25a"; }
+  .fa-money:before { content: "\f0d6"; }
+  .fa-print:before { content: "\f02f"; }
+  .fa-plus:before { content: "\f067"; }
+  .fa-trash-o:before { content: "\f014"; }
+  .fa-pencil:before { content: "\f040"; }
+
+  /* ====== ریل منوی سرمه‌ای — بازسازی میلیمتری #s-m-t (MainStyleNew.css) ====== */
   .crm-rail {
     background-color: #012875;
-    border-radius: 10px 0 0 10px; /* MainStyleNew.css: #s-m-t */
+    border-radius: 10px 0 0 10px;
   }
+  /* .s-b — بدون پس‌زمینه و حاشیه در نسخه جدید */
   .crm-rail-node {
-    border: 1px solid transparent;
-    border-radius: 5px; /* .node */
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
   .crm-rail-node:hover {
-    background-color: rgba(231, 234, 242, 0.08);
+    background-color: transparent;
   }
   .crm-rail-node.Selected {
-    border-color: rgba(231, 234, 242, 0.35);
-    background-color: rgba(231, 234, 242, 0.06);
+    background-color: transparent;
+  }
+  .crm-rail-head {
+    padding: 10px 15px; /* #s-m-t-content .parent-node .s-b-head */
+    text-align: center;
   }
   .crm-rail-item-title {
     color: #e7eaf2 !important;
     font-family: "Ravi", "Vazirmatn", Tahoma, sans-serif;
     font-weight: 300; /* ravi-light */
     font-size: 15px;
+    padding: 0 10px;
   }
   .crm-rail-icon {
     color: #e7eaf2 !important;
+    font-size: 30px; /* .s-m-t .node .s-b-head i — !important در محصول */
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .crm-rail-sub-icon {
+    color: #e7eaf2 !important;
+    font-size: 15px; /* زیرمنوهای دارای فرزند */
+  }
+  .crm-rail-leaf-dot {
+    color: #e7eaf2 !important;
+    font-size: 5px; /* fa-circle برگ‌ها */
+  }
+  .crm-rail-caret {
+    color: #8e8ddb !important; /* fa-caret-* */
+    font-size: 20px;
+  }
+  .crm-rail-child {
+    margin-right: 25px;
+    padding: 5px 10px 5px 5px; /* .parent-node .child-node */
   }
   .crm-rail-divider {
-    border-bottom: 1px solid rgba(202, 202, 202, 0.35); /* .mnu-divider */
+    border-bottom: 1px solid rgba(202, 202, 202, 0.35); /* .mnu-divider روی سرمه‌ای */
     margin: 7px 0;
   }
+  .crm-rail-logo {
+    margin-bottom: 65px; /* #s-m-t .s-m-app-icon */
+  }
+  .crm-rail-ver {
+    color: #fff;
+    direction: ltr;
+    opacity: 0.5;
+    padding: 5px 10px;
+    width: 100%;
+  }
 
-  /* ====== قرص (pill) هدر ====== */
+  /* ====== قرص‌های هدر (bxh-*) ====== */
   .crm-pill {
     border: 1px solid #8598be;
     border-radius: 50px;
+  }
+  .crm-hdr-shadow {
+    box-shadow: 0 3px 7px #ddf0f9; /* Main-Bar */
+  }
+  .crm-hrv {
+    border-left: 1px solid #a3b2cc;
+    height: 80%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* ====== قرص کارتابل (Cartables-RowBox — MainStyleNew.css) ====== */
+  .crm-cartables-strip {
+    background-color: #e7effc;
+    padding: 5px 7px;
+    border-radius: 50px;
+    width: max-content;
+    max-width: 75%;
+    overflow: auto;
+    white-space: nowrap;
+  }
+  .crm-cartables-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .crm-cartable-item {
+    color: #1c9cde !important;
+    border-left: 1px solid #61b7e9;
+    padding-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .crm-cartable-item:last-child {
+    border-left: none;
+  }
+  .crm-cartable-item.is-disabled {
+    opacity: 0.45;
+    cursor: default;
   }
 
   /* ====== کارت صفحه با هدر آبی (SectionBody + Mainheader) ====== */
@@ -292,9 +433,36 @@
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.06);
   }
   .crm-section-header {
-    background-color: #528fcc; /* .SectionBody label.Mainheader */
+    background-color: #528fcc;
     color: #fff;
     border-radius: 8px 8px 0 0;
+  }
+
+  /* ====== جدول به سبک Kendo Bootstrap (تم رسمی CRMIdeal) ====== */
+  .crm-grid th {
+    background: #f5f5f5;
+    border: 1px solid #dfdfdf;
+    color: #333;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 6px 8px;
+    height: 34px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .crm-grid td {
+    border: 1px solid #e9e9e9;
+    font-size: 11.5px;
+    padding: 5px 8px;
+    height: 32px;
+    text-align: center;
+    color: #313131;
+  }
+  .crm-grid tr:nth-child(even) td {
+    background: #f5f5f5;
+  }
+  .crm-grid tbody tr:hover td {
+    background: #eaf3ff;
   }
 
   /* ====== قرص دسترسی سریع داشبورد (qa-item) ====== */

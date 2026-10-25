@@ -51,12 +51,12 @@ export function DataTable<T extends { id: string }>({
 
   return (
     <div>
-      <div className="rounded-xl border bg-card overflow-hidden">
-        <Table>
+      <div className="rounded-lg overflow-hidden border border-[#dfdfdf]">
+        <Table className="crm-grid">
           <TableHeader>
-            <TableRow className="bg-muted/60 hover:bg-muted/60">
+            <TableRow className="hover:bg-transparent">
               {columns.map((c) => (
-                <TableHead key={c.key} className={cn("font-bold text-xs", c.className)}>
+                <TableHead key={c.key} className={cn("crm-grid-th text-center", c.className)}>
                   {c.header}
                 </TableHead>
               ))}
