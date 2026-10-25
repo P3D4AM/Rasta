@@ -125,7 +125,6 @@ export default function UsersPage() {
       setRoles(r.rows); setPositions(p.rows); setDepartments(d.rows); setUserGroups(g.rows);
       setUsersLight(u.rows.filter((x) => x.id !== me?.id));
     }).catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadDetail = useCallback(async (id: string) => {
