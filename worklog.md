@@ -57,3 +57,23 @@ Stage Summary:
 - Rasta v1.0 MVP delivered: modern rewrite of CRMIdeal core — Next.js 16 + TS + Prisma + shadcn/ui, single clean codebase
 - Login: admin/admin123 (also manager/manager123, sales1/sales123, sales2/sales123)
 - Decompiled legacy source preserved at project-analysis/decompiled/ for future module porting (inventory, HR, SMS, AI, accounting links...)
+
+---
+Task ID: 4
+Agent: main (Z.ai)
+Task: Bootstrap GitHub repo P3D4AM/Rasta — push all project files, create develop branch, commit/push all future work
+
+Work Log:
+- Checked remote via API: repo exists, private, empty, default branch main, full admin/push permissions
+- Local .git was polluted: auto-snapshot history contained the 187MB legacy zip + 600MB crm-project site (GitHub 100MB/file limit would reject the push) and tracked .env (AUTH_SECRET)
+- Decision: restart history from one clean orphan baseline commit (1275fdaf); old history preserved LOCALLY as branch archive/scaffold-history (never pushed)
+- Hardened .gitignore: secrets (.gh_token/.gh_credentials/.env), runtime db, env artifacts (.zscripts, Caddyfile, tool-results, examples, mini-services, tests, upload, download, skills), legacy raw binaries (zip + site)
+- Renamed package to "rasta" v0.1.0; added .env.example; moved MVP screenshots to docs/screenshots/; wrote README.md, docs/analysis/01-legacy-crm-analysis.md, docs/roadmap.md
+- Baseline pushed to origin main (9,158 files: MVP app + ~9k decompiled reference files + docs)
+- Created develop from main and pushed; BRANCH POLICY: all future work ONLY on develop until owner approves initial release; main is the release line (merge only with owner approval)
+
+Stage Summary:
+- Repo live: https://github.com/P3D4AM/Rasta (private) — branches: main (baseline 1275fdaf) + develop (active)
+- Auth: PAT at /home/z/my-project/.gh_token; git credential store at /home/z/my-project/.gh_credentials (both gitignored — NEVER commit)
+- FUTURE SESSIONS MUST: `git checkout develop && git pull` before work; commit + push to develop after every task
+- Local-only (not in repo): archive/scaffold-history branch, legacy zip + site under project-analysis/
