@@ -7,7 +7,7 @@ import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { db } from "@/lib/db";
-import type { ActionKey, ModuleKey } from "@/lib/constants";
+import type { FormId } from "@/lib/constants";
 
 const SESSION_COOKIE = "rasta_session";
 const SESSION_TTL_HOURS = 48; // same as legacy 48h, but sliding JWT
@@ -81,7 +81,8 @@ export type SessionUser = {
   isAdmin: boolean;
   roleId: string | null;
   roleName: string | null;
-  permissions: Record<string, Record<string, boolean>>;
+  // فرم → فهرست اکشن‌های مجاز — مثل کش مجوز CRMIdeal (Cache/User/Permissions)
+  permissions: Record<string, string[]>;
 };
 
 /** Load full user + permission map. Returns null when unauthenticated. */
@@ -97,14 +98,9 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   });
   if (!user || !user.isActive) return null;
 
-  const permissions: Record<string, Record<string, boolean>> = {};
+  const permissions: Record<string, string[]> = {};
   for (const p of user.role?.permissions ?? []) {
-    permissions[p.module] = {
-      canView: p.canView,
-      canCreate: p.canCreate,
-      canEdit: p.canEdit,
-      canDelete: p.canDelete,
-    };
+    permissions[p.formId] = [...(permissions[p.formId] ?? []), p.actionId];
   }
 
   return {
@@ -120,19 +116,13 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   };
 }
 
-export function can(
-  user: SessionUser,
-  module: ModuleKey,
-  action: ActionKey
-): boolean {
+/**
+ * آیا کاربر به (فرم، اکشن) دسترسی دارد؟ — معادل UserLogin.IsUserAccess(formName, actionName)
+ * ادمین سیستم همه‌چیز را دارد (مثل کاربر adm در CRMIdeal).
+ */
+export function can(user: SessionUser, form: FormId | string, action: string): boolean {
   if (user.isAdmin) return true;
-  const perm = user.permissions[module];
-  if (!perm) return false;
-  const map: Record<ActionKey, boolean> = {
-    view: perm.canView,
-    create: perm.canCreate,
-    edit: perm.canEdit,
-    delete: perm.canDelete,
-  };
-  return map[action] ?? false;
+  const acts = user.permissions[form];
+  if (!acts) return false;
+  return acts.includes(action);
 }

@@ -30,6 +30,40 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
+  // ── بازسازی ستون‌های Users محصول CRMIdeal (AccountsController/UserDefine) ──
+  nickName       String? // نام مستعار (Nickname)
+  persCode       String? // کد پرسنلی (PersCode)
+  fatherName     String? // نام پدر (FatherName)
+  nationalCode   String? // کد ملی (NationalCode)
+  identityNumber String? // شماره شناسنامه (IdentityNumber)
+  insuranceCode  String? // کد بیمه (InsuranceCode)
+  mobile         String? // موبایل (Mobile)
+  mobileII       String? // موبایل دوم (MobileII)
+  address        String? // نشانی (Address)
+  tel            String? // تلفن (Tel)
+  telDesc        String? // توضیح تلفن (TelDesc)
+  description    String? // توضیحات (Description)
+  userGroupId    String? // گروه کاربری (UserGroupId)
+  userGroup      UserGroup? @relation(fields: [userGroupId], references: [id])
+  positionId     String? // سمت سازمانی (PositionId)
+  position       UserPosition? @relation(fields: [positionId], references: [id])
+  departmentId   String? // دپارتمان (DepartmentInfo)
+  department     UserDepartment? @relation(fields: [departmentId], references: [id])
+  responsibleUserId String? // مسئول مستقیم (ResponsibleUserId)
+  responsible    User?   @relation("ResponsibleUser", fields: [responsibleUserId], references: [id])
+  responsibles   User[]  @relation("ResponsibleUser")
+  alternativeUserIds  String? // کاربران جانشین (AlternativeUserIds — CSV)
+  extensions     String? // شماره‌های داخلی تلفنی (UserExtensions)
+  callPreNumber  String? // پیش‌شمارهٔ تماس خروجی (CallPreNumber)
+  startDate      DateTime? // تاریخ شروع فعالیت حساب (StartDate)
+  expireDate     DateTime? // تاریخ انقضای حساب — چک در ورود (ExpireDate)
+  defCmpPrjTitle String? // عنوان پیش‌فرض پروژه (DefCmpPrjTitle)
+  signature      Bytes? // امضای دیجیتال (UserSignature.Signature)
+  disableInternalMessageAlarmVoice Boolean @default(false) // قطع صدای آلارم پیام داخلی
+  disableReceiveCnvsInfoAllarm     Boolean @default(false) // قطع آلارم گفتگوهای دیگران
+  accessDailyChartAllUsers Boolean @default(false) // دسترسی نمودار روزانه همه کاربران
+  accessSaleChartAllUsers  Boolean @default(false) // دسترسی نمودار فروش همه کاربران
+
   ownedCompanies Company[]         @relation("CompanyOwner")
   ownedDeals     Deal[]            @relation("DealOwner")
   createdTasks   Task[]            @relation("TaskCreator")
@@ -42,27 +76,47 @@ model User {
   fundCustodian  FundTransaction[] @relation("FundCustodian")
   fundVerifier   FundTransaction[] @relation("FundVerifier")
   fundCreator    FundTransaction[] @relation("FundCreator")
+
+  // ناوینی‌های کاربر روی پروژه — مثل ۱۰ navigation کاربر CrmProjects
+  startedProjects     Project[] @relation("ProjectStarter")
+  finishedProjects    Project[] @relation("ProjectFinisher")
+  ticketStopProjects  Project[] @relation("ProjectTicketStopper")
+  readProjects        Project[] @relation("ProjectFirstReader")
+  respondedProjects   Project[] @relation("ProjectFirstResponder")
+  firstDoingProjects  Project[] @relation("ProjectFirstDoer")
+  registeredProjects  Project[] @relation("ProjectRegistrar")
+  lastEditedProjects  Project[] @relation("ProjectLastEditor")
+  cnvsReferUser       ProjectConversation[] @relation("CnvsReferUser")
+  cnvsRegisterUser    ProjectConversation[] @relation("CnvsRegistrar")
+
+  loginAllowedTimes UserLoginAllowedTime[]
+  bankAccounts     BankAccount[] @relation("UserBankAccounts")
 }
 
+// نقش — بازسازی CrmsysRolls (شامل سقف درصد تخفیف به تفکیک نقش)
 model Role {
   id          String           @id @default(cuid())
   name        String           @unique
   description String?
+  // سقف درصد تخفیف پیش‌فاکتور (LimitPreOrderDiscount*)
+  limitPreOrderDiscountActive  Boolean @default(false)
+  limitPreOrderDiscountPercent Float   @default(0)
+  // سقف درصد تخفیف فاکتور فروش (LimitOrderDiscount*)
+  limitOrderDiscountActive     Boolean @default(false)
+  limitOrderDiscountPercent    Float   @default(0)
   users       User[]
   permissions RolePermission[]
 }
 
+// مجوز — بازسازی CrmsysRollPermission: نقش × فرم × اکشن (مثل خود CRMIdeal)
 model RolePermission {
   id        String  @id @default(cuid())
   roleId    String
   role      Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  module    String // companies | contacts | deals | activities | products | quotations | orders | tasks | users | roles | reports
-  canView   Boolean @default(false)
-  canCreate Boolean @default(false)
-  canEdit   Boolean @default(false)
-  canDelete Boolean @default(false)
+  formId    String // نام فرم مثل خود CRMIdeal: frmDefineUsers, frmPreOrder, frmDefineProjects...
+  actionId  String // اکشن ریز: actView, actInsert, actEdit, actDelete, actCanSetArchive...
 
-  @@unique([roleId, module])
+  @@unique([roleId, formId, actionId])
 }
 
 // ─────────────────────────── CRM Core ───────────────────────────
@@ -90,6 +144,7 @@ model Company {
 
   contacts       Contact[]
   deals          Deal[]
+  projects       Project[]
   activities     Activity[]
   tasks          Task[]
   quotations     Quotation[]
@@ -497,10 +552,317 @@ model BankAccount {
   accountOwner  String // صاحب حساب (BankingAccountOwner)
   isDefault     Boolean         @default(false)
   desc          String?
+  // حساب بانکی کاربر — بازسازی UserBankingAccounts (AccountsController.UserBankingAccounts)
+  userId        String?
+  user          User?           @relation("UserBankAccounts", fields: [userId], references: [id])
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
   @@unique([accountNumber])
+}
+
+// ─────────────────────────── ماژول پروژه‌ها (فاز ۴) ───────────────────────────
+// بازسازی faithful از CRMIdeal v3.1.18.187:
+//   CrmProjects → Project، CrmConversationStatus(Group) → CnvsStatus(Group)،
+//   CrmProjectTitle(Group)/Groups/Grade/Priority/Category → همین‌جا،
+//   ProjectInformationTree (درختچه اطلاعات) → ProjectFieldTitle/ProjectInformation
+// پروژه = پرونده/تیکت متصل به مخاطب؛ درصد پیشرفت = ProgressPercent وضعیتِ آخرین مذاکره.
+// نکته: گانت/زمان‌بند/وظیفه/عضو پروژه در خود CRMIdeal وجود ندارد (مطالعه سورس) — ساخته نمی‌شود.
+
+// سرفصل پروژه — CrmProjectTitleGroups (شامل متن توافق‌نامه/SLA و سقف تیکت هم‌جریان)
+model ProjectTitleGroup {
+  id           String  @id @default(cuid())
+  name         String // سرفصل (ProjectTitleGroup)
+  description  String? // توضیحات — در CRMIdeal با Kendo Editor + تصویر
+  color         String?
+  agreementActive Boolean @default(false) // نمایش توافق‌نامه (ProjectTitleGroupAgreementActive)
+  agreementDesc   String? // متن توافق‌نامه/SLA (ProjectTitleGroupAgreementDesc)
+  subjectDefaultContext String? // متن پیش‌فرض موضوع تیکت
+  ticketAllowInCurrentCount Int? // سقف تیکت‌های هم‌زمان مجاز سرفصل
+  orderView    Int     @default(0) // ترتیب نمایش
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  titles   ProjectTitle[]
+  projects Project[]
+}
+
+// عنوان پیش‌فرض پروژه — CrmProjectTitles (قالب پیش‌فرض که فیلدهای فرم را پر می‌کند)
+model ProjectTitle {
+  id              String  @id @default(cuid())
+  title           String // عنوان (ProjectTitle)
+  titleGroupId    String?
+  titleGroup      ProjectTitleGroup? @relation(fields: [titleGroupId], references: [id])
+  statusGroupId   String? // مدل پیشرفت پیش‌فرض (ProjectTitleStatusGroupId)
+  gradeId         String? // مقطع پیش‌فرض (ProjectTitleGradeId)
+  priorityId      String? // اولویت پیش‌فرض (ProjectTitlePriorityId)
+  description     String?
+  activeNumRWithTitle Boolean @default(false) // شماره‌گذاری به تفکیک عنوان (ActivePrjNumRWithTitle)
+  postFix         String? // پسوند پیش‌فرض (PrjPostFix)
+  remindDay       Int? // روز یادآوری از امروز (PrjRemindDay)
+  foCmpCanSee     Boolean @default(false) // نمایش در باشگاه (PrjFOCmpCanSee)
+  isTicket        Boolean @default(false) // پروژه از نوع تیکت (PrjIsTicket)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  grade    ProjectGrade?   @relation(fields: [gradeId], references: [id])
+  priority ProjectPriority? @relation(fields: [priorityId], references: [id])
+  statusGroup CnvsStatusGroup? @relation(fields: [statusGroupId], references: [id])
+}
+
+// گروه پروژه — CrmProjectGroups
+model ProjectGroup {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  orderView   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  projects Project[]
+}
+
+// مقطع پروژه — CrmProjectGrade
+model ProjectGrade {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  orderView   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  projects  Project[]
+  titles    ProjectTitle[]
+}
+
+// اولویت پروژه — CrmProjectPriority (با رنگ)
+model ProjectPriority {
+  id          String    @id @default(cuid())
+  name        String
+  color       String? // رنگ اولویت در UI (Priority.Color)
+  description String?
+  orderView   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  projects Project[]
+  titles   ProjectTitle[]
+}
+
+// دسته‌بندی درختی پروژه — CrmProjectCategory (هر گره مدل پیشرفت پیش‌فرض خودش را دارد)
+model ProjectCategory {
+  id            String  @id @default(cuid())
+  name          String
+  parentId      String?
+  parent        ProjectCategory? @relation("ProjectCategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children      ProjectCategory[] @relation("ProjectCategoryTree")
+  statusGroupId String? // مدل پیشرفت پیش‌فرض دسته (CnvsStatusGroupId)
+  statusGroup  CnvsStatusGroup? @relation(fields: [statusGroupId], references: [id])
+  orderView     Int     @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  projects Project[]
+}
+
+// مدل پیشرفت — CrmConversationStatusGroups
+model CnvsStatusGroup {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  orderView   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  statuses   CnvsStatus[]
+  projects   Project[]
+  categories ProjectCategory[]
+  titles     ProjectTitle[]
+}
+
+// وضعیت مذاکره — CrmConversationStatus + نتیجه‌های وضعیت (CrmConversationStatusResult)
+model CnvsStatus {
+  id                String  @id @default(cuid())
+  groupId           String
+  group             CnvsStatusGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  name              String
+  progressPercent   Int     @default(0) // درصد پیشرفت وضعیت (ProgressPercent)
+  orderView         Int     @default(0)
+  // نتیجه‌های وضعیت — مثل CRMIdeal:
+  prjFinished       Boolean @default(false) // نتیجه، پروژه را آرشیو می‌کند (PrjFinished)
+  addPrjActive      Boolean @default(false) // نتیجه، پروژه جدید می‌سازد (AddPrjActive)
+  issuePreOrderActive Boolean @default(false) // نتیجه، صدور پیش‌فاکتور (IssuePordActive)
+  issueOrderActive  Boolean @default(false) // نتیجه، صدور فاکتور فروش (IssueOrdActive)
+  noCnvsDup         Boolean @default(false) // مذاکره تکراری مجاز نیست (NoCnvsDup)
+  isDefault         Boolean @default(false) // وضعیت پیش‌فرض درج
+  isActive           Boolean @default(true)
+  color             String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  conversations ProjectConversation[]
+}
+
+// پروژه — بازسازی CrmProjects (پرونده/تیکت متصل به مخاطب)
+model Project {
+  id               String   @id @default(cuid())
+  number           Int      @unique // شماره‌گذاری اتومات (prjNumR — ReservedNumber sysPart=12)
+  referenceNumber  String? // شماره عطف (prjNumRef — فرمول در SP خود محصول است؛ در رستا دستی)
+  postFix          String? // پسوند عنوان (prjPostFix) — یکتا به تفکیک مخاطب
+  inquiryNumber    String? // شماره استعلام (prjInquiryNum)
+  title            String // عنوان (prjTitle) — اجباری
+  subject          String? // موضوع (prjSubject)
+  description      String? // توضیح (prjDesc)
+  descriptionAdditional String? // توضیح تکمیلی (prjDescI)
+  titleGroupId     String?
+  titleGroup       ProjectTitleGroup? @relation(fields: [titleGroupId], references: [id])
+  groupId          String?
+  group            ProjectGroup?   @relation(fields: [groupId], references: [id])
+  gradeId          String?
+  grade            ProjectGrade?   @relation(fields: [gradeId], references: [id])
+  priorityId       String?
+  priority         ProjectPriority? @relation(fields: [priorityId], references: [id])
+  categoryId       String?
+  category         ProjectCategory? @relation(fields: [categoryId], references: [id])
+  statusGroupId    String // مدل پیشرفت (prjcnvsStatusGroupId) — اجباری مثل CRMIdeal
+  statusGroup      CnvsStatusGroup @relation(fields: [statusGroupId], references: [id])
+  companyId        String // مخاطب (prjCompanyId) — اجباری
+  company          Company @relation(fields: [companyId], references: [id])
+  starterUserId    String? // آغازگر (prjStarterUserId)
+  starter          User?   @relation("ProjectStarter", fields: [starterUserId], references: [id])
+  startDate        DateTime? // تاریخ شروع (prjStartDate)
+  startDay         String? // روز شروع (prjStartDay)
+  startTime        String? // ساعت شروع (prjStartTime — HH:mm:ss)
+  // آرشیو (prjIsFinished + فیلدهای prjFinished*)
+  isFinished       Boolean  @default(false)
+  finishedDate     DateTime? // تاریخ آرشیو
+  finishedDay      String?
+  finishedTime    String?
+  finishedUserId   String? // آرشیوکننده (prjFinishedUserId)
+  finishedUser     User?   @relation("ProjectFinisher", fields: [finishedUserId], references: [id])
+  finishedDurationSec Int? // مدت تا آرشیو به ثانیه (prjFinishedDuration)
+  remindDate       DateTime? // تاریخ یادآوری/سررسید (prjRemindDate)
+  orderView        Int? // ترتیب نمایش (prjOrderView)
+  // تیکت (prjIsTicket + prjTicketStop*)
+  isTicket         Boolean  @default(false)
+  ticketStop       Boolean  @default(false) // توقف تیکت (prjTicketStop)
+  ticketStopUserId String?
+  ticketStopUser   User?   @relation("ProjectTicketStopper", fields: [ticketStopUserId], references: [id])
+  ticketStopDate   DateTime?
+  // باشگاه مشتریان (prjFOCmpCanSee + prjFOCmpCanInsCnvs/CanNotInsCnvs)
+  foCmpCanSee     Boolean  @default(false) // نمایش برای مخاطب در باشگاه
+  foCmpCanInsCnvs Boolean  @default(true) // امکان درج مذاکره از باشگاه
+  // زمان‌بندی ToDo (prjToDoTime*)
+  toDoTime         DateTime? // زمان پیش‌بینی‌شده انجام
+  toDoTimeRegister DateTime? // زمان ثبت پیش‌بینی
+  toDoTimeDone     DateTime? // زمان تحقق
+  toDoTimeSec      Int? // مدت پیش‌بینی (ثانیه)
+  // SLA تیکت (prjRead*/prjResponse*/prjFirstDoing*)
+  readDate         DateTime? // اولین مطالعه
+  readUserId       String?
+  readUser         User?   @relation("ProjectFirstReader", fields: [readUserId], references: [id])
+  readDurationSec  Int?
+  responseDate     DateTime? // اولین پاسخ
+  responseUserId   String?
+  responseUser     User?   @relation("ProjectFirstResponder", fields: [responseUserId], references: [id])
+  responseDurationSec Int?
+  firstDoingDate   DateTime? // اولین اقدام
+  firstDoingUserId String?
+  firstDoingUser   User?   @relation("ProjectFirstDoer", fields: [firstDoingUserId], references: [id])
+  firstDoingDurationSec Int?
+  registeredById   String? // ثبت‌کننده اولیه (prjFirstRegisterUserId)
+  registeredBy     User?   @relation("ProjectRegistrar", fields: [registeredById], references: [id])
+  lastEditedById   String? // آخرین ویرایشگر (UserId1)
+  lastEditedBy     User?   @relation("ProjectLastEditor", fields: [lastEditedById], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  conversations ProjectConversation[]
+
+  @@index([companyId, isFinished])
+  @@index([remindDate])
+}
+
+// مذاکره پروژه — بازسازی CrmConversation (هستهٔ پیشرفت: درصد پروژه از آخرین مذاکره)
+model ProjectConversation {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  companyId     String // مخاطب برای پیمایش سریع
+  statusId      String
+  status        CnvsStatus @relation(fields: [statusId], references: [id])
+  referUserId   String? // کاربر ارجاع (cnvsReferUserId)
+  referUser     User?    @relation("CnvsReferUser", fields: [referUserId], references: [id])
+  cnvsDate      DateTime @default(now()) // تاریخ مذاکره
+  cnvsDay       String?
+  cnvsTime      String?
+  description   String // متن مذاکره
+  doingTimeSec  Int? // مدت انجام (ثانیه)
+  registeredById String
+  registeredBy  User     @relation("CnvsRegistrar", fields: [registeredById], references: [id])
+  createdAt     DateTime @default(now())
+
+  @@index([projectId, cnvsDate])
+}
+
+// ─────────────────────── ساختار سازمانی کاربران (Accounts) ───────────────────────
+
+// سمت سازمانی — UserPositions (درخت + انتقال گروهی کاربران در CRMIdeal)
+model UserPosition {
+  id        String   @id @default(cuid())
+  name      String // نام سمت (PositionName)
+  code      String? // کد سمت (PositionCode)
+  manager   String? // مدیر سمت (PositionManager)
+  tel       String?
+  email     String?
+  address   String?
+  orderView Int      @default(0)
+  parentId  String?
+  parent    UserPosition? @relation("PositionTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children  UserPosition[] @relation("PositionTree")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+// گروه کاربری — UserGroups (فقط گروه‌بندی نمایشی — در منطق مجوز استفاده نمی‌شود، مثل CRMIdeal)
+model UserGroup {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users User[]
+}
+
+// دپارتمان — UserDepartments
+model UserDepartment {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users User[]
+}
+
+// ساعت/روز/IP مجاز ورود — UserLoginAllowedTimes (اعمال در ورود)
+model UserLoginAllowedTime {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayOfWeek Int? // ۰=شنبه … ۶=جمعه — null = هر روز
+  fromDate  DateTime? // بازه تاریخ مجاز
+  toDate    DateTime?
+  fromTime  String // HH:mm
+  toTime    String // HH:mm
+  ipAddress String? // اگر خالی = هر IP
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 // پرداخت آنلاین — بازسازی Areas/OnlinePayment (ملت/پارسیان/زرین‌پال)

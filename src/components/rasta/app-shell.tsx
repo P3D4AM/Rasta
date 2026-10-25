@@ -44,7 +44,7 @@ import {
   User,
 } from "lucide-react";
 import type { SessionUser } from "@/lib/auth";
-import { MODULES, type ModuleKey } from "@/lib/constants";
+import { MODULES, MODULE_TO_FORM, type ModuleKey } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /* ─────────── درخت منو — مطابق کلیدهای mu و mnu در CRMIdeal (Menus.resx + کلاس‌های s-b) ───────────
@@ -102,7 +102,7 @@ const RAIL_MENU: RailRoot[] = [
     children: [
       { key: "muCompany", title: "مشتریان (طرف حساب ها)", href: "/companies", module: "companies" },
       { key: "muPersons", title: "افراد", href: "/contacts", module: "contacts" },
-      { key: "muProject", title: "پروژه ها", href: "/deals", module: "deals" },
+      { key: "muProject", title: "پروژه ها", href: "/projects", module: "companies" },
       { key: "muFile", title: "پرونده ها", soon: true },
       { key: "muArchiveProject", title: "آرشیو گروهی پروژه ها", soon: true },
     ],
@@ -264,7 +264,8 @@ const RAIL_MENU: RailRoot[] = [
     title: "اطلاعات پایه - تنظیمات",
     icon: "fa fa-cogs",
     children: [
-      { key: "muBaseInfo", title: "اطلاعات پایه", soon: true },
+      { key: "muProject", title: "اطلاعات پایه پروژه ها", href: "/settings/project-defs", module: "settings" },
+      { key: "muUsersBaseInfo", title: "اطلاعات پایه کاربران", href: "/settings/user-org", module: "settings" },
       { key: "muSettings", title: "تنظیمات", href: "/settings", module: "settings" },
       { key: "muSpecificSettings", title: "تنظیمات اختصاصی", href: "/settings/payments", module: "payments" },
     ],
@@ -303,12 +304,14 @@ function useCartables(pathname: string): CartableItem[] {
   );
 }
 
-/* دسترسی‌پذیری ماژول بر اساس نقش کاربر (مثل UserLogin.IsUserAccess) */
+/* دسترسی‌پذیری ماژول بر اساس نقش کاربر (مثل UserLogin.IsUserAccess — فرم×اکشن) */
 function useModuleAccess(user: SessionUser) {
   return useMemo(() => {
     const can = (m?: ModuleKey) => {
       if (!m) return true;
-      return user.isAdmin || user.permissions[m]?.canView !== false;
+      if (user.isAdmin) return true;
+      const form = MODULE_TO_FORM[m];
+      return (user.permissions[form] ?? []).includes("actView");
     };
     return can;
   }, [user]);
@@ -503,7 +506,14 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
                     </div>
                     <MenuRow icon={CalendarDays} label="حاضری امروز" />
                     <MenuRow icon={FileChartColumnIncreasing} label="یادداشت روزانه" />
-                    <MenuRow icon={KeyRound} label="تغییر رمز عبور" />
+                    <Link
+                      href="/settings/password"
+                      onClick={() => setProfileOpen(false)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-[13px] text-[#1f2733] hover:bg-[#f7f9fc] transition-colors"
+                    >
+                      <KeyRound className="w-4 h-4 text-[#528fcc]" />
+                      تغییر رمز عبور
+                    </Link>
                     <MenuRow icon={ImageIcon} label="تغییر تصویر کاربر" />
                     <MenuRow icon={RefreshCcw} label="به‌روزرسانی حافظه" />
                     <button

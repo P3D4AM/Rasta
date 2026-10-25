@@ -14,48 +14,107 @@ function hashPassword(password: string): string {
   return `${salt}:${hash}`;
 }
 
-const MODULES = [
-  "dashboard", "companies", "contacts", "deals", "activities", "tasks",
-  "products", "quotations", "orders", "warehouses", "inventory", "purchases",
-  "reports", "users", "roles",
-  "fund", "banking", "payments", "settings",
+const now = new Date();
+const daysAgo = (n: number) => new Date(now.getTime() - n * 86400000);
+const daysAhead = (n: number) => new Date(now.getTime() + n * 86400000);
+const at = (d: number, hour: number, minute = 0) => {
+  const dt = new Date(now.getTime() - d * 86400000);
+  dt.setHours(hour, minute, 0, 0);
+  return dt;
+};
+
+// ── رجیستری فرم×اکشن — آینه FORMS در src/lib/constants.ts (بازسازی CrmsysRollPermission) ──
+const FORM_ACTIONS: [string, string[]][] = [
+  ["frmHomePage", ["actView"]],
+  ["frmCompanyI", ["actView", "actInsert", "actEdit", "actDelete", "actprjInsert"]],
+  ["frmCompanyPersons", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmDefineProjects", ["actPost", "actCanSetArchive", "actCanSetPrjIsTicket", "actCanChangePrjToDoTime"]],
+  ["frmProjectPreview", ["actView", "actDelete", "actDeleteCmpProjectWithDep", "actDeleteAllCmpProjectsWithDep"]],
+  ["frmConversations", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmDeals", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmTasks", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmActivities", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmPreOrder", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmOrder", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmBuyOrder", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmProduct", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmWareHouse", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmStock", ["actView", "actInsert"]],
+  ["frmFund", ["actView", "actInsert", "actEdit", "actDelete", "actVerify"]],
+  ["frmBanking", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmOnlinePayment", ["actView", "actInsert"]],
+  ["frmReports", ["actView"]],
+  ["frmDefineUsers", ["actView", "actInsert", "actEdit", "actDelete", "actEditMoreInfo", "actAssignRoll", "actUploadSignature", "actManageBankingAccounts", "actLoginAllowedTimes", "actShowDetailsUserCount"]],
+  ["frmUserRoll", ["actView", "actInsert", "actEdit", "actDelete"]],
+  ["frmRollPermission", ["actView"]],
+  ["frmSetting", ["actView", "actEdit"]],
+  ["frmMain", ["actDefineProjectTitle", "actDefineProjectTitleGroup", "actDefinePrjGroup", "actDefinePrjGrade", "actDefinePrjPriority", "actDefinePrjCategory", "actDefinecnvsStatusGroups", "actDefinecnvsStatus", "actDefineUserPositions", "actDefineUserGroups", "actDefineDepartments"]],
 ];
 
-function fullPerms() {
-  return MODULES.map((m) => ({
-    module: m,
-    canView: true, canCreate: true, canEdit: true, canDelete: true,
-  }));
-}
+const buildPerms = (sets: [string, string[]][]) =>
+  sets.flatMap(([formId, actions]) => actions.map((actionId) => ({ formId, actionId })));
 
-function salesPerms() {
-  return [
-    { module: "dashboard", canView: true, canCreate: false, canEdit: false, canDelete: false },
-    { module: "companies", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "contacts", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "deals", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "activities", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "tasks", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "products", canView: true, canCreate: false, canEdit: false, canDelete: false },
-    { module: "quotations", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "orders", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "inventory", canView: true, canCreate: false, canEdit: false, canDelete: false },
-    { module: "fund", canView: true, canCreate: true, canEdit: false, canDelete: false },
-  ];
-}
+const dedupePerms = (perms: { formId: string; actionId: string }[]) => {
+  const seen = new Map<string, { formId: string; actionId: string }>();
+  for (const p of perms) seen.set(`${p.formId}:${p.actionId}`, p);
+  return [...seen.values()];
+};
 
-function purchasePerms() {
-  return [
-    { module: "warehouses", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "inventory", canView: true, canCreate: true, canEdit: true, canDelete: false },
-    { module: "purchases", canView: true, canCreate: true, canEdit: true, canDelete: true },
-  ];
-}
+const fullPerms = () => buildPerms(FORM_ACTIONS);
+
+const salesPerms = () =>
+  buildPerms([
+    ["frmHomePage", ["actView"]],
+    ["frmCompanyI", ["actView", "actInsert", "actEdit", "actprjInsert"]],
+    ["frmCompanyPersons", ["actView", "actInsert", "actEdit"]],
+    ["frmDefineProjects", ["actPost"]],
+    ["frmProjectPreview", ["actView"]],
+    ["frmConversations", ["actView", "actInsert"]],
+    ["frmDeals", ["actView", "actInsert", "actEdit"]],
+    ["frmActivities", ["actView", "actInsert", "actEdit"]],
+    ["frmTasks", ["actView", "actInsert", "actEdit"]],
+    ["frmPreOrder", ["actView", "actInsert", "actEdit"]],
+    ["frmOrder", ["actView", "actInsert", "actEdit"]],
+    ["frmProduct", ["actView"]],
+    ["frmStock", ["actView"]],
+    ["frmReports", ["actView"]],
+  ]);
+
+const managerPerms = () =>
+  dedupePerms([
+    ...salesPerms(),
+    ...buildPerms([
+      ["frmCompanyI", ["actDelete"]],
+      ["frmCompanyPersons", ["actDelete"]],
+      ["frmDefineProjects", ["actCanSetArchive", "actCanSetPrjIsTicket", "actCanChangePrjToDoTime"]],
+      ["frmConversations", ["actEdit", "actDelete"]],
+      ["frmPreOrder", ["actDelete"]],
+      ["frmOrder", ["actDelete"]],
+      ["frmWareHouse", ["actView", "actInsert", "actEdit", "actDelete"]],
+      ["frmStock", ["actInsert"]],
+      ["frmBuyOrder", ["actView", "actInsert", "actEdit", "actDelete"]],
+      ["frmFund", ["actView", "actInsert", "actEdit", "actDelete", "actVerify"]],
+      ["frmBanking", ["actView"]],
+      ["frmOnlinePayment", ["actView"]],
+      ["frmDeals", ["actDelete"]],
+    ]),
+  ]);
 
 async function main() {
   console.log("🌱 Seeding Rasta CRM database…");
 
   // ── wipe (children first) ──
+  await db.projectConversation.deleteMany();
+  await db.project.deleteMany();
+  await db.cnvsStatus.deleteMany();
+  await db.cnvsStatusGroup.deleteMany();
+  await db.projectCategory.deleteMany();
+  await db.projectPriority.deleteMany();
+  await db.projectGrade.deleteMany();
+  await db.projectGroup.deleteMany();
+  await db.projectTitle.deleteMany();
+  await db.projectTitleGroup.deleteMany();
+  await db.userLoginAllowedTime.deleteMany();
   await db.stockMovement.deleteMany();
   await db.stockLevel.deleteMany();
   await db.purchaseOrderItem.deleteMany();
@@ -83,6 +142,9 @@ async function main() {
   await db.rolePermission.deleteMany();
   await db.role.deleteMany();
   await db.user.deleteMany();
+  await db.userPosition.deleteMany();
+  await db.userGroup.deleteMany();
+  await db.userDepartment.deleteMany();
   await db.setting.deleteMany();
 
   // ── settings ──
@@ -104,7 +166,7 @@ async function main() {
     ],
   });
 
-  // ── roles ──
+  // ── roles (بازسازی CrmsysRolls + CrmsysRollPermission) ──
   const adminRole = await db.role.create({
     data: {
       name: "مدیر سیستم",
@@ -115,33 +177,38 @@ async function main() {
   const salesManagerRole = await db.role.create({
     data: {
       name: "مدیر فروش",
-      description: "مدیریت فروش و مشتریان",
-      permissions: {
-        create: Object.values(
-          [
-            ...salesPerms(),
-            ...purchasePerms(),
-            { module: "reports", canView: true, canCreate: false, canEdit: false, canDelete: false },
-          ].reduce<Record<string, { module: string; canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean }>>(
-            (acc, p) => {
-              acc[p.module] = p; // later entries override earlier
-              return acc;
-            },
-            {}
-          )
-        ),
-      },
+      description: "مدیریت فروش، انبار و خزانه",
+      permissions: { create: managerPerms() },
     },
   });
   const salesRole = await db.role.create({
     data: {
       name: "کارشناس فروش",
       description: "پیگیری مشتریان و ثبت فروش",
+      // سقف درصد تخفیف به تفکیک نقش — مثل CrmsysRolls.Limit*Discount*
+      limitPreOrderDiscountActive: true,
+      limitPreOrderDiscountPercent: 15,
+      limitOrderDiscountActive: true,
+      limitOrderDiscountPercent: 15,
       permissions: { create: salesPerms() },
     },
   });
 
-  // ── users ──
+  // ── ساختار سازمانی کاربران (UserPositions درخت / UserGroups / UserDepartments) ──
+  const posCeo = await db.userPosition.create({ data: { name: "مدیرعامل", code: "CEO", orderView: 1 } });
+  const posSalesMgr = await db.userPosition.create({ data: { name: "مدیر فروش", code: "SM", parentId: posCeo.id, orderView: 1 } });
+  const posSalesExp = await db.userPosition.create({ data: { name: "کارشناس فروش", code: "SE", parentId: posSalesMgr.id, orderView: 1 } });
+  const posItMgr = await db.userPosition.create({ data: { name: "مدیر فناوری اطلاعات", code: "ITM", parentId: posCeo.id, orderView: 2 } });
+  const posTech = await db.userPosition.create({ data: { name: "کارشناس فنی", code: "TE", parentId: posItMgr.id, orderView: 1 } });
+
+  const grpSales = await db.userGroup.create({ data: { name: "گروه فروش", description: "کارشناسان فروش داخلی" } });
+  const grpTech = await db.userGroup.create({ data: { name: "گروه فنی", description: "پشتیبانی فنی و شبکه" } });
+
+  const depSales = await db.userDepartment.create({ data: { name: "فروش و بازاریابی", description: "پیگیری مشتریان و قراردادها" } });
+  const depTech = await db.userDepartment.create({ data: { name: "فنی و پشتیبانی", description: "پشتیبانی فنی و اجرای پروژه‌ها" } });
+  const depFinance = await db.userDepartment.create({ data: { name: "مالی و اداری" } });
+
+  // ── users (ستون‌های Users خود CRMIdeal: کد پرسنلی/سمت/دپارتمان/مسئول/...) ──
   const admin = await db.user.create({
     data: {
       username: "admin",
@@ -151,6 +218,13 @@ async function main() {
       email: "admin@rasta.local",
       isAdmin: true,
       roleId: adminRole.id,
+      persCode: "1001",
+      positionId: posCeo.id,
+      departmentId: depFinance.id,
+      nationalCode: "0011112222",
+      mobile: "09121000000",
+      extensions: "101",
+      startDate: daysAgo(400),
     },
   });
   const manager = await db.user.create({
@@ -160,8 +234,20 @@ async function main() {
       firstName: "مریم",
       lastName: "محمدی",
       email: "manager@rasta.local",
-      isAdmin: true,
       roleId: salesManagerRole.id,
+      persCode: "1002",
+      positionId: posSalesMgr.id,
+      departmentId: depSales.id,
+      userGroupId: grpSales.id,
+      responsibleUserId: admin.id,
+      nationalCode: "0022223333",
+      mobile: "09121110000",
+      tel: "021-88112233",
+      telDesc: "داخلی ۲۰۱",
+      extensions: "201",
+      callPreNumber: "9",
+      startDate: daysAgo(320),
+      description: "مسئول تیم فروش داخلی",
     },
   });
   const sales1 = await db.user.create({
@@ -172,6 +258,19 @@ async function main() {
       lastName: "رضایی",
       email: "sales1@rasta.local",
       roleId: salesRole.id,
+      persCode: "1003",
+      positionId: posSalesExp.id,
+      departmentId: depSales.id,
+      userGroupId: grpSales.id,
+      responsibleUserId: manager.id,
+      fatherName: "حسن",
+      nationalCode: "0033334444",
+      identityNumber: "0123456789",
+      mobile: "09121220000",
+      mobileII: "09351220000",
+      extensions: "203",
+      startDate: daysAgo(210),
+      defCmpPrjTitle: "خرید لپ‌تاپ سازمانی",
     },
   });
   const sales2 = await db.user.create({
@@ -182,6 +281,16 @@ async function main() {
       lastName: "کریمی",
       email: "sales2@rasta.local",
       roleId: salesRole.id,
+      persCode: "1004",
+      positionId: posTech.id,
+      departmentId: depTech.id,
+      userGroupId: grpTech.id,
+      responsibleUserId: manager.id,
+      fatherName: "محمد",
+      nationalCode: "0044445555",
+      mobile: "09121330000",
+      extensions: "204",
+      startDate: daysAgo(150),
     },
   });
 
@@ -233,10 +342,6 @@ async function main() {
   const contacts = await Promise.all(contactsData.map((c) => db.contact.create({ data: c })));
 
   // ── deals ──
-  const now = new Date();
-  const daysAgo = (n: number) => new Date(now.getTime() - n * 86400000);
-  const daysAhead = (n: number) => new Date(now.getTime() + n * 86400000);
-
   const dealsData = [
     { title: "تأمین زیرساخت شبکه دفتر مرکزی", companyId: companies[0].id, contactId: contacts[0].id, stage: "PROPOSAL", amount: 1850000000, probability: 70, priority: "HIGH", ownerId: sales1.id, expectedCloseAt: daysAhead(12) },
     { title: "قرارداد پشتیبانی سالانه ۱۴۰۵", companyId: companies[0].id, stage: "NEGOTIATION", amount: 960000000, probability: 80, priority: "NORMAL", ownerId: sales1.id, expectedCloseAt: daysAhead(6) },
@@ -618,8 +723,273 @@ async function main() {
     },
   });
 
+  /* ═══════════════ فاز ۴ — ماژول پروژه‌ها (بازسازی CrmProjects + مذاکرات) ═══════════════ */
+
+  // ── اولویت‌ها (CrmProjectPriority با رنگ) ──
+  const prUrgent = await db.projectPriority.create({ data: { name: "فوری", color: "#e53935", description: "پیگیری در کمتر از ۲۴ ساعت", orderView: 1 } });
+  const prHigh = await db.projectPriority.create({ data: { name: "زیاد", color: "#fb8c00", orderView: 2 } });
+  const prNormal = await db.projectPriority.create({ data: { name: "معمولی", color: "#1e88e5", orderView: 3 } });
+  const prLow = await db.projectPriority.create({ data: { name: "کم", color: "#43a047", orderView: 4 } });
+
+  // ── مقطع‌ها (CrmProjectGrade) ──
+  const gGold = await db.projectGrade.create({ data: { name: "طلایی", description: "مشتریان کلیدی", orderView: 1 } });
+  const gSilver = await db.projectGrade.create({ data: { name: "متوسط", orderView: 2 } });
+  const gBase = await db.projectGrade.create({ data: { name: "پایه", orderView: 3 } });
+
+  // ── گروه‌های پروژه (CrmProjectGroups) ──
+  const pgEquip = await db.projectGroup.create({ data: { name: "فروش تجهیزات", orderView: 1 } });
+  const pgSupport = await db.projectGroup.create({ data: { name: "پشتیبانی و خدمات", orderView: 2 } });
+  await db.projectGroup.create({ data: { name: "گارانتی و تعمیرات", orderView: 3 } });
+
+  // ── سرفصل‌ها (CrmProjectTitleGroups + توافق‌نامه/SLA) ──
+  const tgSales = await db.projectTitleGroup.create({
+    data: {
+      name: "فروش تجهیزات", color: "#0288d1", orderView: 1,
+      agreementActive: true,
+      agreementDesc: "شرایط تحویل: ۱۵ روز کاری پس از واریز. گارانتی ۱۸ ماهه. تمدید قرارداد ۳۰ روز پیش از پایان اعتبار.",
+      ticketAllowInCurrentCount: 10,
+    },
+  });
+  const tgSupport = await db.projectTitleGroup.create({
+    data: {
+      name: "پشتیبانی و خدمات", color: "#7cb342", orderView: 2,
+      agreementActive: true,
+      agreementDesc: "SLA پشتیبانی: پاسخ اولیه حداکثر ۴ ساعت کاری، رفع مشکل حداکثر ۲ روز کاری.",
+      subjectDefaultContext: "شرح خطا/درخواست:",
+      ticketAllowInCurrentCount: 5,
+    },
+  });
+
+  // ── مدل‌های پیشرفت (CnvsStatusGroup) + وضعیت‌ها (CnvsStatus + نتیجه‌ها) ──
+  const sgSales = await db.cnvsStatusGroup.create({ data: { name: "چرخه فروش", orderView: 1 } });
+  const stNew = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "آغازین", progressPercent: 10, isDefault: true, orderView: 1 } });
+  const stReview = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "در حال بررسی", progressPercent: 30, orderView: 2 } });
+  const stQuot = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "پیش‌فاکتور صادر شد", progressPercent: 55, issuePreOrderActive: true, orderView: 3 } });
+  const stNeg = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "مذاکره نهایی", progressPercent: 80, orderView: 4 } });
+  const stWon = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "موفق", progressPercent: 100, prjFinished: true, orderView: 5, color: "#43a047" } });
+  const stLost = await db.cnvsStatus.create({ data: { groupId: sgSales.id, name: "ناموفق", progressPercent: 100, prjFinished: true, orderView: 6, color: "#e53935" } });
+
+  const sgTicket = await db.cnvsStatusGroup.create({ data: { name: "پشتیبانی و تیکت", orderView: 2 } });
+  const tkNew = await db.cnvsStatus.create({ data: { groupId: sgTicket.id, name: "ثبت تیکت", progressPercent: 10, isDefault: true, orderView: 1 } });
+  const tkWorking = await db.cnvsStatus.create({ data: { groupId: sgTicket.id, name: "در دست بررسی", progressPercent: 35, orderView: 2 } });
+  await db.cnvsStatus.create({ data: { groupId: sgTicket.id, name: "در حال اقدام", progressPercent: 65, orderView: 3 } });
+  const tkWaiting = await db.cnvsStatus.create({ data: { groupId: sgTicket.id, name: "در انتظار مشتری", progressPercent: 75, orderView: 4 } });
+  await db.cnvsStatus.create({ data: { groupId: sgTicket.id, name: "حل‌شده", progressPercent: 100, prjFinished: true, orderView: 5, color: "#43a047" } });
+
+  // ── دسته‌بندی درختی (CrmProjectCategory — مدل پیشرفت پیش‌فرض هر گره) ──
+  const catSalesRoot = await db.projectCategory.create({ data: { name: "فروش", orderView: 1 } });
+  const catEquip = await db.projectCategory.create({ data: { name: "تجهیزات سخت‌افزاری", parentId: catSalesRoot.id, statusGroupId: sgSales.id, orderView: 1 } });
+  const catService = await db.projectCategory.create({ data: { name: "خدمات و آموزش", parentId: catSalesRoot.id, statusGroupId: sgSales.id, orderView: 2 } });
+  const catSupportRoot = await db.projectCategory.create({ data: { name: "پشتیبانی", orderView: 2 } });
+  const catTicket = await db.projectCategory.create({ data: { name: "تیکت پشتیبانی", parentId: catSupportRoot.id, statusGroupId: sgTicket.id, orderView: 1 } });
+  await db.projectCategory.create({ data: { name: "گارانتی", parentId: catSupportRoot.id, statusGroupId: sgTicket.id, orderView: 2 } });
+
+  // ── عنوان‌های پیش‌فرض (CrmProjectTitles — قالب پرکن فرم) ──
+  await db.projectTitle.create({ data: { title: "خرید لپ‌تاپ سازمانی", titleGroupId: tgSales.id, statusGroupId: sgSales.id, gradeId: gGold.id, priorityId: prHigh.id, activeNumRWithTitle: true, postFix: "LP", remindDay: 14,} });
+  await db.projectTitle.create({ data: { title: "خرید مانیتور", titleGroupId: tgSales.id, statusGroupId: sgSales.id, gradeId: gSilver.id, priorityId: prNormal.id, postFix: "MN", remindDay: 10,} });
+  await db.projectTitle.create({ data: { title: "نصب و راه‌اندازی شبکه", titleGroupId: tgSales.id, statusGroupId: sgSales.id, gradeId: gSilver.id, priorityId: prHigh.id, postFix: "NET", remindDay: 7,} });
+  await db.projectTitle.create({ data: { title: "قرارداد پشتیبانی سالانه", titleGroupId: tgSupport.id, statusGroupId: sgTicket.id, gradeId: gGold.id, priorityId: prNormal.id, postFix: "SUP", remindDay: 30, isTicket: true,} });
+  await db.projectTitle.create({ data: { title: "خطای نرم‌افزاری", titleGroupId: tgSupport.id, statusGroupId: sgTicket.id, gradeId: gBase.id, priorityId: prUrgent.id, postFix: "BUG", remindDay: 1, isTicket: true,} });
+  await db.projectTitle.create({ data: { title: "استعلام قیمت", titleGroupId: tgSales.id, statusGroupId: sgSales.id, gradeId: gBase.id, priorityId: prLow.id, postFix: "INQ", remindDay: 3,} });
+
+  // ── پروژه‌ها (CrmProjects) + مذاکرات (CrmConversation) ──
+  const mkCnvs = (projectId: string, companyId: string, rows: { statusId: string; day: number; hour: number; desc: string; by: string; refer?: string; doing?: number }[]) =>
+    Promise.all(
+      rows.map((r) =>
+        db.projectConversation.create({
+          data: {
+            projectId, companyId, statusId: r.statusId,
+            cnvsDate: at(r.day, r.hour), cnvsDay: "—", cnvsTime: `${String(r.hour).padStart(2, "0")}:00:00`,
+            description: r.desc, doingTimeSec: r.doing ?? null,
+            referUserId: r.refer ?? null, registeredById: r.by,
+          },
+        })
+      )
+    );
+
+  // ۱ — فروش تجهیزات، جاری، پیش‌فاکتور صادر شده (٪۵۵)
+  const p1 = await db.project.create({
+    data: {
+      number: 1, title: "خرید لپ‌تاپ سازمانی", postFix: "LP-01", referenceNumber: "DP/1404/01",
+      inquiryNumber: "است-101",
+      subject: "نیاز به ۸ دستگاه لپ‌تاپ ۱۵ اینچی برای تیم توسعه",
+      description: "مشتری مدل Latitude 5540 را انتخاب کرد؛ تحویل مرحله‌ای.",
+      companyId: companies[0].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gGold.id, priorityId: prHigh.id, categoryId: catEquip.id,
+      starterUserId: sales1.id, startDate: at(12, 9), startDay: "شنبه", startTime: "09:00:00",
+      remindDate: daysAgo(-3), toDoTime: daysAgo(-7), toDoTimeRegister: daysAgo(10), toDoTimeSec: 7 * 86400,
+      registeredById: sales1.id,
+    },
+  });
+  await mkCnvs(p1.id, companies[0].id, [
+    { statusId: stNew.id, day: 12, hour: 9, desc: "تماس اول — معرفی محصولات و ثبت نیاز", by: sales1.id },
+    { statusId: stReview.id, day: 9, hour: 11, desc: "جلسه فنی با مدیر IT؛ لیست نهایی شد", by: sales1.id, doing: 5400 },
+    { statusId: stQuot.id, day: 5, hour: 10, desc: "پیش‌فاکتور شماره ۱۰۰۱ ارسال شد", by: sales1.id, doing: 2700 },
+  ]);
+
+  // ۲ — تیکت پشتیبانی سالانه (٪۷۵ در انتظار مشتری) + SLA ثبت‌شده
+  const p2 = await db.project.create({
+    data: {
+      number: 2, title: "قرارداد پشتیبانی سالانه", postFix: "SUP-01", referenceNumber: "DP/1404/02",
+      subject: "تمدید قرارداد پشتیبانی ۱۴۰۵ و تنظیم SLA",
+      companyId: companies[0].id, statusGroupId: sgTicket.id, titleGroupId: tgSupport.id,
+      groupId: pgSupport.id, gradeId: gGold.id, priorityId: prNormal.id, categoryId: catTicket.id,
+      isTicket: true, foCmpCanSee: true,
+      starterUserId: sales1.id, startDate: at(6, 8), startDay: "یکشنبه", startTime: "08:30:00",
+      readDate: at(6, 9), readUserId: sales1.id, readDurationSec: 3600,
+      responseDate: at(5, 9), responseUserId: sales1.id, responseDurationSec: 90000,
+      firstDoingDate: at(5, 9), firstDoingUserId: sales1.id, firstDoingDurationSec: 90000,
+      remindDate: daysAgo(-2),
+      registeredById: sales1.id,
+    },
+  });
+  await mkCnvs(p2.id, companies[0].id, [
+    { statusId: tkNew.id, day: 6, hour: 8, desc: "تیکت ثبت شد — درخواست تمدید از باشگاه مشتریان", by: sales1.id },
+    { statusId: tkWorking.id, day: 5, hour: 9, desc: "بررسی شرایط فعلی و تهیه پیش‌نویس قرارداد", by: sales1.id, doing: 5400 },
+    { statusId: tkWaiting.id, day: 2, hour: 14, desc: "پیش‌نویس برای تأیید به مشتری ارسال شد", by: sales1.id },
+  ]);
+
+  // ۳ — خرید مانیتور گلبرگ — یادآوری عقب‌افتاده (قرمز در درخت + کارتابل یادآور)
+  const p3 = await db.project.create({
+    data: {
+      number: 3, title: "خرید ۵۰ دستگاه مانیتور", postFix: "MN-01",
+      subject: "خرید یکجای مانیتورهای ۲۷ اینچ 4K",
+      companyId: companies[1].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gSilver.id, priorityId: prNormal.id, categoryId: catEquip.id,
+      starterUserId: sales2.id, startDate: at(8, 10), startTime: "10:00:00",
+      remindDate: daysAgo(1),
+      registeredById: sales2.id,
+    },
+  });
+  await mkCnvs(p3.id, companies[1].id, [
+    { statusId: stNew.id, day: 8, hour: 10, desc: "تماس ورودی — درخواست استعلام ۵۰ دستگاه", by: sales2.id },
+    { statusId: stReview.id, day: 4, hour: 12, desc: "نمونه در دفتر مشتری تست شد؛ رضایت اولیه", by: sales2.id, doing: 3600 },
+  ]);
+
+  // ۴ — نوبت‌دهی کلینیک (٪۱۰)
+  const p4 = await db.project.create({
+    data: {
+      number: 4, title: "راه‌اندازی نرم‌افزار نوبت‌دهی",
+      companyId: companies[3].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gBase.id, priorityId: prLow.id, categoryId: catService.id,
+      starterUserId: sales2.id, startDate: at(3, 13),
+      remindDate: daysAgo(-5),
+      registeredById: sales2.id,
+    },
+  });
+  await mkCnvs(p4.id, companies[3].id, [
+    { statusId: stNew.id, day: 3, hour: 13, desc: "معرفی سیستم نوبت‌دهی آنلاین", by: sales2.id },
+  ]);
+
+  // ۵ — کلاس هوشمند پارسا (٪۵۵)
+  const p5 = await db.project.create({
+    data: {
+      number: 5, title: "بروزرسانی کلاس‌های هوشمند",
+      companyId: companies[4].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gSilver.id, priorityId: prNormal.id, categoryId: catEquip.id,
+      starterUserId: sales1.id, startDate: at(10, 9),
+      remindDate: daysAgo(-9),
+      registeredById: sales1.id,
+    },
+  });
+  await mkCnvs(p5.id, companies[4].id, [
+    { statusId: stNew.id, day: 10, hour: 9, desc: "بازدید اولیه از کلاس‌ها", by: sales1.id },
+    { statusId: stReview.id, day: 6, hour: 10, desc: "لیست تجهیزات موردنیاز تهیه شد", by: sales1.id },
+    { statusId: stQuot.id, day: 1, hour: 11, desc: "پیش‌فاکتور شماره ۱۰۰۲ ارسال شد", by: sales1.id },
+  ]);
+
+  // ۶ — سردخانه باران — آرشیو‌شده با وضعیت موفق (٪۱۰۰)
+  const p6 = await db.project.create({
+    data: {
+      number: 6, title: "سیستم انبار سردخانه", postFix: "NET-01",
+      companyId: companies[6].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gGold.id, priorityId: prHigh.id, categoryId: catEquip.id,
+      starterUserId: sales2.id, startDate: at(25, 9),
+      isFinished: true, finishedDate: at(9, 14), finishedUserId: sales2.id, finishedDurationSec: 16 * 86400,
+      registeredById: sales2.id,
+    },
+  });
+  await mkCnvs(p6.id, companies[6].id, [
+    { statusId: stNew.id, day: 25, hour: 9, desc: "تماس اول و بازدید سایت", by: sales2.id },
+    { statusId: stQuot.id, day: 18, hour: 10, desc: "پیش‌فاکتور تجهیزات سردخانه", by: sales2.id },
+    { statusId: stNeg.id, day: 12, hour: 15, desc: "توافق نهایی بر پرداخت نقدی دو مرحله‌ای", by: sales2.id, doing: 7200 },
+    { statusId: stWon.id, day: 9, hour: 14, desc: "تحویل کامل و تمدید قرارداد امضا شد", by: sales2.id },
+  ]);
+
+  // ۷ — هتل دریا نور — آرشیو ناموفق
+  const p7 = await db.project.create({
+    data: {
+      number: 7, title: "شبکه بی‌سیم هتل",
+      companyId: companies[7].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gSilver.id, priorityId: prNormal.id, categoryId: catEquip.id,
+      starterUserId: sales1.id, startDate: at(20, 11),
+      isFinished: true, finishedDate: at(4, 16), finishedUserId: sales1.id, finishedDurationSec: 16 * 86400,
+      registeredById: sales1.id,
+    },
+  });
+  await mkCnvs(p7.id, companies[7].id, [
+    { statusId: stNew.id, day: 20, hour: 11, desc: "بازدید و طراحی پوشش بی‌سیم", by: sales1.id },
+    { statusId: stReview.id, day: 12, hour: 10, desc: "رقیب قیمت پایین‌تری داد", by: sales1.id },
+    { statusId: stLost.id, day: 4, hour: 16, desc: "مشتری با رقیب قرارداد بست — بایگانی پرونده", by: sales1.id },
+  ]);
+
+  // ۸ — تیکت خطای پنل — در دست بررسی (٪۳۵)
+  const p8 = await db.project.create({
+    data: {
+      number: 8, title: "خطا در ورود کاربران پنل", postFix: "BUG-01",
+      subject: "شرح خطا/درخواست: کاربران باشگاه با خطای Session می‌مانند",
+      companyId: companies[0].id, statusGroupId: sgTicket.id, titleGroupId: tgSupport.id,
+      groupId: pgSupport.id, gradeId: gBase.id, priorityId: prUrgent.id, categoryId: catTicket.id,
+      isTicket: true, foCmpCanSee: true,
+      starterUserId: sales2.id, startDate: at(3, 10),
+      readDate: at(3, 11), readUserId: sales2.id, readDurationSec: 3600,
+      responseDate: at(2, 9), responseUserId: sales2.id, responseDurationSec: 82800,
+      firstDoingDate: at(2, 9), firstDoingUserId: sales2.id, firstDoingDurationSec: 82800,
+      remindDate: daysAgo(-1),
+      registeredById: sales2.id,
+    },
+  });
+  await mkCnvs(p8.id, companies[0].id, [
+    { statusId: tkNew.id, day: 3, hour: 10, desc: "تیکت از باشگاه ثبت شد — خطای Session", by: sales1.id, refer: sales2.id },
+    { statusId: tkWorking.id, day: 2, hour: 9, desc: "بررسی لاگ‌ها؛ مشکل از تنظیمات SSO شناسایی شد", by: sales2.id, doing: 3600 },
+  ]);
+
+  // ۹ — تیکت آموزش — توقف‌شده (prjTicketStop)
+  const p9 = await db.project.create({
+    data: {
+      number: 9, title: "درخواست آموزش کاربران",
+      companyId: companies[1].id, statusGroupId: sgTicket.id, titleGroupId: tgSupport.id,
+      groupId: pgSupport.id, gradeId: gBase.id, priorityId: prLow.id, categoryId: catService.id,
+      isTicket: true,
+      ticketStop: true, ticketStopUserId: manager.id, ticketStopDate: at(1, 12),
+      starterUserId: manager.id, startDate: at(4, 9),
+      remindDate: daysAgo(-6),
+      registeredById: manager.id,
+    },
+  });
+  await mkCnvs(p9.id, companies[1].id, [
+    { statusId: tkNew.id, day: 4, hour: 9, desc: "درخواست جلسه آموزش ۲ ساعته", by: manager.id },
+    { statusId: tkWorking.id, day: 2, hour: 10, desc: "زمان‌بندی با مشتری در حال هماهنگی — تا هماهنگی نهایی توقف", by: manager.id },
+  ]);
+
+  // ۱۰ — استعلام سوئیچ پویا تجارت (٪۱۰) — پیش‌مشتری
+  const p10 = await db.project.create({
+    data: {
+      number: 10, title: "استعلام قیمت سوئیچ ۲۴ پورت",
+      companyId: companies[2].id, statusGroupId: sgSales.id, titleGroupId: tgSales.id,
+      groupId: pgEquip.id, gradeId: gBase.id, priorityId: prLow.id, categoryId: catEquip.id,
+      starterUserId: sales1.id, startDate: at(2, 15),
+      remindDate: daysAgo(-4),
+      registeredById: sales1.id,
+    },
+  });
+  await mkCnvs(p10.id, companies[2].id, [
+    { statusId: stNew.id, day: 2, hour: 15, desc: "استعلام تلفنی — لیست قیمت ارسال شد", by: sales1.id },
+  ]);
+
   console.log("✅ Seed complete!");
   console.log("   ورود: admin/admin123 · manager/manager123 · sales1/sales123 · sales2/sales123");
+  console.log("   نقش کارشناس فروش: سقف تخفیف ۱۵٪ — برای تست مجوز فرم×اکشن");
 }
 
 main()

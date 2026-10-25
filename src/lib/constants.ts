@@ -53,6 +53,126 @@ export const ACTIONS: Record<ActionKey, string> = {
   delete: "حذف",
 };
 
+// ── سیستم مجوز فرم×اکشن — بازسازی CrmsysRollPermission خود CRMIdeal ──
+// در CRMIdeal مجوز = رکورد (نقش × فرم × اکشن)؛ فرم‌ها frm* و اکشن‌ها act* نام‌گذاری شده‌اند
+// و هر دکمهٔ UI جداگانه با UserLogin.IsUserAccess(formName, actionName) کنترل می‌شود.
+
+export type FormId =
+  | "frmHomePage" | "frmMain" | "frmCompanyI" | "frmCompanyPersons"
+  | "frmDefineProjects" | "frmProjectPreview" | "frmConversations"
+  | "frmDeals" | "frmActivities" | "frmTasks"
+  | "frmPreOrder" | "frmOrder" | "frmProduct" | "frmBuyOrder"
+  | "frmWareHouse" | "frmStock" | "frmFund" | "frmBanking" | "frmOnlinePayment"
+  | "frmReports" | "frmDefineUsers" | "frmUserRoll" | "frmRollPermission" | "frmSetting";
+
+export const STD_ACTS = ["actView", "actInsert", "actEdit", "actDelete"] as const;
+
+export type FormMeta = { id: FormId; label: string; section: string; actions: string[] };
+
+export const FORMS: FormMeta[] = [
+  { id: "frmHomePage", label: "صفحه اصلی", section: "خانه", actions: ["actView"] },
+  // بانک اطلاعاتی مشتریان
+  { id: "frmCompanyI", label: "مشتریان (طرف حساب‌ها)", section: "بانک اطلاعاتی مشتریان", actions: [...STD_ACTS, "actprjInsert"] },
+  { id: "frmCompanyPersons", label: "افراد مخاطب", section: "بانک اطلاعاتی مشتریان", actions: [...STD_ACTS] },
+  { id: "frmDefineProjects", label: "درج/ویرایش پروژه", section: "بانک اطلاعاتی مشتریان", actions: ["actPost", "actCanSetArchive", "actCanSetPrjIsTicket", "actCanChangePrjToDoTime"] },
+  { id: "frmProjectPreview", label: "نمایش پروژه", section: "بانک اطلاعاتی مشتریان", actions: ["actView", "actDelete", "actDeleteCmpProjectWithDep", "actDeleteAllCmpProjectsWithDep"] },
+  { id: "frmConversations", label: "مذاکرات پروژه", section: "بانک اطلاعاتی مشتریان", actions: [...STD_ACTS] },
+  { id: "frmDeals", label: "فرصت‌های فروش (افزونه رستا)", section: "بانک اطلاعاتی مشتریان", actions: [...STD_ACTS] },
+  // کارتابل
+  { id: "frmTasks", label: "کارها و یادآورها", section: "کارتابل‌ها", actions: [...STD_ACTS] },
+  { id: "frmActivities", label: "فعالیت‌ها (افزونه رستا)", section: "کارتابل‌ها", actions: [...STD_ACTS] },
+  // خرید - فروش - انبار
+  { id: "frmPreOrder", label: "پیش‌فاکتور", section: "خرید - فروش - انبار", actions: [...STD_ACTS] },
+  { id: "frmOrder", label: "فاکتور فروش", section: "خرید - فروش - انبار", actions: [...STD_ACTS] },
+  { id: "frmBuyOrder", label: "سفارش خرید", section: "خرید - فروش - انبار", actions: [...STD_ACTS] },
+  { id: "frmProduct", label: "کالا و خدمات", section: "خرید - فروش - انبار", actions: [...STD_ACTS] },
+  { id: "frmWareHouse", label: "انبارها", section: "خرید - فروش - انبار", actions: [...STD_ACTS] },
+  { id: "frmStock", label: "موجودی و گردش کالا", section: "خرید - فروش - انبار", actions: ["actView", "actInsert"] },
+  // خزانه - بانک
+  { id: "frmFund", label: "خزانه", section: "خزانه - بانک - پرداخت", actions: [...STD_ACTS, "actVerify"] },
+  { id: "frmBanking", label: "بانک‌داری", section: "خزانه - بانک - پرداخت", actions: [...STD_ACTS] },
+  { id: "frmOnlinePayment", label: "پرداخت آنلاین", section: "خزانه - بانک - پرداخت", actions: ["actView", "actInsert"] },
+  // گزارش‌ها
+  { id: "frmReports", label: "گزارش‌ها", section: "گزارش‌ها", actions: ["actView"] },
+  // ارتباطات و امنیت کاربران
+  { id: "frmDefineUsers", label: "تعریف کاربران", section: "ارتباطات و امنیت کاربران", actions: [
+    "actView", "actInsert", "actEdit", "actDelete", "actEditMoreInfo", "actAssignRoll",
+    "actUploadSignature", "actManageBankingAccounts", "actLoginAllowedTimes", "actShowDetailsUserCount",
+  ] },
+  { id: "frmUserRoll", label: "تعریف نقش‌های کاربری", section: "ارتباطات و امنیت کاربران", actions: [...STD_ACTS] },
+  { id: "frmRollPermission", label: "تخصیص مجوز برای هر نقش", section: "ارتباطات و امنیت کاربران", actions: ["actView"] },
+  { id: "frmSetting", label: "تنظیمات", section: "اطلاعات پایه - تنظیمات", actions: ["actView", "actEdit"] },
+  // اقدامات frmMain — تعاریف پایه (مثل خود CRMIdeal که تعاریف با frmMain/actDefine* گیت می‌شوند)
+  { id: "frmMain", label: "تعاریف پایه (اقدامات اصلی)", section: "اطلاعات پایه - تنظیمات", actions: [
+    "actDefineProjectTitle", "actDefineProjectTitleGroup", "actDefinePrjGroup", "actDefinePrjGrade",
+    "actDefinePrjPriority", "actDefinePrjCategory", "actDefinecnvsStatusGroups", "actDefinecnvsStatus",
+    "actDefineUserPositions", "actDefineUserGroups", "actDefineDepartments",
+  ] },
+];
+
+export const FORMS_BY_ID: Record<string, FormMeta> = Object.fromEntries(FORMS.map((f) => [f.id, f]));
+
+export const ACT_LABELS: Record<string, string> = {
+  actView: "مشاهده", actInsert: "درج", actEdit: "ویرایش", actDelete: "حذف", actPost: "ثبت",
+  actprjInsert: "درج پروژه",
+  actCanSetArchive: "اجازه آرشیو پروژه",
+  actCanSetPrjIsTicket: "تعیین نوع تیکت",
+  actCanChangePrjToDoTime: "تعیین زمان انجام",
+  actDeleteCmpProjectWithDep: "حذف پروژه با وابستگی‌ها",
+  actDeleteAllCmpProjectsWithDep: "حذف همه پروژه‌ها با وابستگی‌ها",
+  actVerify: "تایید / لغو تایید",
+  actEditMoreInfo: "ویرایش اطلاعات تکمیلی",
+  actAssignRoll: "تخصیص نقش",
+  actUploadSignature: "بارگذاری امضا",
+  actManageBankingAccounts: "مدیریت حساب‌های بانکی",
+  actLoginAllowedTimes: "تعیین ساعت ورود",
+  actShowDetailsUserCount: "نمایش جزئیات تعداد کاربران",
+  actDefineProjectTitle: "تعریف عنوان‌های پیش‌فرض پروژه",
+  actDefineProjectTitleGroup: "تعریف سرفصل‌های پروژه",
+  actDefinePrjGroup: "تعریف گروه پروژه",
+  actDefinePrjGrade: "تعریف مقطع پروژه",
+  actDefinePrjPriority: "تعریف اولویت پروژه",
+  actDefinePrjCategory: "تعریف دسته‌بندی پروژه",
+  actDefinecnvsStatusGroups: "تعریف مدل‌های پیشرفت",
+  actDefinecnvsStatus: "تعریف وضعیت‌های مذاکره",
+  actDefineUserPositions: "تعریف سمت‌های سازمانی",
+  actDefineUserGroups: "تعریف گروه‌های کاربری",
+  actDefineDepartments: "تعریف دپارتمان‌ها",
+};
+
+// نگاشت ماژول‌های قدیمی رستا به فرم‌های CRMIdeal (برای مسیرهای API موجود)
+export const MODULE_TO_FORM: Record<ModuleKey, FormId> = {
+  dashboard: "frmHomePage",
+  companies: "frmCompanyI",
+  contacts: "frmCompanyPersons",
+  deals: "frmDeals",
+  activities: "frmActivities",
+  tasks: "frmTasks",
+  products: "frmProduct",
+  quotations: "frmPreOrder",
+  orders: "frmOrder",
+  warehouses: "frmWareHouse",
+  inventory: "frmStock",
+  purchases: "frmBuyOrder",
+  users: "frmDefineUsers",
+  roles: "frmUserRoll",
+  reports: "frmReports",
+  settings: "frmSetting",
+  fund: "frmFund",
+  banking: "frmBanking",
+  payments: "frmOnlinePayment",
+};
+
+export const ACTION_TO_ACT: Record<ActionKey, string> = {
+  view: "actView",
+  create: "actInsert",
+  edit: "actEdit",
+  delete: "actDelete",
+};
+
+// ── روزهای هفته (تعیین ساعت ورود — UserLoginAllowedTimes) ──
+export const WEEK_DAYS = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"] as const;
+
 // ── Company ──
 export const COMPANY_TYPES = ["CUSTOMER", "PROSPECT", "PARTNER", "SUPPLIER", "OTHER"] as const;
 export const COMPANY_TYPE_LABELS: Record<string, string> = {

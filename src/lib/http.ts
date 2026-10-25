@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import { getCurrentUser, can, type SessionUser } from "@/lib/auth";
-import type { ActionKey, ModuleKey } from "@/lib/constants";
+import { MODULE_TO_FORM, ACTION_TO_ACT, type ActionKey, type ModuleKey } from "@/lib/constants";
 
 export function json(data: unknown, status = 200) {
   return NextResponse.json(data, { status });
@@ -28,16 +28,24 @@ export async function requireUser(): Promise<SessionUser> {
   return user;
 }
 
-/** Throws HttpError(403) if module:action is not permitted. */
+/** Throws HttpError(403) if form:action is not permitted — معادل DynamicAuthorize خود CRMIdeal. */
+export async function requirePerm(
+  form: string,
+  action: string
+): Promise<SessionUser> {
+  const user = await requireUser();
+  if (!can(user, form, action)) {
+    throw new HttpError(403, "شما به این بخش دسترسی ندارید.");
+  }
+  return user;
+}
+
+/** Throws HttpError(403) if module:action is not permitted. (legacy signature — maps module→frm*, action→act*) */
 export async function requirePermission(
   module: ModuleKey,
   action: ActionKey
 ): Promise<SessionUser> {
-  const user = await requireUser();
-  if (!can(user, module, action)) {
-    throw new HttpError(403, "شما به این بخش دسترسی ندارید.");
-  }
-  return user;
+  return requirePerm(MODULE_TO_FORM[module], ACTION_TO_ACT[action]);
 }
 
 /** Wrap a route handler with uniform error → JSON conversion. */
