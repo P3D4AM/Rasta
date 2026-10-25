@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { requirePermission, handle, json, apiError, parseListQuery, nextDocNumber } from "@/lib/http";
+import { assertDiscountLimit } from "@/lib/discount";
 import { Prisma } from "@prisma/client";
 
 export type ItemInput = {
@@ -102,6 +103,8 @@ export async function POST(req: Request) {
     if (items.length === 0) return apiError("حداقل یک ردیف کالا وارد کنید.", 400);
 
     const totals = calcTotals(items);
+    // سقف درصد تخفیف نقش — مثل CrmsysRolls.LimitPreOrderDiscount*
+    await assertDiscountLimit(user, "preOrder", totals.discountTotal, totals.subtotal);
     const number = await nextDocNumber("quotation");
 
     const quotation = await db.quotation.create({

@@ -48,8 +48,8 @@ export async function requirePermission(
   return requirePerm(MODULE_TO_FORM[module], ACTION_TO_ACT[action]);
 }
 
-/** Wrap a route handler with uniform error → JSON conversion. */
-export async function handle(fn: () => Promise<NextResponse>): Promise<NextResponse> {
+/** Wrap a route handler with uniform error → JSON conversion. (Response هم مجاز است — برای فایل/تصویر) */
+export async function handle(fn: () => Promise<Response>): Promise<Response> {
   try {
     return await fn();
   } catch (err) {

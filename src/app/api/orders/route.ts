@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { requirePermission, handle, json, apiError, parseListQuery } from "@/lib/http";
+import { assertDiscountLimit } from "@/lib/discount";
 import { Prisma } from "@prisma/client";
 
 // GET /api/orders — sales invoices
@@ -51,6 +52,8 @@ export async function POST(req: Request) {
     const items = Array.isArray(body?.items) ? body.items : [];
     if (items.length === 0) return apiError("حداقل یک ردیف کالا وارد کنید.", 400);
     const totals = calcTotals(items);
+    // سقف درصد تخفیف نقش — مثل CrmsysRolls.LimitOrderDiscount*
+    await assertDiscountLimit(user, "order", totals.discountTotal, totals.subtotal);
 
     const last = await db.salesOrder.findFirst({ orderBy: { number: "desc" }, select: { number: true } });
     const number = (last?.number ?? 1000) + 1;
