@@ -77,3 +77,11 @@ Stage Summary:
 - Auth: PAT at /home/z/my-project/.gh_token; git credential store at /home/z/my-project/.gh_credentials (both gitignored — NEVER commit)
 - FUTURE SESSIONS MUST: `git checkout develop && git pull` before work; commit + push to develop after every task
 - Local-only (not in repo): archive/scaffold-history branch, legacy zip + site under project-analysis/
+
+ADDENDUM (post-push, same task): the sandbox auto-snapshot mechanism flips HEAD to local main between tool calls and can absorb uncommitted changes (it caused the first worklog commit to land on local main instead of develop). State corrected: develop reset to d1780812 (worklog commit, pushed), local main reset back to baseline 1275fdaf (= remote main). Remote verified: main=1275fdaf (frozen release line), develop=d1780812 (active).
+
+Countermeasure protocol for ALL future sessions:
+1. `git checkout develop && git pull` at session start
+2. `git branch --show-current` before EVERY commit
+3. edit + commit + push in the smallest possible window (one atomic Bash when touching files that differ across branches); leave nothing uncommitted
+4. local main may accumulate UUID auto-snapshot commits — NEVER push local main; remote main stays frozen at baseline until owner-approved release
