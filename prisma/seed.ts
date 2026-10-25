@@ -16,7 +16,8 @@ function hashPassword(password: string): string {
 
 const MODULES = [
   "dashboard", "companies", "contacts", "deals", "activities", "tasks",
-  "products", "quotations", "orders", "reports", "users", "roles",
+  "products", "quotations", "orders", "warehouses", "inventory", "purchases",
+  "reports", "users", "roles",
 ];
 
 function fullPerms() {
@@ -37,13 +38,27 @@ function salesPerms() {
     { module: "products", canView: true, canCreate: false, canEdit: false, canDelete: false },
     { module: "quotations", canView: true, canCreate: true, canEdit: true, canDelete: false },
     { module: "orders", canView: true, canCreate: true, canEdit: true, canDelete: false },
+    { module: "inventory", canView: true, canCreate: false, canEdit: false, canDelete: false },
+  ];
+}
+
+function purchasePerms() {
+  return [
+    { module: "warehouses", canView: true, canCreate: true, canEdit: true, canDelete: false },
+    { module: "inventory", canView: true, canCreate: true, canEdit: true, canDelete: false },
+    { module: "purchases", canView: true, canCreate: true, canEdit: true, canDelete: true },
   ];
 }
 
 async function main() {
   console.log("🌱 Seeding Rasta CRM database…");
 
-  // ── wipe ──
+  // ── wipe (children first) ──
+  await db.stockMovement.deleteMany();
+  await db.stockLevel.deleteMany();
+  await db.purchaseOrderItem.deleteMany();
+  await db.purchaseOrder.deleteMany();
+  await db.warehouse.deleteMany();
   await db.activityLog.deleteMany();
   await db.payment.deleteMany();
   await db.salesOrderItem.deleteMany();
@@ -87,6 +102,7 @@ async function main() {
         create: Object.values(
           [
             ...salesPerms(),
+            ...purchasePerms(),
             { module: "reports", canView: true, canCreate: false, canEdit: false, canDelete: false },
           ].reduce<Record<string, Record<string, unknown>>>((acc, p) => {
             acc[p.module] = p; // later entries override earlier
@@ -172,6 +188,8 @@ async function main() {
     { name: "شرکت مهندسی راه‌سازان البرق", type: "SUPPLIER", industry: "راه‌سازی", city: "کرج", province: "البرز", phone: "026-34445566" },
     { name: "پخش سراسری باران", type: "CUSTOMER", industry: "پخش و توزیع", city: "تبریز", province: "آذربایجان شرقی", phone: "041-35556677", email: "sales@baran-dist.ir" },
     { name: "هتل پنج‌ستاره دریا نور", type: "PARTNER", industry: "هتلداری", city: "بندرعباس", province: "هرمزگان", phone: "076-33445566", email: "info@daryanoor.ir" },
+    { name: "توزیع تجهیزات دیجیتال آریا", type: "SUPPLIER", industry: "توزیع سخت‌افزار", city: "تهران", province: "تهران", phone: "021-66778899", email: "sales@aria-dist.ir" },
+    { name: "پارس سیستم کارون", type: "SUPPLIER", industry: "شبکه و امنیت", city: "اهواز", province: "خوزستان", phone: "061-3334455", email: "info@karoon-sys.ir" },
   ];
   const companies = await Promise.all(
     companiesData.map((c, i) =>
@@ -346,6 +364,124 @@ async function main() {
     data: { orderId: o2.id, amount: total2, method: "CASH", paidAt: daysAgo(27) },
   });
   await db.salesOrder.update({ where: { id: o2.id }, data: { paidTotal: total2 } });
+
+  // ── warehouses & stock (Phase 2) ──
+  const wh1 = await db.warehouse.create({
+    data: { name: "انبار مرکزی", code: "WH-Main", location: "تهران، خیابان کارگر شمالی", isDefault: true, note: "انبار اصلی محصولات فیزیکی" },
+  });
+  const wh2 = await db.warehouse.create({
+    data: { name: "انبار شعبه اصفهان", code: "WH-Isf", location: "اصفهان، خیابان چهارباغ بالا" },
+  });
+
+  // movement history (sums match the final stock levels below)
+  const movementsData = [
+    // opening receipt — 30 days ago
+    ...[1, 2, 3, 4, 5].map((pi) => ({
+      type: "IN" as const,
+      productId: products[pi].id,
+      toWarehouseId: wh1.id,
+      quantity: [0, 35, 18, 40, 50, 100][pi],
+      unitCost: products[pi].cost,
+      refType: "MANUAL",
+      note: "موجودی اولیه دوره",
+      userId: admin.id,
+      movedAt: daysAgo(30),
+    })),
+    // received purchase order 1001 — 20 days ago (20 laptops)
+    {
+      type: "IN" as const,
+      productId: products[0].id,
+      toWarehouseId: wh1.id,
+      quantity: 20,
+      unitCost: 740000000,
+      refType: "PURCHASE_ORDER",
+      note: "رسید خرید سفارش شماره 1001",
+      userId: manager.id,
+      movedAt: daysAgo(20),
+    },
+    // sales order 1002 issue — 27 days ago (2 printers + 4 cartridges)
+    { type: "OUT" as const, productId: products[2].id, fromWarehouseId: wh1.id, quantity: 2, refType: "SALES_ORDER", note: "صدور فاکتور فروش شماره 1002", userId: sales1.id, movedAt: daysAgo(27) },
+    { type: "OUT" as const, productId: products[5].id, fromWarehouseId: wh1.id, quantity: 4, refType: "SALES_ORDER", note: "صدور فاکتور فروش شماره 1002", userId: sales1.id, movedAt: daysAgo(27) },
+    // project sale — 10 days ago (14 printers, leaves low stock for demo)
+    { type: "OUT" as const, productId: products[2].id, fromWarehouseId: wh1.id, quantity: 14, refType: "MANUAL", note: "فروش پروژه‌ای دانشگاه", userId: sales1.id, movedAt: daysAgo(10) },
+    // sales order 1001 issue — 8 days ago (10 switches + 20 routers)
+    { type: "OUT" as const, productId: products[3].id, fromWarehouseId: wh1.id, quantity: 10, refType: "SALES_ORDER", note: "صدور فاکتور فروش شماره 1001", userId: sales2.id, movedAt: daysAgo(8) },
+    { type: "OUT" as const, productId: products[4].id, fromWarehouseId: wh1.id, quantity: 20, refType: "SALES_ORDER", note: "صدور فاکتور فروش شماره 1001", userId: sales2.id, movedAt: daysAgo(8) },
+    // transfer to Isfahan branch — 5 days ago
+    { type: "TRANSFER" as const, productId: products[1].id, fromWarehouseId: wh1.id, toWarehouseId: wh2.id, quantity: 10, refType: "MANUAL", note: "تأمین موجودی شعبه", userId: manager.id, movedAt: daysAgo(5) },
+    { type: "TRANSFER" as const, productId: products[4].id, fromWarehouseId: wh1.id, toWarehouseId: wh2.id, quantity: 10, refType: "MANUAL", note: "تأمین موجودی شعبه", userId: manager.id, movedAt: daysAgo(5) },
+    // counter sale — 4 days ago
+    { type: "OUT" as const, productId: products[5].id, fromWarehouseId: wh1.id, quantity: 12, refType: "MANUAL", note: "فروش حضوری", userId: sales2.id, movedAt: daysAgo(4) },
+    // damage adjustment — 2 days ago
+    { type: "ADJUST" as const, productId: products[5].id, toWarehouseId: wh1.id, quantity: -3, refType: "MANUAL", note: "نقص و شکست در انبارشماری", userId: admin.id, movedAt: daysAgo(2) },
+  ];
+  for (const m of movementsData) {
+    await db.stockMovement.create({ data: m });
+  }
+
+  // final stock levels (match movement history)
+  const levelsData = [
+    { p: 0, w: wh1.id, q: 20 },   // لپ‌تاپ
+    { p: 1, w: wh1.id, q: 25 },   // مانیتور
+    { p: 1, w: wh2.id, q: 10 },
+    { p: 2, w: wh1.id, q: 2 },    // پرینتر — رو به اتمام (دموی هشدار)
+    { p: 3, w: wh1.id, q: 30 },   // سوئیچ
+    { p: 4, w: wh1.id, q: 20 },   // روتر
+    { p: 4, w: wh2.id, q: 10 },
+    { p: 5, w: wh1.id, q: 81 },   // کارتریج
+  ];
+  for (const l of levelsData) {
+    await db.stockLevel.create({
+      data: { productId: products[l.p].id, warehouseId: l.w, quantity: l.q },
+    });
+  }
+
+  // ── purchase orders ──
+  const po1Sub = 20 * 740000000;
+  await db.purchaseOrder.create({
+    data: {
+      number: 1001,
+      supplierId: companies[8].id,
+      warehouseId: wh1.id,
+      issueDate: daysAgo(21),
+      expectedAt: daysAgo(20),
+      receivedAt: daysAgo(20),
+      status: "RECEIVED",
+      note: "خرید یکجای لپ‌تاپ‌های سازمانی",
+      ownerId: manager.id,
+      subtotal: po1Sub,
+      taxTotal: po1Sub * 0.09,
+      total: po1Sub * 1.09,
+      items: {
+        create: [
+          { productId: products[0].id, description: products[0].name, qty: 20, unitPrice: 740000000, taxRate: 9, lineTotal: 20 * 740000000 * 1.09 },
+        ],
+      },
+    },
+  });
+
+  const po2Sub = 10 * 175000000 + 40 * 22000000;
+  await db.purchaseOrder.create({
+    data: {
+      number: 1002,
+      supplierId: companies[9].id,
+      warehouseId: wh1.id,
+      issueDate: daysAgo(2),
+      expectedAt: daysAhead(5),
+      status: "ORDERED",
+      note: "در انتظار تحویل — ترجیحاً قبل از پایان هفته",
+      ownerId: manager.id,
+      subtotal: po2Sub,
+      taxTotal: po2Sub * 0.09,
+      total: po2Sub * 1.09,
+      items: {
+        create: [
+          { productId: products[1].id, description: products[1].name, qty: 10, unitPrice: 175000000, taxRate: 9, lineTotal: 10 * 175000000 * 1.09 },
+          { productId: products[5].id, description: products[5].name, qty: 40, unitPrice: 22000000, taxRate: 9, lineTotal: 40 * 22000000 * 1.09 },
+        ],
+      },
+    },
+  });
 
   console.log("✅ Seed complete!");
   console.log("   ورود: admin/admin123 · manager/manager123 · sales1/sales123 · sales2/sales123");
