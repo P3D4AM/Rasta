@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace CRM.Models;
+
+[MetadataType(typeof(CrmDyFormWorkflowStepsMetadata))]
+public class CrmDyFormWorkflowSteps
+{
+	public int FormWorkflowStepId { get; set; }
+
+	public int WorkflowId { get; set; }
+
+	public string WorkflowStepTitle { get; set; }
+
+	public int SubFormId { get; set; }
+
+	public string ReferUserIds { get; set; }
+
+	public int? ReferRollId { get; set; }
+
+	public string MultiReferUserIds { get; set; }
+
+	public string CheckerUserIds { get; set; }
+
+	public bool? NoPrevious { get; set; }
+
+	public bool? NoNextWithOutCheck { get; set; }
+
+	public int? OrderView { get; set; }
+
+	public int? ProgressPercent { get; set; }
+
+	public bool? IsActive { get; set; }
+
+	public int FirstRegisterUserId { get; set; }
+
+	public DateTime FirstRegisterDate { get; set; }
+
+	public string FirstRegisterDatePersian { get; set; }
+
+	public int UserId { get; set; }
+
+	public short Year1 { get; set; }
+
+	public short Month1 { get; set; }
+
+	public DateTime RegisterDate { get; set; }
+
+	public string RegisterDatePersian { get; set; }
+
+	public Guid GUId { get; set; }
+
+	public string AppType { get; set; }
+
+	public int LanguageID { get; set; }
+
+	public int? CheckerRollId { get; set; }
+
+	public virtual ICollection<CrmDyFormFieldMasterValues> CrmDyFormFieldMasterValues { get; set; }
+
+	public virtual CrmDyForms CrmDyForms { get; set; }
+
+	public virtual CrmDyFormWorkflows CrmDyFormWorkflows { get; set; }
+
+	public virtual CrmsysRolls CrmsysRolls { get; set; }
+
+	public virtual ICollection<CrmDyFormWorkflowSteps_Lang> CrmDyFormWorkflowSteps_Lang { get; set; }
+
+	public virtual Languages Languages { get; set; }
+
+	public virtual CrmsysRolls CrmsysRolls1 { get; set; }
+
+	public virtual Users Users { get; set; }
+
+	public virtual Users Users1 { get; set; }
+
+	public CrmDyFormWorkflowSteps()
+	{
+		CrmDyFormFieldMasterValues = (ICollection<CrmDyFormFieldMasterValues>)new HashSet<CrmDyFormFieldMasterValues>();
+		CrmDyFormWorkflowSteps_Lang = (ICollection<CrmDyFormWorkflowSteps_Lang>)new HashSet<CrmDyFormWorkflowSteps_Lang>();
+	}
+}

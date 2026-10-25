@@ -1,0 +1,178 @@
+using System;
+
+namespace CRM.Models;
+
+public class WSspSelectPreOrderItemsByPordIdAndManufacturerName_Result
+{
+	public int PreOrderItemID { get; set; }
+
+	public int PreOrderId { get; set; }
+
+	public int pordIPrdId { get; set; }
+
+	public double? pordIQuantity { get; set; }
+
+	public decimal? pordIPrice { get; set; }
+
+	public decimal? pordITotalPrice { get; set; }
+
+	public string pordIDescription { get; set; }
+
+	public int UserId { get; set; }
+
+	public int FPId { get; set; }
+
+	public short Month1 { get; set; }
+
+	public DateTime RegisterDate { get; set; }
+
+	public string RegisterDatePersian { get; set; }
+
+	public string pordIQuantityDesc { get; set; }
+
+	public decimal? pordIDiscountI { get; set; }
+
+	public decimal? pordIDiscount { get; set; }
+
+	public decimal? pordIDiscountPercent { get; set; }
+
+	public decimal? pordIDiscountIPercent { get; set; }
+
+	public Guid? GUId { get; set; }
+
+	public int? pordIPrdUnitId { get; set; }
+
+	public int? pordICurrencyUnitId { get; set; }
+
+	public int? pordIOrderView { get; set; }
+
+	public double? pordIFCR { get; set; }
+
+	public decimal? pordITax { get; set; }
+
+	public decimal? pordITaxIndex { get; set; }
+
+	public bool? pordICalculateTax { get; set; }
+
+	public bool? pordINotVisible { get; set; }
+
+	public double? pordIFCRI { get; set; }
+
+	public bool? pordINotInSum { get; set; }
+
+	public int? pordIWHId { get; set; }
+
+	public string pordIWrhsName { get; set; }
+
+	public decimal? pordIRound { get; set; }
+
+	public string AppType { get; set; }
+
+	public int? LanguageID { get; set; }
+
+	public int? FirstRegisterUserId { get; set; }
+
+	public string FirstRegisterDatePersian { get; set; }
+
+	public DateTime? FirstRegisterDate { get; set; }
+
+	public decimal? pordIRoundPlus { get; set; }
+
+	public string PrdName { get; set; }
+
+	public string PrdCode { get; set; }
+
+	public string PrdFGName { get; set; }
+
+	public string PrdSGName { get; set; }
+
+	public string PrdUnitName { get; set; }
+
+	public string PrdCurrencyUnitPrice { get; set; }
+
+	public string PrdFirstBarcode { get; set; }
+
+	public int? pordIPrdPriceGroupID { get; set; }
+
+	public string pordITracing { get; set; }
+
+	public int? pordILinkAccItemId { get; set; }
+
+	public string pordILinkAccItemIdStr { get; set; }
+
+	public decimal? pordIPriceSum { get; set; }
+
+	public decimal? pordIDiscountISum { get; set; }
+
+	public decimal? pordIDiscountSum { get; set; }
+
+	public decimal? pordITaxSum { get; set; }
+
+	public string pordIPrdUnit { get; set; }
+
+	public string pordICurrencyUnit { get; set; }
+
+	public int? pordIDeliveryTermId { get; set; }
+
+	public string pordIDeliveryTerm { get; set; }
+
+	public DateTime? pordIDeliveryDate { get; set; }
+
+	public string pordIDeliveryDatePersian { get; set; }
+
+	public string pordILinkAccWHIdStr { get; set; }
+
+	public double? pordIQuantityTotal { get; set; }
+
+	public int? pordIPrdColorId { get; set; }
+
+	public string pordIPrdColor { get; set; }
+
+	public int? pordIPrdUnitIdI { get; set; }
+
+	public string pordIPrdUnitI { get; set; }
+
+	public double? pordIPrdUnitIRateResult { get; set; }
+
+	public bool? PrdSingleItem { get; set; }
+
+	public double? ordIPrdUnitIRate { get; set; }
+
+	public string PrdModuleName { get; set; }
+
+	public DateTime? pordIValidityExpireDate { get; set; }
+
+	public string pordIValidityExpireDatePersian { get; set; }
+
+	public decimal? pordIPrdAutoCalcRate { get; set; }
+
+	public decimal? pordIPrdAutoCalcInflationRateInfo { get; set; }
+
+	public string pordIDescriptionI { get; set; }
+
+	public string pordIPrdNickname { get; set; }
+
+	public string pordIDiscountDesc { get; set; }
+
+	public string pordIDeliveryTime { get; set; }
+
+	public string pordIDeliveryDay { get; set; }
+
+	public DateTime? pordIDeliveryEndDate { get; set; }
+
+	public string pordIDeliveryEndDatePersian { get; set; }
+
+	public string pordIDeliveryEndTime { get; set; }
+
+	public string pordIDeliveryEndDay { get; set; }
+
+	public string PrdManufacturerName { get; set; }
+
+	public string PrdManufacturerCode { get; set; }
+
+	public int? pordCompanyId { get; set; }
+
+	public int? cmpNumber { get; set; }
+
+	public string cmpUserName { get; set; }
+}

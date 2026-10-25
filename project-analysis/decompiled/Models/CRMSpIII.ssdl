@@ -1,0 +1,854 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <Function Name="CRMspCalculateCnvsDoingTimeByPrjTitleGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="FromDate" Type="datetime" Mode="In" />
+    <Parameter Name="ToDate" Type="datetime" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="IsFinished" Type="int" Mode="In" />
+    <Parameter Name="IsTicket" Type="int" Mode="In" />
+    <Parameter Name="PrjTitleGroup" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspCallerIDCleanPhoneNumberByUserCallPreNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CallTypeId" Type="int" Mode="In" />
+    <Parameter Name="PhoneNumber" Type="varchar" Mode="In" />
+    <Parameter Name="TrunkSource" Type="varchar" Mode="In" />
+    <Parameter Name="TrunkDestination" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspChartDailyOrdersExtraInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="HorizontalField" Type="smallint" Mode="In" />
+    <Parameter Name="VerticalMode" Type="smallint" Mode="In" />
+    <Parameter Name="SelectedValues" Type="varchar(max)" Mode="In" />
+    <Parameter Name="FiltersJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="FDate" Type="datetime" Mode="In" />
+    <Parameter Name="TDate" Type="datetime" Mode="In" />
+    <Parameter Name="GroupFieldKey" Type="int" Mode="In" />
+    <Parameter Name="GroupFieldValues" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CurrUserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspChartMonthlyOrdersInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FirstDayOfMonths" Type="varchar(max)" Mode="In" />
+    <Parameter Name="FDate" Type="datetime" Mode="In" />
+    <Parameter Name="TDate" Type="datetime" Mode="In" />
+    <Parameter Name="SelectedValue" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CurrUserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="GroupFieldKey" Type="int" Mode="In" />
+    <Parameter Name="GroupFieldValues" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspCheckDefaultCompanySettingUserConflict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserIdList" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="SettingId" Type="int" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspCheckPublicDefaultCompanySettingConflict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SettingId" Type="int" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspDySearchStockSupplies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Val" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspExecuteLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LeaveId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageId" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageId" Type="int" Mode="In" />
+    <Parameter Name="Result" Type="int" Mode="InOut" />
+    <Parameter Name="RequestUserIds" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="FromLeaveDate" Type="datetime" Mode="In" />
+    <Parameter Name="ToLeaveDate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="CRMspFileSearchWebSmart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchVal" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchConditionMode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="CRMspGetUnReadTicketForUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserIds" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspIntMsgGetUnReadMessgeForUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserIds" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCityWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="ProvinceId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyGroupsIIIWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyGroupsIIWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyGroupsIVWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyGroupsWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyLogoByCmpIds" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyIds" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyPresentationsWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyQuickRegisterDefSettingIsDefUserAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyQuickRegisterDefSettingUserAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanySubGroupsWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CompanyGroupId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectCompanyTypesWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectConsecutiveLeaveByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Date" Type="datetime" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="TimeAttendanceMode" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectLeaveWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CrmUserId" Type="int" Mode="In" />
+    <Parameter Name="LeaveId" Type="int" Mode="In" />
+    <Parameter Name="LeaveTypeId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="FDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="TDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="LeaveStatusId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectPrjTitleGroupsByCmpId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="IsFinished" Type="int" Mode="In" />
+    <Parameter Name="IsTicket" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectProvinceWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CountryId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectUsersByIdsWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="UserIdList" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="IsActive" Type="bit" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectUsersWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="DepartmentId" Type="int" Mode="In" />
+    <Parameter Name="IsActive" Type="bit" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="LinkedTypeId" Type="int" Mode="In" />
+    <Parameter Name="ExcludeUserIds" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspSelectUserTaskById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserTaskId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="CRMspUpdateCompanyDefaultSettingDefFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SettingIds" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="CRMspUpdateCompanyQuickRegisterDefSettingLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyQuickRegisterDefSettingId" Type="int" Mode="In" />
+    <Parameter Name="CmpLocationLat" Type="varchar" Mode="In" />
+    <Parameter Name="CmpLocationLong" Type="varchar" Mode="In" />
+    <Parameter Name="CmpLocationZoom" Type="float" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="varchar" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspUpdatePersonQuickRegisterDefSettingLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyQuickRegisterDefSettingId" Type="int" Mode="In" />
+    <Parameter Name="PrsLocationLat" Type="varchar" Mode="In" />
+    <Parameter Name="PrsLocationLong" Type="varchar" Mode="In" />
+    <Parameter Name="PrsLocationZoom" Type="float" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="varchar" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspUpdateUserLastCheckEmailDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LastCheckEmailDate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="CRMspUserTaskAlarmDidIt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserTaskId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="varchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="UserTaskRemindDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="UserTaskRemindDate" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="CRMspUserTaskDidIt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserTaskId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="varchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="TargetDate" Type="datetime" Mode="In" />
+    <Parameter Name="IsFinish" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="EmailspGetUnReadEmailReceiveCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="EmailspInsertEmailUserTempTankByCompanyPerson" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="EmailSystemPartId" Type="int" Mode="In" />
+    <Parameter Name="EmailObjectId" Type="bigint" Mode="In" />
+    <Parameter Name="CompanyId" Type="int" Mode="In" />
+    <Parameter Name="CompanyPersonId" Type="int" Mode="In" />
+    <Parameter Name="EmailCmpPrjId" Type="int" Mode="In" />
+    <Parameter Name="FilePath" Type="nvarchar" Mode="In" />
+    <Parameter Name="FilePathII" Type="nvarchar" Mode="In" />
+    <Parameter Name="FilePathIII" Type="nvarchar" Mode="In" />
+    <Parameter Name="FilePathIV" Type="nvarchar" Mode="In" />
+    <Parameter Name="FilePathV" Type="nvarchar" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="varchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="EmailspSearchEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchedValue" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="EmailspSelectEmailReadySendByUserId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SendDateTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="EmailspSelectEmailTankCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SendDateTime" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="EmailspSelectEmailTankReadySend" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SendDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ScorespInsertAndCalcOrderCancelledScores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderId" Type="int" Mode="In" />
+    <Parameter Name="CurrDate" Type="datetime" Mode="In" />
+    <Parameter Name="UpdateCompanyGroups" Type="bit" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="Result" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="ScorespInsertAndCalcScores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FromDate" Type="datetime" Mode="In" />
+    <Parameter Name="ToDate" Type="datetime" Mode="In" />
+    <Parameter Name="ScoreRuleIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="CompanyId" Type="nvarchar" Mode="In" />
+    <Parameter Name="CurrDate" Type="datetime" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UpdateCompanyGroups" Type="bit" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="IsReturnCntRow" Type="bit" Mode="In" />
+    <Parameter Name="ReturnCntRow" Type="bigint" Mode="InOut" />
+    <Parameter Name="TextEarningScore" Type="nvarchar" Mode="In" />
+    <Parameter Name="TextSpendScore" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="ScorespInsertDuplicateScoreRule" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="RuleId" Type="int" Mode="In" />
+    <Parameter Name="RuleTitleJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="LanguageId" Type="int" Mode="In" />
+    <Parameter Name="InsertedRuleId" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="ScorespReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FromScoreDate" Type="datetime" Mode="In" />
+    <Parameter Name="ToScoreDate" Type="datetime" Mode="In" />
+    <Parameter Name="ScoreRuleIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="CompanyId" Type="nvarchar" Mode="In" />
+    <Parameter Name="TextEarningScore" Type="nvarchar" Mode="In" />
+    <Parameter Name="TextSpendScore" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="rptUserId" Type="int" Mode="In" />
+    <Parameter Name="rptDate" Type="nvarchar" Mode="In" />
+    <Parameter Name="rptDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ScorespReportSearchCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Val" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ScorespSelectScores" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FromScoreDate" Type="datetime" Mode="In" />
+    <Parameter Name="ToScoreDate" Type="datetime" Mode="In" />
+    <Parameter Name="ScoreRuleIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="CompanyId" Type="nvarchar" Mode="In" />
+    <Parameter Name="ScoreUserIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="ScoreSysPartIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="ScoreObjectIds" Type="nvarchar" Mode="In" />
+    <Parameter Name="TextEarningScore" Type="nvarchar" Mode="In" />
+    <Parameter Name="TextSpendScore" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SecspSearchLetters" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchVal" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchConditionMode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspBuyOrderPaymentDeActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderPaymentId" Type="int" Mode="In" />
+    <Parameter Name="bordpayDeActiveUserId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="WSspBuyOrderPaymentDeActiveExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderPaymentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspBuyOrderPaymentVerify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderPaymentId" Type="int" Mode="In" />
+    <Parameter Name="bordpayVerifierId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="WSspBuyOrderPaymentVerifyExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderPaymentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspChartSalesTargetDistributionReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspChartSalesTargetReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspCheckDefaultOrderSettingUserConflict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserIdList" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="OrderSettingId" Type="int" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspCheckPublicDefaultOrderSettingConflict" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderSettingId" Type="int" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspControlBuyOrderItemsSoldStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderId" Type="int" Mode="In" />
+    <Parameter Name="BordItemJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PrdKind" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspControlOrderItemsSoldStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderId" Type="int" Mode="In" />
+    <Parameter Name="OrdItemJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="OrdItemListStr" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PrdKind" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspControlPreOrderItemsSoldStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PreOrderId" Type="int" Mode="In" />
+    <Parameter Name="PordItemJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PrdKind" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspDeleteBuyOrderItemLinkOrderItem" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderId" Type="int" Mode="In" />
+    <Parameter Name="BuyOrderItemId" Type="int" Mode="In" />
+    <Parameter Name="OrderId" Type="int" Mode="In" />
+    <Parameter Name="OrderItemId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="Result" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspDeleteSalesTarget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="ErrorMessage" Type="nvarchar(max)" Mode="InOut" />
+  </Function>
+  <Function Name="WSspInsertBuyOrderOprUserAccessToAllUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BuyOrderOprId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspInsertSalesTarget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TitleLangJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetOrderCount" Type="int" Mode="In" />
+    <Parameter Name="TargetOrderAmount" Type="decimal" Mode="In" />
+    <Parameter Name="TargetFromDate" Type="datetime" Mode="In" />
+    <Parameter Name="TargetToDate" Type="datetime" Mode="In" />
+    <Parameter Name="TargetFromDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="TargetToDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="TargetDistributionDetailsJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetTermsJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetScopeJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageId" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageId" Type="int" Mode="In" />
+    <Parameter Name="InsertedId" Type="int" Mode="InOut" />
+    <Parameter Name="ErrorMessage" Type="nvarchar(max)" Mode="InOut" />
+  </Function>
+  <Function Name="WSspOrderCommissionPreVerify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderCommissionId" Type="int" Mode="In" />
+    <Parameter Name="PreVerifierUserId" Type="int" Mode="In" />
+    <Parameter Name="PreVerifiedDate" Type="datetime" Mode="In" />
+    <Parameter Name="PreVerifiedDatePersian" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="WSspOrderCommissionPreVerifyExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderCommissionId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspOrderPaymentDeActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderPaymentId" Type="int" Mode="In" />
+    <Parameter Name="ordpayDeActiveUserId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="WSspOrderPaymentDeActiveExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderPaymentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspPreOrderPaymentDeActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PreOrderPaymentId" Type="int" Mode="In" />
+    <Parameter Name="pordpayDeActiveUserId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="WSspPreOrderPaymentDeActiveExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PreOrderPaymentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspPreOrderPaymentVerify" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PreOrderPaymentId" Type="int" Mode="In" />
+    <Parameter Name="pordpayVerifierId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="WSspPreOrderPaymentVerifyExit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PreOrderPaymentId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspReturnSoldOrdPrdCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PrdId" Type="int" Mode="In" />
+    <Parameter Name="CurrOrdItemId" Type="int" Mode="In" />
+    <Parameter Name="FCR" Type="float" Mode="In" />
+    <Parameter Name="FCRI" Type="float" Mode="In" />
+    <Parameter Name="WhId" Type="int" Mode="In" />
+    <Parameter Name="Tracing" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSearchBuyOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchVal" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchConditionMode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspSearchOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchVal" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchConditionMode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspSearchPreOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SearchVal" Type="nvarchar" Mode="In" />
+    <Parameter Name="UserID" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchConditionMode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspSelectDeliveryTermWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderDefaultSettingById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderSettingId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderDefaultSettingIsDefUserAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="ReferUserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderDefaultSettingUserAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+    <Parameter Name="ReferUserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderGroupWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderOprWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrdersForSalesTarget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectOrderStatusWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectPreOrderDefaultSettingUserAccess" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ReferUserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectProductFirstGroupWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectProductSecondGroupWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="FGId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectProductsWithCodeAndGroup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="JsonText" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="LanguageId" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectProductWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="FGId" Type="int" Mode="In" />
+    <Parameter Name="SGId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectSalesTarget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectSalesTargetsWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspSelectSaleTargets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectSettlementTypeWithPaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageNumber" Type="int" Mode="In" />
+    <Parameter Name="PageSize" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="SearchTerm" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectSoldOrdProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PrdId" Type="int" Mode="In" />
+    <Parameter Name="FCR" Type="float" Mode="In" />
+    <Parameter Name="FCRI" Type="float" Mode="In" />
+    <Parameter Name="WhId" Type="int" Mode="In" />
+    <Parameter Name="Tracing" Type="nvarchar" Mode="In" />
+    <Parameter Name="CurrOrdItemId" Type="int" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="TopCount" Type="int" Mode="In" />
+    <Parameter Name="LastRowNumber" Type="bigint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectValidPordProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PrdId" Type="int" Mode="In" />
+    <Parameter Name="FCR" Type="float" Mode="In" />
+    <Parameter Name="FCRI" Type="float" Mode="In" />
+    <Parameter Name="WhId" Type="int" Mode="In" />
+    <Parameter Name="Tracing" Type="nvarchar" Mode="In" />
+    <Parameter Name="CurrId" Type="int" Mode="In" />
+    <Parameter Name="CurrDate" Type="datetime" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="TopCount" Type="int" Mode="In" />
+    <Parameter Name="LastRowNumber" Type="bigint" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSelectWareHouseWithId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="WareHouseId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="WSspSendUserSalesTargetNotif" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="ToUserId" Type="int" Mode="In" />
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="Date" Type="datetime" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+    <Parameter Name="CenterId" Type="int" Mode="In" />
+    <Parameter Name="TemplateUserMessageJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TemplateResponsibleUserMessageJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="MessageSubjectJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="AchievementDateJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="Year1" Type="smallint" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="WSspUpdateOrderDefaultSettingDefFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="SettingIds" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UseType" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="WSspUpdateProductMulti" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PrdGroupdJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="FieldJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="DefaultLanguageId" Type="int" Mode="In" />
+    <Parameter Name="Result" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="WSspUpdateSalesTarget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SalesTargetId" Type="int" Mode="In" />
+    <Parameter Name="TitleLangJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetOrderCount" Type="int" Mode="In" />
+    <Parameter Name="TargetOrderAmount" Type="decimal" Mode="In" />
+    <Parameter Name="TargetFromDate" Type="datetime" Mode="In" />
+    <Parameter Name="TargetToDate" Type="datetime" Mode="In" />
+    <Parameter Name="TargetFromDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="TargetToDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="TargetDistributionDetailsJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetTermsJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="TargetScopeJson" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="FPId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="int" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="nvarchar" Mode="In" />
+    <Parameter Name="LanguageId" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageId" Type="int" Mode="In" />
+    <Parameter Name="ErrorMessage" Type="nvarchar(max)" Mode="InOut" />
+  </Function>
+  <EntityContainer Name="ModelsStoreContainer" />
+</Schema>

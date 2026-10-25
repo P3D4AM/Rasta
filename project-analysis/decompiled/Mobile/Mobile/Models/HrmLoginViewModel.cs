@@ -1,0 +1,28 @@
+namespace Mobile.Models;
+
+public class HrmLoginViewModel
+{
+	public string username { get; set; }
+
+	public string password { get; set; }
+
+	public string mobDate { get; set; }
+
+	public string mobHour { get; set; }
+
+	public string apiVersion { get; set; }
+
+	public string appName { get; set; }
+
+	public string imeiCode { get; set; }
+
+	public int LangId { get; set; }
+
+	public string projectAppName { get; set; }
+
+	public string deviceId { get; set; }
+
+	public int deviceType { get; set; }
+
+	public string deviceProperty { get; set; }
+}

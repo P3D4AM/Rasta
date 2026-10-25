@@ -1,0 +1,10 @@
+namespace Mobile.Models;
+
+public class MobspReturnDocOprTypeFromDocId_Result
+{
+	public int DocID { get; set; }
+
+	public int OprId { get; set; }
+
+	public int? OprType { get; set; }
+}

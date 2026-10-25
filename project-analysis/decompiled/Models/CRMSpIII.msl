@@ -1,0 +1,1507 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="CRMSpIIIEntities">
+    <FunctionImportMapping FunctionImportName="CRMspFileSearchWebSmart" FunctionName="Models.Store.CRMspFileSearchWebSmart">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspFileSearchWebSmart_Result">
+          <ScalarProperty Name="FileDirectoryID" ColumnName="FileDirectoryID" />
+          <ScalarProperty Name="FileDirectoryTypeId" ColumnName="FileDirectoryTypeId" />
+          <ScalarProperty Name="FileDirectoryType" ColumnName="FileDirectoryType" />
+          <ScalarProperty Name="FileDirectoryTypeOpr" ColumnName="FileDirectoryTypeOpr" />
+          <ScalarProperty Name="MasterId" ColumnName="MasterId" />
+          <ScalarProperty Name="DetailId" ColumnName="DetailId" />
+          <ScalarProperty Name="SubDetailId" ColumnName="SubDetailId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="FolderName" ColumnName="FolderName" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="CopyFromPath" ColumnName="CopyFromPath" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+          <ScalarProperty Name="DocDay" ColumnName="DocDay" />
+          <ScalarProperty Name="DocTime" ColumnName="DocTime" />
+          <ScalarProperty Name="DocDateTime" ColumnName="DocDateTime" />
+          <ScalarProperty Name="TypeOprObjectId" ColumnName="TypeOprObjectId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="OrderView" ColumnName="OrderView" />
+          <ScalarProperty Name="TypeOprObjectIdI" ColumnName="TypeOprObjectIdI" />
+          <ScalarProperty Name="TypeOprObjectIdII" ColumnName="TypeOprObjectIdII" />
+          <ScalarProperty Name="FileDirectoryNumRef" ColumnName="FileDirectoryNumRef" />
+          <ScalarProperty Name="FileDirectoryParentId" ColumnName="FileDirectoryParentId" />
+          <ScalarProperty Name="FileCId" ColumnName="FileCId" />
+          <ScalarProperty Name="FileLinkAccData" ColumnName="FileLinkAccData" />
+          <ScalarProperty Name="FileDesc" ColumnName="FileDesc" />
+          <ScalarProperty Name="cmpName" ColumnName="cmpName" />
+          <ScalarProperty Name="cmpCode" ColumnName="cmpCode" />
+          <ScalarProperty Name="cmpNumber" ColumnName="cmpNumber" />
+          <ScalarProperty Name="PrsName" ColumnName="PrsName" />
+          <ScalarProperty Name="prjPostFix" ColumnName="prjPostFix" />
+          <ScalarProperty Name="prjTitle" ColumnName="prjTitle" />
+          <ScalarProperty Name="RegisterUserFullName" ColumnName="RegisterUserFullName" />
+          <ScalarProperty Name="EditUserFullName" ColumnName="EditUserFullName" />
+          <ScalarProperty Name="SearchRank" ColumnName="SearchRank" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ScorespInsertDuplicateScoreRule" FunctionName="Models.Store.ScorespInsertDuplicateScoreRule" />
+    <FunctionImportMapping FunctionImportName="WSspSearchBuyOrders" FunctionName="Models.Store.WSspSearchBuyOrders">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSearchBuyOrders_Result">
+          <ScalarProperty Name="bordNumber" ColumnName="bordNumber" />
+          <ScalarProperty Name="bordCompanyId" ColumnName="bordCompanyId" />
+          <ScalarProperty Name="bordCompanyPersonId" ColumnName="bordCompanyPersonId" />
+          <ScalarProperty Name="bordProjectId" ColumnName="bordProjectId" />
+          <ScalarProperty Name="bordTotalAmount" ColumnName="bordTotalAmount" />
+          <ScalarProperty Name="bordDateTime" ColumnName="bordDateTime" />
+          <ScalarProperty Name="bordDate" ColumnName="bordDate" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="BuyOrderOprId" ColumnName="BuyOrderOprId" />
+          <ScalarProperty Name="BuyOrderOpr" ColumnName="BuyOrderOpr" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSearchOrders" FunctionName="Models.Store.WSspSearchOrders">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSearchOrders_Result">
+          <ScalarProperty Name="ordNumber" ColumnName="ordNumber" />
+          <ScalarProperty Name="ordCompanyId" ColumnName="ordCompanyId" />
+          <ScalarProperty Name="ordCompanyPersonId" ColumnName="ordCompanyPersonId" />
+          <ScalarProperty Name="ordProjectId" ColumnName="ordProjectId" />
+          <ScalarProperty Name="ordTotalAmount" ColumnName="ordTotalAmount" />
+          <ScalarProperty Name="ordDateTime" ColumnName="ordDateTime" />
+          <ScalarProperty Name="ordDate" ColumnName="ordDate" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="OrderOprId" ColumnName="OrderOprId" />
+          <ScalarProperty Name="OrderOpr" ColumnName="OrderOpr" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSearchPreOrders" FunctionName="Models.Store.WSspSearchPreOrders">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSearchPreOrders_Result">
+          <ScalarProperty Name="pordNumber" ColumnName="pordNumber" />
+          <ScalarProperty Name="pordCompanyId" ColumnName="pordCompanyId" />
+          <ScalarProperty Name="pordCompanyPersonId" ColumnName="pordCompanyPersonId" />
+          <ScalarProperty Name="pordProjectId" ColumnName="pordProjectId" />
+          <ScalarProperty Name="pordTotalAmount" ColumnName="pordTotalAmount" />
+          <ScalarProperty Name="pordDateTime" ColumnName="pordDateTime" />
+          <ScalarProperty Name="pordDate" ColumnName="pordDate" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="PreOrderOprID" ColumnName="PreOrderOprID" />
+          <ScalarProperty Name="pordTypeId" ColumnName="pordTypeId" />
+          <ScalarProperty Name="PreOrderOpr" ColumnName="PreOrderOpr" />
+          <ScalarProperty Name="PreOrderType" ColumnName="PreOrderType" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspUpdateProductMulti" FunctionName="Models.Store.WSspUpdateProductMulti" />
+    <FunctionImportMapping FunctionImportName="SecspSearchLetters" FunctionName="Models.Store.SecspSearchLetters">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.SecspSearchLetters_Result">
+          <ScalarProperty Name="LetterId" ColumnName="LetterId" />
+          <ScalarProperty Name="LetterTypeId" ColumnName="LetterTypeId" />
+          <ScalarProperty Name="LetterPreNumber" ColumnName="LetterPreNumber" />
+          <ScalarProperty Name="LetterNumber" ColumnName="LetterNumber" />
+          <ScalarProperty Name="LetterPreNumberII" ColumnName="LetterPreNumberII" />
+          <ScalarProperty Name="LetterNumberII" ColumnName="LetterNumberII" />
+          <ScalarProperty Name="LetterCompanyId" ColumnName="LetterCompanyId" />
+          <ScalarProperty Name="LetterPersonId" ColumnName="LetterPersonId" />
+          <ScalarProperty Name="LetterProjectId" ColumnName="LetterProjectId" />
+          <ScalarProperty Name="LetterSubject" ColumnName="LetterSubject" />
+          <ScalarProperty Name="LetterDateTime" ColumnName="LetterDateTime" />
+          <ScalarProperty Name="LetterDate" ColumnName="LetterDate" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Person" ColumnName="Person" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ScorespInsertAndCalcOrderCancelledScores" FunctionName="Models.Store.ScorespInsertAndCalcOrderCancelledScores" />
+    <FunctionImportMapping FunctionImportName="ScorespReport" FunctionName="Models.Store.ScorespReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.ScorespReport_Result">
+          <ScalarProperty Name="ScoreId" ColumnName="ScoreId" />
+          <ScalarProperty Name="ScoreDate" ColumnName="ScoreDate" />
+          <ScalarProperty Name="ScoreDatePersian" ColumnName="ScoreDatePersian" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="ScoreRuleId" ColumnName="ScoreRuleId" />
+          <ScalarProperty Name="ScoreRuleTitle" ColumnName="ScoreRuleTitle" />
+          <ScalarProperty Name="ScoreOrderId" ColumnName="ScoreOrderId" />
+          <ScalarProperty Name="ScoreOrderInfo" ColumnName="ScoreOrderInfo" />
+          <ScalarProperty Name="ScoreCmpId" ColumnName="ScoreCmpId" />
+          <ScalarProperty Name="ScoreCompanyName" ColumnName="ScoreCompanyName" />
+          <ScalarProperty Name="ScoreCompanyNumber" ColumnName="ScoreCompanyNumber" />
+          <ScalarProperty Name="OrderView" ColumnName="OrderView" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterUser" ColumnName="FirstRegisterUser" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RegisterUser" ColumnName="RegisterUser" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="ScoreSysPartId" ColumnName="ScoreSysPartId" />
+          <ScalarProperty Name="ScoreSysPartTitle" ColumnName="ScoreSysPartTitle" />
+          <ScalarProperty Name="ScoreObjectId" ColumnName="ScoreObjectId" />
+          <ScalarProperty Name="ScoreObjectInfo" ColumnName="ScoreObjectInfo" />
+          <ScalarProperty Name="ScoreOprType" ColumnName="ScoreOprType" />
+          <ScalarProperty Name="ScoreOprTypeTitle" ColumnName="ScoreOprTypeTitle" />
+          <ScalarProperty Name="ScoreExpireDate" ColumnName="ScoreExpireDate" />
+          <ScalarProperty Name="ScoreExpireDatePersian" ColumnName="ScoreExpireDatePersian" />
+          <ScalarProperty Name="ScoreIsExpired" ColumnName="ScoreIsExpired" />
+          <ScalarProperty Name="ScoreDescription" ColumnName="ScoreDescription" />
+          <ScalarProperty Name="ScoreKind" ColumnName="ScoreKind" />
+          <ScalarProperty Name="ScoreUserId" ColumnName="ScoreUserId" />
+          <ScalarProperty Name="ScoreUser" ColumnName="ScoreUser" />
+          <ScalarProperty Name="DisCodeRuleId" ColumnName="DisCodeRuleId" />
+          <ScalarProperty Name="DisCodeRuleTitle" ColumnName="DisCodeRuleTitle" />
+          <ScalarProperty Name="ScoreCId" ColumnName="ScoreCId" />
+          <ScalarProperty Name="CenterName" ColumnName="CenterName" />
+          <ScalarProperty Name="CenterCode" ColumnName="CenterCode" />
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ScorespReportSearchCompany" FunctionName="Models.Store.ScorespReportSearchCompany">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.ScorespReportSearchCompany_Result">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="cmpNumber" ColumnName="cmpNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ScorespInsertAndCalcScores" FunctionName="Models.Store.ScorespInsertAndCalcScores">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.ScorespInsertAndCalcScores_Result">
+          <ScalarProperty Name="ScoreId" ColumnName="ScoreId" />
+          <ScalarProperty Name="ScoreDate" ColumnName="ScoreDate" />
+          <ScalarProperty Name="ScoreDatePersian" ColumnName="ScoreDatePersian" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="ScoreRuleId" ColumnName="ScoreRuleId" />
+          <ScalarProperty Name="ScoreRuleTitle" ColumnName="ScoreRuleTitle" />
+          <ScalarProperty Name="ScoreOrderId" ColumnName="ScoreOrderId" />
+          <ScalarProperty Name="ScoreOrderInfo" ColumnName="ScoreOrderInfo" />
+          <ScalarProperty Name="ScoreCmpId" ColumnName="ScoreCmpId" />
+          <ScalarProperty Name="ScoreCompanyName" ColumnName="ScoreCompanyName" />
+          <ScalarProperty Name="ScoreSysPartId" ColumnName="ScoreSysPartId" />
+          <ScalarProperty Name="ScoreSysPartTitle" ColumnName="ScoreSysPartTitle" />
+          <ScalarProperty Name="ScoreObjectId" ColumnName="ScoreObjectId" />
+          <ScalarProperty Name="ScoreObjectInfo" ColumnName="ScoreObjectInfo" />
+          <ScalarProperty Name="ScoreOprType" ColumnName="ScoreOprType" />
+          <ScalarProperty Name="ScoreOprTypeTitle" ColumnName="ScoreOprTypeTitle" />
+          <ScalarProperty Name="ScoreExpireDate" ColumnName="ScoreExpireDate" />
+          <ScalarProperty Name="ScoreExpireDatePersian" ColumnName="ScoreExpireDatePersian" />
+          <ScalarProperty Name="ScoreIsExpired" ColumnName="ScoreIsExpired" />
+          <ScalarProperty Name="ScoreDescription" ColumnName="ScoreDescription" />
+          <ScalarProperty Name="ScoreKind" ColumnName="ScoreKind" />
+          <ScalarProperty Name="ScoreUserId" ColumnName="ScoreUserId" />
+          <ScalarProperty Name="ScoreUser" ColumnName="ScoreUser" />
+          <ScalarProperty Name="DisCodeRuleId" ColumnName="DisCodeRuleId" />
+          <ScalarProperty Name="DisCodeRuleTitle" ColumnName="DisCodeRuleTitle" />
+          <ScalarProperty Name="ScoreCId" ColumnName="ScoreCId" />
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ScorespSelectScores" FunctionName="Models.Store.ScorespSelectScores">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.ScorespSelectScores_Result">
+          <ScalarProperty Name="ScoreId" ColumnName="ScoreId" />
+          <ScalarProperty Name="ScoreDate" ColumnName="ScoreDate" />
+          <ScalarProperty Name="ScoreDatePersian" ColumnName="ScoreDatePersian" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="ScoreRuleId" ColumnName="ScoreRuleId" />
+          <ScalarProperty Name="ScoreRuleTitle" ColumnName="ScoreRuleTitle" />
+          <ScalarProperty Name="ScoreOrderId" ColumnName="ScoreOrderId" />
+          <ScalarProperty Name="ScoreOrderInfo" ColumnName="ScoreOrderInfo" />
+          <ScalarProperty Name="ScoreCmpId" ColumnName="ScoreCmpId" />
+          <ScalarProperty Name="ScoreCompanyName" ColumnName="ScoreCompanyName" />
+          <ScalarProperty Name="ScoreCompanyNumber" ColumnName="ScoreCompanyNumber" />
+          <ScalarProperty Name="OrderView" ColumnName="OrderView" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterUser" ColumnName="FirstRegisterUser" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RegisterUser" ColumnName="RegisterUser" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="ScoreSysPartId" ColumnName="ScoreSysPartId" />
+          <ScalarProperty Name="ScoreSysPartTitle" ColumnName="ScoreSysPartTitle" />
+          <ScalarProperty Name="ScoreObjectId" ColumnName="ScoreObjectId" />
+          <ScalarProperty Name="ScoreObjectInfo" ColumnName="ScoreObjectInfo" />
+          <ScalarProperty Name="ScoreOprType" ColumnName="ScoreOprType" />
+          <ScalarProperty Name="ScoreOprTypeTitle" ColumnName="ScoreOprTypeTitle" />
+          <ScalarProperty Name="ScoreExpireDate" ColumnName="ScoreExpireDate" />
+          <ScalarProperty Name="ScoreExpireDatePersian" ColumnName="ScoreExpireDatePersian" />
+          <ScalarProperty Name="ScoreIsExpired" ColumnName="ScoreIsExpired" />
+          <ScalarProperty Name="ScoreDescription" ColumnName="ScoreDescription" />
+          <ScalarProperty Name="ScoreKind" ColumnName="ScoreKind" />
+          <ScalarProperty Name="ScoreUserId" ColumnName="ScoreUserId" />
+          <ScalarProperty Name="ScoreUser" ColumnName="ScoreUser" />
+          <ScalarProperty Name="DisCodeRuleId" ColumnName="DisCodeRuleId" />
+          <ScalarProperty Name="DisCodeRuleTitle" ColumnName="DisCodeRuleTitle" />
+          <ScalarProperty Name="ScoreCId" ColumnName="ScoreCId" />
+          <ScalarProperty Name="CenterName" ColumnName="CenterName" />
+          <ScalarProperty Name="CenterCode" ColumnName="CenterCode" />
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspDySearchStockSupplies" FunctionName="Models.Store.CRMspDySearchStockSupplies">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspDySearchStockSupplies_Result">
+          <ScalarProperty Name="StockSupplyId" ColumnName="StockSupplyId" />
+          <ScalarProperty Name="stsupNumber" ColumnName="stsupNumber" />
+          <ScalarProperty Name="stsupDate" ColumnName="stsupDate" />
+          <ScalarProperty Name="stsupDateTime" ColumnName="stsupDateTime" />
+          <ScalarProperty Name="StockSupplyInfo" ColumnName="StockSupplyInfo" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="EmailspSelectEmailTankCount" FunctionName="Models.Store.EmailspSelectEmailTankCount" />
+    <FunctionImportMapping FunctionImportName="EmailspGetUnReadEmailReceiveCount" FunctionName="Models.Store.EmailspGetUnReadEmailReceiveCount" />
+    <FunctionImportMapping FunctionImportName="WSspDeleteSalesTarget" FunctionName="Models.Store.WSspDeleteSalesTarget" />
+    <FunctionImportMapping FunctionImportName="EmailspSelectEmailReadySendByUserId" FunctionName="Models.Store.EmailspSelectEmailReadySendByUserId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.EmailspSelectEmailReadySendByUserId_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Header_Id" ColumnName="Header_Id" />
+          <ScalarProperty Name="Header_Subject" ColumnName="Header_Subject" />
+          <ScalarProperty Name="Header_Body" ColumnName="Header_Body" />
+          <ScalarProperty Name="Header_PriorityId" ColumnName="Header_PriorityId" />
+          <ScalarProperty Name="Setting_Id" ColumnName="Setting_Id" />
+          <ScalarProperty Name="UsersInfo_Id" ColumnName="UsersInfo_Id" />
+          <ScalarProperty Name="UsersInfo_euUserId" ColumnName="UsersInfo_euUserId" />
+          <ScalarProperty Name="UsersInfo_euNikeName" ColumnName="UsersInfo_euNikeName" />
+          <ScalarProperty Name="UsersInfo_euNikeEmail" ColumnName="UsersInfo_euNikeEmail" />
+          <ScalarProperty Name="UsersInfo_euPOP3Server" ColumnName="UsersInfo_euPOP3Server" />
+          <ScalarProperty Name="UsersInfo_euSMTPServer" ColumnName="UsersInfo_euSMTPServer" />
+          <ScalarProperty Name="UsersInfo_euUserName" ColumnName="UsersInfo_euUserName" />
+          <ScalarProperty Name="UsersInfo_euPassword" ColumnName="UsersInfo_euPassword" />
+          <ScalarProperty Name="UsersInfo_euIsActive" ColumnName="UsersInfo_euIsActive" />
+          <ScalarProperty Name="Detail_Id" ColumnName="Detail_Id" />
+          <ScalarProperty Name="Detail_EmailAddress" ColumnName="Detail_EmailAddress" />
+          <ScalarProperty Name="Detail_EmailCmpId" ColumnName="Detail_EmailCmpId" />
+          <ScalarProperty Name="Detail_EmailCmpPrsId" ColumnName="Detail_EmailCmpPrsId" />
+          <ScalarProperty Name="Detail_EmailCmpPrjId" ColumnName="Detail_EmailCmpPrjId" />
+          <ScalarProperty Name="Detail_EmailCmpName" ColumnName="Detail_EmailCmpName" />
+          <ScalarProperty Name="Detail_EmailCmpPrsName" ColumnName="Detail_EmailCmpPrsName" />
+          <ScalarProperty Name="Detail_EmailPrsJob" ColumnName="Detail_EmailPrsJob" />
+          <ScalarProperty Name="Detail_StatusId" ColumnName="Detail_StatusId" />
+          <ScalarProperty Name="Detail_AppType" ColumnName="Detail_AppType" />
+          <ScalarProperty Name="Detail_TryCount" ColumnName="Detail_TryCount" />
+          <ScalarProperty Name="UsersInfo_euSMTPUseDefCredentials" ColumnName="UsersInfo_euSMTPUseDefCredentials" />
+          <ScalarProperty Name="UsersInfo_euSMTPUseSsl" ColumnName="UsersInfo_euSMTPUseSsl" />
+          <ScalarProperty Name="UsersInfo_euSMTPPort" ColumnName="UsersInfo_euSMTPPort" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyGroupsIIIWithPaging" FunctionName="Models.Store.CRMspSelectCompanyGroupsIIIWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyGroupsIIIWithPaging_Result">
+          <ScalarProperty Name="CompanyGroupIIIID" ColumnName="CompanyGroupIIIID" />
+          <ScalarProperty Name="GroupIIIName" ColumnName="GroupIIIName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyGroupsIIWithPaging" FunctionName="Models.Store.CRMspSelectCompanyGroupsIIWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyGroupsIIWithPaging_Result">
+          <ScalarProperty Name="CompanyGroupIIID" ColumnName="CompanyGroupIIID" />
+          <ScalarProperty Name="GroupIIName" ColumnName="GroupIIName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyGroupsIVWithPaging" FunctionName="Models.Store.CRMspSelectCompanyGroupsIVWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyGroupsIVWithPaging_Result">
+          <ScalarProperty Name="CompanyGroupIVID" ColumnName="CompanyGroupIVID" />
+          <ScalarProperty Name="GroupIVName" ColumnName="GroupIVName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyGroupsWithPaging" FunctionName="Models.Store.CRMspSelectCompanyGroupsWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyGroupsWithPaging_Result">
+          <ScalarProperty Name="CompanyGroupID" ColumnName="CompanyGroupID" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyPresentationsWithPaging" FunctionName="Models.Store.CRMspSelectCompanyPresentationsWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyPresentationsWithPaging_Result">
+          <ScalarProperty Name="CompanyPresentationID" ColumnName="CompanyPresentationID" />
+          <ScalarProperty Name="Presentation" ColumnName="Presentation" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyTypesWithPaging" FunctionName="Models.Store.CRMspSelectCompanyTypesWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyTypesWithPaging_Result">
+          <ScalarProperty Name="CompanyTypeID" ColumnName="CompanyTypeID" />
+          <ScalarProperty Name="CompanyTypeName" ColumnName="CompanyTypeName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectProvinceWithPaging" FunctionName="Models.Store.CRMspSelectProvinceWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectProvinceWithPaging_Result">
+          <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+          <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectUsersWithPaging" FunctionName="Models.Store.CRMspSelectUsersWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectUsersWithPaging_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCityWithPaging" FunctionName="Models.Store.CRMspSelectCityWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCityWithPaging_Result">
+          <ScalarProperty Name="CityID" ColumnName="CityID" />
+          <ScalarProperty Name="CityName" ColumnName="CityName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspUpdateUserLastCheckEmailDate" FunctionName="Models.Store.CRMspUpdateUserLastCheckEmailDate" />
+    <FunctionImportMapping FunctionImportName="CRMspSelectUsersByIdsWithPaging" FunctionName="Models.Store.CRMspSelectUsersByIdsWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectUsersByIdsWithPaging_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspUpdateCompanyQuickRegisterDefSettingLocation" FunctionName="Models.Store.CRMspUpdateCompanyQuickRegisterDefSettingLocation" />
+    <FunctionImportMapping FunctionImportName="CRMspUpdatePersonQuickRegisterDefSettingLocation" FunctionName="Models.Store.CRMspUpdatePersonQuickRegisterDefSettingLocation" />
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanySubGroupsWithPaging" FunctionName="Models.Store.CRMspSelectCompanySubGroupsWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanySubGroupsWithPaging_Result">
+          <ScalarProperty Name="CompanySubGroupID" ColumnName="CompanySubGroupID" />
+          <ScalarProperty Name="SubGroupName" ColumnName="SubGroupName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectDeliveryTermWithPaging" FunctionName="Models.Store.WSspSelectDeliveryTermWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectDeliveryTermWithPaging_Result">
+          <ScalarProperty Name="DeliveryTermId" ColumnName="DeliveryTermId" />
+          <ScalarProperty Name="DeliveryTerm" ColumnName="DeliveryTerm" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderGroupWithPaging" FunctionName="Models.Store.WSspSelectOrderGroupWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrderGroupWithPaging_Result">
+          <ScalarProperty Name="OrderGroupId" ColumnName="OrderGroupId" />
+          <ScalarProperty Name="OrderGroupName" ColumnName="OrderGroupName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderOprWithPaging" FunctionName="Models.Store.WSspSelectOrderOprWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrderOprWithPaging_Result">
+          <ScalarProperty Name="OrderOprID" ColumnName="OrderOprID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderStatusWithPaging" FunctionName="Models.Store.WSspSelectOrderStatusWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrderStatusWithPaging_Result">
+          <ScalarProperty Name="OrderStatusId" ColumnName="OrderStatusId" />
+          <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectSettlementTypeWithPaging" FunctionName="Models.Store.WSspSelectSettlementTypeWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectSettlementTypeWithPaging_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspDeleteBuyOrderItemLinkOrderItem" FunctionName="Models.Store.WSspDeleteBuyOrderItemLinkOrderItem" />
+    <FunctionImportMapping FunctionImportName="EmailspSelectEmailTankReadySend" FunctionName="Models.Store.EmailspSelectEmailTankReadySend">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.EmailspSelectEmailTankReadySend_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Header_Id" ColumnName="Header_Id" />
+          <ScalarProperty Name="Header_Subject" ColumnName="Header_Subject" />
+          <ScalarProperty Name="Header_Body" ColumnName="Header_Body" />
+          <ScalarProperty Name="Header_PriorityId" ColumnName="Header_PriorityId" />
+          <ScalarProperty Name="Setting_Id" ColumnName="Setting_Id" />
+          <ScalarProperty Name="UsersInfo_Id" ColumnName="UsersInfo_Id" />
+          <ScalarProperty Name="UsersInfo_euUserId" ColumnName="UsersInfo_euUserId" />
+          <ScalarProperty Name="UsersInfo_euNikeName" ColumnName="UsersInfo_euNikeName" />
+          <ScalarProperty Name="UsersInfo_euNikeEmail" ColumnName="UsersInfo_euNikeEmail" />
+          <ScalarProperty Name="UsersInfo_euPOP3Server" ColumnName="UsersInfo_euPOP3Server" />
+          <ScalarProperty Name="UsersInfo_euSMTPServer" ColumnName="UsersInfo_euSMTPServer" />
+          <ScalarProperty Name="UsersInfo_euUserName" ColumnName="UsersInfo_euUserName" />
+          <ScalarProperty Name="UsersInfo_euPassword" ColumnName="UsersInfo_euPassword" />
+          <ScalarProperty Name="UsersInfo_euIsActive" ColumnName="UsersInfo_euIsActive" />
+          <ScalarProperty Name="Detail_Id" ColumnName="Detail_Id" />
+          <ScalarProperty Name="Detail_EmailAddress" ColumnName="Detail_EmailAddress" />
+          <ScalarProperty Name="Detail_EmailCmpId" ColumnName="Detail_EmailCmpId" />
+          <ScalarProperty Name="Detail_EmailCmpPrsId" ColumnName="Detail_EmailCmpPrsId" />
+          <ScalarProperty Name="Detail_EmailCmpPrjId" ColumnName="Detail_EmailCmpPrjId" />
+          <ScalarProperty Name="Detail_EmailCmpName" ColumnName="Detail_EmailCmpName" />
+          <ScalarProperty Name="Detail_EmailCmpPrsName" ColumnName="Detail_EmailCmpPrsName" />
+          <ScalarProperty Name="Detail_EmailPrsJob" ColumnName="Detail_EmailPrsJob" />
+          <ScalarProperty Name="Detail_StatusId" ColumnName="Detail_StatusId" />
+          <ScalarProperty Name="Detail_AppType" ColumnName="Detail_AppType" />
+          <ScalarProperty Name="Detail_TryCount" ColumnName="Detail_TryCount" />
+          <ScalarProperty Name="UsersInfo_euSMTPUseDefCredentials" ColumnName="UsersInfo_euSMTPUseDefCredentials" />
+          <ScalarProperty Name="UsersInfo_euSMTPUseSsl" ColumnName="UsersInfo_euSMTPUseSsl" />
+          <ScalarProperty Name="UsersInfo_euSMTPPort" ColumnName="UsersInfo_euSMTPPort" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectProductFirstGroupWithPaging" FunctionName="Models.Store.WSspSelectProductFirstGroupWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectProductFirstGroupWithPaging_Result">
+          <ScalarProperty Name="PrdFirstGroupID" ColumnName="PrdFirstGroupID" />
+          <ScalarProperty Name="FGName" ColumnName="FGName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectProductSecondGroupWithPaging" FunctionName="Models.Store.WSspSelectProductSecondGroupWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectProductSecondGroupWithPaging_Result">
+          <ScalarProperty Name="PrdSecondGroupID" ColumnName="PrdSecondGroupID" />
+          <ScalarProperty Name="SGName" ColumnName="SGName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectProductWithPaging" FunctionName="Models.Store.WSspSelectProductWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectProductWithPaging_Result">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectSalesTarget" FunctionName="Models.Store.WSspSelectSalesTarget">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectSalesTarget_Result">
+          <ScalarProperty Name="SalesTargetId" ColumnName="SalesTargetId" />
+          <ScalarProperty Name="TargetTitle" ColumnName="TargetTitle" />
+          <ScalarProperty Name="TargetOrderCount" ColumnName="TargetOrderCount" />
+          <ScalarProperty Name="TargetOrderAmount" ColumnName="TargetOrderAmount" />
+          <ScalarProperty Name="TargetFromDate" ColumnName="TargetFromDate" />
+          <ScalarProperty Name="TargetToDate" ColumnName="TargetToDate" />
+          <ScalarProperty Name="TargetFromDatePersian" ColumnName="TargetFromDatePersian" />
+          <ScalarProperty Name="TargetToDatePersian" ColumnName="TargetToDatePersian" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="LangTitleJson" ColumnName="LangTitleJson" />
+          <ScalarProperty Name="TargetDistributionDetailsJson" ColumnName="TargetDistributionDetailsJson" />
+          <ScalarProperty Name="TargetTermsJson" ColumnName="TargetTermsJson" />
+          <ScalarProperty Name="TargetUserScopeJson" ColumnName="TargetUserScopeJson" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspInsertSalesTarget" FunctionName="Models.Store.WSspInsertSalesTarget" />
+    <FunctionImportMapping FunctionImportName="WSspUpdateSalesTarget" FunctionName="Models.Store.WSspUpdateSalesTarget" />
+    <FunctionImportMapping FunctionImportName="WSspSelectSalesTargetsWithPaging" FunctionName="Models.Store.WSspSelectSalesTargetsWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectSalesTargetsWithPaging_Result">
+          <ScalarProperty Name="SalesTargetId" ColumnName="SalesTargetId" />
+          <ScalarProperty Name="TargetTitle" ColumnName="TargetTitle" />
+          <ScalarProperty Name="TargetOrderCount" ColumnName="TargetOrderCount" />
+          <ScalarProperty Name="TargetOrderAmount" ColumnName="TargetOrderAmount" />
+          <ScalarProperty Name="TargetFromDate" ColumnName="TargetFromDate" />
+          <ScalarProperty Name="TargetToDate" ColumnName="TargetToDate" />
+          <ScalarProperty Name="TargetFromDatePersian" ColumnName="TargetFromDatePersian" />
+          <ScalarProperty Name="TargetToDatePersian" ColumnName="TargetToDatePersian" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="LangTitleJson" ColumnName="LangTitleJson" />
+          <ScalarProperty Name="TargetDistributionDetailsJson" ColumnName="TargetDistributionDetailsJson" />
+          <ScalarProperty Name="TargetTermsJson" ColumnName="TargetTermsJson" />
+          <ScalarProperty Name="TargetUserScopeJson" ColumnName="TargetUserScopeJson" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectConsecutiveLeaveByDate" FunctionName="Models.Store.CRMspSelectConsecutiveLeaveByDate">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectConsecutiveLeaveByDate_Result">
+          <ScalarProperty Name="LeaveId" ColumnName="LeaveId" />
+          <ScalarProperty Name="LeaveTypeId" ColumnName="LeaveTypeId" />
+          <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+          <ScalarProperty Name="RequestUserId" ColumnName="RequestUserId" />
+          <ScalarProperty Name="RequestUser" ColumnName="RequestUser" />
+          <ScalarProperty Name="ReplaceUserId" ColumnName="ReplaceUserId" />
+          <ScalarProperty Name="ReplaceUser" ColumnName="ReplaceUser" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="DayCount" ColumnName="DayCount" />
+          <ScalarProperty Name="FromTime" ColumnName="FromTime" />
+          <ScalarProperty Name="ToTime" ColumnName="ToTime" />
+          <ScalarProperty Name="HourCount" ColumnName="HourCount" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="KindId" ColumnName="KindId" />
+          <ScalarProperty Name="LeaveKind" ColumnName="LeaveKind" />
+          <ScalarProperty Name="Place" ColumnName="Place" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="ProvinceId" ColumnName="ProvinceId" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="CityId" ColumnName="CityId" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
+          <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+          <ScalarProperty Name="StayTypeId" ColumnName="StayTypeId" />
+          <ScalarProperty Name="StayType" ColumnName="StayType" />
+          <ScalarProperty Name="LeaveStatusId" ColumnName="LeaveStatusId" />
+          <ScalarProperty Name="LeaveStatus" ColumnName="LeaveStatus" />
+          <ScalarProperty Name="VerifierUserId" ColumnName="VerifierUserId" />
+          <ScalarProperty Name="VerifierUser" ColumnName="VerifierUser" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterUser" ColumnName="FirstRegisterUser" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FromDateTime" ColumnName="FromDateTime" />
+          <ScalarProperty Name="ToDateTime" ColumnName="ToDateTime" />
+          <ScalarProperty Name="PlaceCoordinateLatitude" ColumnName="PlaceCoordinateLatitude" />
+          <ScalarProperty Name="PlaceCoordinateLongitude" ColumnName="PlaceCoordinateLongitude" />
+          <ScalarProperty Name="PlaceCoordinateZoomLevel" ColumnName="PlaceCoordinateZoomLevel" />
+          <ScalarProperty Name="ReplaceUserIsVerified" ColumnName="ReplaceUserIsVerified" />
+          <ScalarProperty Name="ReplaceUserVerifiedDate" ColumnName="ReplaceUserVerifiedDate" />
+          <ScalarProperty Name="ReplaceUserVerifiedDatePersian" ColumnName="ReplaceUserVerifiedDatePersian" />
+          <ScalarProperty Name="VerifiedRegisterDate" ColumnName="VerifiedRegisterDate" />
+          <ScalarProperty Name="VerifiedRegisterDatePersian" ColumnName="VerifiedRegisterDatePersian" />
+          <ScalarProperty Name="VerificationWorkFlowId" ColumnName="VerificationWorkFlowId" />
+          <ScalarProperty Name="VerificationWorkFlow" ColumnName="VerificationWorkFlow" />
+          <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
+          <ScalarProperty Name="CancelerUserId" ColumnName="CancelerUserId" />
+          <ScalarProperty Name="CancelerUser" ColumnName="CancelerUser" />
+          <ScalarProperty Name="CanceledDate" ColumnName="CanceledDate" />
+          <ScalarProperty Name="CanceledDatePersian" ColumnName="CanceledDatePersian" />
+          <ScalarProperty Name="ReplaceUserIntMsgId" ColumnName="ReplaceUserIntMsgId" />
+          <ScalarProperty Name="DailyDateTimeInfo" ColumnName="DailyDateTimeInfo" />
+          <ScalarProperty Name="StepGroupId" ColumnName="StepGroupId" />
+          <ScalarProperty Name="StepGroup" ColumnName="StepGroup" />
+          <ScalarProperty Name="IsEnteryRegistered" ColumnName="IsEnteryRegistered" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspChartSalesTargetDistributionReport" FunctionName="Models.Store.WSspChartSalesTargetDistributionReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspChartSalesTargetDistributionReport_Result">
+          <ScalarProperty Name="DistributionItemId" ColumnName="DistributionItemId" />
+          <ScalarProperty Name="DistributionItemName" ColumnName="DistributionItemName" />
+          <ScalarProperty Name="TargetCount" ColumnName="TargetCount" />
+          <ScalarProperty Name="TargetAmount" ColumnName="TargetAmount" />
+          <ScalarProperty Name="ActualAmount" ColumnName="ActualAmount" />
+          <ScalarProperty Name="ActualCount" ColumnName="ActualCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspChartSalesTargetReport" FunctionName="Models.Store.WSspChartSalesTargetReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspChartSalesTargetReport_Result">
+          <ScalarProperty Name="ActualAmount" ColumnName="ActualAmount" />
+          <ScalarProperty Name="ActualCount" ColumnName="ActualCount" />
+          <ScalarProperty Name="TargetOrderAmount" ColumnName="TargetOrderAmount" />
+          <ScalarProperty Name="TargetOrderCount" ColumnName="TargetOrderCount" />
+          <ScalarProperty Name="AchievementPercentAmount" ColumnName="AchievementPercentAmount" />
+          <ScalarProperty Name="AchievementPercentCount" ColumnName="AchievementPercentCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectSaleTargets" FunctionName="Models.Store.WSspSelectSaleTargets">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectSaleTargets_Result">
+          <ScalarProperty Name="SalesTargetId" ColumnName="SalesTargetId" />
+          <ScalarProperty Name="TargetTitle" ColumnName="TargetTitle" />
+          <ScalarProperty Name="TargetOrderCount" ColumnName="TargetOrderCount" />
+          <ScalarProperty Name="TargetOrderAmount" ColumnName="TargetOrderAmount" />
+          <ScalarProperty Name="TargetFromDate" ColumnName="TargetFromDate" />
+          <ScalarProperty Name="TargetToDate" ColumnName="TargetToDate" />
+          <ScalarProperty Name="TargetFromDatePersian" ColumnName="TargetFromDatePersian" />
+          <ScalarProperty Name="TargetToDatePersian" ColumnName="TargetToDatePersian" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="HasTargetDistribution" ColumnName="HasTargetDistribution" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspReturnSoldOrdPrdCount" FunctionName="Models.Store.WSspReturnSoldOrdPrdCount">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspReturnSoldOrdPrdCount_Result">
+          <ScalarProperty Name="RemainOrdQtyTotal" ColumnName="RemainOrdQtyTotal" />
+          <ScalarProperty Name="RemainOrdQty" ColumnName="RemainOrdQty" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspControlPreOrderItemsSoldStock" FunctionName="Models.Store.WSspControlPreOrderItemsSoldStock">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspControlPreOrderItemsSoldStock_Result">
+          <ScalarProperty Name="PreOrderItemID" ColumnName="PreOrderItemID" />
+          <ScalarProperty Name="pordIPrdId" ColumnName="pordIPrdId" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="pordIQuantity" ColumnName="pordIQuantity" />
+          <ScalarProperty Name="pordIFCR" ColumnName="pordIFCR" />
+          <ScalarProperty Name="pordIFCRI" ColumnName="pordIFCRI" />
+          <ScalarProperty Name="pordIWHId" ColumnName="pordIWHId" />
+          <ScalarProperty Name="pordITracing" ColumnName="pordITracing" />
+          <ScalarProperty Name="pordILinkAccWHIdStr" ColumnName="pordILinkAccWHIdStr" />
+          <ScalarProperty Name="pordIQuantityTotal" ColumnName="pordIQuantityTotal" />
+          <ScalarProperty Name="RemainCountAllWH" ColumnName="RemainCountAllWH" />
+          <ScalarProperty Name="QuantityRemain" ColumnName="QuantityRemain" />
+          <ScalarProperty Name="SoldOrdQuantity" ColumnName="SoldOrdQuantity" />
+          <ScalarProperty Name="TracingRemainCount" ColumnName="TracingRemainCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspControlOrderItemsSoldStock" FunctionName="Models.Store.WSspControlOrderItemsSoldStock">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspControlOrderItemsSoldStock_Result">
+          <ScalarProperty Name="OrderItemID" ColumnName="OrderItemID" />
+          <ScalarProperty Name="ordIPrdId" ColumnName="ordIPrdId" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="ordIQuantity" ColumnName="ordIQuantity" />
+          <ScalarProperty Name="ordIFCR" ColumnName="ordIFCR" />
+          <ScalarProperty Name="ordIFCRI" ColumnName="ordIFCRI" />
+          <ScalarProperty Name="ordIWHId" ColumnName="ordIWHId" />
+          <ScalarProperty Name="ordITracing" ColumnName="ordITracing" />
+          <ScalarProperty Name="ordILinkAccWHIdStr" ColumnName="ordILinkAccWHIdStr" />
+          <ScalarProperty Name="ordIQuantityTotal" ColumnName="ordIQuantityTotal" />
+          <ScalarProperty Name="RemainCountAllWH" ColumnName="RemainCountAllWH" />
+          <ScalarProperty Name="QuantityRemain" ColumnName="QuantityRemain" />
+          <ScalarProperty Name="SoldOrdQuantity" ColumnName="SoldOrdQuantity" />
+          <ScalarProperty Name="TracingRemainCount" ColumnName="TracingRemainCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspControlBuyOrderItemsSoldStock" FunctionName="Models.Store.WSspControlBuyOrderItemsSoldStock">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspControlBuyOrderItemsSoldStock_Result">
+          <ScalarProperty Name="BuyOrderItemID" ColumnName="BuyOrderItemID" />
+          <ScalarProperty Name="bordIPrdId" ColumnName="bordIPrdId" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="bordIQuantity" ColumnName="bordIQuantity" />
+          <ScalarProperty Name="bordIFCR" ColumnName="bordIFCR" />
+          <ScalarProperty Name="bordIFCRI" ColumnName="bordIFCRI" />
+          <ScalarProperty Name="bordIWHId" ColumnName="bordIWHId" />
+          <ScalarProperty Name="bordITracing" ColumnName="bordITracing" />
+          <ScalarProperty Name="bordILinkAccWHIdStr" ColumnName="bordILinkAccWHIdStr" />
+          <ScalarProperty Name="bordIQuantityTotal" ColumnName="bordIQuantityTotal" />
+          <ScalarProperty Name="RemainCountAllWH" ColumnName="RemainCountAllWH" />
+          <ScalarProperty Name="QuantityRemain" ColumnName="QuantityRemain" />
+          <ScalarProperty Name="SoldOrdQuantity" ColumnName="SoldOrdQuantity" />
+          <ScalarProperty Name="TracingRemainCount" ColumnName="TracingRemainCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderDefaultSettingById" FunctionName="Models.Store.WSspSelectOrderDefaultSettingById">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrderDefaultSettingById_Result">
+          <ScalarProperty Name="OrderSettingID" ColumnName="OrderSettingID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="GuarantyId" ColumnName="GuarantyId" />
+          <ScalarProperty Name="TaxIndex" ColumnName="TaxIndex" />
+          <ScalarProperty Name="CalculateTax" ColumnName="CalculateTax" />
+          <ScalarProperty Name="SpecialWord" ColumnName="SpecialWord" />
+          <ScalarProperty Name="DescriptionI" ColumnName="DescriptionI" />
+          <ScalarProperty Name="DescriptionII" ColumnName="DescriptionII" />
+          <ScalarProperty Name="PrintFormatId" ColumnName="PrintFormatId" />
+          <ScalarProperty Name="RightLogoId" ColumnName="RightLogoId" />
+          <ScalarProperty Name="LeftLogoId" ColumnName="LeftLogoId" />
+          <ScalarProperty Name="SignatureId" ColumnName="SignatureId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FPId" ColumnName="FPId" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="SettingTitle" ColumnName="SettingTitle" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="SigningI" ColumnName="SigningI" />
+          <ScalarProperty Name="SigningII" ColumnName="SigningII" />
+          <ScalarProperty Name="SigningIII" ColumnName="SigningIII" />
+          <ScalarProperty Name="AccountNumberI" ColumnName="AccountNumberI" />
+          <ScalarProperty Name="AccountShabaNumberI" ColumnName="AccountShabaNumberI" />
+          <ScalarProperty Name="AccountNumberII" ColumnName="AccountNumberII" />
+          <ScalarProperty Name="AccountShabaNumberII" ColumnName="AccountShabaNumberII" />
+          <ScalarProperty Name="ReferUserId" ColumnName="ReferUserId" />
+          <ScalarProperty Name="ReferUser" ColumnName="ReferUser" />
+          <ScalarProperty Name="OrderOprID" ColumnName="OrderOprID" />
+          <ScalarProperty Name="AutoGenerateOrdSerial" ColumnName="AutoGenerateOrdSerial" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="CurrencyUnitId" ColumnName="CurrencyUnitId" />
+          <ScalarProperty Name="DeliveryTermId" ColumnName="DeliveryTermId" />
+          <ScalarProperty Name="VerifierRequestId" ColumnName="VerifierRequestId" />
+          <ScalarProperty Name="DefWHId" ColumnName="DefWHId" />
+          <ScalarProperty Name="DefPrdPriceGroupId" ColumnName="DefPrdPriceGroupId" />
+          <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+          <ScalarProperty Name="EmailUsersInfoId" ColumnName="EmailUsersInfoId" />
+          <ScalarProperty Name="EmailUserDefaultSettingId" ColumnName="EmailUserDefaultSettingId" />
+          <ScalarProperty Name="VerificationWorkFlowId" ColumnName="VerificationWorkFlowId" />
+          <ScalarProperty Name="SaleCenterId" ColumnName="SaleCenterId" />
+          <ScalarProperty Name="DefPayTypeId" ColumnName="DefPayTypeId" />
+          <ScalarProperty Name="SettlementTypeId" ColumnName="SettlementTypeId" />
+          <ScalarProperty Name="DefAutoAddCnvsCmpQuickRegisterDefSettingId" ColumnName="DefAutoAddCnvsCmpQuickRegisterDefSettingId" />
+          <ScalarProperty Name="DefAutoAddCnvsDesc" ColumnName="DefAutoAddCnvsDesc" />
+          <ScalarProperty Name="IsDefIssueQuickOrder" ColumnName="IsDefIssueQuickOrder" />
+          <ScalarProperty Name="AutoInsertOrdPay" ColumnName="AutoInsertOrdPay" />
+          <ScalarProperty Name="TaxIndexItem" ColumnName="TaxIndexItem" />
+          <ScalarProperty Name="CalculateTaxItem" ColumnName="CalculateTaxItem" />
+          <ScalarProperty Name="AddPrdValidity" ColumnName="AddPrdValidity" />
+          <ScalarProperty Name="AddPrdValidityPrjTitle" ColumnName="AddPrdValidityPrjTitle" />
+          <ScalarProperty Name="CurrencyUnitIdI" ColumnName="CurrencyUnitIdI" />
+          <ScalarProperty Name="SaleAreaId" ColumnName="SaleAreaId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrdersForSalesTarget" FunctionName="Models.Store.WSspSelectOrdersForSalesTarget">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrdersForSalesTarget_Result">
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="ordNumber" ColumnName="ordNumber" />
+          <ScalarProperty Name="ordDateTime" ColumnName="ordDateTime" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="EligibleAmount" ColumnName="EligibleAmount" />
+          <ScalarProperty Name="DynamicColumns" ColumnName="DynamicColumns" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSendUserSalesTargetNotif" FunctionName="Models.Store.WSspSendUserSalesTargetNotif">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSendUserSalesTargetNotif_Result">
+          <ScalarProperty Name="DistinctMessagesCount" ColumnName="DistinctMessagesCount" />
+          <ScalarProperty Name="TotalMessagesCount" ColumnName="TotalMessagesCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyLogoByCmpIds" FunctionName="Models.Store.CRMspSelectCompanyLogoByCmpIds">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyLogoByCmpIds_Result">
+          <ScalarProperty Name="CompanyLoGoID" ColumnName="CompanyLoGoID" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CompanyLogo" ColumnName="CompanyLogo" />
+          <ScalarProperty Name="LogoDesc" ColumnName="LogoDesc" />
+          <ScalarProperty Name="CompanyLogoStr" ColumnName="CompanyLogoStr" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspBuyOrderPaymentDeActive" FunctionName="Models.Store.WSspBuyOrderPaymentDeActive" />
+    <FunctionImportMapping FunctionImportName="WSspBuyOrderPaymentDeActiveExit" FunctionName="Models.Store.WSspBuyOrderPaymentDeActiveExit" />
+    <FunctionImportMapping FunctionImportName="WSspBuyOrderPaymentVerify" FunctionName="Models.Store.WSspBuyOrderPaymentVerify" />
+    <FunctionImportMapping FunctionImportName="WSspBuyOrderPaymentVerifyExit" FunctionName="Models.Store.WSspBuyOrderPaymentVerifyExit" />
+    <FunctionImportMapping FunctionImportName="WSspOrderPaymentDeActive" FunctionName="Models.Store.WSspOrderPaymentDeActive" />
+    <FunctionImportMapping FunctionImportName="WSspOrderPaymentDeActiveExit" FunctionName="Models.Store.WSspOrderPaymentDeActiveExit" />
+    <FunctionImportMapping FunctionImportName="WSspPreOrderPaymentDeActive" FunctionName="Models.Store.WSspPreOrderPaymentDeActive" />
+    <FunctionImportMapping FunctionImportName="WSspPreOrderPaymentDeActiveExit" FunctionName="Models.Store.WSspPreOrderPaymentDeActiveExit" />
+    <FunctionImportMapping FunctionImportName="WSspPreOrderPaymentVerify" FunctionName="Models.Store.WSspPreOrderPaymentVerify" />
+    <FunctionImportMapping FunctionImportName="WSspPreOrderPaymentVerifyExit" FunctionName="Models.Store.WSspPreOrderPaymentVerifyExit" />
+    <FunctionImportMapping FunctionImportName="WSspOrderCommissionPreVerify" FunctionName="Models.Store.WSspOrderCommissionPreVerify" />
+    <FunctionImportMapping FunctionImportName="WSspOrderCommissionPreVerifyExit" FunctionName="Models.Store.WSspOrderCommissionPreVerifyExit" />
+    <FunctionImportMapping FunctionImportName="CRMspUserTaskDidIt" FunctionName="Models.Store.CRMspUserTaskDidIt" />
+    <FunctionImportMapping FunctionImportName="CRMspSelectUserTaskById" FunctionName="Models.Store.CRMspSelectUserTaskById">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectUserTaskById_Result">
+          <ScalarProperty Name="UserTaskId" ColumnName="UserTaskId" />
+          <ScalarProperty Name="UserTaskDatePersian" ColumnName="UserTaskDatePersian" />
+          <ScalarProperty Name="UserTaskDate" ColumnName="UserTaskDate" />
+          <ScalarProperty Name="UserTaskTime" ColumnName="UserTaskTime" />
+          <ScalarProperty Name="UserTaskTitle" ColumnName="UserTaskTitle" />
+          <ScalarProperty Name="UserTaskDescription" ColumnName="UserTaskDescription" />
+          <ScalarProperty Name="UserTaskPriorityId" ColumnName="UserTaskPriorityId" />
+          <ScalarProperty Name="UserTaskGroupId" ColumnName="UserTaskGroupId" />
+          <ScalarProperty Name="UserTaskShowAllarm" ColumnName="UserTaskShowAllarm" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="UserTaskRemindDate" ColumnName="UserTaskRemindDate" />
+          <ScalarProperty Name="UserTaskRemindTime" ColumnName="UserTaskRemindTime" />
+          <ScalarProperty Name="UserTaskRemindDateTime" ColumnName="UserTaskRemindDateTime" />
+          <ScalarProperty Name="UserTaskIsPublic" ColumnName="UserTaskIsPublic" />
+          <ScalarProperty Name="UserTaskTimeEnd" ColumnName="UserTaskTimeEnd" />
+          <ScalarProperty Name="UserTaskNoTimeOverlap" ColumnName="UserTaskNoTimeOverlap" />
+          <ScalarProperty Name="UserTaskRepeatDaily" ColumnName="UserTaskRepeatDaily" />
+          <ScalarProperty Name="UserTaskRepeatWeekly" ColumnName="UserTaskRepeatWeekly" />
+          <ScalarProperty Name="UserTaskRepeatMonthly" ColumnName="UserTaskRepeatMonthly" />
+          <ScalarProperty Name="UserTaskRepeatYearly" ColumnName="UserTaskRepeatYearly" />
+          <ScalarProperty Name="UserTaskRemindRepeatDaily" ColumnName="UserTaskRemindRepeatDaily" />
+          <ScalarProperty Name="UserTaskRemindRepeatWeekly" ColumnName="UserTaskRemindRepeatWeekly" />
+          <ScalarProperty Name="UserTaskRemindRepeatMonthly" ColumnName="UserTaskRemindRepeatMonthly" />
+          <ScalarProperty Name="UserTaskRemindRepeatYearly" ColumnName="UserTaskRemindRepeatYearly" />
+          <ScalarProperty Name="UserTaskDateEnd" ColumnName="UserTaskDateEnd" />
+          <ScalarProperty Name="UserTaskDateEndPersian" ColumnName="UserTaskDateEndPersian" />
+          <ScalarProperty Name="UserTaskDidIt" ColumnName="UserTaskDidIt" />
+          <ScalarProperty Name="UserTaskDidItDate" ColumnName="UserTaskDidItDate" />
+          <ScalarProperty Name="UserTaskDidItDatePersian" ColumnName="UserTaskDidItDatePersian" />
+          <ScalarProperty Name="UserTaskDidItInfoJson" ColumnName="UserTaskDidItInfoJson" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectLeaveWithPaging" FunctionName="Models.Store.CRMspSelectLeaveWithPaging">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectLeaveWithPaging_Result">
+          <ScalarProperty Name="LeaveId" ColumnName="LeaveId" />
+          <ScalarProperty Name="LeaveTypeId" ColumnName="LeaveTypeId" />
+          <ScalarProperty Name="RequestUserId" ColumnName="RequestUserId" />
+          <ScalarProperty Name="ReplaceUserId" ColumnName="ReplaceUserId" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="FromDateI" ColumnName="FromDateI" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="DayCount" ColumnName="DayCount" />
+          <ScalarProperty Name="FromTime" ColumnName="FromTime" />
+          <ScalarProperty Name="ToTime" ColumnName="ToTime" />
+          <ScalarProperty Name="HourCount" ColumnName="HourCount" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="KindId" ColumnName="KindId" />
+          <ScalarProperty Name="Place" ColumnName="Place" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+          <ScalarProperty Name="ProvinceId" ColumnName="ProvinceId" />
+          <ScalarProperty Name="CityId" ColumnName="CityId" />
+          <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
+          <ScalarProperty Name="StayTypeId" ColumnName="StayTypeId" />
+          <ScalarProperty Name="LeaveStatusId" ColumnName="LeaveStatusId" />
+          <ScalarProperty Name="VerifierUserId" ColumnName="VerifierUserId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FromDateTime" ColumnName="FromDateTime" />
+          <ScalarProperty Name="ToDateTime" ColumnName="ToDateTime" />
+          <ScalarProperty Name="PlaceCoordinateLatitude" ColumnName="PlaceCoordinateLatitude" />
+          <ScalarProperty Name="PlaceCoordinateLongitude" ColumnName="PlaceCoordinateLongitude" />
+          <ScalarProperty Name="PlaceCoordinateZoomLevel" ColumnName="PlaceCoordinateZoomLevel" />
+          <ScalarProperty Name="LeaveLang" ColumnName="LeaveLang" />
+          <ScalarProperty Name="ReplaceUserIsVerified" ColumnName="ReplaceUserIsVerified" />
+          <ScalarProperty Name="ReplaceUserVerifiedDate" ColumnName="ReplaceUserVerifiedDate" />
+          <ScalarProperty Name="ReplaceUserVerifiedDatePersian" ColumnName="ReplaceUserVerifiedDatePersian" />
+          <ScalarProperty Name="VerifiedRegisterDate" ColumnName="VerifiedRegisterDate" />
+          <ScalarProperty Name="VerifiedRegisterDatePersian" ColumnName="VerifiedRegisterDatePersian" />
+          <ScalarProperty Name="VerificationWorkFlowId" ColumnName="VerificationWorkFlowId" />
+          <ScalarProperty Name="VerificationWorkFlow" ColumnName="VerificationWorkFlow" />
+          <ScalarProperty Name="LeaveTypeOpr" ColumnName="LeaveTypeOpr" />
+          <ScalarProperty Name="UserDepartmentLeaveVerificationWorkFlowId" ColumnName="UserDepartmentLeaveVerificationWorkFlowId" />
+          <ScalarProperty Name="UserDepartmentMissionVerificationWorkFlowId" ColumnName="UserDepartmentMissionVerificationWorkFlowId" />
+          <ScalarProperty Name="UserDepartmentLeaveVerificationWorkFlow" ColumnName="UserDepartmentLeaveVerificationWorkFlow" />
+          <ScalarProperty Name="UserDepartmentMissionVerificationWorkFlow" ColumnName="UserDepartmentMissionVerificationWorkFlow" />
+          <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+          <ScalarProperty Name="RequestUser" ColumnName="RequestUser" />
+          <ScalarProperty Name="ReplaceUser" ColumnName="ReplaceUser" />
+          <ScalarProperty Name="Kind" ColumnName="Kind" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+          <ScalarProperty Name="StayType" ColumnName="StayType" />
+          <ScalarProperty Name="LeaveStatus" ColumnName="LeaveStatus" />
+          <ScalarProperty Name="VerifierUser" ColumnName="VerifierUser" />
+          <ScalarProperty Name="FirstRegisterUser" ColumnName="FirstRegisterUser" />
+          <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+          <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
+          <ScalarProperty Name="CancelerUserId" ColumnName="CancelerUserId" />
+          <ScalarProperty Name="CanceledDate" ColumnName="CanceledDate" />
+          <ScalarProperty Name="CanceledDatePersian" ColumnName="CanceledDatePersian" />
+          <ScalarProperty Name="CancelerUser" ColumnName="CancelerUser" />
+          <ScalarProperty Name="ReplaceUserIntMsgId" ColumnName="ReplaceUserIntMsgId" />
+          <ScalarProperty Name="DailyDateTimeInfo" ColumnName="DailyDateTimeInfo" />
+          <ScalarProperty Name="StepGroupId" ColumnName="StepGroupId" />
+          <ScalarProperty Name="StepGroup" ColumnName="StepGroup" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectValidPordProduct" FunctionName="Models.Store.WSspSelectValidPordProduct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectValidPordProduct_Result">
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+          <ScalarProperty Name="PreOrderId" ColumnName="PreOrderId" />
+          <ScalarProperty Name="PreOrderItemID" ColumnName="PreOrderItemID" />
+          <ScalarProperty Name="pordNumber" ColumnName="pordNumber" />
+          <ScalarProperty Name="pordNumberRevision" ColumnName="pordNumberRevision" />
+          <ScalarProperty Name="pordDate" ColumnName="pordDate" />
+          <ScalarProperty Name="pordDateTime" ColumnName="pordDateTime" />
+          <ScalarProperty Name="pordStatusId" ColumnName="pordStatusId" />
+          <ScalarProperty Name="pordExpireDate" ColumnName="pordExpireDate" />
+          <ScalarProperty Name="pordExpireDateTime" ColumnName="pordExpireDateTime" />
+          <ScalarProperty Name="pordIPrdId" ColumnName="pordIPrdId" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="PrdCode" ColumnName="PrdCode" />
+          <ScalarProperty Name="pordIQuantity" ColumnName="pordIQuantity" />
+          <ScalarProperty Name="pordIFCR" ColumnName="pordIFCR" />
+          <ScalarProperty Name="pordIFCRI" ColumnName="pordIFCRI" />
+          <ScalarProperty Name="pordIWHId" ColumnName="pordIWHId" />
+          <ScalarProperty Name="WrhsName" ColumnName="WrhsName" />
+          <ScalarProperty Name="WrhsCode" ColumnName="WrhsCode" />
+          <ScalarProperty Name="pordITracing" ColumnName="pordITracing" />
+          <ScalarProperty Name="pordOrdQuantity" ColumnName="pordOrdQuantity" />
+          <ScalarProperty Name="pordDocQuantity" ColumnName="pordDocQuantity" />
+          <ScalarProperty Name="ordDocQuantity" ColumnName="ordDocQuantity" />
+          <ScalarProperty Name="nopord_ordDocQuantity" ColumnName="nopord_ordDocQuantity" />
+          <ScalarProperty Name="RemindQty" ColumnName="RemindQty" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectWareHouseWithId" FunctionName="Models.Store.WSspSelectWareHouseWithId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectWareHouseWithId_Result">
+          <ScalarProperty Name="WareHouseID" ColumnName="WareHouseID" />
+          <ScalarProperty Name="WrhsName" ColumnName="WrhsName" />
+          <ScalarProperty Name="WrhsCode" ColumnName="WrhsCode" />
+          <ScalarProperty Name="WrhsAddress" ColumnName="WrhsAddress" />
+          <ScalarProperty Name="WrhsPreTel" ColumnName="WrhsPreTel" />
+          <ScalarProperty Name="WrhsTel" ColumnName="WrhsTel" />
+          <ScalarProperty Name="WrhsTelSecond" ColumnName="WrhsTelSecond" />
+          <ScalarProperty Name="WrhsTelThird" ColumnName="WrhsTelThird" />
+          <ScalarProperty Name="WrhsFax" ColumnName="WrhsFax" />
+          <ScalarProperty Name="WrhsFaxSecond" ColumnName="WrhsFaxSecond" />
+          <ScalarProperty Name="WrhsArea" ColumnName="WrhsArea" />
+          <ScalarProperty Name="WrhsPerson" ColumnName="WrhsPerson" />
+          <ScalarProperty Name="WrhsDescription" ColumnName="WrhsDescription" />
+          <ScalarProperty Name="IsFix" ColumnName="IsFix" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="FPId" ColumnName="FPId" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="WrhsDeActive" ColumnName="WrhsDeActive" />
+          <ScalarProperty Name="OrderView" ColumnName="OrderView" />
+          <ScalarProperty Name="WrhsLinkAccWhId" ColumnName="WrhsLinkAccWhId" />
+          <ScalarProperty Name="WrhsLinkAccWhCode" ColumnName="WrhsLinkAccWhCode" />
+          <ScalarProperty Name="WrhsLinkAccWhIdStr" ColumnName="WrhsLinkAccWhIdStr" />
+          <ScalarProperty Name="WrhsLinkAccWareHouses" ColumnName="WrhsLinkAccWareHouses" />
+          <ScalarProperty Name="WrhsUserId" ColumnName="WrhsUserId" />
+          <ScalarProperty Name="WrhsUser" ColumnName="WrhsUser" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectSoldOrdProduct" FunctionName="Models.Store.WSspSelectSoldOrdProduct">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectSoldOrdProduct_Result">
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="OrderOprId" ColumnName="OrderOprId" />
+          <ScalarProperty Name="OrderOpr" ColumnName="OrderOpr" />
+          <ScalarProperty Name="OrderItemID" ColumnName="OrderItemID" />
+          <ScalarProperty Name="ordNumber" ColumnName="ordNumber" />
+          <ScalarProperty Name="ordDate" ColumnName="ordDate" />
+          <ScalarProperty Name="ordDateTime" ColumnName="ordDateTime" />
+          <ScalarProperty Name="ordStatusId" ColumnName="ordStatusId" />
+          <ScalarProperty Name="ordIPrdId" ColumnName="ordIPrdId" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="PrdCode" ColumnName="PrdCode" />
+          <ScalarProperty Name="ordIQuantity" ColumnName="ordIQuantity" />
+          <ScalarProperty Name="ordIFCR" ColumnName="ordIFCR" />
+          <ScalarProperty Name="ordIFCRI" ColumnName="ordIFCRI" />
+          <ScalarProperty Name="ordIWHId" ColumnName="ordIWHId" />
+          <ScalarProperty Name="WrhsName" ColumnName="WrhsName" />
+          <ScalarProperty Name="WrhsCode" ColumnName="WrhsCode" />
+          <ScalarProperty Name="ordITracing" ColumnName="ordITracing" />
+          <ScalarProperty Name="DocItemIds" ColumnName="DocItemIds" />
+          <ScalarProperty Name="Returned_ordIQuantity" ColumnName="Returned_ordIQuantity" />
+          <ScalarProperty Name="ordIDocQuantity" ColumnName="ordIDocQuantity" />
+          <ScalarProperty Name="RemindQty" ColumnName="RemindQty" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspInsertBuyOrderOprUserAccessToAllUsers" FunctionName="Models.Store.WSspInsertBuyOrderOprUserAccessToAllUsers" />
+    <FunctionImportMapping FunctionImportName="CRMspChartDailyOrdersExtraInfo" FunctionName="Models.Store.CRMspChartDailyOrdersExtraInfo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspChartDailyOrdersExtraInfo_Result">
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderDateStr" ColumnName="OrderDateStr" />
+          <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+          <ScalarProperty Name="OrderTotalAmount" ColumnName="OrderTotalAmount" />
+          <ScalarProperty Name="OrderTotalDiscount" ColumnName="OrderTotalDiscount" />
+          <ScalarProperty Name="OprType" ColumnName="OprType" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="XLabelValue" ColumnName="XLabelValue" />
+          <ScalarProperty Name="XLabelText" ColumnName="XLabelText" />
+          <ScalarProperty Name="FilteredProductAmount" ColumnName="FilteredProductAmount" />
+          <ScalarProperty Name="FilteredProductCount" ColumnName="FilteredProductCount" />
+          <ScalarProperty Name="FilteredProductDiscount" ColumnName="FilteredProductDiscount" />
+          <ScalarProperty Name="GroupFieldValue" ColumnName="GroupFieldValue" />
+          <ScalarProperty Name="GroupFieldText" ColumnName="GroupFieldText" />
+          <ScalarProperty Name="AppliedFilters" ColumnName="AppliedFilters" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspUserTaskAlarmDidIt" FunctionName="Models.Store.CRMspUserTaskAlarmDidIt" />
+    <FunctionImportMapping FunctionImportName="CRMspExecuteLeave" FunctionName="Models.Store.CRMspExecuteLeave">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.mct_III_Result">
+          <ScalarProperty Name="Result" ColumnName="Result" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectProductsWithCodeAndGroup" FunctionName="Models.Store.WSspSelectProductsWithCodeAndGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectProductsWithCodeAndGroup_Result">
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="PrdName" ColumnName="PrdName" />
+          <ScalarProperty Name="PrdCode" ColumnName="PrdCode" />
+          <ScalarProperty Name="PrdGroupID" ColumnName="PrdGroupID" />
+          <ScalarProperty Name="SGName" ColumnName="SGName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectPrjTitleGroupsByCmpId" FunctionName="Models.Store.CRMspSelectPrjTitleGroupsByCmpId" />
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderDefaultSettingIsDefUserAccess" FunctionName="Models.Store.WSspSelectOrderDefaultSettingIsDefUserAccess" />
+    <FunctionImportMapping FunctionImportName="WSspUpdateOrderDefaultSettingDefFields" FunctionName="Models.Store.WSspUpdateOrderDefaultSettingDefFields" />
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyQuickRegisterDefSettingIsDefUserAccess" FunctionName="Models.Store.CRMspSelectCompanyQuickRegisterDefSettingIsDefUserAccess" />
+    <FunctionImportMapping FunctionImportName="CRMspCalculateCnvsDoingTimeByPrjTitleGroup" FunctionName="Models.Store.CRMspCalculateCnvsDoingTimeByPrjTitleGroup">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspCalculateCnvsDoingTimeByPrjTitleGroup_Result">
+          <ScalarProperty Name="cnvsPrjDoingTime" ColumnName="cnvsPrjDoingTime" />
+          <ScalarProperty Name="prjTitleGroup" ColumnName="prjTitleGroup" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspCheckDefaultOrderSettingUserConflict" FunctionName="Models.Store.WSspCheckDefaultOrderSettingUserConflict">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspCheckDefaultOrderSettingUserConflict_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="OrderSettingID" ColumnName="OrderSettingID" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="User" ColumnName="User" />
+          <ScalarProperty Name="OrderDefaultSetting" ColumnName="OrderDefaultSetting" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspCheckPublicDefaultOrderSettingConflict" FunctionName="Models.Store.WSspCheckPublicDefaultOrderSettingConflict">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspCheckPublicDefaultOrderSettingConflict_Result">
+          <ScalarProperty Name="OrderSettingID" ColumnName="OrderSettingID" />
+          <ScalarProperty Name="OrderDefaultSetting" ColumnName="OrderDefaultSetting" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspSelectCompanyQuickRegisterDefSettingUserAccess" FunctionName="Models.Store.CRMspSelectCompanyQuickRegisterDefSettingUserAccess">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspSelectCompanyQuickRegisterDefSettingUserAccess_Result">
+          <ScalarProperty Name="CompanyQuickRegisterDefSettingId" ColumnName="CompanyQuickRegisterDefSettingId" />
+          <ScalarProperty Name="SettingTitle" ColumnName="SettingTitle" />
+          <ScalarProperty Name="cmpTitleId" ColumnName="cmpTitleId" />
+          <ScalarProperty Name="cmpActivityType" ColumnName="cmpActivityType" />
+          <ScalarProperty Name="cmpGroupId" ColumnName="cmpGroupId" />
+          <ScalarProperty Name="cmpSubGroupId" ColumnName="cmpSubGroupId" />
+          <ScalarProperty Name="cmpGroupIdII" ColumnName="cmpGroupIdII" />
+          <ScalarProperty Name="cmpGroupIdIII" ColumnName="cmpGroupIdIII" />
+          <ScalarProperty Name="cmpGroupIdIV" ColumnName="cmpGroupIdIV" />
+          <ScalarProperty Name="cmpTypeId" ColumnName="cmpTypeId" />
+          <ScalarProperty Name="cmpPresentationId" ColumnName="cmpPresentationId" />
+          <ScalarProperty Name="cmpCityId" ColumnName="cmpCityId" />
+          <ScalarProperty Name="cmpSpecialPoint" ColumnName="cmpSpecialPoint" />
+          <ScalarProperty Name="cmpDescription" ColumnName="cmpDescription" />
+          <ScalarProperty Name="cmpEffectiveDateIncDay" ColumnName="cmpEffectiveDateIncDay" />
+          <ScalarProperty Name="cmpKind" ColumnName="cmpKind" />
+          <ScalarProperty Name="prsTitleId" ColumnName="prsTitleId" />
+          <ScalarProperty Name="prsJobId" ColumnName="prsJobId" />
+          <ScalarProperty Name="prsTypeId" ColumnName="prsTypeId" />
+          <ScalarProperty Name="prsGroupId" ColumnName="prsGroupId" />
+          <ScalarProperty Name="prsSexId" ColumnName="prsSexId" />
+          <ScalarProperty Name="prsEducationId" ColumnName="prsEducationId" />
+          <ScalarProperty Name="prsCityId" ColumnName="prsCityId" />
+          <ScalarProperty Name="prsSpecialPoint" ColumnName="prsSpecialPoint" />
+          <ScalarProperty Name="prsDescription" ColumnName="prsDescription" />
+          <ScalarProperty Name="prsDepartmentId" ColumnName="prsDepartmentId" />
+          <ScalarProperty Name="prjTitle" ColumnName="prjTitle" />
+          <ScalarProperty Name="prjDesc" ColumnName="prjDesc" />
+          <ScalarProperty Name="prjGradeId" ColumnName="prjGradeId" />
+          <ScalarProperty Name="prjPriorityId" ColumnName="prjPriorityId" />
+          <ScalarProperty Name="prjGroupId" ColumnName="prjGroupId" />
+          <ScalarProperty Name="prjcnvsStatusGroupId" ColumnName="prjcnvsStatusGroupId" />
+          <ScalarProperty Name="prjPostFix" ColumnName="prjPostFix" />
+          <ScalarProperty Name="prjRemindDateIncDay" ColumnName="prjRemindDateIncDay" />
+          <ScalarProperty Name="prjFOCmpCanSee" ColumnName="prjFOCmpCanSee" />
+          <ScalarProperty Name="prjSubject" ColumnName="prjSubject" />
+          <ScalarProperty Name="prjTitleGroup" ColumnName="prjTitleGroup" />
+          <ScalarProperty Name="prjCategoryId" ColumnName="prjCategoryId" />
+          <ScalarProperty Name="prjDescI" ColumnName="prjDescI" />
+          <ScalarProperty Name="cnvsTopicId" ColumnName="cnvsTopicId" />
+          <ScalarProperty Name="cnvsDesc" ColumnName="cnvsDesc" />
+          <ScalarProperty Name="cnvsReferDesc" ColumnName="cnvsReferDesc" />
+          <ScalarProperty Name="cnvsStatusId" ColumnName="cnvsStatusId" />
+          <ScalarProperty Name="cnvsPriorityId" ColumnName="cnvsPriorityId" />
+          <ScalarProperty Name="cnvsRemindDateIncDay" ColumnName="cnvsRemindDateIncDay" />
+          <ScalarProperty Name="cnvsRemindTime" ColumnName="cnvsRemindTime" />
+          <ScalarProperty Name="cnvsRemindDateForAllarmIncDay" ColumnName="cnvsRemindDateForAllarmIncDay" />
+          <ScalarProperty Name="cnvsFOCmpCanSee" ColumnName="cnvsFOCmpCanSee" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+          <ScalarProperty Name="OrderView" ColumnName="OrderView" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="IsDefaultForCmpInfo" ColumnName="IsDefaultForCmpInfo" />
+          <ScalarProperty Name="IsDefIssueQuickOrder" ColumnName="IsDefIssueQuickOrder" />
+          <ScalarProperty Name="prjpordDefaultSettingId" ColumnName="prjpordDefaultSettingId" />
+          <ScalarProperty Name="prjordDefaultSettingId" ColumnName="prjordDefaultSettingId" />
+          <ScalarProperty Name="cmpLocationLat" ColumnName="cmpLocationLat" />
+          <ScalarProperty Name="cmpLocationLong" ColumnName="cmpLocationLong" />
+          <ScalarProperty Name="cmpLocationZoom" ColumnName="cmpLocationZoom" />
+          <ScalarProperty Name="prsLocationLat" ColumnName="prsLocationLat" />
+          <ScalarProperty Name="prsLocationLong" ColumnName="prsLocationLong" />
+          <ScalarProperty Name="prsLocationZoom" ColumnName="prsLocationZoom" />
+          <ScalarProperty Name="InActive" ColumnName="InActive" />
+          <ScalarProperty Name="AccessUserJson" ColumnName="AccessUserJson" />
+          <ScalarProperty Name="ActiveInQuickOrder" ColumnName="ActiveInQuickOrder" />
+          <ScalarProperty Name="PublicMode" ColumnName="PublicMode" />
+          <ScalarProperty Name="IsDefaultForUser" ColumnName="IsDefaultForUser" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectOrderDefaultSettingUserAccess" FunctionName="Models.Store.WSspSelectOrderDefaultSettingUserAccess">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectOrderDefaultSettingUserAccess_Result">
+          <ScalarProperty Name="OrderSettingID" ColumnName="OrderSettingID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="GuarantyId" ColumnName="GuarantyId" />
+          <ScalarProperty Name="TaxIndex" ColumnName="TaxIndex" />
+          <ScalarProperty Name="CalculateTax" ColumnName="CalculateTax" />
+          <ScalarProperty Name="SpecialWord" ColumnName="SpecialWord" />
+          <ScalarProperty Name="DescriptionI" ColumnName="DescriptionI" />
+          <ScalarProperty Name="DescriptionII" ColumnName="DescriptionII" />
+          <ScalarProperty Name="PrintFormatId" ColumnName="PrintFormatId" />
+          <ScalarProperty Name="RightLogoId" ColumnName="RightLogoId" />
+          <ScalarProperty Name="LeftLogoId" ColumnName="LeftLogoId" />
+          <ScalarProperty Name="SignatureId" ColumnName="SignatureId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FPId" ColumnName="FPId" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="SettingTitle" ColumnName="SettingTitle" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="SigningI" ColumnName="SigningI" />
+          <ScalarProperty Name="SigningII" ColumnName="SigningII" />
+          <ScalarProperty Name="SigningIII" ColumnName="SigningIII" />
+          <ScalarProperty Name="AccountNumberI" ColumnName="AccountNumberI" />
+          <ScalarProperty Name="AccountShabaNumberI" ColumnName="AccountShabaNumberI" />
+          <ScalarProperty Name="AccountNumberII" ColumnName="AccountNumberII" />
+          <ScalarProperty Name="AccountShabaNumberII" ColumnName="AccountShabaNumberII" />
+          <ScalarProperty Name="ReferUserId" ColumnName="ReferUserId" />
+          <ScalarProperty Name="OrderOprID" ColumnName="OrderOprID" />
+          <ScalarProperty Name="AutoGenerateOrdSerial" ColumnName="AutoGenerateOrdSerial" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="CurrencyUnitId" ColumnName="CurrencyUnitId" />
+          <ScalarProperty Name="DeliveryTermId" ColumnName="DeliveryTermId" />
+          <ScalarProperty Name="VerifierRequestId" ColumnName="VerifierRequestId" />
+          <ScalarProperty Name="DefWHId" ColumnName="DefWHId" />
+          <ScalarProperty Name="DefPrdPriceGroupId" ColumnName="DefPrdPriceGroupId" />
+          <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+          <ScalarProperty Name="EmailUsersInfoId" ColumnName="EmailUsersInfoId" />
+          <ScalarProperty Name="EmailUserDefaultSettingId" ColumnName="EmailUserDefaultSettingId" />
+          <ScalarProperty Name="VerificationWorkFlowId" ColumnName="VerificationWorkFlowId" />
+          <ScalarProperty Name="SaleCenterId" ColumnName="SaleCenterId" />
+          <ScalarProperty Name="DefPayTypeId" ColumnName="DefPayTypeId" />
+          <ScalarProperty Name="SettlementTypeId" ColumnName="SettlementTypeId" />
+          <ScalarProperty Name="IsDefIssueQuickOrder" ColumnName="IsDefIssueQuickOrder" />
+          <ScalarProperty Name="AutoInsertOrdPay" ColumnName="AutoInsertOrdPay" />
+          <ScalarProperty Name="TaxIndexItem" ColumnName="TaxIndexItem" />
+          <ScalarProperty Name="CalculateTaxItem" ColumnName="CalculateTaxItem" />
+          <ScalarProperty Name="AddPrdValidity" ColumnName="AddPrdValidity" />
+          <ScalarProperty Name="AddPrdValidityPrjTitle" ColumnName="AddPrdValidityPrjTitle" />
+          <ScalarProperty Name="PublicMode" ColumnName="PublicMode" />
+          <ScalarProperty Name="ReferUser" ColumnName="ReferUser" />
+          <ScalarProperty Name="SaleAreaId" ColumnName="SaleAreaId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="WSspSelectPreOrderDefaultSettingUserAccess" FunctionName="Models.Store.WSspSelectPreOrderDefaultSettingUserAccess">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.WSspSelectPreOrderDefaultSettingUserAccess_Result">
+          <ScalarProperty Name="PreOrderSettingID" ColumnName="PreOrderSettingID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="GuarantyId" ColumnName="GuarantyId" />
+          <ScalarProperty Name="PayConditionId" ColumnName="PayConditionId" />
+          <ScalarProperty Name="DeliveryTimeId" ColumnName="DeliveryTimeId" />
+          <ScalarProperty Name="CreditDurationId" ColumnName="CreditDurationId" />
+          <ScalarProperty Name="TaxIndex" ColumnName="TaxIndex" />
+          <ScalarProperty Name="CalculateTax" ColumnName="CalculateTax" />
+          <ScalarProperty Name="SpecialWord" ColumnName="SpecialWord" />
+          <ScalarProperty Name="DescriptionI" ColumnName="DescriptionI" />
+          <ScalarProperty Name="DescriptionII" ColumnName="DescriptionII" />
+          <ScalarProperty Name="PrintFormatId" ColumnName="PrintFormatId" />
+          <ScalarProperty Name="RightLogoId" ColumnName="RightLogoId" />
+          <ScalarProperty Name="LeftLogoId" ColumnName="LeftLogoId" />
+          <ScalarProperty Name="SigningI" ColumnName="SigningI" />
+          <ScalarProperty Name="SigningII" ColumnName="SigningII" />
+          <ScalarProperty Name="SigningIII" ColumnName="SigningIII" />
+          <ScalarProperty Name="AccountNumberI" ColumnName="AccountNumberI" />
+          <ScalarProperty Name="AccountShabaNumberI" ColumnName="AccountShabaNumberI" />
+          <ScalarProperty Name="AccountNumberII" ColumnName="AccountNumberII" />
+          <ScalarProperty Name="AccountShabaNumberII" ColumnName="AccountShabaNumberII" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="SignatureId" ColumnName="SignatureId" />
+          <ScalarProperty Name="VerifierRequestId" ColumnName="VerifierRequestId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FPId" ColumnName="FPId" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="SettingTitle" ColumnName="SettingTitle" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="ReferUserId" ColumnName="ReferUserId" />
+          <ScalarProperty Name="PreOrderOprID" ColumnName="PreOrderOprID" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="VerificationWorkFlowId" ColumnName="VerificationWorkFlowId" />
+          <ScalarProperty Name="CurrencyUnitId" ColumnName="CurrencyUnitId" />
+          <ScalarProperty Name="DeliveryTermId" ColumnName="DeliveryTermId" />
+          <ScalarProperty Name="PreOrderTypeId" ColumnName="PreOrderTypeId" />
+          <ScalarProperty Name="DefWHId" ColumnName="DefWHId" />
+          <ScalarProperty Name="DefPrdPriceGroupId" ColumnName="DefPrdPriceGroupId" />
+          <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+          <ScalarProperty Name="EmailUsersInfoId" ColumnName="EmailUsersInfoId" />
+          <ScalarProperty Name="EmailUserDefaultSettingId" ColumnName="EmailUserDefaultSettingId" />
+          <ScalarProperty Name="SaleCenterId" ColumnName="SaleCenterId" />
+          <ScalarProperty Name="DefPayTypeId" ColumnName="DefPayTypeId" />
+          <ScalarProperty Name="TaxIndexItem" ColumnName="TaxIndexItem" />
+          <ScalarProperty Name="CalculateTaxItem" ColumnName="CalculateTaxItem" />
+          <ScalarProperty Name="PublicMode" ColumnName="PublicMode" />
+          <ScalarProperty Name="ReferUser" ColumnName="ReferUser" />
+          <ScalarProperty Name="SaleAreaId" ColumnName="SaleAreaId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspCheckDefaultCompanySettingUserConflict" FunctionName="Models.Store.CRMspCheckDefaultCompanySettingUserConflict">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspCheckDefaultCompanySettingUserConflict_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="SettingID" ColumnName="SettingID" />
+          <ScalarProperty Name="User" ColumnName="User" />
+          <ScalarProperty Name="OrderDefaultSetting" ColumnName="OrderDefaultSetting" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspCheckPublicDefaultCompanySettingConflict" FunctionName="Models.Store.CRMspCheckPublicDefaultCompanySettingConflict">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspCheckPublicDefaultCompanySettingConflict_Result">
+          <ScalarProperty Name="SettingID" ColumnName="SettingID" />
+          <ScalarProperty Name="OrderDefaultSetting" ColumnName="OrderDefaultSetting" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspUpdateCompanyDefaultSettingDefFields" FunctionName="Models.Store.CRMspUpdateCompanyDefaultSettingDefFields" />
+    <FunctionImportMapping FunctionImportName="EmailspSearchEmails" FunctionName="Models.Store.EmailspSearchEmails">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.EmailspSearchEmails_Result">
+          <ScalarProperty Name="CNT" ColumnName="CNT" />
+          <ScalarProperty Name="EmailReceiveId" ColumnName="EmailReceiveId" />
+          <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+          <ScalarProperty Name="EmailDate" ColumnName="EmailDate" />
+          <ScalarProperty Name="EmailDatePersian" ColumnName="EmailDatePersian" />
+          <ScalarProperty Name="FromUserEmail" ColumnName="FromUserEmail" />
+          <ScalarProperty Name="ToUserEmail" ColumnName="ToUserEmail" />
+          <ScalarProperty Name="ToUserEmailUserInfoId" ColumnName="ToUserEmailUserInfoId" />
+          <ScalarProperty Name="ToUserEmailNikeName" ColumnName="ToUserEmailNikeName" />
+          <ScalarProperty Name="ToUserEmailNikeEmail" ColumnName="ToUserEmailNikeEmail" />
+          <ScalarProperty Name="Bcc" ColumnName="Bcc" />
+          <ScalarProperty Name="Cc" ColumnName="Cc" />
+          <ScalarProperty Name="Subject" ColumnName="Subject" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="HtmlBody" ColumnName="HtmlBody" />
+          <ScalarProperty Name="FolderName" ColumnName="FolderName" />
+          <ScalarProperty Name="EmailReceiveFolderId" ColumnName="EmailReceiveFolderId" />
+          <ScalarProperty Name="ReceiveDate" ColumnName="ReceiveDate" />
+          <ScalarProperty Name="ReceiveDatePersian" ColumnName="ReceiveDatePersian" />
+          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+          <ScalarProperty Name="ReadDate" ColumnName="ReadDate" />
+          <ScalarProperty Name="ReadDatePersian" ColumnName="ReadDatePersian" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="CompanyPersonId" ColumnName="CompanyPersonId" />
+          <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterUser" ColumnName="FirstRegisterUser" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="AttachCnt" ColumnName="AttachCnt" />
+          <ScalarProperty Name="EmailSendHeaderId" ColumnName="EmailSendHeaderId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspCallerIDCleanPhoneNumberByUserCallPreNumber" FunctionName="Models.Store.CRMspCallerIDCleanPhoneNumberByUserCallPreNumber">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspCallerIDCleanPhoneNumberByUserCallPreNumber_Result">
+          <ScalarProperty Name="CallTypeId" ColumnName="CallTypeId" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="TrunkSource" ColumnName="TrunkSource" />
+          <ScalarProperty Name="TrunkDestination" ColumnName="TrunkDestination" />
+          <ScalarProperty Name="CallPreNumber" ColumnName="CallPreNumber" />
+          <ScalarProperty Name="SelectedUserId" ColumnName="SelectedUserId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="EmailspInsertEmailUserTempTankByCompanyPerson" FunctionName="Models.Store.EmailspInsertEmailUserTempTankByCompanyPerson" />
+    <FunctionImportMapping FunctionImportName="CRMspChartMonthlyOrdersInfo" FunctionName="Models.Store.CRMspChartMonthlyOrdersInfo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspChartMonthlyOrdersInfo_Result">
+          <ScalarProperty Name="DateValue" ColumnName="DateValue" />
+          <ScalarProperty Name="DateText" ColumnName="DateText" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="OrderDateStr" ColumnName="OrderDateStr" />
+          <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+          <ScalarProperty Name="OrderTotalAmount" ColumnName="OrderTotalAmount" />
+          <ScalarProperty Name="OprType" ColumnName="OprType" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="GroupFieldValue" ColumnName="GroupFieldValue" />
+          <ScalarProperty Name="GroupFieldText" ColumnName="GroupFieldText" />
+          <ScalarProperty Name="FilteredProductAmount" ColumnName="FilteredProductAmount" />
+          <ScalarProperty Name="FilteredProductCount" ColumnName="FilteredProductCount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspIntMsgGetUnReadMessgeForUsers" FunctionName="Models.Store.CRMspIntMsgGetUnReadMessgeForUsers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspIntMsgGetUnReadMessgeForUsers_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="MessageCnt" ColumnName="MessageCnt" />
+          <ScalarProperty Name="VerifyCnt" ColumnName="VerifyCnt" />
+          <ScalarProperty Name="MsgdTypeId" ColumnName="MsgdTypeId" />
+          <ScalarProperty Name="InternalMessageID" ColumnName="InternalMessageID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CRMspGetUnReadTicketForUsers" FunctionName="Models.Store.CRMspGetUnReadTicketForUsers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Models.CRMspGetUnReadTicketForUsers_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="InProgressCnt" ColumnName="InProgressCnt" />
+          <ScalarProperty Name="NewCnt" ColumnName="NewCnt" />
+          <ScalarProperty Name="AllCnt" ColumnName="AllCnt" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

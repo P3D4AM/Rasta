@@ -1,0 +1,49 @@
+using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.ServiceModel;
+
+namespace CRMIdeal.LinkKyan;
+
+[DebuggerStepThrough]
+[GeneratedCode("System.ServiceModel", "4.0.0.0")]
+[EditorBrowsable(EditorBrowsableState.Advanced)]
+[MessageContract(WrapperName = "CreateGiftCertificate", WrapperNamespace = "KyanOnlineSaleService", IsWrapped = true)]
+public class CreateGiftCertificateRequest
+{
+	[MessageHeader(Namespace = "KyanOnlineSaleService")]
+	public ValidationSoapHeader ValidationSoapHeader;
+
+	[MessageHeader(Namespace = "KyanOnlineSaleService")]
+	public AuthUser AuthUser;
+
+	[MessageBodyMember(Namespace = "KyanOnlineSaleService", Order = 0)]
+	public string barcode;
+
+	[MessageBodyMember(Namespace = "KyanOnlineSaleService", Order = 1)]
+	public string memberID;
+
+	[MessageBodyMember(Namespace = "KyanOnlineSaleService", Order = 2)]
+	public decimal Amount;
+
+	[MessageBodyMember(Namespace = "KyanOnlineSaleService", Order = 3)]
+	public int BonHOrBonT;
+
+	[MessageBodyMember(Namespace = "KyanOnlineSaleService", Order = 4)]
+	public int BonCartType;
+
+	public CreateGiftCertificateRequest()
+	{
+	}
+
+	public CreateGiftCertificateRequest(ValidationSoapHeader ValidationSoapHeader, AuthUser AuthUser, string barcode, string memberID, decimal Amount, int BonHOrBonT, int BonCartType)
+	{
+		this.ValidationSoapHeader = ValidationSoapHeader;
+		this.AuthUser = AuthUser;
+		this.barcode = barcode;
+		this.memberID = memberID;
+		this.Amount = Amount;
+		this.BonHOrBonT = BonHOrBonT;
+		this.BonCartType = BonCartType;
+	}
+}

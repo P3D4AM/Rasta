@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+<resheader name="resmimetype"><value>text/microsoft-resx</value></resheader><resheader name="version"><value>1.3</value></resheader><resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><data name="AccountNumber" xml:space="preserve"><value>Account Number</value></data>
+  <data name="PrjRemindDate" xml:space="preserve"><value>Reminder Date</value></data>
+  <data name="CmpSubGroup" xml:space="preserve"><value>Sub Group</value></data>
+  <data name="lblDraft" xml:space="preserve"><value>Draft of warehouse</value></data>
+  <data name="BankingBranch" xml:space="preserve"><value>Bank Branch</value></data>
+  <data name="lblScore" xml:space="preserve"><value>Score</value></data>
+  <data name="docVerifiedRequest" xml:space="preserve"><value>Request verify / change in attachment {0}</value></data>
+  <data name="ResponsibleUser" xml:space="preserve"><value>Responsible Name</value></data>
+  <data name="CmpPreTel" xml:space="preserve"><value>Code</value></data>
+  <data name="CmpMainPerson" xml:space="preserve"><value>Main personnel</value></data>
+  <data name="BankingAccount" xml:space="preserve"><value>Bank Account</value></data>
+  <data name="CommEffectiveDate" xml:space="preserve"><value>Effective date</value></data>
+  <data name="ImportDate" xml:space="preserve"><value>Date</value></data>
+  <data name="FromFirstRegisterDate" xml:space="preserve"><value>From the date of registration</value></data>
+  <data name="UserStartDate" xml:space="preserve"><value>Starting Date</value></data>
+  <data name="PordCompanyPerson" xml:space="preserve"><value>Customer personnel</value></data>
+  <data name="PrdPriceDocDate" xml:space="preserve"><value>Date</value></data>
+  <data name="DestinationWarehouse" xml:space="preserve"><value>Destination warehouse</value></data>
+  <data name="PrdAutoCalcIndexedPrdId" xml:space="preserve"><value>Related index product</value></data>
+  <data name="CmpCoordinateLastUser" xml:space="preserve"><value>Registered user customer location</value></data>
+  <data name="CmpCoordinateLastDate" xml:space="preserve"><value>Customer coordinate date</value></data>
+  <data name="ToRegisterDate" xml:space="preserve"><value>To the last edit date</value></data>
+  <data name="PordVerificationWorkFlowId" xml:space="preserve"><value>Verification cycle</value></data>
+  <data name="PordVerificationReqReasonCancellation" xml:space="preserve"><value>The reasons for cancellation</value></data>
+  <data name="lblProjectProductHistory" xml:space="preserve"><value>Service details</value></data>
+  <data name="PrjCategory" xml:space="preserve"><value>Category</value></data>
+  <data name="CnvsDate" xml:space="preserve"><value>Conversation Date</value></data>
+  <data name="CnvsDesc" xml:space="preserve"><value>Conversation Description</value></data>
+  <data name="CnvsUser" xml:space="preserve"><value>Negotiator</value></data>
+  <data name="OrdGuaranty" xml:space="preserve"><value>Guaranty</value></data>
+  <data name="OrdpayBankingAccountID" xml:space="preserve"><value>Bank account</value></data>
+  <data name="PordStatusId" xml:space="preserve"><value>Status</value></data>
+  <data name="docVerifiedRequestDocNumber" xml:space="preserve"><value>Warehouse sheet number</value></data>
+  <data name="PreOrderOprId" xml:space="preserve"><value>Pre-order group</value></data>
+  <data name="ordVerifiedRequestOrdDate" xml:space="preserve"><value>Order date</value></data>
+  <data name="FromRegisterDate" xml:space="preserve"><value>From the last edit date</value></data>
+  <data name="PrdCostGroup" xml:space="preserve"><value>Group</value></data>
+  <data name="DocOpr" xml:space="preserve"><value>Document Type</value></data>
+  <data name="OrderItem" xml:space="preserve"><value>Invoice Item (Product).</value></data>
+  <data name="CmpaddType" xml:space="preserve"><value>Address Type</value></data>
+  <data name="CmpaddCity" xml:space="preserve"><value>City</value></data>
+  <data name="CommVerifiedDate" xml:space="preserve"><value>Approval date</value></data>
+  <data name="CommVerifierUser" xml:space="preserve"><value>Confirming user</value></data>
+  <data name="PreOrder" xml:space="preserve"><value>preorder</value></data>
+  <data name="LinkAccOrdType" xml:space="preserve"><value>Invoice type in other systems</value></data>
+  <data name="PordVerificationReqWorkflowId" xml:space="preserve"><value>Workflow Name</value></data>
+  <data name="CampaignParent" xml:space="preserve"><value>Parent</value></data>
+  <data name="CmpTel" xml:space="preserve"><value>Tel</value></data>
+  <data name="CmpFax" xml:space="preserve"><value>Fax</value></data>
+  <data name="UserDepartment" xml:space="preserve"><value>Department</value></data>
+  <data name="CnvsCoordinateLastDatePersian" xml:space="preserve"><value>Coordinate registration date</value></data>
+  <data name="Serials" xml:space="preserve"><value>Serials</value></data>
+  <data name="BankName" xml:space="preserve"><value>Bank Name</value></data>
+  <data name="CmpTelUpTo" xml:space="preserve"><value>To</value></data>
+  <data name="PrdOrdIssuePrjCnvsStatusGroupId" xml:space="preserve"><value>Progress model (settings when issuing an invoice from a proforma invoice containing this product)</value></data>
+  <data name="PrdUnitIdII" xml:space="preserve"><value>Second Product Sub-Unit</value></data>
+  <data name="VerificationWorkFlowStepCmpSuppUser" xml:space="preserve"><value>Contact expert</value></data>
+  <data name="OrdCompanyPerson" xml:space="preserve"><value>Customer Personnel</value></data>
+  <data name="CmpMobile" xml:space="preserve"><value>Mobile</value></data>
+  <data name="ordVerifiedRequestOrdAtach" xml:space="preserve"><value>the attachment order</value></data>
+  <data name="PrdAutoCalcPordPrdId" xml:space="preserve"><value>Product (Proforma Invoice Settings)</value></data>
+  <data name="CnvsStatusResult" xml:space="preserve"><value>Progress status result</value></data>
+  <data name="PrdColor" xml:space="preserve"><value>Product color</value></data>
+  <data name="PrjCmpPresentation" xml:space="preserve"><value>Presentation</value></data>
+  <data name="CurrencyUnitRate" xml:space="preserve"><value>Exchange Rate</value></data>
+  <data name="PrsTelUpTo" xml:space="preserve"><value>To (Person)</value></data>
+  <data name="PordPayAmount" xml:space="preserve"><value>Amount</value></data>
+  <data name="PrdPrice" xml:space="preserve"><value>Sale price</value></data>
+  <data name="bordSupplierDeliveryDate" xml:space="preserve"><value>Delivery Date from Supplier</value></data>
+  <data name="PrdFirstGroup" xml:space="preserve"><value>First group</value></data>
+  <data name="ToFirstRegisterDate" xml:space="preserve"><value>To the registration date</value></data>
+  <data name="docVerifiedRequestFirstRegister" xml:space="preserve"><value>Registrar</value></data>
+  <data name="PrdAutoCalcPordPrjTitleGroupId" xml:space="preserve"><value>Heading Title (Proforma Invoice Project Settings)</value></data>
+  <data name="PordVerificationReqVerifyUserId" xml:space="preserve"><value>Verifier</value></data>
+  <data name="VerificationWorkFlowStepCmpReferUser" xml:space="preserve"><value>Contact marketer</value></data>
+  <data name="VerificationWorkFlowStepTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="OrdpayBankingBranchID" xml:space="preserve"><value>Branch</value></data>
+  <data name="CmpaddCoordinateLastUser" xml:space="preserve"><value>Latest Location Editor</value></data>
+  <data name="CmpaddCoordinateLastDate" xml:space="preserve"><value>The date the location was modified</value></data>
+  <data name="LinkAccFiscalYear" xml:space="preserve"><value>Fiscal year in other systems</value></data>
+  <data name="docVerifiedRequestCompanayName" xml:space="preserve"><value>Contact name</value></data>
+  <data name="PordPrintFormatId" xml:space="preserve"><value>Print format</value></data>
+  <data name="ProjectI" xml:space="preserve"><value>Project</value></data>
+  <data name="ordVerifiedRequestDbClickOnOtherInfo" xml:space="preserve"><value>by double-clicking on the additional information table of the message, you can see and verify the order.</value></data>
+  <data name="CnvsReferToMultilUser" xml:space="preserve"><value>User (transcript)</value></data>
+  <data name="Province" xml:space="preserve"><value>Province</value></data>
+  <data name="CmpGroupIII" xml:space="preserve"><value>Group III</value></data>
+  <data name="ExpireDate" xml:space="preserve"><value>Expiration Date</value></data>
+  <data name="DiscountCodeRule" xml:space="preserve"><value>Discount code rule</value></data>
+  <data name="PrdCurrencyUnit" xml:space="preserve"><value>Currency unit</value></data>
+  <data name="Hamyar" xml:space="preserve"><value>Hamyar</value></data>
+  <data name="PrdAutoCalcPordCnvsStatusId" xml:space="preserve"><value>Progress status (Negotiation registration settings)</value></data>
+  <data name="PrjGrade" xml:space="preserve"><value>Project Grade</value></data>
+  <data name="PrjGroup" xml:space="preserve"><value>Project Group</value></data>
+  <data name="PrjTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="PrdAutoCalcPordPrjTitleId" xml:space="preserve"><value>Project Title (Proforma Invoice Project Settings)</value></data>
+  <data name="PrsPreTel" xml:space="preserve"><value>Pre tel (Person)</value></data>
+  <data name="PrjFinishedStatus" xml:space="preserve"><value>Status completed</value></data>
+  <data name="CmpPresentation" xml:space="preserve"><value>Presentation</value></data>
+  <data name="SourceWarehouse" xml:space="preserve"><value>Source warehouse</value></data>
+  <data name="GroupName" xml:space="preserve"><value>Group Name</value></data>
+  <data name="CmpProvince" xml:space="preserve"><value>Province</value></data>
+  <data name="PordPayConditionId" xml:space="preserve"><value>Payment condition</value></data>
+  <data name="OrderOpr" xml:space="preserve"><value>Order type</value></data>
+  <data name="GenerateDiscountCodeFromDisCodeRuleTitle" xml:space="preserve"><value>Discount code created by the user</value></data>
+  <data name="OrdpayBankingBankID" xml:space="preserve"><value>Bank</value></data>
+  <data name="OrdLLogo" xml:space="preserve"><value>Logo to the left</value></data>
+  <data name="OrdRLogo" xml:space="preserve"><value>Logo to the right</value></data>
+  <data name="OrdOprId" xml:space="preserve"><value>Order type</value></data>
+  <data name="ToDate" xml:space="preserve"><value>To date</value></data>
+  <data name="PordProject" xml:space="preserve"><value>Project</value></data>
+  <data name="PreOrderOpr" xml:space="preserve"><value>Pre-order group</value></data>
+  <data name="ordVerifiedRequestReferUserName" xml:space="preserve"><value>Marketer_Owner</value></data>
+  <data name="PrjcnvsStatusGroup" xml:space="preserve"><value>Model Progress</value></data>
+  <data name="CommIsPaidDate" xml:space="preserve"><value>Payment date</value></data>
+  <data name="CommIsPaidUser" xml:space="preserve"><value>Paying user</value></data>
+  <data name="CommTypePrs" xml:space="preserve"><value>Contact personnel receiving commission</value></data>
+  <data name="CommTypeCmp" xml:space="preserve"><value>Contact person receiving the commission</value></data>
+  <data name="CnvsRemindTime" xml:space="preserve"><value>Alarms Time</value></data>
+  <data name="CnvsRemindDate" xml:space="preserve"><value>Remind date in the dashboard</value></data>
+  <data name="Sample" xml:space="preserve"><value>Sample</value></data>
+  <data name="PrdOrdIssueUpdateCmpTypeId" xml:space="preserve"><value>Update contact type (settings when issuing an invoice from a proforma invoice containing this product)</value></data>
+  <data name="CommPayType" xml:space="preserve"><value>Payment method</value></data>
+  <data name="CampaignName" xml:space="preserve"><value>Campaign Name</value></data>
+  <data name="PrsTel" xml:space="preserve"><value>Person Tel</value></data>
+  <data name="PrsSex" xml:space="preserve"><value>Sex</value></data>
+  <data name="PrsFax" xml:space="preserve"><value>Fax</value></data>
+  <data name="PrsJob" xml:space="preserve"><value>Job</value></data>
+  <data name="PrsEducation" xml:space="preserve"><value>Education</value></data>
+  <data name="Person" xml:space="preserve"><value>Person</value></data>
+  <data name="PrdSHPOtherSupplier" xml:space="preserve"><value>Supplier</value></data>
+  <data name="LinkAccInventoryType" xml:space="preserve"><value>Warehouse slip type in other systems</value></data>
+  <data name="BankingAccountType" xml:space="preserve"><value>Type</value></data>
+  <data name="CmpCountry" xml:space="preserve"><value>Country</value></data>
+  <data name="DyfrmCheckRequestDbClickOnOtherInfo" xml:space="preserve"><value>by double clicking on the additional information table below, you can see and verify the form</value></data>
+  <data name="docVerifiedRequestDocOpr" xml:space="preserve"><value>Type of warehouse sheet</value></data>
+  <data name="PordDate" xml:space="preserve"><value>Date of pre-order</value></data>
+  <data name="OrdVerify" xml:space="preserve"><value>Verifier Order</value></data>
+  <data name="PrjUserDepartment" xml:space="preserve"><value>Department</value></data>
+  <data name="PrdCost" xml:space="preserve"><value>Purchase price</value></data>
+  <data name="PrdName" xml:space="preserve"><value>Product name</value></data>
+  <data name="PrdUnit" xml:space="preserve"><value>Product unit</value></data>
+  <data name="PrsTelII" xml:space="preserve"><value>Tel II</value></data>
+  <data name="PrsTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="Project" xml:space="preserve"><value>Project</value></data>
+  <data name="Product" xml:space="preserve"><value>Product</value></data>
+  <data name="docVerifiedRequestVerifier" xml:space="preserve"><value>Verifier</value></data>
+  <data name="PrsType" xml:space="preserve"><value>Type</value></data>
+  <data name="PrsCity" xml:space="preserve"><value>City</value></data>
+  <data name="PrsProvince" xml:space="preserve"><value>Province</value></data>
+  <data name="PrsGroup" xml:space="preserve"><value>Group</value></data>
+  <data name="OrdpayCashId" xml:space="preserve"><value>Fund</value></data>
+  <data name="PrdOrdIssuePrjTitleGroupId" xml:space="preserve"><value>Header title (settings when issuing an invoice from a proforma invoice containing this product)</value></data>
+  <data name="PordICurrencyUnitId" xml:space="preserve"><value>Currency unit</value></data>
+  <data name="PordCreditDurationId" xml:space="preserve"><value>Credit duration</value></data>
+  <data name="Warehouse" xml:space="preserve"><value>Warehouse</value></data>
+  <data name="OrdStatus" xml:space="preserve"><value>Order Status</value></data>
+  <data name="PordReferUserId" xml:space="preserve"><value>Marketer</value></data>
+  <data name="PordVerificationReqVerifyText" xml:space="preserve"><value>Verification request text</value></data>
+  <data name="Company" xml:space="preserve"><value>Customer</value></data>
+  <data name="PrdSaleCenterIds" xml:space="preserve"><value>Sales centers</value></data>
+  <data name="CmpaddCompanyAddress" xml:space="preserve"><value>Address</value></data>
+  <data name="CnvsReferUser" xml:space="preserve"><value>Refer To</value></data>
+  <data name="Country" xml:space="preserve"><value>Country</value></data>
+  <data name="PordRLogoId" xml:space="preserve"><value>Logo to the right</value></data>
+  <data name="PersonI" xml:space="preserve"><value>Customer Personnel</value></data>
+  <data name="CurrUnitRateDestCurrencyUnit" xml:space="preserve"><value>Destination Currency</value></data>
+  <data name="ordVerifiedRequest" xml:space="preserve"><value>Request verify / changes in</value></data>
+  <data name="CnvsTopic" xml:space="preserve"><value>Topic</value></data>
+  <data name="VerificationRequestObjectType" xml:space="preserve"><value>Verification workflow type</value></data>
+  <data name="Specificatuion" xml:space="preserve"><value>Specificatuion</value></data>
+  <data name="PordLLogoId" xml:space="preserve"><value>Logo to the left</value></data>
+  <data name="DocOprId" xml:space="preserve"><value>Document type</value></data>
+  <data name="CmpGroupII" xml:space="preserve"><value>Group II</value></data>
+  <data name="CmpGroupIV" xml:space="preserve"><value>Group IV</value></data>
+  <data name="CmpType" xml:space="preserve"><value>Type</value></data>
+  <data name="CmpCity" xml:space="preserve"><value>City</value></data>
+  <data name="OrdReferUser" xml:space="preserve"><value>Order Marketer</value></data>
+  <data name="LinkAccUser" xml:space="preserve"><value>User on other systems</value></data>
+  <data name="AlternateVerifyUser" xml:space="preserve"><value>Alternate Approver</value></data>
+  <data name="lblDyForm" xml:space="preserve"><value>Form maker</value></data>
+  <data name="OtherSystemsSepInvRecTypeII" xml:space="preserve"><value>Buy (Imported)</value></data>
+  <data name="OtherSystemsSepInvRecTypeIV" xml:space="preserve"><value>Other</value></data>
+  <data name="OrdPreOrderVerifierId" xml:space="preserve"><value>Verifier preorder</value></data>
+  <data name="PordVerifiedRegisterDate" xml:space="preserve"><value>Verified date</value></data>
+  <data name="BranchName" xml:space="preserve"><value>Branch Name</value></data>
+  <data name="PordpayBankingBranchID" xml:space="preserve"><value>Branch</value></data>
+  <data name="OrdDeliveryDate" xml:space="preserve"><value>Delivery date</value></data>
+  <data name="OrdDeliveryTime" xml:space="preserve"><value>Delivery time</value></data>
+  <data name="PrjStarterUser" xml:space="preserve"><value>Starter</value></data>
+  <data name="ApiUserName" xml:space="preserve"><value>Username</value></data>
+  <data name="PordpayGroupIIId" xml:space="preserve"><value>Second group</value></data>
+  <data name="docVerifiedRequestDbClickOnOtherInfo" xml:space="preserve"><value>by double-clicking on the additional information table of the message, you can see and verify the warehouse shee.</value></data>
+  <data name="Payments" xml:space="preserve"><value>Payments</value></data>
+  <data name="NewIntMsg" xml:space="preserve"><value>New internal message</value></data>
+  <data name="docVerifiedRequestSubject" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="PrdAutoCalcPordTaxDefSettingId" xml:space="preserve"><value>Default settings with tax (smart tax determination based on the last invoice issued)</value></data>
+  <data name="LanguageMainCurrency" xml:space="preserve"><value>dollar</value></data>
+  <data name="PrjTitleGroup" xml:space="preserve"><value>Heading</value></data>
+  <data name="PrsMobile" xml:space="preserve"><value>Mobile</value></data>
+  <data name="OrdPayType" xml:space="preserve"><value>Payment Type</value></data>
+  <data name="DocExpDate" xml:space="preserve"><value>Expiration date</value></data>
+  <data name="StockSupply" xml:space="preserve"><value>Stock supply</value></data>
+  <data name="PrdAutoCalcIssueOrdFromIndexedOprId" xml:space="preserve"><value>Index invoice type (Issuance of index invoice)</value></data>
+  <data name="UserExpireDate" xml:space="preserve"><value>Expiration Date</value></data>
+  <data name="CompanyAddressTypeName" xml:space="preserve"><value>Title</value></data>
+  <data name="PrdAutoCalcPordNoTaxDefSettingId" xml:space="preserve"><value>Default settings: No tax (smart tax determination based on the last invoice issued)</value></data>
+  <data name="TxtIsNotDone" xml:space="preserve"><value>Not Done</value></data>
+  <data name="VerificationWorkFlowStepSaleCenterReferUser" xml:space="preserve"><value>Responsible sale center</value></data>
+  <data name="bordDeliveryDate" xml:space="preserve"><value>Announced Delivery Date</value></data>
+  <data name="CnvsPriority" xml:space="preserve"><value>Priority Show</value></data>
+  <data name="CmpOfficialCity" xml:space="preserve"><value>Official City</value></data>
+  <data name="PrdTaxClearedDate" xml:space="preserve"><value>Tax Settlement Date</value></data>
+  <data name="Commissions" xml:space="preserve"><value>Commissions</value></data>
+  <data name="VerificationWorkFlow" xml:space="preserve"><value>Verification Workflow</value></data>
+  <data name="Guaranty" xml:space="preserve"><value>Guaranty</value></data>
+  <data name="PordPayDocDate" xml:space="preserve"><value>Document date</value></data>
+  <data name="PayCondition" xml:space="preserve"><value>Pay Condition</value></data>
+  <data name="UserCoordinateLastDate" xml:space="preserve"><value>The date the location of user was modified</value></data>
+  <data name="PrdRowColor" xml:space="preserve"><value>Row display color</value></data>
+  <data name="stsupCompanyId" xml:space="preserve"><value>Contact Name</value></data>
+  <data name="Error" xml:space="preserve"><value>Error</value></data>
+  <data name="CmpTitle" xml:space="preserve"><value>Title</value></data>
+  <data name="CmpTelII" xml:space="preserve"><value>Tel II</value></data>
+  <data name="Group" xml:space="preserve"><value>Group</value></data>
+  <data name="CmpGroup" xml:space="preserve"><value>Group</value></data>
+  <data name="Order" xml:space="preserve"><value>Order</value></data>
+  <data name="UserPosition" xml:space="preserve"><value>Position</value></data>
+  <data name="DocDate" xml:space="preserve"><value>Date</value></data>
+  <data name="PrdPriceGroupId" xml:space="preserve"><value>Price list</value></data>
+  <data name="UserRoll" xml:space="preserve"><value>User Role</value></data>
+  <data name="bordPaymentType" xml:space="preserve"><value>Payment Type</value></data>
+  <data name="bordTaxClearedDate" xml:space="preserve"><value>Tax Settlement Date</value></data>
+  <data name="OrdIValidityExpireDate" xml:space="preserve"><value>Validity Date</value></data>
+  <data name="OrdpayGroup" xml:space="preserve"><value>Payment Group</value></data>
+  <data name="PordpayCashId" xml:space="preserve"><value>Fund</value></data>
+  <data name="FromDate" xml:space="preserve"><value>From date</value></data>
+  <data name="Quantity" xml:space="preserve"><value>Quantity</value></data>
+  <data name="PordpayGroupIId" xml:space="preserve"><value>First group</value></data>
+  <data name="PordVerificationReqVerification" xml:space="preserve"><value>Verification requests</value></data>
+  <data name="SubGroupName" xml:space="preserve"><value>Subgroup Name</value></data>
+  <data name="lblCommission" xml:space="preserve"><value>Commission</value></data>
+  <data name="OrdProject" xml:space="preserve"><value>Project</value></data>
+  <data name="PordSignatureId" xml:space="preserve"><value>Signature</value></data>
+  <data name="CommKind" xml:space="preserve"><value>Type of commission</value></data>
+  <data name="CommDate" xml:space="preserve"><value>Commission registration date</value></data>
+  <data name="CommType" xml:space="preserve"><value>Receiver type</value></data>
+  <data name="CommUser" xml:space="preserve"><value>User receiving commission</value></data>
+  <data name="CompanyI" xml:space="preserve"><value>Customer</value></data>
+  <data name="OrdPayDocDate" xml:space="preserve"><value>Document Date</value></data>
+  <data name="OrdpayGroupIIId" xml:space="preserve"><value>Second group</value></data>
+  <data name="CurrUnitRateSrcCurrencyUnit" xml:space="preserve"><value>Source Currency</value></data>
+  <data name="TxtIsDone" xml:space="preserve"><value>Done</value></data>
+  <data name="PrsCountry" xml:space="preserve"><value>Country</value></data>
+  <data name="OtherSystemsSepInvRecTypeI" xml:space="preserve"><value>Buy (Internal)</value></data>
+  <data name="OtherSystemsSepInvRecTypeV" xml:space="preserve"><value>Early inventory of the period</value></data>
+  <data name="CmpEffectiveDate" xml:space="preserve"><value>Effective Date</value></data>
+  <data name="OrdCompany" xml:space="preserve"><value>Customer</value></data>
+  <data name="BuyOrder" xml:space="preserve"><value>Buy Order</value></data>
+  <data name="CompanyPerson" xml:space="preserve"><value>Customer Personnel</value></data>
+  <data name="CommPayTypeTitle" xml:space="preserve"><value>Payment type title</value></data>
+  <data name="prdTracing" xml:space="preserve"><value>Tracing</value></data>
+  <data name="lblVerificationWorkFlow" xml:space="preserve"><value>Approval cycle</value></data>
+  <data name="stsupReferUserId" xml:space="preserve"><value>Applicant</value></data>
+  <data name="BankAccount" xml:space="preserve"><value>Bank Account</value></data>
+  <data name="PrdPriceGroup" xml:space="preserve"><value>List Sale Price</value></data>
+  <data name="PrdAutoCalcPordCnvsTopicId" xml:space="preserve"><value>Negotiation type (Negotiation recording settings)</value></data>
+  <data name="PordDeliveryTime" xml:space="preserve"><value>Delivery time</value></data>
+  <data name="PordDeliveryDate" xml:space="preserve"><value>Delivery date</value></data>
+  <data name="IsNotVerifiedSubject" xml:space="preserve"><value>Disapproval</value></data>
+  <data name="OrdIPrdUnit" xml:space="preserve"><value>Product unit</value></data>
+  <data name="PordpayTypeId" xml:space="preserve"><value>Payment Type</value></data>
+  <data name="PrdSecondGroup" xml:space="preserve"><value>Second group</value></data>
+  <data name="PrdOrdIssueUpdateTaxCmpGroupIdII" xml:space="preserve"><value>Second audience group with taxes (update second audience group based on taxability)</value></data>
+  <data name="ordVerifiedRequestOrdVerified" xml:space="preserve"><value>Verifier</value></data>
+  <data name="OtherSystemsSepInvDelTypeIII" xml:space="preserve"><value>Other</value></data>
+  <data name="OrdDate" xml:space="preserve"><value>Order date</value></data>
+  <data name="stsupVerifierRequestId" xml:space="preserve"><value>Verifier Request</value></data>
+  <data name="bordFinalDeliveryDate" xml:space="preserve"><value>Final Delivery Date</value></data>
+  <data name="PrsDepartment" xml:space="preserve"><value>Department</value></data>
+  <data name="PrjFinishedUser" xml:space="preserve"><value>Archiver</value></data>
+  <data name="PrjFinishedDate" xml:space="preserve"><value>Completion date of the project</value></data>
+  <data name="ordVerifiedRequestFirstRegisterUserName" xml:space="preserve"><value>Registrar</value></data>
+  <data name="PrdAutoCalcPordCnvsStatusResultId" xml:space="preserve"><value>Result (Negotiation Recording Settings)</value></data>
+  <data name="DeliveryTime" xml:space="preserve"><value>Delivery Time</value></data>
+  <data name="OtherSystemsSepInvDelTypeIV" xml:space="preserve"><value>Transfer between warehouses</value></data>
+  <data name="OtherSystemsSepInvDelTypeII" xml:space="preserve"><value>Consumption</value></data>
+  <data name="OprType" xml:space="preserve"><value>Type</value></data>
+  <data name="OrdPrintFormat" xml:space="preserve"><value>Print Format</value></data>
+  <data name="CnvsRemindDateForAllarm" xml:space="preserve"><value>Alarms Date</value></data>
+  <data name="CnvsStatus" xml:space="preserve"><value>Progress Status</value></data>
+  <data name="OrdICurrencyUnit" xml:space="preserve"><value>Currency Unit</value></data>
+  <data name="frmError" xml:space="preserve"><value>Error</value></data>
+  <data name="PrdAutoCalcPordPrjCnvsStatusGroupId" xml:space="preserve"><value>Progress Model (Proforma Invoice Project Settings)</value></data>
+  <data name="stsupProjectId" xml:space="preserve"><value>Project</value></data>
+  <data name="PrdOrdIssuePrjTitleId" xml:space="preserve"><value>Project title (settings when issuing an invoice from a proforma invoice containing this product)</value></data>
+  <data name="PordIPrdUnitId" xml:space="preserve"><value>Product unit</value></data>
+  <data name="stsupCompanyPersonId" xml:space="preserve"><value>Person Name</value></data>
+  <data name="DefualtPrjTitle" xml:space="preserve"><value>Register from the site</value></data>
+  <data name="PordVerifierId" xml:space="preserve"><value>Verifier pre-order</value></data>
+  <data name="CnvsPerson" xml:space="preserve"><value>Person</value></data>
+  <data name="PrdCostDocDate" xml:space="preserve"><value>Date</value></data>
+  <data name="CommAmountCurrUn" xml:space="preserve"><value>Currency unit</value></data>
+  <data name="PrjStartDate" xml:space="preserve"><value>Start date of the project</value></data>
+  <data name="OrdSettlementType" xml:space="preserve"><value>Payment Type of Order</value></data>
+  <data name="CreditDuration" xml:space="preserve"><value>Credit Duration</value></data>
+  <data name="Saturday" xml:space="preserve"><value>Saturday</value></data>
+  <data name="ordVerifiedRequestCompanayName" xml:space="preserve"><value>Contact name</value></data>
+  <data name="PrsMarriageDate" xml:space="preserve"><value>Marriage Date</value></data>
+  <data name="OrdpayGroupIId" xml:space="preserve"><value>First group</value></data>
+  <data name="LinkAccSettingDB" xml:space="preserve"><value>Databases in other systems</value></data>
+  <data name="PrjPrdHSetDate" xml:space="preserve"><value>Request Date</value></data>
+  <data name="lblDoc" xml:space="preserve"><value>Document of warehouse</value></data>
+  <data name="lblDiscountCode" xml:space="preserve"><value>Discount code</value></data>
+  <data name="PordDeliveryTimeId" xml:space="preserve"><value>Delivery time</value></data>
+  <data name="PordExpireTime" xml:space="preserve"><value>Expiration time</value></data>
+  <data name="PordExpireDate" xml:space="preserve"><value>Expiration date</value></data>
+  <data name="lblNewIntMsg" xml:space="preserve"><value>New internal message</value></data>
+  <data name="VerificationWorkFlowStep" xml:space="preserve"><value>Verification Workflow Step</value></data>
+  <data name="JsonValue" xml:space="preserve"><value>Jason's amount</value></data>
+  <data name="ordVerifiedRequestSubject" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="PordGuarantyId" xml:space="preserve"><value>Guaranty</value></data>
+  <data name="UserGroup" xml:space="preserve"><value>Group</value></data>
+  <data name="PrsNationalCode" xml:space="preserve"><value>National code</value></data>
+  <data name="lblMoneyBag" xml:space="preserve"><value>Money bag</value></data>
+  <data name="PrsBirthDate" xml:space="preserve"><value>Birth Date</value></data>
+  <data name="PrdUnitIdI" xml:space="preserve"><value>Product Sub-Unit</value></data>
+  <data name="PordVerifierRequestId" xml:space="preserve"><value>Verifier request</value></data>
+  <data name="OrdPayAmount" xml:space="preserve"><value>Amount</value></data>
+  <data name="docVerifiedRequestDocDate" xml:space="preserve"><value>Date of Issue warehouse sheet</value></data>
+  <data name="OtherSystemsSepInvRecTypeIII" xml:space="preserve"><value>Manufacturing</value></data>
+  <data name="VerifiedRequestSubject" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="PordVerificationReqStepVerifyText" xml:space="preserve"><value>Description</value></data>
+  <data name="PrjPrdHDoneStatusUser" xml:space="preserve"><value>User</value></data>
+  <data name="PrjPriority" xml:space="preserve"><value>Project Priority</value></data>
+  <data name="PrjPrdHDoneStatusDate" xml:space="preserve"><value>Date Done Request</value></data>
+  <data name="CurrencyUnit" xml:space="preserve"><value>Currency unit</value></data>
+  <data name="CmpReferUser" xml:space="preserve"><value>Marketer</value></data>
+  <data name="PrjSmsSendDate" xml:space="preserve"><value>SMS sending date</value></data>
+  <data name="OrdVerifierRequest" xml:space="preserve"><value>Verifier Request</value></data>
+  <data name="OrdVerifiedRegisterDate" xml:space="preserve"><value>Verified date</value></data>
+  <data name="PordCompany" xml:space="preserve"><value>Customer</value></data>
+  <data name="lblMoveMent" xml:space="preserve"><value>Movement between the warehouses</value></data>
+  <data name="SettlementType" xml:space="preserve"><value>Payment Terms</value></data>
+  <data name="VerificationWorkFlowStepResponsibleUser" xml:space="preserve"><value>Responsible user</value></data>
+  <data name="PrdOrdIssueUpdateNoTaxCmpGroupIdII" xml:space="preserve"><value>Second group of non-taxable audience (updated second group of audience based on taxability)</value></data>
+  <data name="PordpayBankingBankID" xml:space="preserve"><value>Bank</value></data>
+  <data name="VerifyUser" xml:space="preserve"><value>Approver User</value></data>
+  <data name="OtherSystemsSepInvDelTypeI" xml:space="preserve"><value>Sell</value></data>
+  <data name="BuyOrderOpr" xml:space="preserve"><value>Buy Order Type</value></data>
+  <data name="ordVerifiedRequestOrdNumber" xml:space="preserve"><value>Order number</value></data>
+  <data name="VerifiedRequestVerify" xml:space="preserve"><value>Verify request</value></data>
+  <data name="DyfrmCheckRequestSubject" xml:space="preserve"><value>Request verify / change in form</value></data>
+  <data name="File" xml:space="preserve"><value>File</value></data>
+  <data name="Date" xml:space="preserve"><value>Date</value></data>
+  <data name="Bank" xml:space="preserve"><value>Bank</value></data>
+  <data name="Cash" xml:space="preserve"><value>Fund</value></data>
+  <data name="City" xml:space="preserve"><value>City</value></data>
+  <data name="Name" xml:space="preserve"><value>Name</value></data>
+  <data name="User" xml:space="preserve"><value>User</value></data>
+  <data name="VerificationWorkFlowStepSellerUser" xml:space="preserve"><value>Seller</value></data>
+  </root>

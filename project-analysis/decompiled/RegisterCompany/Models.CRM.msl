@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="CRMEntities">
+    <FunctionImportMapping FunctionImportName="ApispRegisterCompanyWithCnvs" FunctionName="Model.Store.ApispRegisterCompanyWithCnvs" />
+    <FunctionImportMapping FunctionImportName="ApispSelectCompanyTitleWithId" FunctionName="Model.Store.ApispSelectCompanyTitleWithId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectCompanyTitleWithId_Result">
+          <ScalarProperty Name="CompanyTitleID" ColumnName="CompanyTitleID" />
+          <ScalarProperty Name="CrmCompanyTitleLangID" ColumnName="CrmCompanyTitleLangID" />
+          <ScalarProperty Name="CompanyTitle" ColumnName="CompanyTitle" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ApispSelectCrmFoSetting" FunctionName="Model.Store.ApispSelectCrmFoSetting">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectCrmFoSetting_Result">
+          <ScalarProperty Name="CrmFoSettingLandID" ColumnName="CrmFoSettingLandID" />
+          <ScalarProperty Name="FoSettingId" ColumnName="FoSettingId" />
+          <ScalarProperty Name="CmpDefaultGroupId" ColumnName="CmpDefaultGroupId" />
+          <ScalarProperty Name="CmpDefaultSubGroupId" ColumnName="CmpDefaultSubGroupId" />
+          <ScalarProperty Name="CmpDefaultGroupIdII" ColumnName="CmpDefaultGroupIdII" />
+          <ScalarProperty Name="CmpDefaultGroupIdIII" ColumnName="CmpDefaultGroupIdIII" />
+          <ScalarProperty Name="CmpDefaultGroupIdIV" ColumnName="CmpDefaultGroupIdIV" />
+          <ScalarProperty Name="CmpDefaultTypeId" ColumnName="CmpDefaultTypeId" />
+          <ScalarProperty Name="CmpDefaultPresentationId" ColumnName="CmpDefaultPresentationId" />
+          <ScalarProperty Name="CmpDefaultReferUserId" ColumnName="CmpDefaultReferUserId" />
+          <ScalarProperty Name="PrjDefaultTitle" ColumnName="PrjDefaultTitle" />
+          <ScalarProperty Name="PrjDefaultStarterUserId" ColumnName="PrjDefaultStarterUserId" />
+          <ScalarProperty Name="PrjDefaultGradeId" ColumnName="PrjDefaultGradeId" />
+          <ScalarProperty Name="PrjDefaultPriorityId" ColumnName="PrjDefaultPriorityId" />
+          <ScalarProperty Name="PrjDefaultGroupId" ColumnName="PrjDefaultGroupId" />
+          <ScalarProperty Name="PrjDefaultCnvsStatusGroupId" ColumnName="PrjDefaultCnvsStatusGroupId" />
+          <ScalarProperty Name="PrjDefaultPostFix" ColumnName="PrjDefaultPostFix" />
+          <ScalarProperty Name="PrjDefaultFOCmpCanSee" ColumnName="PrjDefaultFOCmpCanSee" />
+          <ScalarProperty Name="PrjInsertCrmProjectsForbiddenFUFDPActive" ColumnName="PrjInsertCrmProjectsForbiddenFUFDPActive" />
+          <ScalarProperty Name="PrjInsertProjectInformationsDefualtFieldActive" ColumnName="PrjInsertProjectInformationsDefualtFieldActive" />
+          <ScalarProperty Name="CnvsDefaultTopicId" ColumnName="CnvsDefaultTopicId" />
+          <ScalarProperty Name="CnvsDefaultDesc" ColumnName="CnvsDefaultDesc" />
+          <ScalarProperty Name="CnvsDefaultUserId" ColumnName="CnvsDefaultUserId" />
+          <ScalarProperty Name="CnvsDefaultReferUserId" ColumnName="CnvsDefaultReferUserId" />
+          <ScalarProperty Name="CnvsDefaultReferDesc" ColumnName="CnvsDefaultReferDesc" />
+          <ScalarProperty Name="CnvsDefaultStatusId" ColumnName="CnvsDefaultStatusId" />
+          <ScalarProperty Name="CnvsDefaultPriorityId" ColumnName="CnvsDefaultPriorityId" />
+          <ScalarProperty Name="EmailSendingIsActive" ColumnName="EmailSendingIsActive" />
+          <ScalarProperty Name="EmailSettingId" ColumnName="EmailSettingId" />
+          <ScalarProperty Name="EmailUserInfoId" ColumnName="EmailUserInfoId" />
+          <ScalarProperty Name="EmailSubjectPatternFormula" ColumnName="EmailSubjectPatternFormula" />
+          <ScalarProperty Name="EmailBodyPatternFormula" ColumnName="EmailBodyPatternFormula" />
+          <ScalarProperty Name="SmsSendingIsActive" ColumnName="SmsSendingIsActive" />
+          <ScalarProperty Name="SmsWebServiceUserName" ColumnName="SmsWebServiceUserName" />
+          <ScalarProperty Name="SmsWebServicePassword" ColumnName="SmsWebServicePassword" />
+          <ScalarProperty Name="SmsWebServiceNumber" ColumnName="SmsWebServiceNumber" />
+          <ScalarProperty Name="SmsWebServiceUrl" ColumnName="SmsWebServiceUrl" />
+          <ScalarProperty Name="SmsBodyPatternFormula" ColumnName="SmsBodyPatternFormula" />
+          <ScalarProperty Name="FoLogEmailAdminI" ColumnName="FoLogEmailAdminI" />
+          <ScalarProperty Name="FoLogEmailAdminII" ColumnName="FoLogEmailAdminII" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ApispSelectCrmsysSetting" FunctionName="Model.Store.ApispSelectCrmsysSetting">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectCrmsysSetting_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="CoName" ColumnName="CoName" />
+          <ScalarProperty Name="CoLoGo" ColumnName="CoLoGo" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="ServerIP" ColumnName="ServerIP" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Year1" ColumnName="Year1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="SantralPreNumber" ColumnName="SantralPreNumber" />
+          <ScalarProperty Name="CallerIDServerIP" ColumnName="CallerIDServerIP" />
+          <ScalarProperty Name="ServiceSIP" ColumnName="ServiceSIP" />
+          <ScalarProperty Name="ServiceSGIP" ColumnName="ServiceSGIP" />
+          <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+          <ScalarProperty Name="EconomicCode" ColumnName="EconomicCode" />
+          <ScalarProperty Name="NationalCode" ColumnName="NationalCode" />
+          <ScalarProperty Name="QuickAddress" ColumnName="QuickAddress" />
+          <ScalarProperty Name="LockSerial" ColumnName="LockSerial" />
+          <ScalarProperty Name="LockCounter" ColumnName="LockCounter" />
+          <ScalarProperty Name="LockNU" ColumnName="LockNU" />
+          <ScalarProperty Name="LockControl" ColumnName="LockControl" />
+          <ScalarProperty Name="AppFilePath" ColumnName="AppFilePath" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="ServiceCIIP" ColumnName="ServiceCIIP" />
+          <ScalarProperty Name="PublicNotice" ColumnName="PublicNotice" />
+          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+          <ScalarProperty Name="ServiceFADeAc" ColumnName="ServiceFADeAc" />
+          <ScalarProperty Name="RecordingVoiceServerIP" ColumnName="RecordingVoiceServerIP" />
+          <ScalarProperty Name="ServiceRIP" ColumnName="ServiceRIP" />
+          <ScalarProperty Name="CantSaveDupPrsMob" ColumnName="CantSaveDupPrsMob" />
+          <ScalarProperty Name="CantSaveDupPrsEmail" ColumnName="CantSaveDupPrsEmail" />
+          <ScalarProperty Name="MustFullcnvsRemindDate" ColumnName="MustFullcnvsRemindDate" />
+          <ScalarProperty Name="CallerIDVersion" ColumnName="CallerIDVersion" />
+          <ScalarProperty Name="CallerIDOldVersion" ColumnName="CallerIDOldVersion" />
+          <ScalarProperty Name="SMSServiceVersion" ColumnName="SMSServiceVersion" />
+          <ScalarProperty Name="SMSServiceOldVersion" ColumnName="SMSServiceOldVersion" />
+          <ScalarProperty Name="ServiceBuyOrdIP" ColumnName="ServiceBuyOrdIP" />
+          <ScalarProperty Name="ServiceEmailIP" ColumnName="ServiceEmailIP" />
+          <ScalarProperty Name="ServiceLetterIP" ColumnName="ServiceLetterIP" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="DisablefrmcmpSearchOnType" ColumnName="DisablefrmcmpSearchOnType" />
+          <ScalarProperty Name="SMSGSMServiceVersion" ColumnName="SMSGSMServiceVersion" />
+          <ScalarProperty Name="SMSGSMServiceOldVersion" ColumnName="SMSGSMServiceOldVersion" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="DefaultLanguageID" ColumnName="DefaultLanguageID" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ApispSelectLanguages" FunctionName="Model.Store.ApispSelectLanguages">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectLanguages_Result">
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
+          <ScalarProperty Name="LanguageCollation" ColumnName="LanguageCollation" />
+          <ScalarProperty Name="LanguageDirection" ColumnName="LanguageDirection" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ApispSelectPersonTitleWithId" FunctionName="Model.Store.ApispSelectPersonTitleWithId">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectPersonTitleWithId_Result">
+          <ScalarProperty Name="PersonTitleID" ColumnName="PersonTitleID" />
+          <ScalarProperty Name="CrmPersonTitleLangID" ColumnName="CrmPersonTitleLangID" />
+          <ScalarProperty Name="PersonTitle" ColumnName="PersonTitle" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ApispSelectUsers" FunctionName="Model.Store.ApispSelectUsers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Model.ApispSelectUsers_Result">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Row" ColumnName="Row" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="PersCode" ColumnName="PersCode" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserId1" ColumnName="UserId1" />
+          <ScalarProperty Name="Month1" ColumnName="Month1" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="RegisterDatePersian" ColumnName="RegisterDatePersian" />
+          <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="TelDesc" ColumnName="TelDesc" />
+          <ScalarProperty Name="PositionId" ColumnName="PositionId" />
+          <ScalarProperty Name="SignatureId" ColumnName="SignatureId" />
+          <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+          <ScalarProperty Name="ResponsibleUserId" ColumnName="ResponsibleUserId" />
+          <ScalarProperty Name="ComputerName" ColumnName="ComputerName" />
+          <ScalarProperty Name="GUId" ColumnName="GUId" />
+          <ScalarProperty Name="CallreIdDeActive" ColumnName="CallreIdDeActive" />
+          <ScalarProperty Name="CallreIdDeActiveLines" ColumnName="CallreIdDeActiveLines" />
+          <ScalarProperty Name="DisableInternalMessageAllarmVoice" ColumnName="DisableInternalMessageAllarmVoice" />
+          <ScalarProperty Name="DisableReceiveCNVSInfoAllarm" ColumnName="DisableReceiveCNVSInfoAllarm" />
+          <ScalarProperty Name="EmailAttachFileLocation" ColumnName="EmailAttachFileLocation" />
+          <ScalarProperty Name="AppType" ColumnName="AppType" />
+          <ScalarProperty Name="CanSetFree" ColumnName="CanSetFree" />
+          <ScalarProperty Name="UserCIPatternFormulaPopUp" ColumnName="UserCIPatternFormulaPopUp" />
+          <ScalarProperty Name="UseClientNameForNetworking" ColumnName="UseClientNameForNetworking" />
+          <ScalarProperty Name="UserIsActiveInWinApp" ColumnName="UserIsActiveInWinApp" />
+          <ScalarProperty Name="UserIsActiveInWebApp" ColumnName="UserIsActiveInWebApp" />
+          <ScalarProperty Name="UserIsActiveInMobApp" ColumnName="UserIsActiveInMobApp" />
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="AllowCopyOtherLanguage" ColumnName="AllowCopyOtherLanguage" />
+          <ScalarProperty Name="FirstRegisterUserId" ColumnName="FirstRegisterUserId" />
+          <ScalarProperty Name="FirstRegisterDatePersian" ColumnName="FirstRegisterDatePersian" />
+          <ScalarProperty Name="FirstRegisterDate" ColumnName="FirstRegisterDate" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>OtherWebServices</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Runtime.Serialization">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Runtime.Serialization.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

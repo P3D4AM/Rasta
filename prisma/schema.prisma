@@ -1,0 +1,310 @@
+// Rasta CRM — Prisma Schema
+// Modern redesign of legacy CRMIdeal (EF5/EDMX, 7 contexts) into one clean schema.
+// NOTE: SQLite (dev) doesn't support enums/lists/Decimal — status fields are Strings
+// validated in src/lib/constants.ts; switch provider to PostgreSQL later for enums/Decimal.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── Identity & Access ───────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  isAdmin      Boolean   @default(false)
+  isActive     Boolean   @default(true)
+  roleId       String?
+  role         Role?     @relation(fields: [roleId], references: [id])
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  ownedCompanies Company[]  @relation("CompanyOwner")
+  ownedDeals     Deal[]     @relation("DealOwner")
+  createdTasks   Task[]     @relation("TaskCreator")
+  assignedTasks  Task[]     @relation("TaskAssignee")
+  activities     Activity[]
+  quotations     Quotation[]
+  orders         SalesOrder[]
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  users       User[]
+  permissions RolePermission[]
+}
+
+model RolePermission {
+  id        String  @id @default(cuid())
+  roleId    String
+  role      Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  module    String // companies | contacts | deals | activities | products | quotations | orders | tasks | users | roles | reports
+  canView   Boolean @default(false)
+  canCreate Boolean @default(false)
+  canEdit   Boolean @default(false)
+  canDelete Boolean @default(false)
+
+  @@unique([roleId, module])
+}
+
+// ─────────────────────────── CRM Core ───────────────────────────
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  nameEn      String?
+  type        String   @default("CUSTOMER") // CUSTOMER | PROSPECT | PARTNER | SUPPLIER | OTHER
+  industry    String?
+  taxId       String?
+  econCode    String?
+  phone       String?
+  email       String?
+  website     String?
+  province    String?
+  city        String?
+  address     String?
+  description String?
+  status      String   @default("ACTIVE") // ACTIVE | INACTIVE
+  ownerId     String?
+  owner       User?    @relation("CompanyOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  contacts   Contact[]
+  deals      Deal[]
+  activities Activity[]
+  tasks      Task[]
+  quotations Quotation[]
+  orders     SalesOrder[]
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  firstName String
+  lastName  String
+  jobTitle  String?
+  phone     String?
+  mobile    String?
+  email     String?
+  isPrimary Boolean  @default(false)
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deals      Deal[]
+  activities Activity[]
+  quotations Quotation[]
+}
+
+model Deal {
+  id              String    @id @default(cuid())
+  title           String
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId       String?
+  contact         Contact?  @relation(fields: [contactId], references: [id])
+  stage           String    @default("NEW") // NEW | CONTACTED | PROPOSAL | NEGOTIATION | WON | LOST
+  amount          Float?
+  probability     Int?
+  priority        String    @default("NORMAL") // LOW | NORMAL | HIGH | URGENT
+  expectedCloseAt DateTime?
+  closedAt        DateTime?
+  closeNote       String?
+  ownerId         String?
+  owner           User?     @relation("DealOwner", fields: [ownerId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  activities Activity[]
+  tasks      Task[]
+  quotations Quotation[]
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  type      String   @default("NOTE") // CALL | MEETING | EMAIL | SMS | NOTE
+  direction String? // INCOMING | OUTGOING
+  subject   String
+  body      String?
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId String?
+  contact   Contact? @relation(fields: [contactId], references: [id])
+  dealId    String?
+  deal      Deal?    @relation(fields: [dealId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  occurredAt DateTime @default(now())
+  nextStep  String?
+  nextAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([companyId])
+  @@index([dealId])
+  @@index([userId])
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  dueAt       DateTime?
+  doneAt      DateTime?
+  status      String    @default("OPEN") // OPEN | DONE | CANCELED
+  priority    String    @default("NORMAL") // LOW | NORMAL | HIGH | URGENT
+  assigneeId  String
+  assignee    User      @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  creatorId   String?
+  creator     User?     @relation("TaskCreator", fields: [creatorId], references: [id])
+  companyId   String?
+  company     Company?  @relation(fields: [companyId], references: [id])
+  dealId      String?
+  deal        Deal?     @relation(fields: [dealId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([assigneeId, status])
+}
+
+// ─────────────────────────── Sales ───────────────────────────
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  code        String?  @unique
+  unit        String   @default("عدد")
+  price       Float    @default(0)
+  cost        Float?
+  taxRate     Float    @default(0)
+  isActive    Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quotationItems QuotationItem[]
+  orderItems     SalesOrderItem[]
+}
+
+model Quotation {
+  id            String    @id @default(cuid())
+  number        Int       @unique
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  contactId     String?
+  contact       Contact?  @relation(fields: [contactId], references: [id])
+  dealId        String?
+  deal          Deal?     @relation(fields: [dealId], references: [id])
+  issueDate     DateTime  @default(now())
+  validUntil    DateTime?
+  status        String    @default("DRAFT") // DRAFT | SENT | ACCEPTED | REJECTED | EXPIRED | CONVERTED
+  note          String?
+  ownerId       String?
+  owner         User?     @relation(fields: [ownerId], references: [id])
+  subtotal      Float     @default(0)
+  discountTotal Float     @default(0)
+  taxTotal      Float     @default(0)
+  total         Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  items  QuotationItem[]
+  orders SalesOrder[]
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?  @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float     @default(1)
+  unitPrice   Float     @default(0)
+  discount    Float     @default(0)
+  taxRate     Float     @default(0)
+  lineTotal   Float     @default(0)
+}
+
+model SalesOrder {
+  id            String    @id @default(cuid())
+  number        Int       @unique
+  quotationId   String?
+  quotation     Quotation? @relation(fields: [quotationId], references: [id])
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  issueDate     DateTime  @default(now())
+  status        String    @default("DRAFT") // DRAFT | ISSUED | PAID | CANCELED
+  note          String?
+  ownerId       String?
+  owner         User?     @relation(fields: [ownerId], references: [id])
+  subtotal      Float     @default(0)
+  discountTotal Float     @default(0)
+  taxTotal      Float     @default(0)
+  total         Float     @default(0)
+  paidTotal     Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  items    SalesOrderItem[]
+  payments Payment[]
+}
+
+model SalesOrderItem {
+  id          String     @id @default(cuid())
+  orderId     String
+  order       SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?   @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float      @default(1)
+  unitPrice   Float      @default(0)
+  discount    Float      @default(0)
+  taxRate     Float      @default(0)
+  lineTotal   Float      @default(0)
+}
+
+model Payment {
+  id        String     @id @default(cuid())
+  orderId   String
+  order     SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount    Float
+  method    String     @default("CASH") // CASH | CARD | TRANSFER | GATEWAY | CHEQUE
+  paidAt    DateTime   @default(now())
+  note      String?
+  createdAt DateTime   @default(now())
+}
+
+// ─────────────────────────── System ───────────────────────────
+
+model Setting {
+  key   String @id
+  value String
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userName  String?
+  action    String
+  entity    String?
+  entityId  String?
+  meta      String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+}

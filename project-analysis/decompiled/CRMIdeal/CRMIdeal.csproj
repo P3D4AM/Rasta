@@ -1,0 +1,222 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <AssemblyName>CRMIdeal</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWindowsForms>True</UseWindowsForms>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>../../crm-project/bin/Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>../../crm-project/bin/System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>../../crm-project/bin/System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>../../crm-project/bin/System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>../../crm-project/bin/System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>../../crm-project/bin/Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>../../crm-project/bin/Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect">
+      <HintPath>../../crm-project/bin/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OpenIdConnect">
+      <HintPath>../../crm-project/bin/Microsoft.Owin.Security.OpenIdConnect.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="Models">
+      <HintPath>../../crm-project/bin/Models.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>../../crm-project/bin/Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <HintPath>../../crm-project/bin/System.Data.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Runtime.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../../crm-project/bin/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>../../crm-project/bin/EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Stimulsoft.Base">
+      <HintPath>../../crm-project/bin/Stimulsoft.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Stimulsoft.Report">
+      <HintPath>../../crm-project/bin/Stimulsoft.Report.dll</HintPath>
+    </Reference>
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="General">
+      <HintPath>../../crm-project/bin/General.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="Kendo.Mvc">
+      <HintPath>../../crm-project/bin/Kendo.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveUp.Net.Imap4">
+      <HintPath>../../crm-project/bin/ActiveUp.Net.Imap4.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiveUp.Net.Common">
+      <HintPath>../../crm-project/bin/ActiveUp.Net.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit">
+      <HintPath>../../crm-project/bin/MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit">
+      <HintPath>../../crm-project/bin/MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>../../crm-project/bin/Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="SautinSoft.HtmlToRtf">
+      <HintPath>../../crm-project/bin/SautinSoft.HtmlToRtf.dll</HintPath>
+    </Reference>
+    <Reference Include="Shygun.Ws.BaseClientModel">
+      <HintPath>../../crm-project/bin/Shygun.Ws.BaseClientModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NR.Shygun.WS.FilterDomains">
+      <HintPath>../../crm-project/bin/NR.Shygun.WS.FilterDomains.dll</HintPath>
+    </Reference>
+    <Reference Include="NR.Shygun.WS.ClientModel">
+      <HintPath>../../crm-project/bin/NR.Shygun.WS.ClientModel.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>../../crm-project/bin/RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SmsIrRestful">
+      <HintPath>../../crm-project/bin/SmsIrRestful.dll</HintPath>
+    </Reference>
+    <Reference Include="OtherWebServices">
+      <HintPath>../../crm-project/bin/OtherWebServices.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>../../crm-project/bin/BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="TaxCollectData.Library">
+      <HintPath>../../crm-project/bin/TaxCollectData.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression">
+      <HintPath>../../crm-project/bin/System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Transactions.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>../../crm-project/bin/EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>../../crm-project/bin/PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId">
+      <HintPath>../../crm-project/bin/DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Words.NET">
+      <HintPath>../../crm-project/bin/Xceed.Words.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="TLSharp.Core">
+      <HintPath>../../crm-project/bin/TLSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NR.Shygun.WS.ClientSDK">
+      <HintPath>../../crm-project/bin/NR.Shygun.WS.ClientSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>../../crm-project/bin/Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>../../crm-project/bin/Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>../../crm-project/bin/Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>../../crm-project/bin/System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages">
+      <HintPath>../../crm-project/bin/System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="Resources">
+      <HintPath>../../crm-project/bin/Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/Microsoft.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>../../crm-project/bin/Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>../../crm-project/bin/Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="CaptchaMvc">
+      <HintPath>../../crm-project/bin/CaptchaMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="dotless.Core">
+      <HintPath>../../crm-project/bin/dotless.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.IO.Compression.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="RtfPipe">
+      <HintPath>../../crm-project/bin/RtfPipe.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Document.NET">
+      <HintPath>../../crm-project/bin/Xceed.Document.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Data.DataSetExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Stimulsoft.Report.Mvc">
+      <HintPath>../../crm-project/bin/Stimulsoft.Report.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>../../crm-project/bin/WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="NReco.PdfGenerator">
+      <HintPath>../../crm-project/bin/NReco.PdfGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Mobile">
+      <HintPath>../../crm-project/bin/Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json">
+      <HintPath>../../crm-project/bin/System.Text.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

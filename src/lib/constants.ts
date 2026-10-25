@@ -1,0 +1,127 @@
+// Rasta CRM — domain constants & Persian labels
+// Replaces the legacy string-enum sprawl (46 areas × form-access flags) with a typed registry.
+
+export type ModuleKey =
+  | "dashboard"
+  | "companies"
+  | "contacts"
+  | "deals"
+  | "activities"
+  | "products"
+  | "quotations"
+  | "orders"
+  | "tasks"
+  | "users"
+  | "roles"
+  | "reports"
+  | "settings";
+
+export type ActionKey = "view" | "create" | "edit" | "delete";
+
+export const MODULES: Record<ModuleKey, { label: string; href: string; icon: string }> = {
+  dashboard: { label: "داشبورد", href: "/dashboard", icon: "LayoutDashboard" },
+  companies: { label: "مشتریان", href: "/companies", icon: "Building2" },
+  contacts: { label: "افراد", href: "/contacts", icon: "Users" },
+  deals: { label: "فرصت‌های فروش", href: "/deals", icon: "Target" },
+  activities: { label: "فعالیت‌ها", href: "/activities", icon: "PhoneCall" },
+  tasks: { label: "کارتابل", href: "/tasks", icon: "ClipboardList" },
+  products: { label: "محصولات", href: "/products", icon: "Package" },
+  quotations: { label: "پیش‌فاکتورها", href: "/quotations", icon: "FileText" },
+  orders: { label: "فاکتورها", href: "/orders", icon: "ReceiptText" },
+  reports: { label: "گزارش‌ها", href: "/reports", icon: "BarChart3" },
+  users: { label: "کاربران", href: "/settings/users", icon: "UserCog" },
+  roles: { label: "نقش‌ها", href: "/settings/roles", icon: "ShieldCheck" },
+  settings: { label: "تنظیمات", href: "/settings", icon: "Settings" },
+};
+
+export const ACTIONS: Record<ActionKey, string> = {
+  view: "مشاهده",
+  create: "ایجاد",
+  edit: "ویرایش",
+  delete: "حذف",
+};
+
+// ── Company ──
+export const COMPANY_TYPES = ["CUSTOMER", "PROSPECT", "PARTNER", "SUPPLIER", "OTHER"] as const;
+export const COMPANY_TYPE_LABELS: Record<string, string> = {
+  CUSTOMER: "مشتری",
+  PROSPECT: "پیش‌مشتری",
+  PARTNER: "همکار",
+  SUPPLIER: "تأمین‌کننده",
+  OTHER: "سایر",
+};
+
+// ── Deal ──
+export const DEAL_STAGES = ["NEW", "CONTACTED", "PROPOSAL", "NEGOTIATION", "WON", "LOST"] as const;
+export const DEAL_STAGE_LABELS: Record<string, string> = {
+  NEW: "جدید",
+  CONTACTED: "تماس گرفته‌شده",
+  PROPOSAL: "پیشنهاد ارسالی",
+  NEGOTIATION: "در مذاکره",
+  WON: "موفق",
+  LOST: "ناموفق",
+};
+export const OPEN_DEAL_STAGES = DEAL_STAGES.slice(0, 4) as readonly string[];
+
+// ── Activity ──
+export const ACTIVITY_TYPES = ["CALL", "MEETING", "EMAIL", "SMS", "NOTE"] as const;
+export const ACTIVITY_TYPE_LABELS: Record<string, string> = {
+  CALL: "تماس تلفنی",
+  MEETING: "جلسه",
+  EMAIL: "ایمیل",
+  SMS: "پیامک",
+  NOTE: "یادداشت",
+};
+export const ACTIVITY_DIRECTIONS: Record<string, string> = {
+  INCOMING: "ورودی",
+  OUTGOING: "خروجی",
+};
+
+// ── Priority ──
+export const PRIORITIES = ["LOW", "NORMAL", "HIGH", "URGENT"] as const;
+export const PRIORITY_LABELS: Record<string, string> = {
+  LOW: "کم",
+  NORMAL: "معمولی",
+  HIGH: "زیاد",
+  URGENT: "فوری",
+};
+
+// ── Quotation ──
+export const QUOTATION_STATUSES = ["DRAFT", "SENT", "ACCEPTED", "REJECTED", "EXPIRED", "CONVERTED"] as const;
+export const QUOTATION_STATUS_LABELS: Record<string, string> = {
+  DRAFT: "پیش‌نویس",
+  SENT: "ارسال‌شده",
+  ACCEPTED: "تأییدشده",
+  REJECTED: "ردشده",
+  EXPIRED: "منقضی",
+  CONVERTED: "تبدیل به فاکتور",
+};
+
+// ── Order ──
+export const ORDER_STATUSES = ["DRAFT", "ISSUED", "PAID", "CANCELED"] as const;
+export const ORDER_STATUS_LABELS: Record<string, string> = {
+  DRAFT: "پیش‌نویس",
+  ISSUED: "صادرشده",
+  PAID: "تسویه‌شده",
+  CANCELED: "لغوشده",
+};
+
+// ── Task ──
+export const TASK_STATUSES = ["OPEN", "DONE", "CANCELED"] as const;
+export const TASK_STATUS_LABELS: Record<string, string> = {
+  OPEN: "باز",
+  DONE: "انجام‌شده",
+  CANCELED: "لغوشده",
+};
+
+// ── Payment ──
+export const PAYMENT_METHODS = ["CASH", "CARD", "TRANSFER", "GATEWAY", "CHEQUE"] as const;
+export const PAYMENT_METHOD_LABELS: Record<string, string> = {
+  CASH: "نقدی",
+  CARD: "کارت‌خوان",
+  TRANSFER: "کارت به کارت",
+  GATEWAY: "درگاه پرداخت",
+  CHEQUE: "چک",
+};
+
+export const CURRENCY = "ریال";

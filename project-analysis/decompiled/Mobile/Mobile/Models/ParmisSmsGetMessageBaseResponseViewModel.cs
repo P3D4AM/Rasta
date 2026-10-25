@@ -1,0 +1,10 @@
+namespace Mobile.Models;
+
+public class ParmisSmsGetMessageBaseResponseViewModel
+{
+	public long RetStatus { get; set; }
+
+	public string StrRetStatus { get; set; }
+
+	public string Value { get; set; }
+}

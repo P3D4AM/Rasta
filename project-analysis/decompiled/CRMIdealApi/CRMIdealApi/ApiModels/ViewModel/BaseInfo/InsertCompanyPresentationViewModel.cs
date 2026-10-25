@@ -1,0 +1,16 @@
+using System;
+
+namespace CRMIdealApi.ApiModels.ViewModel.BaseInfo;
+
+public class InsertCompanyPresentationViewModel : PublicParametersWithOutCenter
+{
+	public string ApiPresentation { get; set; }
+
+	public string ApiLinkAccCmpPresentationIdStr { get; set; }
+
+	public DateTime? ApiLinkAccFirstTransferDate { get; set; }
+
+	public DateTime? ApiLinkAccLastTransferDate { get; set; }
+
+	public string ApiLinkAccData { get; set; }
+}

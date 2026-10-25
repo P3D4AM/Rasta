@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <Function Name="ApispCheckDuplicatePrsEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="prsEmail" Type="nvarchar" Mode="In" />
+    <Parameter Name="CurrId" Type="int" Mode="In" />
+    <Parameter Name="ResultDupcmpNumber" Type="nvarchar" Mode="InOut" />
+  </Function>
+  <Function Name="ApispRegisterCompanyWithCnvs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+    <Parameter Name="Password" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpNumber" Type="int" Mode="In" />
+    <Parameter Name="CmpName" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpNameEng" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTitleId" Type="int" Mode="In" />
+    <Parameter Name="CmpFame" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpActivityType" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpGroupId" Type="int" Mode="In" />
+    <Parameter Name="CmpSubGroupId" Type="int" Mode="In" />
+    <Parameter Name="CmpGroupIdII" Type="int" Mode="In" />
+    <Parameter Name="CmpGroupIdIII" Type="int" Mode="In" />
+    <Parameter Name="CmpGroupIdIV" Type="int" Mode="In" />
+    <Parameter Name="CmpTypeId" Type="int" Mode="In" />
+    <Parameter Name="CmpPresentationId" Type="int" Mode="In" />
+    <Parameter Name="CmpPreTel" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTel" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTelUpTo" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTelDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpPreTelII" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTelII" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTelUpToII" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpTelIIDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpMobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpFax" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpFaxDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpCountryId" Type="int" Mode="In" />
+    <Parameter Name="CmpProvinceId" Type="int" Mode="In" />
+    <Parameter Name="CmpCityId" Type="int" Mode="In" />
+    <Parameter Name="CmpAddress" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpAddressDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpZipCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpPostBox" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpWebSite" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpEmail" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpInteresting" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpSpecialPoint" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpDescription" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpUserName" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpPassword" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpRegistrationNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpEconomicCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpNationalCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpBuyLimit" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpAccountNumber" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpAccInquiry" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpFreight" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpInquiry" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpReferUserId" Type="int" Mode="In" />
+    <Parameter Name="CmpSpecialWordForCI" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpEffectiveDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpEffectiveDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="CmpCoordinateLatitude" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpCoordinateLongitude" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpCoordinateLastDate" Type="datetime" Mode="In" />
+    <Parameter Name="CmpCoordinateLastDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="CmpCoordinateZoomLevel" Type="int" Mode="In" />
+    <Parameter Name="CmpCoordinateLastUserId" Type="int" Mode="In" />
+    <Parameter Name="PrsLName" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsFName" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsTitleId" Type="int" Mode="In" />
+    <Parameter Name="PrsJobId" Type="int" Mode="In" />
+    <Parameter Name="PrsTypeId" Type="int" Mode="In" />
+    <Parameter Name="PrsGroupId" Type="int" Mode="In" />
+    <Parameter Name="PrsSexId" Type="int" Mode="In" />
+    <Parameter Name="PrsPreTel" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsTel" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsTelUpTo" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsTelDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsTelII" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsFax" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsFaxDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsMobile" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsEmail" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsEmailII" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsAddress" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsAddressDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsNationalCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsBirthDate" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsBirthDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="PrsMarriageDate" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsMarriageDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="PrsDescription" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrsDepartmentId" Type="int" Mode="In" />
+    <Parameter Name="PrjTitle" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrjDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrjStarterUserId" Type="int" Mode="In" />
+    <Parameter Name="PrjGradeId" Type="int" Mode="In" />
+    <Parameter Name="PrjPriorityId" Type="int" Mode="In" />
+    <Parameter Name="PrjGroupId" Type="int" Mode="In" />
+    <Parameter Name="PrjcnvsStatusGroupId" Type="int" Mode="In" />
+    <Parameter Name="PrjPostFix" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrjRemindDate" Type="nvarchar" Mode="In" />
+    <Parameter Name="PrjRemindDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="PrjInsertCrmProjectForbiddenFUFDPActive" Type="bit" Mode="In" />
+    <Parameter Name="CnvsTopicId" Type="int" Mode="In" />
+    <Parameter Name="CnvsDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CnvsUserId" Type="int" Mode="In" />
+    <Parameter Name="CnvsReferUserId" Type="int" Mode="In" />
+    <Parameter Name="CnvsReferDesc" Type="nvarchar" Mode="In" />
+    <Parameter Name="CnvsStatusId" Type="int" Mode="In" />
+    <Parameter Name="CnvsPriorityId" Type="int" Mode="In" />
+    <Parameter Name="CnvsRemindDate" Type="nvarchar" Mode="In" />
+    <Parameter Name="CnvsRemindDateTime" Type="datetime" Mode="In" />
+    <Parameter Name="CnvsReferToMultilUser" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="Month1" Type="smallint" Mode="In" />
+    <Parameter Name="RegisterDate" Type="datetime" Mode="In" />
+    <Parameter Name="RegisterDatePersian" Type="nvarchar" Mode="In" />
+    <Parameter Name="RegisterTime" Type="nvarchar" Mode="In" />
+    <Parameter Name="RegisterDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="AppType" Type="varchar" Mode="In" />
+    <Parameter Name="NeedErjaRefMsgSubject" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NeedErjaRefMsgBody" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NeedErjaMultiIntmsgSubject" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="NeedErjaMultiIntmsgBody" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="ConversationErjaShowText" Type="nvarchar" Mode="In" />
+    <Parameter Name="Value" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="InsertedCompanyId" Type="int" Mode="InOut" />
+    <Parameter Name="InsertedPersonId" Type="int" Mode="InOut" />
+    <Parameter Name="InsertedProjectId" Type="int" Mode="InOut" />
+    <Parameter Name="InsertedConversationId" Type="int" Mode="InOut" />
+    <Parameter Name="ErrorMessage" Type="nvarchar(max)" Mode="InOut" />
+    <Parameter Name="CmpCodeNotDup" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="ApispSelectCompanyTitleWithId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CompanyTitleId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ApispSelectCrmFoSetting" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="ApispSelectCrmsysSetting" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="ApispSelectLanguages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="ApispSelectPersonTitleWithId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PersonTitleId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="ApispSelectUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserId" Type="int" Mode="In" />
+    <Parameter Name="LanguageID" Type="int" Mode="In" />
+    <Parameter Name="DefaultLanguageID" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="ModelStoreContainer" />
+</Schema>

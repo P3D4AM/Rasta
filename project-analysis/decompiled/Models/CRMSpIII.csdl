@@ -1,0 +1,2096 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CRMSpIIIEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="CRMspFileSearchWebSmart" ReturnType="Collection(Models.CRMspFileSearchWebSmart_Result)">
+      <Parameter Name="SearchVal" Mode="In" Type="String" />
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchConditionMode" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespInsertDuplicateScoreRule">
+      <Parameter Name="RuleId" Mode="In" Type="Int32" />
+      <Parameter Name="RuleTitleJson" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="InsertedRuleId" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSearchBuyOrders" ReturnType="Collection(Models.WSspSearchBuyOrders_Result)">
+      <Parameter Name="SearchVal" Mode="In" Type="String" />
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchConditionMode" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSearchOrders" ReturnType="Collection(Models.WSspSearchOrders_Result)">
+      <Parameter Name="SearchVal" Mode="In" Type="String" />
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchConditionMode" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSearchPreOrders" ReturnType="Collection(Models.WSspSearchPreOrders_Result)">
+      <Parameter Name="SearchVal" Mode="In" Type="String" />
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchConditionMode" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspUpdateProductMulti">
+      <Parameter Name="PrdGroupdJson" Mode="In" Type="String" />
+      <Parameter Name="FieldJson" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="DefaultLanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="Result" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SecspSearchLetters" ReturnType="Collection(Models.SecspSearchLetters_Result)">
+      <Parameter Name="SearchVal" Mode="In" Type="String" />
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchConditionMode" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespInsertAndCalcOrderCancelledScores">
+      <Parameter Name="OrderId" Mode="In" Type="Int32" />
+      <Parameter Name="CurrDate" Mode="In" Type="DateTime" />
+      <Parameter Name="UpdateCompanyGroups" Mode="In" Type="Boolean" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="Result" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespReport" ReturnType="Collection(Models.ScorespReport_Result)">
+      <Parameter Name="FromScoreDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToScoreDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ScoreRuleIds" Mode="In" Type="String" />
+      <Parameter Name="CompanyId" Mode="In" Type="String" />
+      <Parameter Name="TextEarningScore" Mode="In" Type="String" />
+      <Parameter Name="TextSpendScore" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="rptUserId" Mode="In" Type="Int32" />
+      <Parameter Name="rptDate" Mode="In" Type="String" />
+      <Parameter Name="rptDay" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespReportSearchCompany" ReturnType="Collection(Models.ScorespReportSearchCompany_Result)">
+      <Parameter Name="Val" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespInsertAndCalcScores" ReturnType="Collection(Models.ScorespInsertAndCalcScores_Result)">
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ScoreRuleIds" Mode="In" Type="String" />
+      <Parameter Name="CompanyId" Mode="In" Type="String" />
+      <Parameter Name="CurrDate" Mode="In" Type="DateTime" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UpdateCompanyGroups" Mode="In" Type="Boolean" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="IsReturnCntRow" Mode="In" Type="Boolean" />
+      <Parameter Name="ReturnCntRow" Mode="InOut" Type="Int64" />
+      <Parameter Name="TextEarningScore" Mode="In" Type="String" />
+      <Parameter Name="TextSpendScore" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="ScorespSelectScores" ReturnType="Collection(Models.ScorespSelectScores_Result)">
+      <Parameter Name="FromScoreDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToScoreDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ScoreRuleIds" Mode="In" Type="String" />
+      <Parameter Name="CompanyId" Mode="In" Type="String" />
+      <Parameter Name="ScoreUserIds" Mode="In" Type="String" />
+      <Parameter Name="ScoreSysPartIds" Mode="In" Type="String" />
+      <Parameter Name="ScoreObjectIds" Mode="In" Type="String" />
+      <Parameter Name="TextEarningScore" Mode="In" Type="String" />
+      <Parameter Name="TextSpendScore" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspDySearchStockSupplies" ReturnType="Collection(Models.CRMspDySearchStockSupplies_Result)">
+      <Parameter Name="Val" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspSelectEmailTankCount" ReturnType="Collection(Int32)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SendDateTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspGetUnReadEmailReceiveCount" ReturnType="Collection(Int32)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspDeleteSalesTarget" ReturnType="Collection(Int32)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="ErrorMessage" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspSelectEmailReadySendByUserId" ReturnType="Collection(Models.EmailspSelectEmailReadySendByUserId_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SendDateTime" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyGroupsIIIWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyGroupsIIIWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyGroupsIIWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyGroupsIIWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyGroupsIVWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyGroupsIVWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyGroupsWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyGroupsWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyPresentationsWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyPresentationsWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyTypesWithPaging" ReturnType="Collection(Models.CRMspSelectCompanyTypesWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectProvinceWithPaging" ReturnType="Collection(Models.CRMspSelectProvinceWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="CountryId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectUsersWithPaging" ReturnType="Collection(Models.CRMspSelectUsersWithPaging_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="DepartmentId" Mode="In" Type="Int32" />
+      <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="LinkedTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="ExcludeUserIds" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCityWithPaging" ReturnType="Collection(Models.CRMspSelectCityWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="ProvinceId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUpdateUserLastCheckEmailDate">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LastCheckEmailDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectUsersByIdsWithPaging" ReturnType="Collection(Models.CRMspSelectUsersByIdsWithPaging_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="UserIdList" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUpdateCompanyQuickRegisterDefSettingLocation">
+      <Parameter Name="CompanyQuickRegisterDefSettingId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpLocationLat" Mode="In" Type="String" />
+      <Parameter Name="CmpLocationLong" Mode="In" Type="String" />
+      <Parameter Name="CmpLocationZoom" Mode="In" Type="Double" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUpdatePersonQuickRegisterDefSettingLocation">
+      <Parameter Name="CompanyQuickRegisterDefSettingId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsLocationLat" Mode="In" Type="String" />
+      <Parameter Name="PrsLocationLong" Mode="In" Type="String" />
+      <Parameter Name="PrsLocationZoom" Mode="In" Type="Double" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanySubGroupsWithPaging" ReturnType="Collection(Models.CRMspSelectCompanySubGroupsWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="CompanyGroupId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectDeliveryTermWithPaging" ReturnType="Collection(Models.WSspSelectDeliveryTermWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderGroupWithPaging" ReturnType="Collection(Models.WSspSelectOrderGroupWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderOprWithPaging" ReturnType="Collection(Models.WSspSelectOrderOprWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderStatusWithPaging" ReturnType="Collection(Models.WSspSelectOrderStatusWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectSettlementTypeWithPaging" ReturnType="Collection(Models.WSspSelectSettlementTypeWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspDeleteBuyOrderItemLinkOrderItem">
+      <Parameter Name="BuyOrderId" Mode="In" Type="Int32" />
+      <Parameter Name="BuyOrderItemId" Mode="In" Type="Int32" />
+      <Parameter Name="OrderId" Mode="In" Type="Int32" />
+      <Parameter Name="OrderItemId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="Result" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspSelectEmailTankReadySend" ReturnType="Collection(Models.EmailspSelectEmailTankReadySend_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SendDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectProductFirstGroupWithPaging" ReturnType="Collection(Models.WSspSelectProductFirstGroupWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectProductSecondGroupWithPaging" ReturnType="Collection(Models.WSspSelectProductSecondGroupWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="FGId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectProductWithPaging" ReturnType="Collection(Models.WSspSelectProductWithPaging_Result)">
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="FGId" Mode="In" Type="Int32" />
+      <Parameter Name="SGId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectSalesTarget" ReturnType="Collection(Models.WSspSelectSalesTarget_Result)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspInsertSalesTarget" ReturnType="Collection(Int32)">
+      <Parameter Name="TitleLangJson" Mode="In" Type="String" />
+      <Parameter Name="TargetOrderCount" Mode="In" Type="Int32" />
+      <Parameter Name="TargetOrderAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="TargetFromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TargetToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TargetFromDatePersian" Mode="In" Type="String" />
+      <Parameter Name="TargetToDatePersian" Mode="In" Type="String" />
+      <Parameter Name="TargetDistributionDetailsJson" Mode="In" Type="String" />
+      <Parameter Name="TargetTermsJson" Mode="In" Type="String" />
+      <Parameter Name="TargetScopeJson" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="InsertedId" Mode="InOut" Type="Int32" />
+      <Parameter Name="ErrorMessage" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspUpdateSalesTarget" ReturnType="Collection(Int32)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="TitleLangJson" Mode="In" Type="String" />
+      <Parameter Name="TargetOrderCount" Mode="In" Type="Int32" />
+      <Parameter Name="TargetOrderAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="TargetFromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TargetToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TargetFromDatePersian" Mode="In" Type="String" />
+      <Parameter Name="TargetToDatePersian" Mode="In" Type="String" />
+      <Parameter Name="TargetDistributionDetailsJson" Mode="In" Type="String" />
+      <Parameter Name="TargetTermsJson" Mode="In" Type="String" />
+      <Parameter Name="TargetScopeJson" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="ErrorMessage" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectSalesTargetsWithPaging" ReturnType="Collection(Models.WSspSelectSalesTargetsWithPaging_Result)">
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="SearchTerm" Mode="In" Type="String" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectConsecutiveLeaveByDate" ReturnType="Collection(Models.CRMspSelectConsecutiveLeaveByDate_Result)">
+      <Parameter Name="Date" Mode="In" Type="DateTime" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="TimeAttendanceMode" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspChartSalesTargetDistributionReport" ReturnType="Collection(Models.WSspChartSalesTargetDistributionReport_Result)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspChartSalesTargetReport" ReturnType="Collection(Models.WSspChartSalesTargetReport_Result)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectSaleTargets" ReturnType="Collection(Models.WSspSelectSaleTargets_Result)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspReturnSoldOrdPrdCount" ReturnType="Collection(Models.WSspReturnSoldOrdPrdCount_Result)">
+      <Parameter Name="PrdId" Mode="In" Type="Int32" />
+      <Parameter Name="CurrOrdItemId" Mode="In" Type="Int32" />
+      <Parameter Name="FCR" Mode="In" Type="Double" />
+      <Parameter Name="FCRI" Mode="In" Type="Double" />
+      <Parameter Name="WhId" Mode="In" Type="Int32" />
+      <Parameter Name="Tracing" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspControlPreOrderItemsSoldStock" ReturnType="Collection(Models.WSspControlPreOrderItemsSoldStock_Result)">
+      <Parameter Name="PreOrderId" Mode="In" Type="Int32" />
+      <Parameter Name="PordItemJson" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PrdKind" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspControlOrderItemsSoldStock" ReturnType="Collection(Models.WSspControlOrderItemsSoldStock_Result)">
+      <Parameter Name="OrderId" Mode="In" Type="Int32" />
+      <Parameter Name="OrdItemJson" Mode="In" Type="String" />
+      <Parameter Name="OrdItemListStr" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PrdKind" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspControlBuyOrderItemsSoldStock" ReturnType="Collection(Models.WSspControlBuyOrderItemsSoldStock_Result)">
+      <Parameter Name="BuyOrderId" Mode="In" Type="Int32" />
+      <Parameter Name="BordItemJson" Mode="In" Type="String" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PrdKind" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderDefaultSettingById" ReturnType="Collection(Models.WSspSelectOrderDefaultSettingById_Result)">
+      <Parameter Name="OrderSettingId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrdersForSalesTarget" ReturnType="Collection(Models.WSspSelectOrdersForSalesTarget_Result)">
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSendUserSalesTargetNotif" ReturnType="Collection(Models.WSspSendUserSalesTargetNotif_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="ToUserId" Mode="In" Type="Int32" />
+      <Parameter Name="SalesTargetId" Mode="In" Type="Int32" />
+      <Parameter Name="Date" Mode="In" Type="DateTime" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="TemplateUserMessageJson" Mode="In" Type="String" />
+      <Parameter Name="TemplateResponsibleUserMessageJson" Mode="In" Type="String" />
+      <Parameter Name="MessageSubjectJson" Mode="In" Type="String" />
+      <Parameter Name="AchievementDateJson" Mode="In" Type="String" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyLogoByCmpIds" ReturnType="Collection(Models.CRMspSelectCompanyLogoByCmpIds_Result)">
+      <Parameter Name="CompanyIds" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspBuyOrderPaymentDeActive">
+      <Parameter Name="BuyOrderPaymentId" Mode="In" Type="Int32" />
+      <Parameter Name="bordpayDeActiveUserId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspBuyOrderPaymentDeActiveExit">
+      <Parameter Name="BuyOrderPaymentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspBuyOrderPaymentVerify">
+      <Parameter Name="BuyOrderPaymentId" Mode="In" Type="Int32" />
+      <Parameter Name="bordpayVerifierId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspBuyOrderPaymentVerifyExit">
+      <Parameter Name="BuyOrderPaymentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspOrderPaymentDeActive">
+      <Parameter Name="OrderPaymentId" Mode="In" Type="Int32" />
+      <Parameter Name="ordpayDeActiveUserId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspOrderPaymentDeActiveExit">
+      <Parameter Name="OrderPaymentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspPreOrderPaymentDeActive">
+      <Parameter Name="PreOrderPaymentId" Mode="In" Type="Int32" />
+      <Parameter Name="pordpayDeActiveUserId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspPreOrderPaymentDeActiveExit">
+      <Parameter Name="PreOrderPaymentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspPreOrderPaymentVerify">
+      <Parameter Name="PreOrderPaymentId" Mode="In" Type="Int32" />
+      <Parameter Name="pordpayVerifierId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspPreOrderPaymentVerifyExit">
+      <Parameter Name="PreOrderPaymentId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspOrderCommissionPreVerify">
+      <Parameter Name="OrderCommissionId" Mode="In" Type="Int32" />
+      <Parameter Name="PreVerifierUserId" Mode="In" Type="Int32" />
+      <Parameter Name="PreVerifiedDate" Mode="In" Type="DateTime" />
+      <Parameter Name="PreVerifiedDatePersian" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspOrderCommissionPreVerifyExit">
+      <Parameter Name="OrderCommissionId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUserTaskDidIt">
+      <Parameter Name="UserTaskId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="TargetDate" Mode="In" Type="DateTime" />
+      <Parameter Name="IsFinish" Mode="In" Type="Boolean" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectUserTaskById" ReturnType="Collection(Models.CRMspSelectUserTaskById_Result)">
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="UserTaskId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectLeaveWithPaging" ReturnType="Collection(Models.CRMspSelectLeaveWithPaging_Result)">
+      <Parameter Name="CrmUserId" Mode="In" Type="Int32" />
+      <Parameter Name="LeaveId" Mode="In" Type="Int32" />
+      <Parameter Name="LeaveTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="FDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="TDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="LeaveStatusId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectValidPordProduct" ReturnType="Collection(Models.WSspSelectValidPordProduct_Result)">
+      <Parameter Name="PrdId" Mode="In" Type="Int32" />
+      <Parameter Name="FCR" Mode="In" Type="Double" />
+      <Parameter Name="FCRI" Mode="In" Type="Double" />
+      <Parameter Name="WhId" Mode="In" Type="Int32" />
+      <Parameter Name="Tracing" Mode="In" Type="String" />
+      <Parameter Name="CurrId" Mode="In" Type="Int32" />
+      <Parameter Name="CurrDate" Mode="In" Type="DateTime" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="TopCount" Mode="In" Type="Int32" />
+      <Parameter Name="LastRowNumber" Mode="In" Type="Int64" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectWareHouseWithId" ReturnType="Collection(Models.WSspSelectWareHouseWithId_Result)">
+      <Parameter Name="WareHouseId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectSoldOrdProduct" ReturnType="Collection(Models.WSspSelectSoldOrdProduct_Result)">
+      <Parameter Name="PrdId" Mode="In" Type="Int32" />
+      <Parameter Name="FCR" Mode="In" Type="Double" />
+      <Parameter Name="FCRI" Mode="In" Type="Double" />
+      <Parameter Name="WhId" Mode="In" Type="Int32" />
+      <Parameter Name="Tracing" Mode="In" Type="String" />
+      <Parameter Name="CurrOrdItemId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="TopCount" Mode="In" Type="Int32" />
+      <Parameter Name="LastRowNumber" Mode="In" Type="Int64" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspInsertBuyOrderOprUserAccessToAllUsers">
+      <Parameter Name="BuyOrderOprId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="FPId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspChartDailyOrdersExtraInfo" ReturnType="Collection(Models.CRMspChartDailyOrdersExtraInfo_Result)">
+      <Parameter Name="HorizontalField" Mode="In" Type="Int16" />
+      <Parameter Name="VerticalMode" Mode="In" Type="Int16" />
+      <Parameter Name="SelectedValues" Mode="In" Type="String" />
+      <Parameter Name="FiltersJson" Mode="In" Type="String" />
+      <Parameter Name="FDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TDate" Mode="In" Type="DateTime" />
+      <Parameter Name="GroupFieldKey" Mode="In" Type="Int32" />
+      <Parameter Name="GroupFieldValues" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CurrUserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUserTaskAlarmDidIt">
+      <Parameter Name="UserTaskId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="UserTaskRemindDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="UserTaskRemindDate" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspExecuteLeave" ReturnType="Collection(Models.mct_III_Result)">
+      <Parameter Name="LeaveId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="Year1" Mode="In" Type="Int16" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="Result" Mode="InOut" Type="Int32" />
+      <Parameter Name="RequestUserIds" Mode="In" Type="String" />
+      <Parameter Name="FromLeaveDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToLeaveDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectProductsWithCodeAndGroup" ReturnType="Collection(Models.WSspSelectProductsWithCodeAndGroup_Result)">
+      <Parameter Name="JsonText" Mode="In" Type="String" />
+      <Parameter Name="LanguageId" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectPrjTitleGroupsByCmpId" ReturnType="Collection(String)">
+      <Parameter Name="CompanyID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="IsFinished" Mode="In" Type="Int32" />
+      <Parameter Name="IsTicket" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderDefaultSettingIsDefUserAccess" ReturnType="Collection(Int32)">
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="ReferUserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspUpdateOrderDefaultSettingDefFields" ReturnType="Collection(Int32)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SettingIds" Mode="In" Type="String" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyQuickRegisterDefSettingIsDefUserAccess" ReturnType="Collection(Int32)">
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspCalculateCnvsDoingTimeByPrjTitleGroup" ReturnType="Collection(Models.CRMspCalculateCnvsDoingTimeByPrjTitleGroup_Result)">
+      <Parameter Name="CompanyID" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="IsFinished" Mode="In" Type="Int32" />
+      <Parameter Name="IsTicket" Mode="In" Type="Int32" />
+      <Parameter Name="PrjTitleGroup" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="WSspCheckDefaultOrderSettingUserConflict" ReturnType="Collection(Models.WSspCheckDefaultOrderSettingUserConflict_Result)">
+      <Parameter Name="UserIdList" Mode="In" Type="String" />
+      <Parameter Name="OrderSettingId" Mode="In" Type="Int32" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspCheckPublicDefaultOrderSettingConflict" ReturnType="Collection(Models.WSspCheckPublicDefaultOrderSettingConflict_Result)">
+      <Parameter Name="OrderSettingId" Mode="In" Type="Int32" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspSelectCompanyQuickRegisterDefSettingUserAccess" ReturnType="Collection(Models.CRMspSelectCompanyQuickRegisterDefSettingUserAccess_Result)">
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectOrderDefaultSettingUserAccess" ReturnType="Collection(Models.WSspSelectOrderDefaultSettingUserAccess_Result)">
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="ReferUserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="WSspSelectPreOrderDefaultSettingUserAccess" ReturnType="Collection(Models.WSspSelectPreOrderDefaultSettingUserAccess_Result)">
+      <Parameter Name="ReferUserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspCheckDefaultCompanySettingUserConflict" ReturnType="Collection(Models.CRMspCheckDefaultCompanySettingUserConflict_Result)">
+      <Parameter Name="UserIdList" Mode="In" Type="String" />
+      <Parameter Name="SettingId" Mode="In" Type="Int32" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspCheckPublicDefaultCompanySettingConflict" ReturnType="Collection(Models.CRMspCheckPublicDefaultCompanySettingConflict_Result)">
+      <Parameter Name="SettingId" Mode="In" Type="Int32" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspUpdateCompanyDefaultSettingDefFields" ReturnType="Collection(Int32)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="SettingIds" Mode="In" Type="String" />
+      <Parameter Name="UseType" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspSearchEmails" ReturnType="Collection(Models.EmailspSearchEmails_Result)">
+      <Parameter Name="SearchedValue" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspCallerIDCleanPhoneNumberByUserCallPreNumber" ReturnType="Collection(Models.CRMspCallerIDCleanPhoneNumberByUserCallPreNumber_Result)">
+      <Parameter Name="CallTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="TrunkSource" Mode="In" Type="String" />
+      <Parameter Name="TrunkDestination" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="EmailspInsertEmailUserTempTankByCompanyPerson">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="EmailSystemPartId" Mode="In" Type="Int32" />
+      <Parameter Name="EmailObjectId" Mode="In" Type="Int64" />
+      <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+      <Parameter Name="CompanyPersonId" Mode="In" Type="Int32" />
+      <Parameter Name="EmailCmpPrjId" Mode="In" Type="Int32" />
+      <Parameter Name="FilePath" Mode="In" Type="String" />
+      <Parameter Name="FilePathII" Mode="In" Type="String" />
+      <Parameter Name="FilePathIII" Mode="In" Type="String" />
+      <Parameter Name="FilePathIV" Mode="In" Type="String" />
+      <Parameter Name="FilePathV" Mode="In" Type="String" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspChartMonthlyOrdersInfo" ReturnType="Collection(Models.CRMspChartMonthlyOrdersInfo_Result)">
+      <Parameter Name="FirstDayOfMonths" Mode="In" Type="String" />
+      <Parameter Name="FDate" Mode="In" Type="DateTime" />
+      <Parameter Name="TDate" Mode="In" Type="DateTime" />
+      <Parameter Name="SelectedValue" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="CurrUserId" Mode="In" Type="Int32" />
+      <Parameter Name="CenterId" Mode="In" Type="Int32" />
+      <Parameter Name="GroupFieldKey" Mode="In" Type="Int32" />
+      <Parameter Name="GroupFieldValues" Mode="In" Type="String" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+      <Parameter Name="PageSize" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspIntMsgGetUnReadMessgeForUsers" ReturnType="Collection(Models.CRMspIntMsgGetUnReadMessgeForUsers_Result)">
+      <Parameter Name="UserIds" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CRMspGetUnReadTicketForUsers" ReturnType="Collection(Models.CRMspGetUnReadTicketForUsers_Result)">
+      <Parameter Name="UserIds" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="CRMspFileSearchWebSmart_Result">
+    <Property Type="Int32" Name="FileDirectoryID" Nullable="false" />
+    <Property Type="Int32" Name="FileDirectoryTypeId" Nullable="true" />
+    <Property Type="String" Name="FileDirectoryType" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="FileDirectoryTypeOpr" Nullable="true" MaxLength="1" />
+    <Property Type="Int32" Name="MasterId" Nullable="true" />
+    <Property Type="Int32" Name="DetailId" Nullable="true" />
+    <Property Type="Int32" Name="SubDetailId" Nullable="true" />
+    <Property Type="String" Name="Title" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="FolderName" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="FileName" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="FilePath" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="CopyFromPath" MaxLength="1" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int16" Name="Year1" Nullable="true" />
+    <Property Type="Int16" Name="Month1" Nullable="true" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="DocDate" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="DocDay" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="DocTime" Nullable="true" MaxLength="1" />
+    <Property Type="DateTime" Name="DocDateTime" Nullable="true" />
+    <Property Type="Int32" Name="TypeOprObjectId" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="1" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="1" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" />
+    <Property Type="Int32" Name="OrderView" Nullable="true" />
+    <Property Type="Int32" Name="TypeOprObjectIdI" Nullable="true" />
+    <Property Type="Int32" Name="TypeOprObjectIdII" Nullable="true" />
+    <Property Type="String" Name="FileDirectoryNumRef" Nullable="true" MaxLength="1" />
+    <Property Type="Int32" Name="FileDirectoryParentId" Nullable="true" />
+    <Property Type="Int32" Name="FileCId" Nullable="true" />
+    <Property Type="String" Name="FileLinkAccData" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="FileDesc" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="cmpName" MaxLength="1" Nullable="true" />
+    <Property Type="String" Name="cmpCode" MaxLength="1" Nullable="true" />
+    <Property Type="Int32" Name="cmpNumber" Nullable="true" />
+    <Property Type="String" Name="PrsName" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="prjPostFix" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="prjTitle" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="RegisterUserFullName" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="EditUserFullName" Nullable="true" MaxLength="1" />
+    <Property Type="Int32" Name="SearchRank" Nullable="true" />
+    <Property Type="Int32" Name="FileDirectoryTypeOprId" Nullable="true" />
+    <Property Type="Int32" Name="LetterTypeId" Nullable="true" />
+    <Property Type="String" Name="RelatedObjectTitle" Nullable="true" />
+    <Property Type="String" Name="DocDateTimeStr" Nullable="true" />
+    <Property Type="Int32" Name="msgTypeId" Nullable="true" />
+    <Property Type="Int32" Name="msgToUserId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSearchBuyOrders_Result">
+    <Property Type="Int64" Name="bordNumber" Nullable="false" />
+    <Property Type="Int32" Name="bordCompanyId" Nullable="false" />
+    <Property Type="Int32" Name="bordCompanyPersonId" Nullable="true" />
+    <Property Type="Int32" Name="bordProjectId" Nullable="true" />
+    <Property Type="Decimal" Name="bordTotalAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="bordDateTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="bordDate" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="String" Name="Person" Nullable="true" MaxLength="252" />
+    <Property Type="String" Name="Project" Nullable="true" MaxLength="301" />
+    <Property Type="Int32" Name="BuyOrderOprId" Nullable="true" />
+    <Property Type="String" Name="BuyOrderOpr" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="bordReferUserId" Nullable="true" />
+    <Property Type="String" Name="ReferUserName" Nullable="true" />
+    <Property Type="Int32" Name="BuyOrderID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="WSspSearchOrders_Result">
+    <Property Type="Int64" Name="ordNumber" Nullable="false" />
+    <Property Type="Int32" Name="ordCompanyId" Nullable="false" />
+    <Property Type="Int32" Name="ordCompanyPersonId" Nullable="true" />
+    <Property Type="Int32" Name="ordProjectId" Nullable="true" />
+    <Property Type="Decimal" Name="ordTotalAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="ordDateTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ordDate" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="String" Name="Person" Nullable="true" MaxLength="252" />
+    <Property Type="String" Name="Project" Nullable="true" MaxLength="301" />
+    <Property Type="Int32" Name="OrderOprId" Nullable="true" />
+    <Property Type="String" Name="OrderOpr" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="OrderID" Nullable="false" />
+    <Property Type="Int32" Name="ordReferUserId" Nullable="false" />
+    <Property Type="String" Name="ReferUserName" Nullable="true" />
+    <Property Type="Int32" Name="ordSellerId" Nullable="true" />
+    <Property Type="String" Name="SellerUserName" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSearchPreOrders_Result">
+    <Property Type="Int64" Name="pordNumber" Nullable="false" />
+    <Property Type="Int32" Name="pordCompanyId" Nullable="true" />
+    <Property Type="Int32" Name="pordCompanyPersonId" Nullable="true" />
+    <Property Type="Int32" Name="pordProjectId" Nullable="true" />
+    <Property Type="Decimal" Name="pordTotalAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="pordDateTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="pordDate" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="String" Name="Person" Nullable="true" MaxLength="252" />
+    <Property Type="String" Name="Project" Nullable="true" MaxLength="301" />
+    <Property Type="Int32" Name="PreOrderOprID" Nullable="true" />
+    <Property Type="Int32" Name="pordTypeId" Nullable="true" />
+    <Property Type="String" Name="PreOrderOpr" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="PreOrderType" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="PreOrderID" Nullable="false" />
+    <Property Type="Int32" Name="pordReferUserId" Nullable="false" />
+    <Property Type="String" Name="ReferUserName" Nullable="true" />
+    <Property Type="Int32" Name="pordSellerId" Nullable="true" />
+    <Property Type="String" Name="SellerUserName" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="SecspSearchLetters_Result">
+    <Property Type="Int32" Name="LetterId" Nullable="false" />
+    <Property Type="Int32" Name="LetterTypeId" Nullable="false" />
+    <Property Type="String" Name="LetterPreNumber" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="LetterNumber" Nullable="false" />
+    <Property Type="String" Name="LetterPreNumberII" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="LetterNumberII" Nullable="true" />
+    <Property Type="Int32" Name="LetterCompanyId" Nullable="true" />
+    <Property Type="Int32" Name="LetterPersonId" Nullable="true" />
+    <Property Type="Int32" Name="LetterProjectId" Nullable="true" />
+    <Property Type="String" Name="LetterSubject" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="LetterDateTime" Nullable="false" Precision="23" />
+    <Property Type="String" Name="LetterDate" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="String" Name="Person" Nullable="true" MaxLength="252" />
+    <Property Type="String" Name="Project" Nullable="true" MaxLength="301" />
+  </ComplexType>
+  <ComplexType Name="ScorespReport_Result">
+    <Property Type="Int32" Name="ScoreId" Nullable="false" />
+    <Property Type="DateTime" Name="ScoreDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="ScoreDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Double" Name="Score" Nullable="false" />
+    <Property Type="Int32" Name="ScoreRuleId" Nullable="true" />
+    <Property Type="String" Name="ScoreRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreOrderId" Nullable="true" />
+    <Property Type="String" Name="ScoreOrderInfo" Nullable="true" MaxLength="153" />
+    <Property Type="Int32" Name="ScoreCmpId" Nullable="true" />
+    <Property Type="String" Name="ScoreCompanyName" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="ScoreCompanyNumber" Nullable="true" />
+    <Property Type="Int32" Name="OrderView" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="false" />
+    <Property Type="String" Name="FirstRegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="RegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int16" Name="Year1" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="false" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="false" />
+    <Property Type="Int32" Name="ScoreSysPartId" Nullable="true" />
+    <Property Type="String" Name="ScoreSysPartTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="ScoreObjectId" Nullable="true" />
+    <Property Type="String" Name="ScoreObjectInfo" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="ScoreOprType" Nullable="true" />
+    <Property Type="String" Name="ScoreOprTypeTitle" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="ScoreExpireDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ScoreExpireDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Boolean" Name="ScoreIsExpired" Nullable="true" />
+    <Property Type="String" Name="ScoreDescription" Nullable="true" />
+    <Property Type="Int32" Name="ScoreKind" Nullable="true" />
+    <Property Type="Int32" Name="ScoreUserId" Nullable="true" />
+    <Property Type="String" Name="ScoreUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="DisCodeRuleId" Nullable="true" />
+    <Property Type="String" Name="DisCodeRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreCId" Nullable="true" />
+    <Property Type="String" Name="CenterName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="CenterCode" Nullable="true" MaxLength="500" />
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ScorespReportSearchCompany_Result">
+    <Property Type="Int32" Name="CompanyId" Nullable="true" />
+    <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="cmpNumber" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ScorespInsertAndCalcScores_Result">
+    <Property Type="Int32" Name="ScoreId" Nullable="true" />
+    <Property Type="DateTime" Name="ScoreDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ScoreDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Double" Name="Score" Nullable="true" />
+    <Property Type="Int32" Name="ScoreRuleId" Nullable="true" />
+    <Property Type="String" Name="ScoreRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreOrderId" Nullable="true" />
+    <Property Type="String" Name="ScoreOrderInfo" Nullable="true" MaxLength="153" />
+    <Property Type="Int32" Name="ScoreCmpId" Nullable="true" />
+    <Property Type="String" Name="ScoreCompanyName" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="ScoreSysPartId" Nullable="true" />
+    <Property Type="String" Name="ScoreSysPartTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="ScoreObjectId" Nullable="true" />
+    <Property Type="String" Name="ScoreObjectInfo" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="ScoreOprType" Nullable="true" />
+    <Property Type="String" Name="ScoreOprTypeTitle" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="ScoreExpireDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ScoreExpireDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Boolean" Name="ScoreIsExpired" Nullable="true" />
+    <Property Type="String" Name="ScoreDescription" Nullable="true" />
+    <Property Type="Int32" Name="ScoreKind" Nullable="true" />
+    <Property Type="Int32" Name="ScoreUserId" Nullable="true" />
+    <Property Type="String" Name="ScoreUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="DisCodeRuleId" Nullable="true" />
+    <Property Type="String" Name="DisCodeRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreCId" Nullable="true" />
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ScorespSelectScores_Result">
+    <Property Type="Int32" Name="ScoreId" Nullable="false" />
+    <Property Type="DateTime" Name="ScoreDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="ScoreDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Double" Name="Score" Nullable="false" />
+    <Property Type="Int32" Name="ScoreRuleId" Nullable="true" />
+    <Property Type="String" Name="ScoreRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreOrderId" Nullable="true" />
+    <Property Type="String" Name="ScoreOrderInfo" Nullable="true" MaxLength="153" />
+    <Property Type="Int32" Name="ScoreCmpId" Nullable="true" />
+    <Property Type="String" Name="ScoreCompanyName" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="ScoreCompanyNumber" Nullable="true" />
+    <Property Type="Int32" Name="OrderView" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="false" />
+    <Property Type="String" Name="FirstRegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="RegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int16" Name="Year1" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="false" />
+    <Property Type="String" Name="AppType" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="false" />
+    <Property Type="Int32" Name="ScoreSysPartId" Nullable="true" />
+    <Property Type="String" Name="ScoreSysPartTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="ScoreObjectId" Nullable="true" />
+    <Property Type="String" Name="ScoreObjectInfo" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="ScoreOprType" Nullable="true" />
+    <Property Type="String" Name="ScoreOprTypeTitle" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="ScoreExpireDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ScoreExpireDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Boolean" Name="ScoreIsExpired" Nullable="true" />
+    <Property Type="String" Name="ScoreDescription" Nullable="true" />
+    <Property Type="Int32" Name="ScoreKind" Nullable="true" />
+    <Property Type="Int32" Name="ScoreUserId" Nullable="true" />
+    <Property Type="String" Name="ScoreUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="DisCodeRuleId" Nullable="true" />
+    <Property Type="String" Name="DisCodeRuleTitle" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="ScoreCId" Nullable="true" />
+    <Property Type="String" Name="CenterName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="CenterCode" Nullable="true" MaxLength="500" />
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspDySearchStockSupplies_Result">
+    <Property Type="Int32" Name="StockSupplyId" Nullable="false" />
+    <Property Type="Int64" Name="stsupNumber" Nullable="false" />
+    <Property Type="String" Name="stsupDate" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="stsupDateTime" Nullable="false" Precision="23" />
+    <Property Type="String" Name="StockSupplyInfo" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="EmailspSelectEmailReadySendByUserId_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="Header_Id" Nullable="false" />
+    <Property Type="String" Name="Header_Subject" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Header_Body" Nullable="true" MaxLength="Max" />
+    <Property Type="Int32" Name="Header_PriorityId" Nullable="false" />
+    <Property Type="Int32" Name="Setting_Id" Nullable="false" />
+    <Property Type="Int32" Name="UsersInfo_Id" Nullable="false" />
+    <Property Type="Int32" Name="UsersInfo_euUserId" Nullable="false" />
+    <Property Type="String" Name="UsersInfo_euNikeName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euNikeEmail" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euPOP3Server" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euSMTPServer" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euUserName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euPassword" Nullable="true" MaxLength="1000" />
+    <Property Type="Boolean" Name="UsersInfo_euIsActive" Nullable="false" />
+    <Property Type="Int32" Name="Detail_Id" Nullable="false" />
+    <Property Type="String" Name="Detail_EmailAddress" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="Detail_EmailCmpId" Nullable="true" />
+    <Property Type="Int32" Name="Detail_EmailCmpPrsId" Nullable="true" />
+    <Property Type="Int32" Name="Detail_EmailCmpPrjId" Nullable="true" />
+    <Property Type="String" Name="Detail_EmailCmpName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Detail_EmailCmpPrsName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Detail_EmailPrsJob" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="Detail_StatusId" Nullable="false" />
+    <Property Type="String" Name="Detail_AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="Detail_TryCount" Nullable="true" />
+    <Property Type="Boolean" Name="UsersInfo_euSMTPUseDefCredentials" Nullable="true" />
+    <Property Type="Boolean" Name="UsersInfo_euSMTPUseSsl" Nullable="true" />
+    <Property Type="Int32" Name="UsersInfo_euSMTPPort" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyGroupsIIIWithPaging_Result">
+    <Property Type="Int32" Name="CompanyGroupIIIID" Nullable="false" />
+    <Property Type="String" Name="GroupIIIName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyGroupsIIWithPaging_Result">
+    <Property Type="Int32" Name="CompanyGroupIIID" Nullable="false" />
+    <Property Type="String" Name="GroupIIName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyGroupsIVWithPaging_Result">
+    <Property Type="Int32" Name="CompanyGroupIVID" Nullable="false" />
+    <Property Type="String" Name="GroupIVName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyGroupsWithPaging_Result">
+    <Property Type="Int32" Name="CompanyGroupID" Nullable="false" />
+    <Property Type="String" Name="GroupName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyPresentationsWithPaging_Result">
+    <Property Type="Int32" Name="CompanyPresentationID" Nullable="false" />
+    <Property Type="String" Name="Presentation" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyTypesWithPaging_Result">
+    <Property Type="Int32" Name="CompanyTypeID" Nullable="false" />
+    <Property Type="String" Name="CompanyTypeName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectProvinceWithPaging_Result">
+    <Property Type="Int32" Name="ProvinceID" Nullable="false" />
+    <Property Type="String" Name="ProvinceName" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="CountryName" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectUsersWithPaging_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="FName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="FullName" Nullable="false" MaxLength="201" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCityWithPaging_Result">
+    <Property Type="Int32" Name="CityID" Nullable="false" />
+    <Property Type="String" Name="CityName" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="ProvinceName" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectUsersByIdsWithPaging_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="FName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="FullName" Nullable="false" MaxLength="201" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanySubGroupsWithPaging_Result">
+    <Property Type="Int32" Name="CompanySubGroupID" Nullable="false" />
+    <Property Type="String" Name="SubGroupName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectDeliveryTermWithPaging_Result">
+    <Property Type="Int32" Name="DeliveryTermId" Nullable="false" />
+    <Property Type="String" Name="DeliveryTerm" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrderGroupWithPaging_Result">
+    <Property Type="Int32" Name="OrderGroupId" Nullable="false" />
+    <Property Type="String" Name="OrderGroupName" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrderOprWithPaging_Result">
+    <Property Type="Int32" Name="OrderOprID" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrderStatusWithPaging_Result">
+    <Property Type="Int32" Name="OrderStatusId" Nullable="false" />
+    <Property Type="String" Name="OrderStatus" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectSettlementTypeWithPaging_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="EmailspSelectEmailTankReadySend_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="Header_Id" Nullable="false" />
+    <Property Type="String" Name="Header_Subject" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Header_Body" Nullable="true" MaxLength="Max" />
+    <Property Type="Int32" Name="Header_PriorityId" Nullable="false" />
+    <Property Type="Int32" Name="Setting_Id" Nullable="false" />
+    <Property Type="Int32" Name="UsersInfo_Id" Nullable="false" />
+    <Property Type="Int32" Name="UsersInfo_euUserId" Nullable="false" />
+    <Property Type="String" Name="UsersInfo_euNikeName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euNikeEmail" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euPOP3Server" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euSMTPServer" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euUserName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UsersInfo_euPassword" Nullable="true" MaxLength="1000" />
+    <Property Type="Boolean" Name="UsersInfo_euIsActive" Nullable="false" />
+    <Property Type="Int32" Name="Detail_Id" Nullable="false" />
+    <Property Type="String" Name="Detail_EmailAddress" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="Detail_EmailCmpId" Nullable="true" />
+    <Property Type="Int32" Name="Detail_EmailCmpPrsId" Nullable="true" />
+    <Property Type="Int32" Name="Detail_EmailCmpPrjId" Nullable="true" />
+    <Property Type="String" Name="Detail_EmailCmpName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Detail_EmailCmpPrsName" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Detail_EmailPrsJob" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="Detail_StatusId" Nullable="false" />
+    <Property Type="String" Name="Detail_AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="Detail_TryCount" Nullable="true" />
+    <Property Type="Boolean" Name="UsersInfo_euSMTPUseDefCredentials" Nullable="true" />
+    <Property Type="Boolean" Name="UsersInfo_euSMTPUseSsl" Nullable="true" />
+    <Property Type="Int32" Name="UsersInfo_euSMTPPort" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectProductFirstGroupWithPaging_Result">
+    <Property Type="Int32" Name="PrdFirstGroupID" Nullable="false" />
+    <Property Type="String" Name="FGName" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectProductSecondGroupWithPaging_Result">
+    <Property Type="Int32" Name="PrdSecondGroupID" Nullable="false" />
+    <Property Type="String" Name="SGName" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectProductWithPaging_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="PrdName" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectSalesTarget_Result">
+    <Property Type="Int32" Name="SalesTargetId" Nullable="false" />
+    <Property Type="String" Name="TargetTitle" Nullable="false" MaxLength="500" />
+    <Property Type="Int32" Name="TargetOrderCount" Nullable="true" />
+    <Property Type="Decimal" Name="TargetOrderAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="TargetFromDate" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="TargetToDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="TargetFromDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="TargetToDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="LangTitleJson" Nullable="true" />
+    <Property Type="String" Name="TargetDistributionDetailsJson" Nullable="true" />
+    <Property Type="String" Name="TargetTermsJson" Nullable="true" />
+    <Property Type="String" Name="TargetUserScopeJson" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectSalesTargetsWithPaging_Result">
+    <Property Type="Int32" Name="SalesTargetId" Nullable="false" />
+    <Property Type="String" Name="TargetTitle" Nullable="false" MaxLength="500" />
+    <Property Type="Int32" Name="TargetOrderCount" Nullable="true" />
+    <Property Type="Decimal" Name="TargetOrderAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="TargetFromDate" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="TargetToDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="TargetFromDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="TargetToDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="LangTitleJson" Nullable="true" />
+    <Property Type="String" Name="TargetDistributionDetailsJson" Nullable="true" />
+    <Property Type="String" Name="TargetTermsJson" Nullable="true" />
+    <Property Type="String" Name="TargetUserScopeJson" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectConsecutiveLeaveByDate_Result">
+    <Property Type="Int32" Name="LeaveId" Nullable="false" />
+    <Property Type="Int32" Name="LeaveTypeId" Nullable="true" />
+    <Property Type="String" Name="LeaveType" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="RequestUserId" Nullable="true" />
+    <Property Type="String" Name="RequestUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="ReplaceUserId" Nullable="true" />
+    <Property Type="String" Name="ReplaceUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="FromDate" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="ToDate" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DayCount" Nullable="true" />
+    <Property Type="String" Name="FromTime" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="ToTime" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="HourCount" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Reason" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Description" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="KindId" Nullable="true" />
+    <Property Type="String" Name="LeaveKind" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Place" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="CompanyId" Nullable="true" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="CountryId" Nullable="true" />
+    <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="ProvinceId" Nullable="true" />
+    <Property Type="String" Name="Province" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="CityId" Nullable="true" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="VehicleTypeId" Nullable="true" />
+    <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="StayTypeId" Nullable="true" />
+    <Property Type="String" Name="StayType" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="LeaveStatusId" Nullable="true" />
+    <Property Type="String" Name="LeaveStatus" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="VerifierUserId" Nullable="true" />
+    <Property Type="String" Name="VerifierUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="EditUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int16" Name="Year1" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="FromDateTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ToDateTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="PlaceCoordinateLatitude" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PlaceCoordinateLongitude" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="PlaceCoordinateZoomLevel" Nullable="true" />
+    <Property Type="Boolean" Name="ReplaceUserIsVerified" Nullable="true" />
+    <Property Type="DateTime" Name="ReplaceUserVerifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ReplaceUserVerifiedDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="VerifiedRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="VerifiedRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="VerificationWorkFlowId" Nullable="true" />
+    <Property Type="String" Name="VerificationWorkFlow" Nullable="true" MaxLength="500" />
+    <Property Type="Boolean" Name="IsCanceled" Nullable="true" />
+    <Property Type="Int32" Name="CancelerUserId" Nullable="true" />
+    <Property Type="String" Name="CancelerUser" Nullable="true" MaxLength="201" />
+    <Property Type="DateTime" Name="CanceledDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="CanceledDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="ReplaceUserIntMsgId" Nullable="true" />
+    <Property Type="String" Name="DailyDateTimeInfo" Nullable="true" />
+    <Property Type="Int32" Name="StepGroupId" Nullable="true" />
+    <Property Type="String" Name="StepGroup" Nullable="true" MaxLength="1000" />
+    <Property Type="Boolean" Name="IsEnteryRegistered" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspChartSalesTargetDistributionReport_Result">
+    <Property Type="String" Name="DistributionItemId" Nullable="true" />
+    <Property Type="String" Name="DistributionItemName" MaxLength="1" Nullable="true" />
+    <Property Type="Decimal" Name="TargetCount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TargetAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ActualAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ActualCount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="AchievementPercentAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="AchievementPercentCount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TotalTargetAmountPercent" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TotalActualAmountPercent" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TotalTargetCountPercent" Nullable="false" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TotalActualCountPercent" Nullable="false" Precision="18" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="WSspChartSalesTargetReport_Result">
+    <Property Type="Decimal" Name="ActualAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="ActualCount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TargetOrderAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="TargetOrderCount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="AchievementPercentAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="AchievementPercentCount" Nullable="true" Precision="18" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectSaleTargets_Result">
+    <Property Type="Int32" Name="SalesTargetId" Nullable="false" />
+    <Property Type="String" Name="TargetTitle" Nullable="false" MaxLength="500" />
+    <Property Type="Int32" Name="TargetOrderCount" Nullable="true" />
+    <Property Type="Decimal" Name="TargetOrderAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="DateTime" Name="TargetFromDate" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="TargetToDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="TargetFromDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="TargetToDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Int32" Name="HasTargetDistribution" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="WSspReturnSoldOrdPrdCount_Result">
+    <Property Type="Double" Name="RemainOrdQtyTotal" Nullable="true" />
+    <Property Type="Double" Name="RemainOrdQty" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspControlPreOrderItemsSoldStock_Result">
+    <Property Type="Int32" Name="PreOrderItemID" Nullable="true" />
+    <Property Type="Int32" Name="pordIPrdId" Nullable="true" />
+    <Property Type="String" Name="PrdName" Nullable="true" />
+    <Property Type="Double" Name="pordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="pordIFCR" Nullable="true" />
+    <Property Type="Double" Name="pordIFCRI" Nullable="true" />
+    <Property Type="Int32" Name="pordIWHId" Nullable="true" />
+    <Property Type="String" Name="pordITracing" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="pordILinkAccWHIdStr" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="pordIQuantityTotal" Nullable="true" />
+    <Property Type="Double" Name="RemainCountAllWH" Nullable="true" />
+    <Property Type="Double" Name="QuantityRemain" Nullable="true" />
+    <Property Type="Double" Name="SoldOrdQuantity" Nullable="true" />
+    <Property Type="Double" Name="TracingRemainCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspControlOrderItemsSoldStock_Result">
+    <Property Type="Int32" Name="OrderItemID" Nullable="true" />
+    <Property Type="Int32" Name="ordIPrdId" Nullable="true" />
+    <Property Type="String" Name="PrdName" Nullable="true" />
+    <Property Type="Double" Name="ordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="ordIFCR" Nullable="true" />
+    <Property Type="Double" Name="ordIFCRI" Nullable="true" />
+    <Property Type="Int32" Name="ordIWHId" Nullable="true" />
+    <Property Type="String" Name="ordITracing" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="ordILinkAccWHIdStr" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="ordIQuantityTotal" Nullable="true" />
+    <Property Type="Double" Name="RemainCountAllWH" Nullable="true" />
+    <Property Type="Double" Name="QuantityRemain" Nullable="true" />
+    <Property Type="Double" Name="SoldOrdQuantity" Nullable="true" />
+    <Property Type="Double" Name="TracingRemainCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspControlBuyOrderItemsSoldStock_Result">
+    <Property Type="Int32" Name="BuyOrderItemID" Nullable="true" />
+    <Property Type="Int32" Name="bordIPrdId" Nullable="true" />
+    <Property Type="String" Name="PrdName" Nullable="true" />
+    <Property Type="Double" Name="bordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="bordIFCR" Nullable="true" />
+    <Property Type="Double" Name="bordIFCRI" Nullable="true" />
+    <Property Type="Int32" Name="bordIWHId" Nullable="true" />
+    <Property Type="String" Name="bordITracing" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="bordILinkAccWHIdStr" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="bordIQuantityTotal" Nullable="true" />
+    <Property Type="Double" Name="RemainCountAllWH" Nullable="true" />
+    <Property Type="Double" Name="QuantityRemain" Nullable="true" />
+    <Property Type="Double" Name="SoldOrdQuantity" Nullable="true" />
+    <Property Type="Double" Name="TracingRemainCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrderDefaultSettingById_Result">
+    <Property Type="Int32" Name="OrderSettingID" Nullable="false" />
+    <Property Type="String" Name="Title" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="GuarantyId" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndex" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTax" Nullable="true" />
+    <Property Type="String" Name="SpecialWord" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="DescriptionI" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="DescriptionII" Nullable="true" MaxLength="4000" />
+    <Property Type="Int32" Name="PrintFormatId" Nullable="true" />
+    <Property Type="Int32" Name="RightLogoId" Nullable="true" />
+    <Property Type="Int32" Name="LeftLogoId" Nullable="true" />
+    <Property Type="Int32" Name="SignatureId" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="FPId" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="SettingTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="String" Name="SigningI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningIII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="ReferUserId" Nullable="true" />
+    <Property Type="String" Name="ReferUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="OrderOprID" Nullable="true" />
+    <Property Type="Boolean" Name="AutoGenerateOrdSerial" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="4000" />
+    <Property Type="Int32" Name="CurrencyUnitId" Nullable="true" />
+    <Property Type="Int32" Name="DeliveryTermId" Nullable="true" />
+    <Property Type="Int32" Name="VerifierRequestId" Nullable="true" />
+    <Property Type="Int32" Name="DefWHId" Nullable="true" />
+    <Property Type="Int32" Name="DefPrdPriceGroupId" Nullable="true" />
+    <Property Type="Int32" Name="SellerId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUsersInfoId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUserDefaultSettingId" Nullable="true" />
+    <Property Type="Int32" Name="VerificationWorkFlowId" Nullable="true" />
+    <Property Type="Int32" Name="SaleCenterId" Nullable="true" />
+    <Property Type="Int32" Name="DefPayTypeId" Nullable="true" />
+    <Property Type="Int32" Name="SettlementTypeId" Nullable="true" />
+    <Property Type="Int32" Name="DefAutoAddCnvsCmpQuickRegisterDefSettingId" Nullable="true" />
+    <Property Type="String" Name="DefAutoAddCnvsDesc" Nullable="true" MaxLength="4000" />
+    <Property Type="Boolean" Name="IsDefIssueQuickOrder" Nullable="true" />
+    <Property Type="Boolean" Name="AutoInsertOrdPay" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndexItem" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTaxItem" Nullable="true" />
+    <Property Type="Boolean" Name="AddPrdValidity" Nullable="true" />
+    <Property Type="String" Name="AddPrdValidityPrjTitle" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="CurrencyUnitIdI" Nullable="true" />
+    <Property Type="Int32" Name="SaleAreaId" Nullable="true" />
+    <Property Type="Int16" Name="PublicMode" Nullable="true" />
+    <Property Type="Boolean" Name="ActiveInOrder" Nullable="true" />
+    <Property Type="Boolean" Name="ActiveInQuickOrder" Nullable="true" />
+    <Property Type="Boolean" Name="IsDefIssueOrder" Nullable="true" />
+    <Property Type="String" Name="AccessUserJson" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrdersForSalesTarget_Result">
+    <Property Type="Int32" Name="OrderID" Nullable="false" />
+    <Property Type="Int64" Name="ordNumber" Nullable="false" />
+    <Property Type="DateTime" Name="ordDateTime" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="TotalAmount" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Decimal" Name="EligibleAmount" Nullable="false" Precision="38" Scale="2" />
+    <Property Type="String" Name="DynamicColumns" Nullable="true" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="ordDate" Nullable="true" />
+    <Property Type="Decimal" Name="EligibleCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSendUserSalesTargetNotif_Result">
+    <Property Type="Int32" Name="DistinctMessagesCount" Nullable="false" />
+    <Property Type="Int32" Name="TotalMessagesCount" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyLogoByCmpIds_Result">
+    <Property Type="Int32" Name="CompanyLoGoID" Nullable="false" />
+    <Property Type="Int32" Name="CompanyId" Nullable="true" />
+    <Property Type="Binary" Name="CompanyLogo" Nullable="false" MaxLength="Max" />
+    <Property Type="String" Name="LogoDesc" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CompanyLogoStr" Nullable="false" MaxLength="1" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectUserTaskById_Result">
+    <Property Type="Int32" Name="UserTaskId" Nullable="false" />
+    <Property Type="String" Name="UserTaskDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="DateTime" Name="UserTaskDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="UserTaskTime" Nullable="true" MaxLength="12" />
+    <Property Type="String" Name="UserTaskTitle" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="UserTaskDescription" Nullable="true" MaxLength="2000" />
+    <Property Type="Int32" Name="UserTaskPriorityId" Nullable="true" />
+    <Property Type="Int32" Name="UserTaskGroupId" Nullable="true" />
+    <Property Type="Int32" Name="UserTaskShowAllarm" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int16" Name="Year1" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="UserTaskRemindDate" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="UserTaskRemindTime" Nullable="true" MaxLength="12" />
+    <Property Type="DateTime" Name="UserTaskRemindDateTime" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="UserTaskIsPublic" Nullable="true" />
+    <Property Type="String" Name="UserTaskTimeEnd" Nullable="true" MaxLength="12" />
+    <Property Type="Boolean" Name="UserTaskNoTimeOverlap" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRepeatDaily" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRepeatWeekly" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRepeatMonthly" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRepeatYearly" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRemindRepeatDaily" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRemindRepeatWeekly" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRemindRepeatMonthly" Nullable="true" />
+    <Property Type="Boolean" Name="UserTaskRemindRepeatYearly" Nullable="true" />
+    <Property Type="DateTime" Name="UserTaskDateEnd" Nullable="true" Precision="23" />
+    <Property Type="String" Name="UserTaskDateEndPersian" Nullable="true" MaxLength="8" />
+    <Property Type="Boolean" Name="UserTaskDidIt" Nullable="true" />
+    <Property Type="DateTime" Name="UserTaskDidItDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="UserTaskDidItDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="UserTaskDidItInfoJson" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectLeaveWithPaging_Result">
+    <Property Type="Int32" Name="LeaveId" Nullable="false" />
+    <Property Type="Int32" Name="LeaveTypeId" Nullable="true" />
+    <Property Type="Int32" Name="RequestUserId" Nullable="true" />
+    <Property Type="Int32" Name="ReplaceUserId" Nullable="true" />
+    <Property Type="String" Name="FromDate" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="FromDateI" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="ToDate" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="DayCount" Nullable="true" />
+    <Property Type="String" Name="FromTime" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="ToTime" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="HourCount" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Reason" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Description" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="KindId" Nullable="true" />
+    <Property Type="String" Name="Place" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="CompanyId" Nullable="true" />
+    <Property Type="Int32" Name="CountryId" Nullable="true" />
+    <Property Type="Int32" Name="ProvinceId" Nullable="true" />
+    <Property Type="Int32" Name="CityId" Nullable="true" />
+    <Property Type="Int32" Name="VehicleTypeId" Nullable="true" />
+    <Property Type="Int32" Name="StayTypeId" Nullable="true" />
+    <Property Type="Int32" Name="LeaveStatusId" Nullable="true" />
+    <Property Type="Int32" Name="VerifierUserId" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="FromDateTime" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ToDateTime" Nullable="true" Precision="23" />
+    <Property Type="String" Name="PlaceCoordinateLatitude" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PlaceCoordinateLongitude" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="PlaceCoordinateZoomLevel" Nullable="true" />
+    <Property Type="String" Name="LeaveLang" Nullable="false" />
+    <Property Type="Boolean" Name="ReplaceUserIsVerified" Nullable="true" />
+    <Property Type="DateTime" Name="ReplaceUserVerifiedDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ReplaceUserVerifiedDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="VerifiedRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="VerifiedRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="VerificationWorkFlowId" Nullable="true" />
+    <Property Type="String" Name="VerificationWorkFlow" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="LeaveTypeOpr" Nullable="true" />
+    <Property Type="Int32" Name="UserDepartmentLeaveVerificationWorkFlowId" Nullable="true" />
+    <Property Type="Int32" Name="UserDepartmentMissionVerificationWorkFlowId" Nullable="true" />
+    <Property Type="String" Name="UserDepartmentLeaveVerificationWorkFlow" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="UserDepartmentMissionVerificationWorkFlow" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="LeaveType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="RequestUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="ReplaceUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="Kind" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Company" Nullable="true" MaxLength="401" />
+    <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Province" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="VehicleType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="StayType" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LeaveStatus" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="VerifierUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="FirstRegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="String" Name="EditUser" Nullable="true" MaxLength="201" />
+    <Property Type="Boolean" Name="IsCanceled" Nullable="true" />
+    <Property Type="Int32" Name="CancelerUserId" Nullable="true" />
+    <Property Type="DateTime" Name="CanceledDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="CanceledDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="CancelerUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="ReplaceUserIntMsgId" Nullable="true" />
+    <Property Type="String" Name="DailyDateTimeInfo" Nullable="true" />
+    <Property Type="Int32" Name="StepGroupId" Nullable="true" />
+    <Property Type="String" Name="StepGroup" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectValidPordProduct_Result">
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+    <Property Type="Int32" Name="PreOrderId" Nullable="true" />
+    <Property Type="Int32" Name="PreOrderItemID" Nullable="true" />
+    <Property Type="Int64" Name="pordNumber" Nullable="true" />
+    <Property Type="Int64" Name="pordNumberRevision" Nullable="true" />
+    <Property Type="String" Name="pordDate" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="pordDateTime" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="pordStatusId" Nullable="true" />
+    <Property Type="String" Name="pordExpireDate" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="pordExpireDateTime" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="pordIPrdId" Nullable="true" />
+    <Property Type="String" Name="PrdName" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="PrdCode" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="pordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="pordIFCR" Nullable="true" />
+    <Property Type="Double" Name="pordIFCRI" Nullable="true" />
+    <Property Type="Int32" Name="pordIWHId" Nullable="true" />
+    <Property Type="String" Name="WrhsName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="WrhsCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="pordITracing" Nullable="true" MaxLength="200" />
+    <Property Type="Double" Name="pordOrdQuantity" Nullable="false" />
+    <Property Type="Double" Name="pordDocQuantity" Nullable="false" />
+    <Property Type="Double" Name="ordDocQuantity" Nullable="false" />
+    <Property Type="Double" Name="nopord_ordDocQuantity" Nullable="false" />
+    <Property Type="Double" Name="RemindQty" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectWareHouseWithId_Result">
+    <Property Type="Int32" Name="WareHouseID" Nullable="false" />
+    <Property Type="String" Name="WrhsName" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="WrhsCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WrhsAddress" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="WrhsPreTel" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsTel" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsTelSecond" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsTelThird" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsFax" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsFaxSecond" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="WrhsArea" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="WrhsPerson" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WrhsDescription" Nullable="true" MaxLength="500" />
+    <Property Type="Int16" Name="IsFix" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="Int32" Name="FPId" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="WrhsDeActive" Nullable="true" />
+    <Property Type="Int32" Name="OrderView" Nullable="true" />
+    <Property Type="Int32" Name="WrhsLinkAccWhId" Nullable="true" />
+    <Property Type="String" Name="WrhsLinkAccWhCode" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="WrhsLinkAccWhIdStr" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WrhsLinkAccWareHouses" Nullable="true" />
+    <Property Type="Int32" Name="WrhsUserId" Nullable="true" />
+    <Property Type="String" Name="WrhsUser" Nullable="true" MaxLength="201" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectSoldOrdProduct_Result">
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+    <Property Type="Int32" Name="OrderId" Nullable="true" />
+    <Property Type="Int32" Name="OrderOprId" Nullable="true" />
+    <Property Type="String" Name="OrderOpr" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="OrderItemID" Nullable="true" />
+    <Property Type="Int64" Name="ordNumber" Nullable="true" />
+    <Property Type="String" Name="ordDate" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="ordDateTime" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="ordStatusId" Nullable="true" />
+    <Property Type="Int32" Name="ordIPrdId" Nullable="true" />
+    <Property Type="String" Name="PrdName" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="PrdCode" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="ordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="ordIFCR" Nullable="true" />
+    <Property Type="Double" Name="ordIFCRI" Nullable="true" />
+    <Property Type="Int32" Name="ordIWHId" Nullable="true" />
+    <Property Type="String" Name="WrhsName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="WrhsCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ordITracing" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="DocItemIds" Nullable="true" />
+    <Property Type="Double" Name="Returned_ordIQuantity" Nullable="true" />
+    <Property Type="Double" Name="ordIDocQuantity" Nullable="true" />
+    <Property Type="Double" Name="RemindQty" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="CRMspChartDailyOrdersExtraInfo_Result">
+    <Property Type="Int32" Name="OrderId" Nullable="false" />
+    <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="OrderDateStr" Nullable="false" MaxLength="8" />
+    <Property Type="Int64" Name="OrderNumber" Nullable="false" />
+    <Property Type="Decimal" Name="OrderTotalAmount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="OrderTotalDiscount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Int32" Name="OprType" Nullable="true" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="XLabelValue" Nullable="true" />
+    <Property Type="String" Name="XLabelText" Nullable="true" />
+    <Property Type="Decimal" Name="FilteredProductAmount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Double" Name="FilteredProductCount" Nullable="true" />
+    <Property Type="Decimal" Name="FilteredProductDiscount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="String" Name="GroupFieldText" Nullable="true" />
+    <Property Type="String" Name="GroupFieldValue" Nullable="true" />
+    <Property Type="String" Name="AppliedFilters" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="mct_III_Result">
+    <Property Type="Int32" Name="Result" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectProductsWithCodeAndGroup_Result">
+    <Property Type="Int32" Name="ProductID" Nullable="false" />
+    <Property Type="String" Name="PrdName" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="PrdCode" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="PrdGroupID" Nullable="false" />
+    <Property Type="String" Name="SGName" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="CRMspCalculateCnvsDoingTimeByPrjTitleGroup_Result">
+    <Property Type="String" Name="cnvsPrjDoingTime" Nullable="true" MaxLength="26" />
+    <Property Type="String" Name="prjTitleGroup" Nullable="false" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="WSspCheckDefaultOrderSettingUserConflict_Result">
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int32" Name="OrderSettingID" Nullable="true" />
+    <Property Type="Int32" Name="Priority" Nullable="true" />
+    <Property Type="String" Name="User" Nullable="true" MaxLength="202" />
+    <Property Type="String" Name="OrderDefaultSetting" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="WSspCheckPublicDefaultOrderSettingConflict_Result">
+    <Property Type="Int32" Name="OrderSettingID" Nullable="false" />
+    <Property Type="String" Name="OrderDefaultSetting" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="CRMspSelectCompanyQuickRegisterDefSettingUserAccess_Result">
+    <Property Type="Int32" Name="CompanyQuickRegisterDefSettingId" Nullable="false" />
+    <Property Type="String" Name="SettingTitle" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="cmpTitleId" Nullable="true" />
+    <Property Type="String" Name="cmpActivityType" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="cmpGroupId" Nullable="true" />
+    <Property Type="Int32" Name="cmpSubGroupId" Nullable="true" />
+    <Property Type="Int32" Name="cmpGroupIdII" Nullable="true" />
+    <Property Type="Int32" Name="cmpGroupIdIII" Nullable="true" />
+    <Property Type="Int32" Name="cmpGroupIdIV" Nullable="true" />
+    <Property Type="Int32" Name="cmpTypeId" Nullable="true" />
+    <Property Type="Int32" Name="cmpPresentationId" Nullable="true" />
+    <Property Type="Int32" Name="cmpCityId" Nullable="true" />
+    <Property Type="String" Name="cmpSpecialPoint" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="cmpDescription" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="cmpEffectiveDateIncDay" Nullable="true" />
+    <Property Type="Int32" Name="cmpKind" Nullable="true" />
+    <Property Type="Int32" Name="prsTitleId" Nullable="true" />
+    <Property Type="Int32" Name="prsJobId" Nullable="true" />
+    <Property Type="Int32" Name="prsTypeId" Nullable="true" />
+    <Property Type="Int32" Name="prsGroupId" Nullable="true" />
+    <Property Type="Int32" Name="prsSexId" Nullable="true" />
+    <Property Type="Int32" Name="prsEducationId" Nullable="true" />
+    <Property Type="Int32" Name="prsCityId" Nullable="true" />
+    <Property Type="String" Name="prsSpecialPoint" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="prsDescription" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="prsDepartmentId" Nullable="true" />
+    <Property Type="String" Name="prjTitle" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="prjDesc" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="prjGradeId" Nullable="true" />
+    <Property Type="Int32" Name="prjPriorityId" Nullable="true" />
+    <Property Type="Int32" Name="prjGroupId" Nullable="true" />
+    <Property Type="Int32" Name="prjcnvsStatusGroupId" Nullable="true" />
+    <Property Type="String" Name="prjPostFix" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="prjRemindDateIncDay" Nullable="true" />
+    <Property Type="Boolean" Name="prjFOCmpCanSee" Nullable="true" />
+    <Property Type="String" Name="prjSubject" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="prjTitleGroup" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="prjCategoryId" Nullable="true" />
+    <Property Type="String" Name="prjDescI" Nullable="true" />
+    <Property Type="Int32" Name="cnvsTopicId" Nullable="true" />
+    <Property Type="String" Name="cnvsDesc" Nullable="true" MaxLength="2000" />
+    <Property Type="String" Name="cnvsReferDesc" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="cnvsStatusId" Nullable="true" />
+    <Property Type="Int32" Name="cnvsPriorityId" Nullable="true" />
+    <Property Type="Int32" Name="cnvsRemindDateIncDay" Nullable="true" />
+    <Property Type="String" Name="cnvsRemindTime" Nullable="true" MaxLength="15" />
+    <Property Type="Int32" Name="cnvsRemindDateForAllarmIncDay" Nullable="true" />
+    <Property Type="Boolean" Name="cnvsFOCmpCanSee" Nullable="true" />
+    <Property Type="Boolean" Name="IsDefault" Nullable="true" />
+    <Property Type="Int32" Name="OrderView" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="false" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int16" Name="Year1" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="false" />
+    <Property Type="String" Name="AppType" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="false" />
+    <Property Type="Boolean" Name="IsDefaultForCmpInfo" Nullable="true" />
+    <Property Type="Boolean" Name="IsDefIssueQuickOrder" Nullable="true" />
+    <Property Type="Int32" Name="prjpordDefaultSettingId" Nullable="true" />
+    <Property Type="Int32" Name="prjordDefaultSettingId" Nullable="true" />
+    <Property Type="String" Name="cmpLocationLat" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="cmpLocationLong" Nullable="true" MaxLength="150" />
+    <Property Type="Double" Name="cmpLocationZoom" Nullable="true" />
+    <Property Type="String" Name="prsLocationLat" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="prsLocationLong" Nullable="true" MaxLength="150" />
+    <Property Type="Double" Name="prsLocationZoom" Nullable="true" />
+    <Property Type="Boolean" Name="InActive" Nullable="true" />
+    <Property Type="String" Name="AccessUserJson" Nullable="true" />
+    <Property Type="Boolean" Name="ActiveInQuickOrder" Nullable="true" />
+    <Property Type="Int16" Name="PublicMode" Nullable="true" />
+    <Property Type="Int32" Name="IsDefaultForUser" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectOrderDefaultSettingUserAccess_Result">
+    <Property Type="Int32" Name="OrderSettingID" Nullable="false" />
+    <Property Type="String" Name="Title" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="GuarantyId" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndex" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTax" Nullable="true" />
+    <Property Type="String" Name="SpecialWord" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="DescriptionI" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="DescriptionII" Nullable="true" MaxLength="4000" />
+    <Property Type="Int32" Name="PrintFormatId" Nullable="true" />
+    <Property Type="Int32" Name="RightLogoId" Nullable="true" />
+    <Property Type="Int32" Name="LeftLogoId" Nullable="true" />
+    <Property Type="Int32" Name="SignatureId" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="FPId" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="SettingTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="String" Name="SigningI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningIII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="ReferUserId" Nullable="true" />
+    <Property Type="Int32" Name="OrderOprID" Nullable="true" />
+    <Property Type="Boolean" Name="AutoGenerateOrdSerial" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Note" Nullable="true" MaxLength="4000" />
+    <Property Type="Int32" Name="CurrencyUnitId" Nullable="true" />
+    <Property Type="Int32" Name="DeliveryTermId" Nullable="true" />
+    <Property Type="Int32" Name="VerifierRequestId" Nullable="true" />
+    <Property Type="Int32" Name="DefWHId" Nullable="true" />
+    <Property Type="Int32" Name="DefPrdPriceGroupId" Nullable="true" />
+    <Property Type="Int32" Name="SellerId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUsersInfoId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUserDefaultSettingId" Nullable="true" />
+    <Property Type="Int32" Name="VerificationWorkFlowId" Nullable="true" />
+    <Property Type="Int32" Name="SaleCenterId" Nullable="true" />
+    <Property Type="Int32" Name="DefPayTypeId" Nullable="true" />
+    <Property Type="Int32" Name="SettlementTypeId" Nullable="true" />
+    <Property Type="Boolean" Name="IsDefIssueQuickOrder" Nullable="true" />
+    <Property Type="Boolean" Name="AutoInsertOrdPay" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndexItem" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTaxItem" Nullable="true" />
+    <Property Type="Boolean" Name="AddPrdValidity" Nullable="true" />
+    <Property Type="String" Name="AddPrdValidityPrjTitle" Nullable="true" MaxLength="100" />
+    <Property Type="Int16" Name="PublicMode" Nullable="true" />
+    <Property Type="String" Name="ReferUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="SaleAreaId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="WSspSelectPreOrderDefaultSettingUserAccess_Result">
+    <Property Type="Int32" Name="PreOrderSettingID" Nullable="false" />
+    <Property Type="String" Name="Title" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="GuarantyId" Nullable="true" />
+    <Property Type="Int32" Name="PayConditionId" Nullable="true" />
+    <Property Type="Int32" Name="DeliveryTimeId" Nullable="true" />
+    <Property Type="Int32" Name="CreditDurationId" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndex" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTax" Nullable="true" />
+    <Property Type="String" Name="SpecialWord" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="DescriptionI" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="DescriptionII" Nullable="true" MaxLength="4000" />
+    <Property Type="Int32" Name="PrintFormatId" Nullable="true" />
+    <Property Type="Int32" Name="RightLogoId" Nullable="true" />
+    <Property Type="Int32" Name="LeftLogoId" Nullable="true" />
+    <Property Type="String" Name="SigningI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="SigningIII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberI" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="AccountShabaNumberII" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Telephone" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Fax" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="WebSite" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="SignatureId" Nullable="true" />
+    <Property Type="Int32" Name="VerifierRequestId" Nullable="true" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="FPId" Nullable="false" />
+    <Property Type="Int16" Name="Month1" Nullable="false" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="String" Name="SettingTitle" Nullable="true" MaxLength="200" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="Int32" Name="ReferUserId" Nullable="true" />
+    <Property Type="Int32" Name="PreOrderOprID" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="VerificationWorkFlowId" Nullable="true" />
+    <Property Type="Int32" Name="CurrencyUnitId" Nullable="true" />
+    <Property Type="Int32" Name="DeliveryTermId" Nullable="true" />
+    <Property Type="Int32" Name="PreOrderTypeId" Nullable="true" />
+    <Property Type="Int32" Name="DefWHId" Nullable="true" />
+    <Property Type="Int32" Name="DefPrdPriceGroupId" Nullable="true" />
+    <Property Type="Int32" Name="SellerId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUsersInfoId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUserDefaultSettingId" Nullable="true" />
+    <Property Type="Int32" Name="SaleCenterId" Nullable="true" />
+    <Property Type="Int32" Name="DefPayTypeId" Nullable="true" />
+    <Property Type="Decimal" Name="TaxIndexItem" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Boolean" Name="CalculateTaxItem" Nullable="true" />
+    <Property Type="Int16" Name="PublicMode" Nullable="true" />
+    <Property Type="String" Name="ReferUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int32" Name="SaleAreaId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspCheckDefaultCompanySettingUserConflict_Result">
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int32" Name="SettingID" Nullable="true" />
+    <Property Type="String" Name="User" Nullable="true" MaxLength="202" />
+    <Property Type="String" Name="OrderDefaultSetting" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="CRMspCheckPublicDefaultCompanySettingConflict_Result">
+    <Property Type="Int32" Name="SettingID" Nullable="false" />
+    <Property Type="String" Name="OrderDefaultSetting" Nullable="false" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="EmailspSearchEmails_Result">
+    <Property Type="Int32" Name="CNT" Nullable="true" />
+    <Property Type="Int32" Name="EmailReceiveId" Nullable="false" />
+    <Property Type="String" Name="MessageId" Nullable="true" MaxLength="2000" />
+    <Property Type="DateTime" Name="EmailDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="EmailDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="FromUserEmail" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="ToUserEmail" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="ToUserEmailUserInfoId" Nullable="false" />
+    <Property Type="String" Name="ToUserEmailNikeName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="ToUserEmailNikeEmail" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Bcc" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="Cc" Nullable="true" MaxLength="4000" />
+    <Property Type="String" Name="Subject" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="Body" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="HtmlBody" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="FolderName" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="EmailReceiveFolderId" Nullable="true" />
+    <Property Type="DateTime" Name="ReceiveDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ReceiveDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Boolean" Name="IsRead" Nullable="true" />
+    <Property Type="DateTime" Name="ReadDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="ReadDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="Priority" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="CompanyId" Nullable="true" />
+    <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="401" />
+    <Property Type="Int32" Name="CompanyPersonId" Nullable="true" />
+    <Property Type="String" Name="PersonName" Nullable="true" MaxLength="252" />
+    <Property Type="Int32" Name="ProjectId" Nullable="true" />
+    <Property Type="String" Name="Project" Nullable="true" MaxLength="301" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterUser" Nullable="true" MaxLength="201" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="String" Name="EditUser" Nullable="true" MaxLength="201" />
+    <Property Type="Int16" Name="Year1" Nullable="true" />
+    <Property Type="Int16" Name="Month1" Nullable="true" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="false" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="false" MaxLength="8" />
+    <Property Type="Guid" Name="GUId" Nullable="false" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="AttachCnt" Nullable="true" />
+    <Property Type="Int32" Name="EmailSendHeaderId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspCallerIDCleanPhoneNumberByUserCallPreNumber_Result">
+    <Property Type="Int32" Name="CallTypeId" Nullable="true" />
+    <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TrunkSource" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="TrunkDestination" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CallPreNumber" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="SelectedUserId" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspChartMonthlyOrdersInfo_Result">
+    <Property Type="String" Name="DateValue" Nullable="true" />
+    <Property Type="String" Name="DateText" Nullable="true" />
+    <Property Type="Int32" Name="OrderId" Nullable="true" />
+    <Property Type="DateTime" Name="OrderDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="OrderDateStr" Nullable="true" MaxLength="8" />
+    <Property Type="Int64" Name="OrderNumber" Nullable="true" />
+    <Property Type="Decimal" Name="OrderTotalAmount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Int32" Name="OprType" Nullable="true" />
+    <Property Type="Int32" Name="TotalCount" Nullable="true" />
+    <Property Type="String" Name="GroupFieldText" Nullable="true" />
+    <Property Type="Int32" Name="GroupFieldValue" Nullable="true" />
+    <Property Type="Decimal" Name="FilteredProductAmount" Nullable="true" />
+    <Property Type="Decimal" Name="FilteredProductCount" Nullable="true" />
+    <Property Type="Decimal" Name="FilteredProductDiscount" Nullable="true" />
+    <Property Type="Decimal" Name="OrderTotalDiscount" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspIntMsgGetUnReadMessgeForUsers_Result">
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int32" Name="MessageCnt" Nullable="false" />
+    <Property Type="Int32" Name="VerifyCnt" Nullable="false" />
+    <Property Type="Int32" Name="MsgdTypeId" Nullable="true" />
+    <Property Type="Int32" Name="InternalMessageID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="CRMspGetUnReadTicketForUsers_Result">
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int32" Name="InProgressCnt" Nullable="false" />
+    <Property Type="Int32" Name="NewCnt" Nullable="false" />
+    <Property Type="Int32" Name="AllCnt" Nullable="true" />
+  </ComplexType>
+</Schema>

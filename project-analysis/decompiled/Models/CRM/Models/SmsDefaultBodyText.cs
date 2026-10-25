@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace CRM.Models;
+
+[MetadataType(typeof(SmsDefaultBodyTextMetadata))]
+public class SmsDefaultBodyText
+{
+	public int Id { get; set; }
+
+	public string Title { get; set; }
+
+	public string Text { get; set; }
+
+	public string Description { get; set; }
+
+	public int UserId { get; set; }
+
+	public short Year1 { get; set; }
+
+	public short Month1 { get; set; }
+
+	public DateTime RegisterDate { get; set; }
+
+	public string RegisterDatePersian { get; set; }
+
+	public int? GroupId { get; set; }
+
+	public Guid? GUId { get; set; }
+
+	public string AppType { get; set; }
+
+	public int? LanguageID { get; set; }
+
+	public int? FirstRegisterUserId { get; set; }
+
+	public string FirstRegisterDatePersian { get; set; }
+
+	public DateTime? FirstRegisterDate { get; set; }
+
+	public virtual Languages Languages { get; set; }
+
+	public virtual ICollection<SmsDefaultBodyText_Lang> SmsDefaultBodyText_Lang { get; set; }
+
+	public virtual SmsDefaultBodyTextGroups SmsDefaultBodyTextGroups { get; set; }
+
+	public virtual Users Users { get; set; }
+
+	public virtual Users Users1 { get; set; }
+
+	public SmsDefaultBodyText()
+	{
+		SmsDefaultBodyText_Lang = (ICollection<SmsDefaultBodyText_Lang>)new HashSet<SmsDefaultBodyText_Lang>();
+	}
+}

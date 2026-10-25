@@ -1,0 +1,25 @@
+using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.ServiceModel;
+
+namespace CRMIdeal.BankMellat;
+
+[DebuggerStepThrough]
+[GeneratedCode("System.ServiceModel", "4.0.0.0")]
+[EditorBrowsable(EditorBrowsableState.Advanced)]
+[MessageContract(WrapperName = "sohResponse", WrapperNamespace = "http://interfaces.core.sw.bps.com/", IsWrapped = true)]
+public class sohResponse
+{
+	[MessageBodyMember(Namespace = "", Order = 0)]
+	public bool @return;
+
+	public sohResponse()
+	{
+	}
+
+	public sohResponse(bool @return)
+	{
+		this.@return = @return;
+	}
+}

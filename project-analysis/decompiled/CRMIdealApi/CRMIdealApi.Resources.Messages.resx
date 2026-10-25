@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+<resheader name="resmimetype"><value>text/microsoft-resx</value></resheader><resheader name="version"><value>1.3</value></resheader><resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><data name="ErrorDisCodeRuleYourScoreIsNotEnough" xml:space="preserve"><value>Your score is not enough to use this rule.</value></data>
+  <data name="msgErrorLinkedPrdIdNotFound" xml:space="preserve"><value>Related product not found!</value></data>
+  <data name="msgErrorBordItemIdNotFound" xml:space="preserve"><value>Purchase invoice row not found!</value></data>
+  <data name="ErrorMobileAlreadyRegistered" xml:space="preserve"><value>The mobile number is duplicate</value></data>
+  <data name="ErrorCheckVerificationWorkflowStepBFCurr" xml:space="preserve"><value>Unable to record information! &lt;br&gt; The order of steps has not been observed &lt;br&gt; Before registering this step you have registered step: &lt;br&gt; {0} &lt;br&gt;</value></data>
+  <data name="MaxDiscountPercentInActivePreOrder" xml:space="preserve"><value>Not possibility approval&lt;br/&gt;Commodity discount rate exceeded the specified&lt;br/&gt;Percent of authorized:</value></data>
+  <data name="ErjaConversationDescription" xml:space="preserve"><value>Conversation Description</value></data>
+  <data name="ErrorNumberIsRepeated" xml:space="preserve"><value>Warehouse Document number is duplicate!</value></data>
+  <data name="msgErrorDuplicateSerialNumberInBuyOrder1" xml:space="preserve"><value>&lt;br/&gt;Has been recorded.</value></data>
+  <data name="msgErrorCenterNotFound" xml:space="preserve"><value>Center not found.</value></data>
+  <data name="ErrorIsNotSpecifiedWFStepCmpReferUser" xml:space="preserve"><value>The target marketer is not specified.</value></data>
+  <data name="CheckFieldInLang" xml:space="preserve"><value>There are a number of languages required {0}</value></data>
+  <data name="msgErrorPordIdNotFound" xml:space="preserve"><value>Invoice not found!</value></data>
+  <data name="ErjaInConnection" xml:space="preserve"><value>In connection with the customer</value></data>
+  <data name="CompanyNotFound" xml:space="preserve"><value>Company Not Found!</value></data>
+  <data name="msgErrorOtherSystemsNotFindCenter" xml:space="preserve"><value>{2} numaralı {1} adlı kişiye ait {0} merkezi, {3} muhasebe yazılımında bulunamadı!</value></data>
+  <data name="NotExistsBordProjectId" xml:space="preserve"><value>The name of the project (supplier details) was not found.</value></data>
+  <data name="ErrorRunFunction" xml:space="preserve"><value>Operations faild</value></data>
+  <data name="ErrorNotFoundSetting" xml:space="preserve"><value>Settings not found</value></data>
+  <data name="msgErrorIsNotSpecified" xml:space="preserve"><value>{0} Not specified!</value></data>
+  <data name="NotExistsBordICostSheetItemId" xml:space="preserve"><value>The selected cost estimate sheet could not be found.</value></data>
+  <data name="NotExistsBordpayTypeId" xml:space="preserve"><value>Payment type not found.</value></data>
+  <data name="MaxDiscountPercentPreOrderInActivePreOrder1" xml:space="preserve"><value>Unable to confirm&lt;br/&gt;The total discount amount of the pre-order exceeds the limit set for you&lt;br/&gt;Permitted percentage:</value></data>
+  <data name="WrongBordOrderDateTime" xml:space="preserve"><value>Order date format is incorrect!</value></data>
+  <data name="ErrorDeleteItemThatHaveChild" xml:space="preserve"><value>This item has a sub-item and you are not allowed to delete it</value></data>
+  <data name="NotExistsBordItem" xml:space="preserve"><value>Purchase invoice item not found.</value></data>
+  <data name="NotExistsBordCustomsCurrUnId" xml:space="preserve"><value>The currency unit of the customs fee was not found.</value></data>
+  <data name="NotExistsBordIFreightCurrUnId" xml:space="preserve"><value>The shipping fee currency was not found.</value></data>
+  <data name="ErrorOrdDiscountIsTooHigh" xml:space="preserve"><value>Order discount more than allowed</value></data>
+  <data name="msgAutoInsertToMoneyBag" xml:space="preserve"><value>{0} {1} amount was charged from spending {2} points in the wallet.</value></data>
+  <data name="ErrorInInsertProject" xml:space="preserve"><value>Error in insert the project</value></data>
+  <data name="RequiredBordCompanyPersonId" xml:space="preserve"><value>The person's name field (supplier details) is not selected.</value></data>
+  <data name="ErrorDupReqCnvs" xml:space="preserve"><value>Your request has already been registered!</value></data>
+  <data name="msgErrorCheckFormWorkflowDetailBFCurr" xml:space="preserve"><value>Unable to record information! &lt;br&gt; The order of steps has not been observed &lt;br&gt; Before registering this step you have registered step: &lt;br&gt; {0} &lt;br&gt;</value></data>
+  <data name="NotExistsBordPaymentTypeId" xml:space="preserve"><value>Payment type not found.</value></data>
+  <data name="ErrorDoneOperationTryAgain" xml:space="preserve"><value>Error in the operation, please try again.</value></data>
+  <data name="ErrorHaveNotAlternateVerifyUser" xml:space="preserve"><value>Alternative user not specified for sending confirmation request!</value></data>
+  <data name="RequiredBordProjectId" xml:space="preserve"><value>Project field (supplier specifications) is not selected.</value></data>
+  <data name="msgErrorFileIsExecuted" xml:space="preserve"><value>The File type is not text ot compressing.</value></data>
+  <data name="DyFormNumberIsRepeated" xml:space="preserve"><value>The tracking number of form is a duplicate!</value></data>
+  <data name="ErrorNotFound" xml:space="preserve"><value>Error not found</value></data>
+  <data name="ErjaDetails" xml:space="preserve"><value>To view more details , double-click a document  on the last page tables</value></data>
+  <data name="ErrorNoPrjPrdHRemainDurationMin" xml:space="preserve"><value>The entered time is more than the time credit balance. The time credit balance for the product is {0}.</value></data>
+  <data name="msgErrorWHIdNotFound" xml:space="preserve"><value>Warehouse not found!</value></data>
+  <data name="NotExistsBordIPrdUnitIdI" xml:space="preserve"><value>Product sub-unit not found.</value></data>
+  <data name="ErjaLastNegotiator" xml:space="preserve"><value>Last negotiator have been</value></data>
+  <data name="ErjaReferDescription" xml:space="preserve"><value>Refer Description</value></data>
+  <data name="msgErrorUploadingFileInFtp" xml:space="preserve"><value>Error uploading file in ftp,</value></data>
+  <data name="ErrorNotFoundPreOrdId" xml:space="preserve"><value>The selected invoice was not found.</value></data>
+  <data name="ErrorPrsMobEmailNotEntered" xml:space="preserve"><value>The mobile number or email of the person has not been entered and one of these fields must be entered</value></data>
+  <data name="msgErrorNotVerifiedPordNoPrdGroupSame" xml:space="preserve"><value>Impossibility of pre-order approval due to non-group products!</value></data>
+  <data name="NotExistsBordCommissionCurrUnId" xml:space="preserve"><value>The currency of the commission was not found.</value></data>
+  <data name="NotExistsBordCompanyId" xml:space="preserve"><value>The company name (supplier details) was not found.</value></data>
+  <data name="ErrorEmptyServerResult" xml:space="preserve"><value>No results were received from the server.</value></data>
+  <data name="msgErrorInSaveInfo" xml:space="preserve"><value>Error in recording information!</value></data>
+  <data name="ErrorNoPrdValidityCountingMinNeedOrder" xml:space="preserve"><value>The selected product needs to register an invoice to use time credit!</value></data>
+  <data name="ErrorNoPrdValidityCountingNumNeedOrder" xml:space="preserve"><value>The selected product needs to register an invoice in order to use the count credit!</value></data>
+  <data name="msgIssueDraftFormOrderWithNumber" xml:space="preserve"><value>With number :</value></data>
+  <data name="EmptyBordPaymentDocDate" xml:space="preserve"><value>Please enter the date of the document.</value></data>
+  <data name="ErrorIsNotEnteredQuantity" xml:space="preserve"><value>The selected item does not have a number.</value></data>
+  <data name="ErrorNotFoundPrintFormat" xml:space="preserve"><value>The selected print format could not be found.</value></data>
+  <data name="ErrorDuplicateZipCode" xml:space="preserve"><value>The zipcode is a duplicate, the zipcode was found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="MaxDiscountPercentOrderInActiveOrder" xml:space="preserve"><value>Not possibility approval&lt;br/&gt;The Order discount is more than the limit set for you&lt;br/&gt;Percent of authorized:</value></data>
+  <data name="msgErrorFileNotExist" xml:space="preserve"><value>The file does not exist!</value></data>
+  <data name="ErrorDuplicateCmpNationalCode" xml:space="preserve"><value>The national ID is a duplicate, this national ID found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="NotExistsBordICommissionCurrUnId" xml:space="preserve"><value>The currency of the commission was not found.</value></data>
+  <data name="ErrorIsNotEntered" xml:space="preserve"><value>{0} is not entered!</value></data>
+  <data name="ErrorInInsertPerson" xml:space="preserve"><value>Error in insert the person</value></data>
+  <data name="ErrorPrdDiscountIsTooHigh" xml:space="preserve"><value>Product discount more than allowed</value></data>
+  <data name="msgSuccessAction" xml:space="preserve"><value>Operation is done successful.</value></data>
+  <data name="NotExistsBordCurrencyUnitId" xml:space="preserve"><value>The reference currency unit was not found.</value></data>
+  <data name="DyFrmUserNotAccess" xml:space="preserve"><value>Lack of access to the form</value></data>
+  <data name="ErrorNoSetLinkAccSystemId" xml:space="preserve"><value>The ID of other systems is not registered in the settings.</value></data>
+  <data name="WrongBordDateTime" xml:space="preserve"><value>Buy order date format is incorrect!</value></data>
+  <data name="msgIssueDraftFormOrderDate" xml:space="preserve"><value>Date :</value></data>
+  <data name="ErrorMustFullCnvsRemindDate" xml:space="preserve"><value>Set the reminder date is mandatory</value></data>
+  <data name="DiscountExpired" xml:space="preserve"><value>Discount code has expired.</value></data>
+  <data name="DiscountNotApplicable" xml:space="preserve"><value>Discount code not applicable to selected products.</value></data>
+  <data name="ErrorUsernameIsRepeat" xml:space="preserve"><value>Username is repeated</value></data>
+  <data name="ErjaPerson" xml:space="preserve"><value>Person</value></data>
+  <data name="msgErrorNotSelectProduct" xml:space="preserve"><value>Product is not selected!</value></data>
+  <data name="ErrorInReadingSysSetting" xml:space="preserve"><value>Error reading settings</value></data>
+  <data name="CheckFieldInLang1" xml:space="preserve"><value>There are a number of languages required {0}</value></data>
+  <data name="ErrorAlreadyRegisteredCmpMultiGroups" xml:space="preserve"><value>This group is already registered for the customer!</value></data>
+  <data name="ErrorFileNotExist" xml:space="preserve"><value>The file does not exist!</value></data>
+  <data name="msgIssueDraftFormOrderInDate" xml:space="preserve"><value>In date :</value></data>
+  <data name="NotExistsBordDefaultSettingId" xml:space="preserve"><value>Default settings not found.</value></data>
+  <data name="ErjaTransmitte" xml:space="preserve"><value>To inform you as follows Conversation had been recorded by the sender</value></data>
+  <data name="NotExistsBuyOrderOprId" xml:space="preserve"><value>The entered invoice type was not found.</value></data>
+  <data name="MismatchBetweenFields" xml:space="preserve"><value>Mismatch between {0} and {1}.</value></data>
+  <data name="ErrorInSendingFile" xml:space="preserve"><value>Error sending file</value></data>
+  <data name="DiscountUsageLimitUser" xml:space="preserve"><value>Usage limit for this Concat reached.</value></data>
+  <data name="ErjaProject" xml:space="preserve"><value>Project</value></data>
+  <data name="ErrorDuplicateCmpEmail" xml:space="preserve"><value>The email address is a duplicate, this email address found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErrorNotMatchUserIdReferIDAndSetRemideDate" xml:space="preserve"><value>If the conversation is refered to other users, reminder date must be set!</value></data>
+  <data name="msgErrorDuplicateSerialNumberInBuyOrder" xml:space="preserve"><value>Duplicate serial number?&lt;br/&gt;The serial number for this product is already order with number&lt;br/&gt;</value></data>
+  <data name="ErrorItemIsWrong" xml:space="preserve"><value>{0} Wrong!</value></data>
+  <data name="msgErrorInAddLinkedPrd" xml:space="preserve"><value>Error inserting related products!</value></data>
+  <data name="ErrorOrderNumberIsRepeated" xml:space="preserve"><value>Order number is duplicate!</value></data>
+  <data name="ErjaAutomatically" xml:space="preserve"><value>This message was sent automatically by the system</value></data>
+  <data name="msgErrorUnitIdINotFound" xml:space="preserve"><value>Subunit not found!</value></data>
+  <data name="ErrorIsNotSpecifiedWFStepCmpSuppUser" xml:space="preserve"><value>The contact expert is not specified.</value></data>
+  <data name="ErrorEmailIIAlreadyRegistered" xml:space="preserve"><value>The e-mail  II is duplicate</value></data>
+  <data name="NotExistsBordReferUserId" xml:space="preserve"><value>The invoice marketer was not found.</value></data>
+  <data name="ErrorIsNotSpecified" xml:space="preserve"><value>{0} Not specified!</value></data>
+  <data name="NotExistsBordCurrencyUnitIdI" xml:space="preserve"><value>The second reference currency unit was not found.</value></data>
+  <data name="NotExistsBordICustomsCurrUnId" xml:space="preserve"><value>The currency unit of the customs fee was not found.</value></data>
+  <data name="ErrorInInsertCompany" xml:space="preserve"><value>Error in insert the company</value></data>
+  <data name="CheckMobileFormat" xml:space="preserve"><value>Mobile format error</value></data>
+  <data name="msgErrorCreateFolderInFtp" xml:space="preserve"><value>Error in create a folder in ftp,</value></data>
+  <data name="ErrorDuplicatePrjNumRef" xml:space="preserve"><value>The project reference number is duplicate.</value></data>
+  <data name="ErrorPrdCodeIsDuplicate" xml:space="preserve"><value>The product code is duplicate and has previously been used for the following product.&lt;br&gt;{0}&lt;br&gt;* Repeat product code led to confusion in the information</value></data>
+  <data name="msgIssueDraftFormOrderOfType" xml:space="preserve"><value>For this order, warehouse document of type :</value></data>
+  <data name="ErjaAttention" xml:space="preserve"><value>Since you dear user</value></data>
+  <data name="DoNotHaveAccess" xml:space="preserve"><value>Do not have access to this section</value></data>
+  <data name="ErrorFileIsNotPic" xml:space="preserve"><value>The file is not a type of photo!</value></data>
+  <data name="NotExistsBordVerificationWorkFlowId" xml:space="preserve"><value>Verification cycle not found.</value></data>
+  <data name="ErrorNotChangePrjcnvsStatusGroupId" xml:space="preserve"><value>There is no possibility of changing the development model! To change negotiations must first clean up</value></data>
+  <data name="msgErrorNoSavePrjPrdHisNoPrj" xml:space="preserve"><value>Unable to register service details, No project has been registered to register service details!</value></data>
+  <data name="ErrorNoPrjPrdHRemainCount" xml:space="preserve"><value>The entered quantity is more than the quantity credit balance. The quantity credit balance for the product is {0}.</value></data>
+  <data name="DyFrmErjaAttentionForMainForm" xml:space="preserve"><value>Sehr geehrter Benutzer, da Sie einer der verantwortungsbewussten Benutzer des {0}-Formulars sind. Es wird informiert, dass vom sendenden Benutzer neue Informationen im unten beschriebenen Formular registriert wurden.</value></data>
+  <data name="NotExistsBordVerifierId" xml:space="preserve"><value>Invoice approver not found.</value></data>
+  <data name="msgIssueDraftFormOrderByUser" xml:space="preserve"><value>By user :</value></data>
+  <data name="RequiredBordCurrencyUnitId" xml:space="preserve"><value>Reference currency unit is not selected.</value></data>
+  <data name="MaxDiscountPercentInActiveOrder" xml:space="preserve"><value>Not possibility approval&lt;br/&gt;Commodity discount rate exceeded the specified&lt;br/&gt;Percent of authorized:</value></data>
+  <data name="ErrorDuplicatePrjPostFix" xml:space="preserve"><value>The title postfix for project is a duplicate, the title postfix was found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErjaNotice" xml:space="preserve"><value>Get latest Conversation record</value></data>
+  <data name="msgErrorNoRegisterPrdInBordWithSingleItem" xml:space="preserve"><value>Unable to register the product&lt;br&gt;The selected purchase order has an independent product!</value></data>
+  <data name="NotExistsBordICurrencyUnitId" xml:space="preserve"><value>The currency of the product was not found.</value></data>
+  <data name="CheckDigit" xml:space="preserve"><value>{0} must be numeric</value></data>
+  <data name="ErrorInInsertConversation" xml:space="preserve"><value>Error in insert the conversation</value></data>
+  <data name="frmErrorInSendingFile" xml:space="preserve"><value>Error sending file</value></data>
+  <data name="msgErrorNotActivePreOrder" xml:space="preserve"><value>The pre order is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="ErrorNotFoundWorkFlowId" xml:space="preserve"><value>The selected confirmation cycle was not found.</value></data>
+  <data name="msgFormIsChecked" xml:space="preserve"><value>The form is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="ErrorAlarmcnvsRemindTime" xml:space="preserve"><value>If you have set the alarm clock of history should also enter</value></data>
+  <data name="NotExistsBordCompanyPersonId" xml:space="preserve"><value>The person's name field (supplier details) is not selected.</value></data>
+  <data name="ErrorCheckCmpNameDuplicate" xml:space="preserve"><value>Unable to register duplicate customer. Customer name is a duplicate. This name has already been registered with Customer Number: {0}.</value></data>
+  <data name="msgErrorNotHavePrdSpecModule" xml:space="preserve"><value>Unable to access product specifications, product specifications module not found.</value></data>
+  <data name="ErrorInReadingFoSetting" xml:space="preserve"><value>Error reading front office settings</value></data>
+  <data name="BuyOrderNumberIsRepeated" xml:space="preserve"><value>Order number is duplicate!</value></data>
+  <data name="ErrorEmpty" xml:space="preserve"><value>Enter the {0}</value></data>
+  <data name="ErrorNotSendToLinkAcc" xml:space="preserve"><value>No transfer to other systems</value></data>
+  <data name="msgErrorIssueDraftForCanceledOrd" xml:space="preserve"><value>Impossibility to issue a draft for an canceled order!</value></data>
+  <data name="ErrorDivisionByZero" xml:space="preserve"><value>Division by zero!</value></data>
+  <data name="ErrorDoneOperation" xml:space="preserve"><value>Error in the done operation</value></data>
+  <data name="msgErrorFilePathIsEmpty" xml:space="preserve"><value>The path file is empty!</value></data>
+  <data name="ErrorNotEnteredFieldValue" xml:space="preserve"><value>The required field value has not been entered!</value></data>
+  <data name="ErrorForcedStatus" xml:space="preserve"><value>Unable to insert the conversation! &lt;br&gt;The order of progress status has not been metBefore registering this status should be the status: &lt;br&gt;{0} &lt;br&gt;Be registered</value></data>
+  <data name="ErrorAlarmcnvsRemindDateForAllarm" xml:space="preserve"><value>If you have set the alarm on the clock must also enter</value></data>
+  <data name="DyFrmReqCheckByName" xml:space="preserve"><value>Request approval for the form</value></data>
+  <data name="ErrorInFormat" xml:space="preserve"><value>{0} format is incorrect!</value></data>
+  <data name="ErrorIsNotSpecifiedWFStepResponsibleUser" xml:space="preserve"><value>The responsible user is not specified.</value></data>
+  <data name="msgErrorNoSavePrjPrdHisNoSelectedPrj" xml:space="preserve"><value>Unable to register service details, A project has not been selected to record service details!</value></data>
+  <data name="msgErrorFinishingUserDefinitionCapacity" xml:space="preserve"><value>Finishing of user definition capacity!</value></data>
+  <data name="msgIssueDraftFormOrderLackInventory" xml:space="preserve"><value>Due to the lack of product inventory in warehouse:</value></data>
+  <data name="ErrorNotAccess" xml:space="preserve"><value>You may request access is limited</value></data>
+  <data name="DiscountNoScoreMin" xml:space="preserve"><value>Insufficient score to use the discount code.</value></data>
+  <data name="DiscountUsageLimit" xml:space="preserve"><value>Discount code usage limit reached.</value></data>
+  <data name="msgErrorInCalculation" xml:space="preserve"><value>Error in calculation</value></data>
+  <data name="ErrorItemIdIsNotEntered" xml:space="preserve"><value>The ID of {0} has not been provided.</value></data>
+  <data name="msgErrorRunFunction" xml:space="preserve"><value>Operations faild</value></data>
+  <data name="msgIssueDraftFormOrderImpossibilityIissued" xml:space="preserve"><value>The impossibility of issuing warehouse draft !!</value></data>
+  <data name="NotExistsBordIPrdUnitId" xml:space="preserve"><value>Product unit not found.</value></data>
+  <data name="NotExistsBordIPrdId" xml:space="preserve"><value>The selected product was not found.</value></data>
+  <data name="ErrorDuplicatePrsNationalCode" xml:space="preserve"><value>The national code is a duplicate, this national code is found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErrorBordIsFixed" xml:space="preserve"><value>The purchase invoice cannot be edited, any changes can be made with the approval of the approver!</value></data>
+  <data name="ErrorItemDuplicate" xml:space="preserve"><value>The {0} is duplicate!</value></data>
+  <data name="NotExistsBordCostSheetId" xml:space="preserve"><value>The invoice cost estimate sheet was not found.</value></data>
+  <data name="SuccessDoneRegister" xml:space="preserve"><value>The operation was successful</value></data>
+  <data name="ErrorCheckPrsMobileDuplicate" xml:space="preserve"><value>Mobile number of {0} is duplicate, customer number found: {1}</value></data>
+  <data name="msgErrorColorIdNotFound" xml:space="preserve"><value>Color not found!</value></data>
+  <data name="RedundancyMessage" xml:space="preserve"><value>Where the use of this item and you do not have permission to remove it</value></data>
+  <data name="IsNotVerifiedSubject" xml:space="preserve"><value>Disapproval</value></data>
+  <data name="ErrorDuplicateFax" xml:space="preserve"><value>The fax number is a duplicate, the fax number was found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErrorDuplicateTel" xml:space="preserve"><value>The phone number is a duplicate, the phone number was found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErjaRonevesht" xml:space="preserve"><value>A copy of the negotiations referred to you by</value></data>
+  <data name="MsgFormNotDefined" xml:space="preserve"><value>Form is not defined!</value></data>
+  <data name="CheckPreTelForNotMobile" xml:space="preserve"><value>Clutter in the structure of the registry, incorrect mobile insertion on the phone number</value></data>
+  <data name="msgErrorPordItemIdNotFound" xml:space="preserve"><value>The pre-invoice line was not found!</value></data>
+  <data name="ErrorOrdIsFixed" xml:space="preserve"><value>The order is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="NotExistsProject" xml:space="preserve"><value>Project not found.</value></data>
+  <data name="MaxDiscountPercentPreOrderInActivePreOrder" xml:space="preserve"><value>Not possibility approval&lt;br/&gt;The Pre Order discount is more than the limit set for you&lt;br/&gt;Percent of authorized:</value></data>
+  <data name="msgErrorErrorSendingMessages" xml:space="preserve"><value>Error sending messages</value></data>
+  <data name="ErrorNotEnteredFieldName" xml:space="preserve"><value>Field name not entered!</value></data>
+  <data name="ErrorPreOrderNumberIsRepeated" xml:space="preserve"><value>Pre-order number is duplicate!</value></data>
+  <data name="ErrorCmpCodeDuplicate" xml:space="preserve"><value>Customer code is repeated. This code has already been recorded for the customer {0}. Unable to enter the code of duplicate</value></data>
+  <data name="ErrorRecordNotFound" xml:space="preserve"><value>The {0} with the provided details was not found.</value></data>
+  <data name="SpecificationJsonErrorFormat" xml:space="preserve"><value>The JSON format of the attributes is not correct.</value></data>
+  <data name="ErrorCheckPrsEmailDuplicate" xml:space="preserve"><value>E-mail of {0} is duplicate, customer number found: {1}</value></data>
+  <data name="NotExistsBordIWHId" xml:space="preserve"><value>The selected warehouse was not found.</value></data>
+  <data name="msgErrorMessageFileExtension" xml:space="preserve"><value>The uploaded file format is illegal. Allowed formats ({0})!</value></data>
+  <data name="NotExistsBordStatusId" xml:space="preserve"><value>Invoice status not found.</value></data>
+  <data name="ErrorCmpNumberDuplicate" xml:space="preserve"><value>Customer number is repeated. This number has already been recorded for the customer {0}. Unable to enter the number of duplicate &lt;br&gt;</value></data>
+  <data name="frmFormBaseEditSuccessFulMessage" xml:space="preserve"><value>Edit information was successfully</value></data>
+  <data name="ErrorDyFrmNotConfirmSteps" xml:space="preserve"><value>Unable to confirm &lt;br&gt; The following steps have not been approved:</value></data>
+  <data name="CheckLenMob" xml:space="preserve"><value>Error number of mobile</value></data>
+  <data name="NotExistsBordFreightCurrUnId" xml:space="preserve"><value>The shipping fee currency was not found.</value></data>
+  <data name="ErrorPordIsFixed" xml:space="preserve"><value>The pre-order is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="ErrorDeleteItemUsedInPrj" xml:space="preserve"><value>The impossibility of removing &lt;br&gt;this item is used in the project definition section.</value></data>
+  <data name="ErrorDeleteItemUsedInCmp" xml:space="preserve"><value>The impossibility of removing &lt;br&gt;this item is used in the customer definition section.</value></data>
+  <data name="ErjaFrom" xml:space="preserve"><value>Conversation referred to you by:</value></data>
+  <data name="msgErrorDivisionByZero" xml:space="preserve"><value>Division by zero!</value></data>
+  <data name="DubClickDisplayCmpInfo" xml:space="preserve"><value>Double-click to display company documents</value></data>
+  <data name="ErrorEmpty1" xml:space="preserve"><value>Enter the {0}</value></data>
+  <data name="PersonNotFound" xml:space="preserve"><value>The personnel is not found!</value></data>
+  <data name="msgErrorYouNotDyFormReferUsers" xml:space="preserve"><value>You are not responsible for the form {0}!</value></data>
+  <data name="ErrorUploadingFileInFtp" xml:space="preserve"><value>Error uploading file in ftp,</value></data>
+  <data name="DyFrmErjaFrom" xml:space="preserve"><value>Referred form</value></data>
+  <data name="frmErrorMessage" xml:space="preserve"><value>Error in current operations</value></data>
+  <data name="msgErrorCalcBordTaxNotMatchEnteredBordTax" xml:space="preserve"><value>The calculated value added tax amount does not match the amount entered by the user. &lt;br&gt; Do you want to register the calculated tax amount?</value></data>
+  <data name="ErrorInConsistencyPrdFSGroup" xml:space="preserve"><value>Inconsistency in the selection of the main and secondary commodity groups</value></data>
+  <data name="ErrorCheckCmpCodeDuplicate" xml:space="preserve"><value>Customer code is {0} duplicate, customer number found: {1}</value></data>
+  <data name="ErrorFormat" xml:space="preserve"><value>{0}  format is incorrect!</value></data>
+  <data name="EmptyBordPaymentTypeId" xml:space="preserve"><value>Please enter the payment type.</value></data>
+  <data name="RequiredBordCompanyId" xml:space="preserve"><value>The company name field (supplier details) is not selected.</value></data>
+  <data name="ErrorNotFoundVerifierUserId" xml:space="preserve"><value>The selected approver could not be found.</value></data>
+  <data name="NotExistsBordFacilityCmpId" xml:space="preserve"><value>The name of the company (intermediary buyer) was not found.</value></data>
+  <data name="NotExistsBordFacilityPrjId" xml:space="preserve"><value>The name of the project (buyer interface) was not found.</value></data>
+  <data name="NotExistsBordFacilityPrsId" xml:space="preserve"><value>The name of the person (buyer's intermediary) was not found.</value></data>
+  <data name="msgErrorCommunicateWithServer" xml:space="preserve"><value>Error communicating with the server!!</value></data>
+  <data name="ErrorItemIsNotEntered" xml:space="preserve"><value>{0} is not entered!</value></data>
+  <data name="msgErrorNoSavePrjPrdHisNoDefaultPrjTitles" xml:space="preserve"><value>Unable to register service details, The selected project is not one of the default project titles!</value></data>
+  <data name="msgErrorStockSupplyNotFound" xml:space="preserve"><value>The inventory supply request sheet was not found!</value></data>
+  <data name="ErrorDuplicateCmpEconomicCode" xml:space="preserve"><value>Duplicate economic code, this economic code was found in the customer under the number {0} and name {1}.</value></data>
+  <data name="EmptyBordPaymentAmount" xml:space="preserve"><value>Please enter the amount.</value></data>
+  <data name="msgErrorMessageMaxSizeFile" xml:space="preserve"><value>File Size send ({0}) is greater than the allowable file size ({1})!</value></data>
+  <data name="DyFrmErjaAttention" xml:space="preserve"><value>Dear user, because you are responsible  for the {0} step in the form {1}. Notifies, sender record a new information   in the form as described below.</value></data>
+  <data name="VersionBuy" xml:space="preserve"><value>Your access to this section is limited. If needed, you can purchase this module. Sales department contact number: 02174451</value></data>
+  <data name="ErrorEmailAlreadyRegistered" xml:space="preserve"><value>The e-mail is duplicate</value></data>
+  <data name="DyFrmNextStepErjaAttention" xml:space="preserve"><value>Dear user, because you are responsible  for the {0} step in the form {1}. Notifies that the new information on the {2} step in the form {1} has been registered by the sender user as follows.</value></data>
+  <data name="ErrorTryAgain" xml:space="preserve"><value>, Please fix and try again.</value></data>
+  <data name="EmptyBordPaymentImportDate" xml:space="preserve"><value>Please enter the registration date.</value></data>
+  <data name="msgIssueDraftFormOrderBeenIissued" xml:space="preserve"><value>been issued.</value></data>
+  <data name="frmFormBaseInsertSuccessFulMessage" xml:space="preserve"><value>New item successfully registered</value></data>
+  <data name="msgErrorInsertToSqlTableCheckValues" xml:space="preserve"><value>An error occurred while inserting into the database table, please check the values passed and then try again.</value></data>
+  <data name="ErrorNotConfirmSteps" xml:space="preserve"><value>Unable to confirm &lt;br&gt; The following steps have not been approved:</value></data>
+  <data name="ErrorNoPrdValidityCounting" xml:space="preserve"><value>The selected product is not a consumer credit product!</value></data>
+  <data name="msgLinkAccSendedBefore" xml:space="preserve"><value>The requested {0} has already been transferred to the {1} system.</value></data>
+  <data name="DiscountNotFound" xml:space="preserve"><value>Discount code not found.</value></data>
+  <data name="EmptyParameters" xml:space="preserve"><value>Please enter one of the input parameters.</value></data>
+  <data name="errorInReadingSetting" xml:space="preserve"><value>Error reading settings!</value></data>
+  <data name="ErrorErrorSendingMessages" xml:space="preserve"><value>Error sending messages</value></data>
+  <data name="ErrorDuplicatePrjDesc" xml:space="preserve"><value>The project description is a duplicate, the description was found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="ErrorDuplicatePrjNumR" xml:space="preserve"><value>The project counter is duplicate.</value></data>
+  <data name="NotExistsBordIPrdColorId" xml:space="preserve"><value>The selected color was not found.</value></data>
+  <data name="msgErrorStockSupplyNumberIsDuplicate" xml:space="preserve"><value>The number of the  stock supply request sheet is a duplicate!</value></data>
+  <data name="ErrorUsernamePasswordIncorrect" xml:space="preserve"><value>Username or password is incorrect</value></data>
+  <data name="ErrorAccessAPILimited" xml:space="preserve"><value>Access API limited!</value></data>
+  <data name="MsgNewInternalMsgFrom" xml:space="preserve"><value>New internal message from {0}</value></data>
+  <data name="ErrorDocIsFixed" xml:space="preserve"><value>The warehouse document is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="msgErrorBordIdNotFound" xml:space="preserve"><value>Purchase invoice not found!</value></data>
+  <data name="msgErrorPrdIdNotFound" xml:space="preserve"><value>Product not found!</value></data>
+  <data name="ErrorDuplicateCmpMobile" xml:space="preserve"><value>The mobile is a duplicate, this mobile found in the customer with the number {0} and the name {1}.</value></data>
+  <data name="NotFoundEx" xml:space="preserve"><value>{0} not found.</value></data>
+  <data name="msgErrorUnitIdNotFound" xml:space="preserve"><value>Main unit not found!</value></data>
+  <data name="ErrorPrsLNameNotEntered" xml:space="preserve"><value>Last name's person is not entered</value></data>
+  <data name="msgErrorNoSavePrjPrdHisByOrdNotVerified" xml:space="preserve"><value>Unable to register service details, The order has not been verified!</value></data>
+  <data name="NotExistsBordReqCmpId" xml:space="preserve"><value>The name of the company (applicant) was not found.</value></data>
+  <data name="NotExistsBordPrintFormatId" xml:space="preserve"><value>Print format not found.</value></data>
+  <data name="DyFrmErjaRonevesht" xml:space="preserve"><value>A copy of the form {0} referred to you by</value></data>
+  <data name="PaymentJsonErrorFormat" xml:space="preserve"><value>The Jason template sent is not correct.</value></data>
+  <data name="NotExistsBordReqPrjId" xml:space="preserve"><value>The project (requester) was not found.</value></data>
+  <data name="NotExistsBordReqPrsId" xml:space="preserve"><value>The name of the person (applicant) was not found.</value></data>
+  <data name="msgErrorNoRegisterPrdSingleItemInBord" xml:space="preserve"><value>Unable to register an independent product&lt;br&gt;The selected purchase order has other items!</value></data>
+  <data name="msgErrorNotActiveBOrd" xml:space="preserve"><value>The order is not editable, any change is possible with verifier coordination!</value></data>
+  <data name="ErrorDiscountIsTooHigh" xml:space="preserve"><value>More Discounts Than Allowed</value></data>
+  <data name="ErjaMultiUser" xml:space="preserve"><value>They are also referred to other users</value></data>
+  <data name="ErrorMsgBuyModule" xml:space="preserve"><value>You are not able to use the {0} module. If needed, you can purchase this module. Sales department contact number: 02174451</value></data>
+  </root>

@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CRMIdealApi</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="ApiModels.CRM.csdl" />
+    <None Remove="ApiModels.CRM.msl" />
+    <None Remove="ApiModels.CRM.ssdl" />
+    <EmbeddedResource Include="ApiModels.CRM.csdl" LogicalName="ApiModels.CRM.csdl" />
+    <EmbeddedResource Include="ApiModels.CRM.msl" LogicalName="ApiModels.CRM.msl" />
+    <EmbeddedResource Include="ApiModels.CRM.ssdl" LogicalName="ApiModels.CRM.ssdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>../../crm-project/bin/System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>../../crm-project/bin/System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>../../crm-project/bin/System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <HintPath>../../crm-project/bin/System.Data.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>../../crm-project/bin/EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>../../crm-project/bin/System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>../../crm-project/bin/System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="General">
+      <HintPath>../../crm-project/bin/General.dll</HintPath>
+    </Reference>
+    <Reference Include="OtherWebServices">
+      <HintPath>../../crm-project/bin/OtherWebServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../../crm-project/bin/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Tracing">
+      <HintPath>../../crm-project/bin/System.Web.Http.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>../../crm-project/bin/Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>../../crm-project/bin/System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/Microsoft.CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

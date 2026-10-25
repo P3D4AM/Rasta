@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CRMEntities" annotation:LazyLoadingEnabled="false">
+    <FunctionImport Name="ApispRegisterCompanyWithCnvs" ReturnType="Collection(Int32)">
+      <Parameter Name="UserName" Mode="In" Type="String" />
+      <Parameter Name="Password" Mode="In" Type="String" />
+      <Parameter Name="CmpNumber" Mode="In" Type="Int32" />
+      <Parameter Name="CmpName" Mode="In" Type="String" />
+      <Parameter Name="CmpNameEng" Mode="In" Type="String" />
+      <Parameter Name="CmpTitleId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpFame" Mode="In" Type="String" />
+      <Parameter Name="CmpActivityType" Mode="In" Type="String" />
+      <Parameter Name="CmpGroupId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpSubGroupId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpGroupIdII" Mode="In" Type="Int32" />
+      <Parameter Name="CmpGroupIdIII" Mode="In" Type="Int32" />
+      <Parameter Name="CmpGroupIdIV" Mode="In" Type="Int32" />
+      <Parameter Name="CmpTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpPresentationId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpPreTel" Mode="In" Type="String" />
+      <Parameter Name="CmpTel" Mode="In" Type="String" />
+      <Parameter Name="CmpTelUpTo" Mode="In" Type="String" />
+      <Parameter Name="CmpTelDesc" Mode="In" Type="String" />
+      <Parameter Name="CmpPreTelII" Mode="In" Type="String" />
+      <Parameter Name="CmpTelII" Mode="In" Type="String" />
+      <Parameter Name="CmpTelUpToII" Mode="In" Type="String" />
+      <Parameter Name="CmpTelIIDesc" Mode="In" Type="String" />
+      <Parameter Name="CmpMobile" Mode="In" Type="String" />
+      <Parameter Name="CmpFax" Mode="In" Type="String" />
+      <Parameter Name="CmpFaxDesc" Mode="In" Type="String" />
+      <Parameter Name="CmpCountryId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpProvinceId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpCityId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpAddress" Mode="In" Type="String" />
+      <Parameter Name="CmpAddressDesc" Mode="In" Type="String" />
+      <Parameter Name="CmpZipCode" Mode="In" Type="String" />
+      <Parameter Name="CmpPostBox" Mode="In" Type="String" />
+      <Parameter Name="CmpWebSite" Mode="In" Type="String" />
+      <Parameter Name="CmpEmail" Mode="In" Type="String" />
+      <Parameter Name="CmpInteresting" Mode="In" Type="String" />
+      <Parameter Name="CmpSpecialPoint" Mode="In" Type="String" />
+      <Parameter Name="CmpDescription" Mode="In" Type="String" />
+      <Parameter Name="CmpUserName" Mode="In" Type="String" />
+      <Parameter Name="CmpPassword" Mode="In" Type="String" />
+      <Parameter Name="CmpRegistrationNumber" Mode="In" Type="String" />
+      <Parameter Name="CmpEconomicCode" Mode="In" Type="String" />
+      <Parameter Name="CmpNationalCode" Mode="In" Type="String" />
+      <Parameter Name="CmpBuyLimit" Mode="In" Type="String" />
+      <Parameter Name="CmpAccountNumber" Mode="In" Type="String" />
+      <Parameter Name="CmpAccInquiry" Mode="In" Type="String" />
+      <Parameter Name="CmpFreight" Mode="In" Type="String" />
+      <Parameter Name="CmpInquiry" Mode="In" Type="String" />
+      <Parameter Name="CmpReferUserId" Mode="In" Type="Int32" />
+      <Parameter Name="CmpSpecialWordForCI" Mode="In" Type="String" />
+      <Parameter Name="CmpCode" Mode="In" Type="String" />
+      <Parameter Name="CmpEffectiveDatePersian" Mode="In" Type="String" />
+      <Parameter Name="CmpEffectiveDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="CmpCoordinateLatitude" Mode="In" Type="String" />
+      <Parameter Name="CmpCoordinateLongitude" Mode="In" Type="String" />
+      <Parameter Name="CmpCoordinateLastDate" Mode="In" Type="DateTime" />
+      <Parameter Name="CmpCoordinateLastDatePersian" Mode="In" Type="String" />
+      <Parameter Name="CmpCoordinateZoomLevel" Mode="In" Type="Int32" />
+      <Parameter Name="CmpCoordinateLastUserId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsLName" Mode="In" Type="String" />
+      <Parameter Name="PrsFName" Mode="In" Type="String" />
+      <Parameter Name="PrsTitleId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsJobId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsTypeId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsGroupId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsSexId" Mode="In" Type="Int32" />
+      <Parameter Name="PrsPreTel" Mode="In" Type="String" />
+      <Parameter Name="PrsTel" Mode="In" Type="String" />
+      <Parameter Name="PrsTelUpTo" Mode="In" Type="String" />
+      <Parameter Name="PrsTelDesc" Mode="In" Type="String" />
+      <Parameter Name="PrsTelII" Mode="In" Type="String" />
+      <Parameter Name="PrsFax" Mode="In" Type="String" />
+      <Parameter Name="PrsFaxDesc" Mode="In" Type="String" />
+      <Parameter Name="PrsMobile" Mode="In" Type="String" />
+      <Parameter Name="PrsEmail" Mode="In" Type="String" />
+      <Parameter Name="PrsEmailII" Mode="In" Type="String" />
+      <Parameter Name="PrsAddress" Mode="In" Type="String" />
+      <Parameter Name="PrsAddressDesc" Mode="In" Type="String" />
+      <Parameter Name="PrsNationalCode" Mode="In" Type="String" />
+      <Parameter Name="PrsBirthDate" Mode="In" Type="String" />
+      <Parameter Name="PrsBirthDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="PrsMarriageDate" Mode="In" Type="String" />
+      <Parameter Name="PrsMarriageDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="PrsDescription" Mode="In" Type="String" />
+      <Parameter Name="PrsDepartmentId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjTitle" Mode="In" Type="String" />
+      <Parameter Name="PrjDesc" Mode="In" Type="String" />
+      <Parameter Name="PrjStarterUserId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjGradeId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjPriorityId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjGroupId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjcnvsStatusGroupId" Mode="In" Type="Int32" />
+      <Parameter Name="PrjPostFix" Mode="In" Type="String" />
+      <Parameter Name="PrjRemindDate" Mode="In" Type="String" />
+      <Parameter Name="PrjRemindDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="PrjInsertCrmProjectForbiddenFUFDPActive" Mode="In" Type="Boolean" />
+      <Parameter Name="CnvsTopicId" Mode="In" Type="Int32" />
+      <Parameter Name="CnvsDesc" Mode="In" Type="String" />
+      <Parameter Name="CnvsUserId" Mode="In" Type="Int32" />
+      <Parameter Name="CnvsReferUserId" Mode="In" Type="Int32" />
+      <Parameter Name="CnvsReferDesc" Mode="In" Type="String" />
+      <Parameter Name="CnvsStatusId" Mode="In" Type="Int32" />
+      <Parameter Name="CnvsPriorityId" Mode="In" Type="Int32" />
+      <Parameter Name="CnvsRemindDate" Mode="In" Type="String" />
+      <Parameter Name="CnvsRemindDateTime" Mode="In" Type="DateTime" />
+      <Parameter Name="CnvsReferToMultilUser" Mode="In" Type="String" />
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="Month1" Mode="In" Type="Int16" />
+      <Parameter Name="RegisterDate" Mode="In" Type="DateTime" />
+      <Parameter Name="RegisterDatePersian" Mode="In" Type="String" />
+      <Parameter Name="RegisterTime" Mode="In" Type="String" />
+      <Parameter Name="RegisterDay" Mode="In" Type="String" />
+      <Parameter Name="AppType" Mode="In" Type="String" />
+      <Parameter Name="NeedErjaRefMsgSubject" Mode="In" Type="String" />
+      <Parameter Name="NeedErjaRefMsgBody" Mode="In" Type="String" />
+      <Parameter Name="NeedErjaMultiIntmsgSubject" Mode="In" Type="String" />
+      <Parameter Name="NeedErjaMultiIntmsgBody" Mode="In" Type="String" />
+      <Parameter Name="ConversationErjaShowText" Mode="In" Type="String" />
+      <Parameter Name="Value" Mode="In" Type="String" />
+      <Parameter Name="InsertedCompanyId" Mode="InOut" Type="Int32" />
+      <Parameter Name="InsertedPersonId" Mode="InOut" Type="Int32" />
+      <Parameter Name="InsertedProjectId" Mode="InOut" Type="Int32" />
+      <Parameter Name="InsertedConversationId" Mode="InOut" Type="Int32" />
+      <Parameter Name="ErrorMessage" Mode="InOut" Type="String" />
+      <Parameter Name="CmpCodeNotDup" Mode="In" Type="Boolean" />
+    </FunctionImport>
+    <FunctionImport Name="ApispSelectCompanyTitleWithId" ReturnType="Collection(Model.ApispSelectCompanyTitleWithId_Result)">
+      <Parameter Name="CompanyTitleId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ApispSelectCrmFoSetting" ReturnType="Collection(Model.ApispSelectCrmFoSetting_Result)" />
+    <FunctionImport Name="ApispSelectCrmsysSetting" ReturnType="Collection(Model.ApispSelectCrmsysSetting_Result)" />
+    <FunctionImport Name="ApispSelectLanguages" ReturnType="Collection(Model.ApispSelectLanguages_Result)" />
+    <FunctionImport Name="ApispSelectPersonTitleWithId" ReturnType="Collection(Model.ApispSelectPersonTitleWithId_Result)">
+      <Parameter Name="PersonTitleId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="ApispSelectUsers" ReturnType="Collection(Model.ApispSelectUsers_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="LanguageID" Mode="In" Type="Int32" />
+      <Parameter Name="DefaultLanguageID" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="ApispSelectCompanyTitleWithId_Result">
+    <Property Type="Int32" Name="CompanyTitleID" Nullable="false" />
+    <Property Type="Int32" Name="CrmCompanyTitleLangID" Nullable="false" />
+    <Property Type="String" Name="CompanyTitle" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ApispSelectCrmFoSetting_Result">
+    <Property Type="Int32" Name="CrmFoSettingLandID" Nullable="false" />
+    <Property Type="Int32" Name="FoSettingId" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultGroupId" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultSubGroupId" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultGroupIdII" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultGroupIdIII" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultGroupIdIV" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultTypeId" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultPresentationId" Nullable="true" />
+    <Property Type="Int32" Name="CmpDefaultReferUserId" Nullable="true" />
+    <Property Type="String" Name="PrjDefaultTitle" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="PrjDefaultStarterUserId" Nullable="false" />
+    <Property Type="Int32" Name="PrjDefaultGradeId" Nullable="true" />
+    <Property Type="Int32" Name="PrjDefaultPriorityId" Nullable="true" />
+    <Property Type="Int32" Name="PrjDefaultGroupId" Nullable="true" />
+    <Property Type="Int32" Name="PrjDefaultCnvsStatusGroupId" Nullable="false" />
+    <Property Type="String" Name="PrjDefaultPostFix" Nullable="true" MaxLength="200" />
+    <Property Type="Boolean" Name="PrjDefaultFOCmpCanSee" Nullable="true" />
+    <Property Type="Boolean" Name="PrjInsertCrmProjectsForbiddenFUFDPActive" Nullable="true" />
+    <Property Type="Boolean" Name="PrjInsertProjectInformationsDefualtFieldActive" Nullable="true" />
+    <Property Type="Int32" Name="CnvsDefaultTopicId" Nullable="false" />
+    <Property Type="String" Name="CnvsDefaultDesc" Nullable="false" MaxLength="2000" />
+    <Property Type="Int32" Name="CnvsDefaultUserId" Nullable="false" />
+    <Property Type="Int32" Name="CnvsDefaultReferUserId" Nullable="false" />
+    <Property Type="String" Name="CnvsDefaultReferDesc" Nullable="true" MaxLength="500" />
+    <Property Type="Int32" Name="CnvsDefaultStatusId" Nullable="false" />
+    <Property Type="Int32" Name="CnvsDefaultPriorityId" Nullable="true" />
+    <Property Type="Boolean" Name="EmailSendingIsActive" Nullable="true" />
+    <Property Type="Int32" Name="EmailSettingId" Nullable="true" />
+    <Property Type="Int32" Name="EmailUserInfoId" Nullable="true" />
+    <Property Type="String" Name="EmailSubjectPatternFormula" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="EmailBodyPatternFormula" Nullable="true" />
+    <Property Type="Boolean" Name="SmsSendingIsActive" Nullable="true" />
+    <Property Type="String" Name="SmsWebServiceUserName" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="SmsWebServicePassword" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="SmsWebServiceNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SmsWebServiceUrl" Nullable="true" MaxLength="300" />
+    <Property Type="String" Name="SmsBodyPatternFormula" Nullable="true" MaxLength="1000" />
+    <Property Type="String" Name="FoLogEmailAdminI" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="FoLogEmailAdminII" Nullable="true" MaxLength="100" />
+    <Property Type="Int32" Name="LanguageID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="ApispSelectCrmsysSetting_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="CoName" Nullable="true" MaxLength="200" />
+    <Property Type="Binary" Name="CoLoGo" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Telephone" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Fax" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="WebSite" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ServerIP" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="UserId" Nullable="true" />
+    <Property Type="Int16" Name="Year1" Nullable="true" />
+    <Property Type="Int16" Name="Month1" Nullable="true" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="SantralPreNumber" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="CallerIDServerIP" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="ServiceSIP" Nullable="true" />
+    <Property Type="Boolean" Name="ServiceSGIP" Nullable="true" />
+    <Property Type="String" Name="RegistrationNumber" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EconomicCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="NationalCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="QuickAddress" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LockSerial" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LockCounter" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="LockNU" Nullable="true" MaxLength="10" />
+    <Property Type="Boolean" Name="LockControl" Nullable="true" />
+    <Property Type="String" Name="AppFilePath" Nullable="true" MaxLength="300" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="Boolean" Name="ServiceCIIP" Nullable="true" />
+    <Property Type="String" Name="PublicNotice" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="ZipCode" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="ServiceFADeAc" Nullable="true" />
+    <Property Type="String" Name="RecordingVoiceServerIP" Nullable="true" MaxLength="300" />
+    <Property Type="Boolean" Name="ServiceRIP" Nullable="true" />
+    <Property Type="Boolean" Name="CantSaveDupPrsMob" Nullable="true" />
+    <Property Type="Boolean" Name="CantSaveDupPrsEmail" Nullable="true" />
+    <Property Type="Boolean" Name="MustFullcnvsRemindDate" Nullable="true" />
+    <Property Type="String" Name="CallerIDVersion" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CallerIDOldVersion" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SMSServiceVersion" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SMSServiceOldVersion" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="ServiceBuyOrdIP" Nullable="true" />
+    <Property Type="Boolean" Name="ServiceEmailIP" Nullable="true" />
+    <Property Type="Boolean" Name="ServiceLetterIP" Nullable="true" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="DisablefrmcmpSearchOnType" Nullable="true" />
+    <Property Type="String" Name="SMSGSMServiceVersion" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SMSGSMServiceOldVersion" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Int32" Name="DefaultLanguageID" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="ApispSelectLanguages_Result">
+    <Property Type="Int32" Name="LanguageID" Nullable="false" />
+    <Property Type="String" Name="LanguageName" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="LanguageCollation" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="LanguageDirection" Nullable="false" MaxLength="3" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ApispSelectPersonTitleWithId_Result">
+    <Property Type="Int32" Name="PersonTitleID" Nullable="false" />
+    <Property Type="Int32" Name="CrmPersonTitleLangID" Nullable="false" />
+    <Property Type="String" Name="PersonTitle" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="ApispSelectUsers_Result">
+    <Property Type="Int32" Name="UserId" Nullable="false" />
+    <Property Type="Int32" Name="Row" Nullable="true" />
+    <Property Type="String" Name="FName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="LName" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PersCode" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="IsAdmin" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="String" Name="Description" Nullable="true" MaxLength="300" />
+    <Property Type="Int32" Name="UserId1" Nullable="true" />
+    <Property Type="Int16" Name="Month1" Nullable="true" />
+    <Property Type="DateTime" Name="RegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="RegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="IPAddress" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="Tel" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="TelDesc" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="PositionId" Nullable="true" />
+    <Property Type="Int32" Name="SignatureId" Nullable="true" />
+    <Property Type="Int32" Name="DepartmentId" Nullable="true" />
+    <Property Type="Int32" Name="ResponsibleUserId" Nullable="true" />
+    <Property Type="String" Name="ComputerName" Nullable="true" MaxLength="50" />
+    <Property Type="Guid" Name="GUId" Nullable="true" />
+    <Property Type="Boolean" Name="CallreIdDeActive" Nullable="true" />
+    <Property Type="String" Name="CallreIdDeActiveLines" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="DisableInternalMessageAllarmVoice" Nullable="true" />
+    <Property Type="Boolean" Name="DisableReceiveCNVSInfoAllarm" Nullable="true" />
+    <Property Type="String" Name="EmailAttachFileLocation" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="AppType" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="CanSetFree" Nullable="true" />
+    <Property Type="String" Name="UserCIPatternFormulaPopUp" Nullable="true" MaxLength="4000" />
+    <Property Type="Boolean" Name="UseClientNameForNetworking" Nullable="true" />
+    <Property Type="Boolean" Name="UserIsActiveInWinApp" Nullable="true" />
+    <Property Type="Boolean" Name="UserIsActiveInWebApp" Nullable="true" />
+    <Property Type="Boolean" Name="UserIsActiveInMobApp" Nullable="true" />
+    <Property Type="Int32" Name="LanguageID" Nullable="true" />
+    <Property Type="Boolean" Name="AllowCopyOtherLanguage" Nullable="true" />
+    <Property Type="Int32" Name="FirstRegisterUserId" Nullable="true" />
+    <Property Type="String" Name="FirstRegisterDatePersian" Nullable="true" MaxLength="8" />
+    <Property Type="DateTime" Name="FirstRegisterDate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="FullName" Nullable="false" MaxLength="201" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,908 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+<resheader name="resmimetype"><value>text/microsoft-resx</value></resheader><resheader name="version"><value>1.3</value></resheader><resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><data name="actdyFormsReport" xml:space="preserve"><value>Report of the forms</value></data>
+  <data name="BordActExportToAccLink" xml:space="preserve"><value>Send group buy orders from CRM to {0} system</value></data>
+  <data name="PrdActPrdLinkAccDetails" xml:space="preserve"><value>Show details of the product connection with the system {0}</value></data>
+  <data name="actOrderGroupVerify" xml:space="preserve"><value>Confirm group of orders that they are filtered</value></data>
+  <data name="actLinkAccSettingGetCmpType" xml:space="preserve"><value>Get the the contacts type of accounting software {0}</value></data>
+  <data name="muRptCall" xml:space="preserve"><value>Statistical reports based on calls</value></data>
+  <data name="actsmsSendedSms" xml:space="preserve"><value>SMS is sent</value></data>
+  <data name="actShowCIVoiceRecordInformation" xml:space="preserve"><value>Show information recorded conversations</value></data>
+  <data name="FOMuGotoFO" xml:space="preserve"><value>Going to the customer club</value></data>
+  <data name="PayRollListActVerifyUserCycleAll" xml:space="preserve"><value>Verify all payroll</value></data>
+  <data name="CompanyIQuickRegisterRMenuPrjPostFix" xml:space="preserve"><value>{0}     month after project start date</value></data>
+  <data name="OrdActSendAllPayToAcc" xml:space="preserve"><value>Transfer all payments to accounting</value></data>
+  <data name="actPrintDiscountCodeHistory" xml:space="preserve"><value>Discount code history report</value></data>
+  <data name="PordActSendFileToAcc" xml:space="preserve"><value>Transfer the selected file to accounting</value></data>
+  <data name="muGoToFoUrl" xml:space="preserve"><value>Enter the contact club</value></data>
+  <data name="actFoSettingCmpUP" xml:space="preserve"><value>Criteria settings for creating a username and password to enter the contacts club</value></data>
+  <data name="actSurveySendSetting" xml:space="preserve"><value>Survey send setting</value></data>
+  <data name="BordActSendToAccLink" xml:space="preserve"><value>Send current buy order to {0} system (one buy order)</value></data>
+  <data name="actordOrderIndicator" xml:space="preserve"><value>Order indicator</value></data>
+  <data name="actPayRollUserCycle" xml:space="preserve"><value>Issuance of payroll</value></data>
+  <data name="muWareHouseBaseInfo" xml:space="preserve"><value>Basic warehouse definitions</value></data>
+  <data name="FOMuPreOrder" xml:space="preserve"><value>Pre orders</value></data>
+  <data name="PordActSendToAccLink" xml:space="preserve"><value>Send current pre-invoice to system {0} (one pre-invoice)</value></data>
+  <data name="OrdActSendOrdToTsp" xml:space="preserve"><value>Sending current order to Modian system (one order)</value></data>
+  <data name="DyFrmActPasteFields" xml:space="preserve"><value>Paste the fields</value></data>
+  <data name="FOMenuSurvey" xml:space="preserve"><value>Survey</value></data>
+  <data name="actUpdateProductMulti" xml:space="preserve"><value>Bulk product updates</value></data>
+  <data name="actLtrSendExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="actDefineFinancialPeriod" xml:space="preserve"><value>Basic information of define the financial period</value></data>
+  <data name="FOMenuTicket" xml:space="preserve"><value>Tickets</value></data>
+  <data name="ReportDesignerWindowsDownload" xml:space="preserve"><value>Downlad the designer of report's windows</value></data>
+  <data name="muBaseInfoSetting" xml:space="preserve"><value>Basic Information - Settings</value></data>
+  <data name="prdActLinkedProducts" xml:space="preserve"><value>Related products</value></data>
+  <data name="actLinkAccSettingPordPayType" xml:space="preserve"><value>Default settings of pre-order payment type in accounting</value></data>
+  <data name="actAIPrompt" xml:space="preserve"><value>Suggested Question</value></data>
+  <data name="actDocIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="actDefinecmpFileType" xml:space="preserve"><value>Basic information of define file type</value></data>
+  <data name="actOrdVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="DyFrmActCrmSysPart" xml:space="preserve"><value>Go to the part used in CRM</value></data>
+  <data name="PordActSendPayToAcc" xml:space="preserve"><value>Transfer selected payment to accounting</value></data>
+  <data name="FOMuLetter" xml:space="preserve"><value>Letters</value></data>
+  <data name="CmpActSendToAcc" xml:space="preserve"><value>Transfer current contact to other systems</value></data>
+  <data name="actDefineBankingBank" xml:space="preserve"><value>Definition of types of banks</value></data>
+  <data name="actLtrReceiveIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="actEmailSetting" xml:space="preserve"><value>E-mail server settings</value></data>
+  <data name="actwhDefineWareHouse" xml:space="preserve"><value>Define warehouse</value></data>
+  <data name="actcTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="muBSWBaseInfo" xml:space="preserve"><value>Basic definitions</value></data>
+  <data name="actCopyAllRollPermissionFromCenter" xml:space="preserve"><value>Temporary copy of permissions from the current center for transfer</value></data>
+  <data name="CmpActLinkedCmpWithAcc" xml:space="preserve"><value>Establish a connection between CRM contacts and other systems</value></data>
+  <data name="TelegramActDeleteTelegramContact" xml:space="preserve"><value>Delete the contact from telegram</value></data>
+  <data name="actDefineUserGroups" xml:space="preserve"><value>User group definition</value></data>
+  <data name="actPreOrderGroupVerifyExit" xml:space="preserve"><value>Exit of confirm group of pre orders that they are filtered</value></data>
+  <data name="actDefinePrsJobs" xml:space="preserve"><value>Basic information of define person jobs</value></data>
+  <data name="actstsupStockSupplyIndicator" xml:space="preserve"><value>Stock supply request sheet indicator</value></data>
+  <data name="actShowPrdGroupMustExistReasons" xml:space="preserve"><value>Show reasons for non-selection of product group in the pre order</value></data>
+  <data name="actltrDefineVerificationWorkflow" xml:space="preserve"><value>Definition of the approval cycle</value></data>
+  <data name="actTestToken" xml:space="preserve"><value>Token test</value></data>
+  <data name="OrdActCreateSmsPanelUserName" xml:space="preserve"><value>Creating SMS panel username</value></data>
+  <data name="actTransferMobAndEmailFromMainPrsToCmp" xml:space="preserve"><value>Non-repetitive transfer of emails and mobile phones of main personnel to the contact</value></data>
+  <data name="UserActDefineUserGroups" xml:space="preserve"><value>Entry to define the user group</value></data>
+  <data name="actltrReceiveLetters" xml:space="preserve"><value>Letters were received</value></data>
+  <data name="CmpActCreateCmpUP" xml:space="preserve"><value>Create the username and password for the contact club</value></data>
+  <data name="FOMenuBParsian" xml:space="preserve"><value>Parsian insurance</value></data>
+  <data name="actcReminder" xml:space="preserve"><value>Reminder dashboard</value></data>
+  <data name="actdyDefineVerificationWorkflow" xml:space="preserve"><value>Define the forms approval cycle</value></data>
+  <data name="actCanceledPreOrder" xml:space="preserve"><value>Cancellation of pre-order</value></data>
+  <data name="muWareHouse" xml:space="preserve"><value>Warehouse</value></data>
+  <data name="CmpActSendToAccLink" xml:space="preserve"><value>Send current contact to {0} system (one contact)</value></data>
+  <data name="FOMenuPerson" xml:space="preserve"><value>Personnel</value></data>
+  <data name="actPreOrder" xml:space="preserve"><value>Pre order entry</value></data>
+  <data name="actPrdUnits" xml:space="preserve"><value>Defint the unit of product</value></data>
+  <data name="actOrdIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="CmpActGoToTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="actPrdColor" xml:space="preserve"><value>Defint the types of colors of product</value></data>
+  <data name="DocActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="actGoPrdDefineProductPrice" xml:space="preserve"><value>Go to product sales price definition form</value></data>
+  <data name="actDefineCountry" xml:space="preserve"><value>Basic information of define the countries</value></data>
+  <data name="actChartDashboard" xml:space="preserve"><value>Charts Dashboard</value></data>
+  <data name="actDefinecmpType" xml:space="preserve"><value>Basic information of define company type</value></data>
+  <data name="actDefinecmpGroupsMulti" xml:space="preserve"><value>Basic information of define multi group in the organization</value></data>
+  <data name="acthrMissionDefineVerificationWorkflow" xml:space="preserve"><value>Define mission approval cycle</value></data>
+  <data name="actChangeUser" xml:space="preserve"><value>Change user</value></data>
+  <data name="actDailyConversation" xml:space="preserve"><value>Report of the daily operation of personnel with contact</value></data>
+  <data name="actGetSupportSoft" xml:space="preserve"><value>Support software (download)</value></data>
+  <data name="muInternalTask" xml:space="preserve"><value>Internal task</value></data>
+  <data name="WareHouseMovementActVerifyDoc" xml:space="preserve"><value>Verify the document movement between the warehouse</value></data>
+  <data name="actcmsDefineGallery" xml:space="preserve"><value>Gallery management</value></data>
+  <data name="actVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="DyFrmActGetXmlFile" xml:space="preserve"><value>Get XML file</value></data>
+  <data name="actDefinecmpGroupsIII" xml:space="preserve"><value>Basic information of define groupIII in the organization</value></data>
+  <data name="DyFrmActPasteFormAndFields" xml:space="preserve"><value>Paste the form with the fields</value></data>
+  <data name="actbordBuyOrderIndicator" xml:space="preserve"><value>Buy order Indicator</value></data>
+  <data name="DocActExportToAccLink" xml:space="preserve"><value>Send group warehouse receipts sheet from CRM to {0} system</value></data>
+  <data name="actDraftIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="actuLinkedUsersAndData" xml:space="preserve"><value>Communication between application information and users</value></data>
+  <data name="actBordExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="TelegramActDeleteAllTelegramFilesFromAllUsers" xml:space="preserve"><value>Delete all telegram files all users</value></data>
+  <data name="actNewsDeleteAllComments" xml:space="preserve"><value>Delete all comments</value></data>
+  <data name="CmpActCmpLinkAccDetails" xml:space="preserve"><value>Show details of the contact connection with the system {0}</value></data>
+  <data name="actIssueOrder" xml:space="preserve"><value>Issue the order</value></data>
+  <data name="acthrLeaveDefineVerificationWorkflow" xml:space="preserve"><value>Define leave approval cycle</value></data>
+  <data name="LeaveDetails" xml:space="preserve"><value>Leave details</value></data>
+  <data name="actrptCmpOrdStockPayAcc" xml:space="preserve"><value>Summary of the financial report of the day</value></data>
+  <data name="FOMuCompanySetting" xml:space="preserve"><value>Settings</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="actCtshVerify" xml:space="preserve"><value>Verify the costsheet</value></data>
+  <data name="actDefineprsType" xml:space="preserve"><value>Basic information of define person types in the organization</value></data>
+  <data name="FOMuCompanyLogOut" xml:space="preserve"><value>Logout</value></data>
+  <data name="actDocExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="CmpActSendCmpUPByEmail" xml:space="preserve"><value>Send the username and password of the contact club via email</value></data>
+  <data name="actFundMultiVerify" xml:space="preserve"><value>Verify the group approval</value></data>
+  <data name="actpordDefinePreOrderStatus" xml:space="preserve"><value>Define the status in pre order</value></data>
+  <data name="actGuaranty" xml:space="preserve"><value>Define the types of guaranty</value></data>
+  <data name="FOMenuMyInfo" xml:space="preserve"><value>My Information</value></data>
+  <data name="muShortcuts" xml:space="preserve"><value>Shortcut</value></data>
+  <data name="actstsupStockSupply" xml:space="preserve"><value>Issuance of stock supply request sheet</value></data>
+  <data name="DraftActVerifyDraft" xml:space="preserve"><value>Verify the warehouse draft</value></data>
+  <data name="actSetFieldStatus" xml:space="preserve"><value>Determining the status of fields</value></data>
+  <data name="actordDefineDiscountPolicy" xml:space="preserve"><value>Defining types of order discount policies</value></data>
+  <data name="FOMenuIssuingInsurancePolicies" xml:space="preserve"><value>Issuing insurance policies</value></data>
+  <data name="CmpActShowCmpInfoLinkAcc" xml:space="preserve"><value>Show current contact information from other systems</value></data>
+  <data name="actwhDocItemSerialSearchI" xml:space="preserve"><value>Search the serial number of warehouse</value></data>
+  <data name="actPrdRelationLimit" xml:space="preserve"><value>Communication between products and other parts of the system</value></data>
+  <data name="actCopAllRoll" xml:space="preserve"><value>Temporary copy of the current role access to transmission</value></data>
+  <data name="actLinkAccSettingOrderOpr" xml:space="preserve"><value>Default sales invoice settings in accounting</value></data>
+  <data name="PrdActSendToAccLink" xml:space="preserve"><value>Send current product to system {0} (one product)</value></data>
+  <data name="actPordGuaranty" xml:space="preserve"><value>Define the types of Guaranty</value></data>
+  <data name="actCostSheetIndicator" xml:space="preserve"><value>Cost estimation sheet indicator</value></data>
+  <data name="actpordDefinePayGroupII" xml:space="preserve"><value>Definition of types of second payment group of pre-order</value></data>
+  <data name="actrptShpPageViewer" xml:space="preserve"><value>Report statistics and store visits</value></data>
+  <data name="actBOrdVerify" xml:space="preserve"><value>Verify the order</value></data>
+  <data name="actActiveDemoUser" xml:space="preserve"><value>Demo version user management</value></data>
+  <data name="actProductGroup" xml:space="preserve"><value>Product categories</value></data>
+  <data name="mnuHolding" xml:space="preserve"><value>Holding</value></data>
+  <data name="actWareHouseMovementEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="SurveyActManageCenter" xml:space="preserve"><value>Managing survey relationships with centers</value></data>
+  <data name="acthrDefineLeaveKind" xml:space="preserve"><value>Define kind in the mission</value></data>
+  <data name="muRptChart" xml:space="preserve"><value>Report charts</value></data>
+  <data name="FOMenuCompanyLetters" xml:space="preserve"><value>Letters</value></data>
+  <data name="actOrdIssueDraft" xml:space="preserve"><value>Issue a warehouse draft</value></data>
+  <data name="actcReferUserIsland" xml:space="preserve"><value>Island dashboard</value></data>
+  <data name="FOMuFinancialInfo" xml:space="preserve"><value>Financial information</value></data>
+  <data name="OrdIndicatorActCalculateOrderScores" xml:space="preserve"><value>Calculate orders score</value></data>
+  <data name="actCopyFormActFromCurrRoll" xml:space="preserve"><value>Temporary copy of current form permissions from current role for transfer</value></data>
+  <data name="CmpActManageCmpLinkAcc" xml:space="preserve"><value>Manage the connection and transmission of CRM contacts with other systems</value></data>
+  <data name="StsupActExitFromIsCanceled" xml:space="preserve"><value>Exit from the cancellation</value></data>
+  <data name="muStockSupply" xml:space="preserve"><value>Stock supply request sheet</value></data>
+  <data name="actPayRollDefineListGroup" xml:space="preserve"><value>Definition of the types payroll list group</value></data>
+  <data name="muOrganizations" xml:space="preserve"><value>Organizations</value></data>
+  <data name="actTargeting" xml:space="preserve"><value>Targeting</value></data>
+  <data name="actPrdShowProducts" xml:space="preserve"><value>Show products</value></data>
+  <data name="FOMuOrder" xml:space="preserve"><value>Orders</value></data>
+  <data name="PordActPordLinkAccDetails" xml:space="preserve"><value>Show details of the pre-order connection with the system {0}</value></data>
+  <data name="muSendToTsp" xml:space="preserve"><value>Modian system</value></data>
+  <data name="muSendToAcc" xml:space="preserve"><value>Transfer to other systems</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpTitle" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and contact title</value></data>
+  <data name="actwhDocItemSerialSearch" xml:space="preserve"><value>Search in warehouse serial</value></data>
+  <data name="actOrdExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="ActManageCountryLinkAcc" xml:space="preserve"><value>Manage and transfer the connection of CRM countries to other systems</value></data>
+  <data name="actSettingNumRef" xml:space="preserve"><value>The counter setting</value></data>
+  <data name="actuLinkedOrdPayTypeAccessForUser" xml:space="preserve"><value>Communication between users and various types of payment, pre-order and sales order</value></data>
+  <data name="OtherSystemsActLinkCityWithAcc" xml:space="preserve"><value>Establish a connection between CRM cities with the software {0}</value></data>
+  <data name="CmpActLinkCmpWithAcc" xml:space="preserve"><value>Establish a connection between CRM contacts with the system {0}</value></data>
+  <data name="CmpActCalcCompanyPrdIndexPrice" xml:space="preserve"><value>Cost calculation based on index</value></data>
+  <data name="DocActSendToAcc" xml:space="preserve"><value>Transfer of receipt to warehouse to accounting</value></data>
+  <data name="ProjectActShowScores" xml:space="preserve"><value>Show points earned</value></data>
+  <data name="OrdActUpdateMobAppDomain" xml:space="preserve"><value>Updating the domain name of the mobile application</value></data>
+  <data name="actPordPrintOtherFormat" xml:space="preserve"><value>Printing in other formats</value></data>
+  <data name="mnuDefineCenters" xml:space="preserve"><value>Definition of types of centers</value></data>
+  <data name="FOMenuDyForm" xml:space="preserve"><value>Form builder</value></data>
+  <data name="WareHouseMovementActVerifyWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="CmpActSetDiscountCode" xml:space="preserve"><value>Assign a discount code to the contact</value></data>
+  <data name="CmpActManageCenterCompanyPerson" xml:space="preserve"><value>Managing contact personnel relationships with centers</value></data>
+  <data name="mnIntMsgLetters" xml:space="preserve"><value>Internal Automation and Secretariat Letters</value></data>
+  <data name="PrdActManagePrdLinkAcc" xml:space="preserve"><value>Manage the connection and transfer information of CRM products with other systems</value></data>
+  <data name="PrdActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="actsmsWSSetting" xml:space="preserve"><value>Web service connection settings in sms</value></data>
+  <data name="actpordPayCondition" xml:space="preserve"><value>Define the payment condition in pre order</value></data>
+  <data name="FOMenuTopHeaderCart" xml:space="preserve"><value>Shopping cart</value></data>
+  <data name="FOMenuTopHeaderShop" xml:space="preserve"><value>Shop</value></data>
+  <data name="actOrdVerify" xml:space="preserve"><value>Verify the order</value></data>
+  <data name="actSetSeoToFirstGroups" xml:space="preserve"><value>Assigning SEO groups to main groups</value></data>
+  <data name="actDefineSex" xml:space="preserve"><value>Basic information of define the types of sex</value></data>
+  <data name="FOMuProfile" xml:space="preserve"><value>Profile</value></data>
+  <data name="actTelegBotSetting" xml:space="preserve"><value>Telegram Bot Settings</value></data>
+  <data name="actrptCallCountInConversationTopics" xml:space="preserve"><value>Report the number of calls according to conversation's topic (marketing)</value></data>
+  <data name="actUpdateTspResultFromExcel" xml:space="preserve"><value>Update the result from the system Excel file (invoice tax number - invoice status)</value></data>
+  <data name="actBOrdVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actShowUserLocationToCmpLocation" xml:space="preserve"><value>Show user location relative to contact</value></data>
+  <data name="actTopSelections" xml:space="preserve"><value>Top Selections</value></data>
+  <data name="OrdIndicatorActTspTransfer" xml:space="preserve"><value>Communication with the Moadian system</value></data>
+  <data name="VerifyRequest" xml:space="preserve"><value>Verify request</value></data>
+  <data name="actDefinecmpPresentation" xml:space="preserve"><value>Basic information of define persentation</value></data>
+  <data name="actLtrSendVerifyWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actsmsAddNewDefaultBodyText" xml:space="preserve"><value>Define the default text in sms</value></data>
+  <data name="actordDefineSaleCenter" xml:space="preserve"><value>Defining the types of sale center of order</value></data>
+  <data name="actSetPhoneState" xml:space="preserve"><value>Determine the status of the dialer</value></data>
+  <data name="actPordIssueDraft" xml:space="preserve"><value>Issue a warehouse draft</value></data>
+  <data name="PrjActDefinecnvsStatus" xml:space="preserve"><value>Entry to define the progress status</value></data>
+  <data name="actLinkAccSettingOrdPayType" xml:space="preserve"><value>Default setting of sales invoice payment type in accounting</value></data>
+  <data name="mnuRptSaleCenterDelivery" xml:space="preserve"><value>Sales Center Scheduling Report</value></data>
+  <data name="actstsupDefineVerificationWorkflow" xml:space="preserve"><value>Define the approval cycle of the stock supply request sheet</value></data>
+  <data name="muTopSelections" xml:space="preserve"><value>Selected</value></data>
+  <data name="actGetCtshItemExcelFile" xml:space="preserve"><value>Get cost estimation sheet items as an excel file</value></data>
+  <data name="actLinkAccSettingGetStores" xml:space="preserve"><value>Get the details of {0} accounting software warehouses</value></data>
+  <data name="actDefineSurvey" xml:space="preserve"><value>Define surveys</value></data>
+  <data name="actLinkAccSettingGetPrdUnit" xml:space="preserve"><value>Get the products unit from accounting software {0}</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpGroupII" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and group II</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpGroupIV" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and group IV</value></data>
+  <data name="DraftActIssueOrder" xml:space="preserve"><value>Issue order</value></data>
+  <data name="actcmsManageHomePageSection" xml:space="preserve"><value>Build and manage store home page categories</value></data>
+  <data name="TelegramActDeleteTelegramFilesFromCurrentUser" xml:space="preserve"><value>Delete telegram files from current user</value></data>
+  <data name="PrdActSelectPrdModuleName" xml:space="preserve"><value>Assignment of module</value></data>
+  <data name="actDefineUserPositions" xml:space="preserve"><value>Define organizational positions</value></data>
+  <data name="actDefineProjectTitle" xml:space="preserve"><value>Basic information of define project default titles</value></data>
+  <data name="WareHouseMovementActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="TelegramActAddContactToCompanyPerson" xml:space="preserve"><value>Connect the contact to contact personnel</value></data>
+  <data name="PrdGpActLinkedPrdGpWithAcc" xml:space="preserve"><value>Connect and transfer CRM product groups to other systems</value></data>
+  <data name="PayRollListActDeleteList" xml:space="preserve"><value>Delete the list along with payrolls</value></data>
+  <data name="actFundDefineVerificationWorkflow" xml:space="preserve"><value /></data>
+  <data name="actFundVerifyByWrokflow" xml:space="preserve"><value>Confirmation by cycle</value></data>
+  <data name="actDocExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="actLinkAccSettingGetPayCondition" xml:space="preserve"><value>Get payment terms details from accounting software {0}</value></data>
+  <data name="actReferUserCommission" xml:space="preserve"><value>Commission dashboard</value></data>
+  <data name="DraftActDraftLinkAccDetails" xml:space="preserve"><value>Show details of the warehouse remittance sheet connection with the system {0}</value></data>
+  <data name="actDefineprsGroups" xml:space="preserve"><value>Basic information of define group in the person</value></data>
+  <data name="DraftActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="StsupActExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="actPasteFormActFromCurrRoll" xml:space="preserve"><value>Transfer copied permissions of the current form from the role</value></data>
+  <data name="actLinkAccSettingGetWarehouse" xml:space="preserve"><value>Get accounting software warehouse list {0}</value></data>
+  <data name="FOMuLinkedCompanyOrders" xml:space="preserve"><value>The orders of the related contacts</value></data>
+  <data name="actcmsDefineNews" xml:space="preserve"><value>News management</value></data>
+  <data name="actSetSeoConfigsToSGByFG" xml:space="preserve"><value>Assigning SEO groups to subgroups of the selected main group</value></data>
+  <data name="OrdActImportFromAccLink" xml:space="preserve"><value>Receive invoice information from {0} system</value></data>
+  <data name="muSurvey" xml:space="preserve"><value>Survey</value></data>
+  <data name="actwhWareHouseMovement" xml:space="preserve"><value>The document movement between the warehouses</value></data>
+  <data name="muCompanyAndCartables" xml:space="preserve"><value>Contact and Dashboard</value></data>
+  <data name="actLinkAccSettingSetBankToRetOrdPayType" xml:space="preserve"><value>Group insertion of check payment type in sales return order based on bank name in two systems</value></data>
+  <data name="actLinkAccSettingSetBankToBordPayType" xml:space="preserve"><value>Group insertion of check payment type in buy order based on bank name in two systems</value></data>
+  <data name="DyFrmActCheckSubForm" xml:space="preserve"><value>Verify the subform</value></data>
+  <data name="actCtshDeleteAllItems" xml:space="preserve"><value>Delete all costsheet items</value></data>
+  <data name="actCenterLinked" xml:space="preserve"><value>Communication between centers</value></data>
+  <data name="actcInternalTask" xml:space="preserve"><value>Internal task dashboard</value></data>
+  <data name="actDefineCnvsDefaultContext" xml:space="preserve"><value>Basic information of define the default text in the conversations</value></data>
+  <data name="OrdActGetPordFOLink" xml:space="preserve"><value>Get the show link in the club</value></data>
+  <data name="actCalenderMiladi" xml:space="preserve"><value>Show gregorian calendar</value></data>
+  <data name="actPreOrders" xml:space="preserve"><value>Pre order indicator</value></data>
+  <data name="CmpActManageCenterCompany" xml:space="preserve"><value>Managing contact with centers</value></data>
+  <data name="UserActDefinePosition" xml:space="preserve"><value>Entry to define the organizational position</value></data>
+  <data name="WareHouseMovementActVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actdocDefineVerificationWorkflow" xml:space="preserve"><value>Define the warehouse sheet approval cycle</value></data>
+  <data name="actrptWrhsPrdMinStock" xml:space="preserve"><value>Minimum warehouse report</value></data>
+  <data name="actManageCompanyPrsUP" xml:space="preserve"><value>Management of the username and password to enter the Personnel contacts club</value></data>
+  <data name="actDocEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="actCtshDeleteAllDyFieldValue" xml:space="preserve"><value>Delete all plugin values in the costsheet</value></data>
+  <data name="actrptchartMainActivityAndCall" xml:space="preserve"><value>Report analytical charts of the register contact and calls</value></data>
+  <data name="actDefineBankingBranch" xml:space="preserve"><value>Definition of types of bank branches</value></data>
+  <data name="FOMuWarehouse" xml:space="preserve"><value>Warehouse</value></data>
+  <data name="actbordPrintFormat" xml:space="preserve"><value>Define the print format in buy order</value></data>
+  <data name="muLinkAccHoloo" xml:space="preserve"><value>Holoo accounting software</value></data>
+  <data name="actLinkAccSettingLinkedPrdUnitByName" xml:space="preserve"><value>Creating a connection between the product unit based on the unit name in CRM with accounting software {0}</value></data>
+  <data name="actEmailShowSendTank" xml:space="preserve"><value>Email - Show the email sending tank</value></data>
+  <data name="actPayRollUserCopyItemsFromOther" xml:space="preserve"><value>Copy items from other courses</value></data>
+  <data name="mnuEmailSend" xml:space="preserve"><value>Send email</value></data>
+  <data name="actLtrReceiveExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="muDailyPordChart" xml:space="preserve"><value>Daily pre order management chart</value></data>
+  <data name="actDefineInternalMessagePriority" xml:space="preserve"><value>Basic information of define the types of priorities in the Internal message</value></data>
+  <data name="actPordIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="ProjectActDeleteCmpProjectWithDep" xml:space="preserve"><value>Delete the selected project with all information</value></data>
+  <data name="DyFrmActPasteForm" xml:space="preserve"><value>Paste the form</value></data>
+  <data name="actordDefinePayGroupI" xml:space="preserve"><value>Definition of order first payment group types</value></data>
+  <data name="actExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="DocActDocLinkAccDetails" xml:space="preserve"><value>Show details of the warehouse receipt connection with the system {0}</value></data>
+  <data name="actAIProvider" xml:space="preserve"><value>AI Provider</value></data>
+  <data name="actDefineDiscountStrategy" xml:space="preserve"><value>Defining various discount strategies for users</value></data>
+  <data name="actpordCreditDuration" xml:space="preserve"><value>Define the credit  duration in pre order</value></data>
+  <data name="actCalculator" xml:space="preserve"><value>Calculator</value></data>
+  <data name="actLeaveStepGroup" xml:space="preserve"><value>Mission step groups</value></data>
+  <data name="FOMenuFinancial" xml:space="preserve"><value>Financial</value></data>
+  <data name="actdyDefineForms" xml:space="preserve"><value>Define the forms</value></data>
+  <data name="actbordDefultSetting" xml:space="preserve"><value>Buy order default settings</value></data>
+  <data name="actDefineLetterDefaultSetting" xml:space="preserve"><value>Define of the default setting</value></data>
+  <data name="FOMenuOrder" xml:space="preserve"><value>Order</value></data>
+  <data name="muDeliveryScheduleReports" xml:space="preserve"><value>Schedule</value></data>
+  <data name="actDraftExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="FOMenuAboutUs" xml:space="preserve"><value>About software</value></data>
+  <data name="FOMenuDraft" xml:space="preserve"><value>Draft</value></data>
+  <data name="FOMenuFiles" xml:space="preserve"><value>Files</value></data>
+  <data name="FOMenuForms" xml:space="preserve"><value>Forms</value></data>
+  <data name="actcmsDefineMenus" xml:space="preserve"><value>Manage menus</value></data>
+  <data name="actInternalMessageHistory" xml:space="preserve"><value>Message history</value></data>
+  <data name="actwhDocOpr" xml:space="preserve"><value>Definition of warehouse slip types</value></data>
+  <data name="BordActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="actDefineProjectTitleGroup" xml:space="preserve"><value>Define types of headers in projects</value></data>
+  <data name="actcmsDefinePages" xml:space="preserve"><value>Build and manage custom pages</value></data>
+  <data name="WareHouseMovementActExportToAccLink" xml:space="preserve"><value>Send group of the movement between the warehouses sheets from CRM to {0} system</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpPresentation" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and presentation</value></data>
+  <data name="actordOrderPaymentIndicator" xml:space="preserve"><value>Order payment Indicator</value></data>
+  <data name="actOrdEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="actBordIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="FOMuCompanyProfile" xml:space="preserve"><value>My file</value></data>
+  <data name="actPrdValidityIndicator" xml:space="preserve"><value>Indicator of validity products</value></data>
+  <data name="CmpActShowCmpDyForms" xml:space="preserve"><value>Display custom-made forms</value></data>
+  <data name="actAIAssistant" xml:space="preserve"><value>AI Assistant</value></data>
+  <data name="actTestBarcode" xml:space="preserve"><value>Barcode testing</value></data>
+  <data name="actLtrReceiveVerify" xml:space="preserve"><value>Verify the letter</value></data>
+  <data name="DyFrmActCopyFormAndFields" xml:space="preserve"><value>Copy the form with the fields</value></data>
+  <data name="actordDefineVerificationWorkflow" xml:space="preserve"><value>Define the invoice approval cycle</value></data>
+  <data name="actPreOrderGroupVerify" xml:space="preserve"><value>Confirm group of pre orders that they are filtered</value></data>
+  <data name="actrptSelectCompanyWithoutPrjCnvs" xml:space="preserve"><value>Report of the contacts without project and conversation</value></data>
+  <data name="PordActSendPayToAccLink" xml:space="preserve"><value>Transferring the payment of the current pre-order to the system {0}</value></data>
+  <data name="actPordExitFromIsCanceled" xml:space="preserve"><value>Exit from the cancellation</value></data>
+  <data name="WhActLinkWarehouseWithAcc" xml:space="preserve"><value>Establish a connection between CRM warehouses and {0} system</value></data>
+  <data name="BordActSendAllPayToAcc" xml:space="preserve"><value>Transfer all payments to accounting</value></data>
+  <data name="actDefineBankingAccount" xml:space="preserve"><value>Definition of bank account types</value></data>
+  <data name="actDefinecmpGroupsII" xml:space="preserve"><value>Basic information of define groupII in the organization</value></data>
+  <data name="actDefinecmpGroupsIV" xml:space="preserve"><value>Basic information of define groupIV in the organization</value></data>
+  <data name="TelegramActGotoCompany" xml:space="preserve"><value>Go to contact form</value></data>
+  <data name="DocActImportFromAccLink" xml:space="preserve"><value>Receive warehouse receipts sheets information from {0} system </value></data>
+  <data name="actLinkAccSettingLinkedDeliveryTermByName" xml:space="preserve"><value>Creating a connection between the type of delivery based on the title of the type of delivery in CRM with accounting software {0}</value></data>
+  <data name="actCIPopUpSetting" xml:space="preserve"><value>Settings pop-up or screen Caller ID</value></data>
+  <data name="muActiveDemoUser" xml:space="preserve"><value>Demo version</value></data>
+  <data name="actDefinePrjPriority" xml:space="preserve"><value>Basic information of define priority in the project</value></data>
+  <data name="CmpActSendCmpNotifToMob" xml:space="preserve"><value>Send message to mobile application</value></data>
+  <data name="actPrdDefineProducts" xml:space="preserve"><value>Define the specification of product</value></data>
+  <data name="OrdActManageOrdTsp" xml:space="preserve"><value>Manage the transmission of orders to Modian system</value></data>
+  <data name="BordActVerifyByWrokflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="FoDiscountCodeInfoTabTitle" xml:space="preserve"><value>Discount Code</value></data>
+  <data name="FOMenuProject" xml:space="preserve"><value>Project</value></data>
+  <data name="actSmsSettingAfterVerify" xml:space="preserve"><value>SMS settings after confirmation</value></data>
+  <data name="actordDefineSettlementType" xml:space="preserve"><value>Define the type of payment in order</value></data>
+  <data name="DyFrmActCopyForm" xml:space="preserve"><value>Copy the form</value></data>
+  <data name="actPordSetting" xml:space="preserve"><value>Entry to form the default settings</value></data>
+  <data name="actLinkAccSettingGetCenter" xml:space="preserve"><value>Get a list of accounting software centers {0}</value></data>
+  <data name="actwhChangeWareHouse" xml:space="preserve"><value>Change warehouse</value></data>
+  <data name="actDeletePrdSpecificationByPrdGroup" xml:space="preserve"><value>Delete all features of this product and its groups</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpGroupIII" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and group III</value></data>
+  <data name="PordIndicatorActSendSms" xml:space="preserve"><value>Send SMS</value></data>
+  <data name="TelegramActDeleteLocalTelegramBotInfo" xml:space="preserve"><value>Delete all info from the local telegram (Bot)</value></data>
+  <data name="actPordIssueStockSupply" xml:space="preserve"><value>Issuance of stock supply request sheet</value></data>
+  <data name="PordActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="OrdActOrdLinkAccDetails" xml:space="preserve"><value>Show details of the order connection with the system {0}</value></data>
+  <data name="OtherSystemsActLinkCmpWithAcc" xml:space="preserve"><value>Establish a connection between CRM contacts with the software {0}</value></data>
+  <data name="actLinkAccSetting" xml:space="preserve"><value>Accounting link settings</value></data>
+  <data name="actVerifyNews" xml:space="preserve"><value>Verify the news</value></data>
+  <data name="actpordDefineVerificationWorkflow" xml:space="preserve"><value>Pre-invoice confirmation cycle definition</value></data>
+  <data name="muEmails" xml:space="preserve"><value>E-mail</value></data>
+  <data name="actAIPromptGroup" xml:space="preserve"><value>Suggested Question Group</value></data>
+  <data name="DyFrmActShowScores" xml:space="preserve"><value>Show points earned</value></data>
+  <data name="actDraftExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="actpordPreOrderOpr" xml:space="preserve"><value>Define the types of groups in pre order</value></data>
+  <data name="actLinkAccSettingBuyOrdPayType" xml:space="preserve"><value>Default setting of purchase invoice payment type in accounting</value></data>
+  <data name="actInternalNewMessage" xml:space="preserve"><value>Send new message</value></data>
+  <data name="actPasteAllRollPermissionToCenter" xml:space="preserve"><value>Transfer copied permissions from the center</value></data>
+  <data name="DyFrmActManageCenterForm" xml:space="preserve"><value>Management of communication form with centers</value></data>
+  <data name="TelegramActAddContact" xml:space="preserve"><value>Add a contact to telegram</value></data>
+  <data name="muLinkAccNoAvaran" xml:space="preserve"><value>Noavaran accounting software</value></data>
+  <data name="OrdActSendToAccLink" xml:space="preserve"><value>Send current invoice to system {0} (one invoice)</value></data>
+  <data name="PayrollActCopyDefaultItemsFromOther" xml:space="preserve"><value>Copy the default items of the selected user payroll to other users</value></data>
+  <data name="BordActBordLinkAccDetails" xml:space="preserve"><value>Show details of the buy order connection with the system {0}</value></data>
+  <data name="PordActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="OrdActGenerateRegisterCode" xml:space="preserve"><value>Get the register code</value></data>
+  <data name="DraftActVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actltrSendLetters" xml:space="preserve"><value>Letters ware sent</value></data>
+  <data name="actEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="actPayRollList" xml:space="preserve"><value>Show payroll list</value></data>
+  <data name="actChangeOrderOpr" xml:space="preserve"><value>Change in the type of the order</value></data>
+  <data name="PrdGpActUpdateAndUploadPrgGroup" xml:space="preserve"><value>Transfer photos of product groups to FTP</value></data>
+  <data name="actAISetting" xml:space="preserve"><value>AI Settings</value></data>
+  <data name="muCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="StsupActIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="CmpActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="OrdActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="actrptPrdSaleByGroupAndDate" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group</value></data>
+  <data name="FOMuChangePassword" xml:space="preserve"><value>Change password</value></data>
+  <data name="actSettingNumR" xml:space="preserve"><value>The counter setting</value></data>
+  <data name="muFOBaseInfo" xml:space="preserve"><value>Basic definitions</value></data>
+  <data name="actcUserLocation" xml:space="preserve"><value>User Location Dashboard</value></data>
+  <data name="actMission" xml:space="preserve"><value>Mission</value></data>
+  <data name="muDefineTimeAttendanceBase" xml:space="preserve"><value>Define time attendance base</value></data>
+  <data name="actDefineDiscountCode" xml:space="preserve"><value>Definition of discount code</value></data>
+  <data name="muPersons" xml:space="preserve"><value>Persons</value></data>
+  <data name="DyFrmActExitFromIsChecked" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="muDashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="actDefinecnvsPriority" xml:space="preserve"><value>Basic information of define the types of priorities</value></data>
+  <data name="OrdActSendAllCommToAccLink" xml:space="preserve"><value>Transfer all current invoice commissions to the {0} system</value></data>
+  <data name="actFundVerifyRequest" xml:space="preserve"><value>Petty Cash Confirmation</value></data>
+  <data name="muAction" xml:space="preserve"><value>Operations</value></data>
+  <data name="OrdActOrdImportExcel" xml:space="preserve"><value>Receive group of the invoices information from Excel file</value></data>
+  <data name="actrptParadox" xml:space="preserve"><value>Report the paradox on warehouse and sales</value></data>
+  <data name="actWareHouseMovementExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="actLinkedProductsDeleteByPrdGroup" xml:space="preserve"><value>Delete all related products of this product and its group members</value></data>
+  <data name="muBaseInfo" xml:space="preserve"><value>Basic Information</value></data>
+  <data name="WhActLinkedWhWithAcc" xml:space="preserve"><value>Establish a connection between CRM repositories and other systems</value></data>
+  <data name="muLeaveMission" xml:space="preserve"><value>Leave and mission</value></data>
+  <data name="actbordBuyOrder" xml:space="preserve"><value>Buy order</value></data>
+  <data name="actLinkAccSettingSyncWarehouse" xml:space="preserve"><value>Warehouse Sync</value></data>
+  <data name="DraftActImportFromAccLink" xml:space="preserve"><value>Receive warehouse draft sheets information from {0} system</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndCPCity" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and city</value></data>
+  <data name="actTspSetting" xml:space="preserve"><value>Communication settings with the Moadian system</value></data>
+  <data name="actKnlgEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="PordActImportFromAccLink" xml:space="preserve"><value>Receive pre-invoice information from the system {0}</value></data>
+  <data name="muRptPrdSale" xml:space="preserve"><value>Reports of the product sales</value></data>
+  <data name="muPrintSurveyQuestions" xml:space="preserve"><value>Print Empty Survey</value></data>
+  <data name="BordActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="actCalenderShamsi" xml:space="preserve"><value>Show solar calendar</value></data>
+  <data name="actSetSeoToSecondGroupsFromFG" xml:space="preserve"><value>Assigning SEO groups to subgroups of the selected main group</value></data>
+  <data name="actrptCmpOrderAcc" xml:space="preserve"><value>Report of unpaid claims</value></data>
+  <data name="Details" xml:space="preserve"><value>Details</value></data>
+  <data name="muArchiveProject" xml:space="preserve"><value>Archive the group of project</value></data>
+  <data name="actcnvsEdit" xml:space="preserve"><value>Show the selected conversation</value></data>
+  <data name="actSetCrmPictures" xml:space="preserve"><value>Image settings in CRM</value></data>
+  <data name="actLinkAccSettingGetItemList" xml:space="preserve"><value>Get the list of {0} of accounting software {1}</value></data>
+  <data name="muCostsheet" xml:space="preserve"><value>Costsheet</value></data>
+  <data name="DocActManageDocLinkAcc" xml:space="preserve"><value>Manage the connection and transfer of CRM warehouse receipts with other systems</value></data>
+  <data name="actDraftEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="actuLinkedProjectsForbiddenForUser" xml:space="preserve"><value>Communication between projects and users</value></data>
+  <data name="actUserLoginAllowedTimes" xml:space="preserve"><value>Determine the logon time</value></data>
+  <data name="FOMenuMyDamage" xml:space="preserve"><value>Damage received by me</value></data>
+  <data name="actbordDefineVerificationWorkflow" xml:space="preserve"><value>Define the buy order approval cycle</value></data>
+  <data name="muLinkAccSepidar" xml:space="preserve"><value>Sepidar accounting software</value></data>
+  <data name="PordActSendToAcc" xml:space="preserve"><value>Pre-order transfer to accounting</value></data>
+  <data name="FOMuAddProduct" xml:space="preserve"><value>Add items</value></data>
+  <data name="actLtrSendVerify" xml:space="preserve"><value>Verify the letter</value></data>
+  <data name="FOMenuCompany" xml:space="preserve"><value>Contact</value></data>
+  <data name="OrdActSendAllPayToAccLink" xml:space="preserve"><value>Transferring all current order payments to the {0} system</value></data>
+  <data name="actNewsExitFromIsFix" xml:space="preserve"><value>Exit confirmation and no change</value></data>
+  <data name="CmpActCompanyQuickRegisterDefSetting" xml:space="preserve"><value>Default settings for quick contact registration</value></data>
+  <data name="actOrdSetting" xml:space="preserve"><value>Go to form the default settings</value></data>
+  <data name="OrdActChargeSmsPanel" xml:space="preserve"><value>SMS panel charging</value></data>
+  <data name="actGetAllReceivedSMS" xml:space="preserve"><value>Read all incoming SMS</value></data>
+  <data name="FOMuSendTicket" xml:space="preserve"><value>Send a new ticket</value></data>
+  <data name="actluDepartment" xml:space="preserve"><value>Define the organizational internal units</value></data>
+  <data name="actltrLetterIndicator" xml:space="preserve"><value>Letters indicator</value></data>
+  <data name="actCtshDeleteAllCtshWithItemsAndValues" xml:space="preserve"><value>Delete the total costsheet</value></data>
+  <data name="PrdActLinkPrdWithAcc" xml:space="preserve"><value>Establish a connection between CRM products and {0} system</value></data>
+  <data name="InsertEx" xml:space="preserve"><value>Definition of a new {0}</value></data>
+  <data name="actordDefineLogo" xml:space="preserve"><value>Define the types of default invoice logos</value></data>
+  <data name="actWareHouseMovementExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="actrptChartUserActivity" xml:space="preserve"><value>Report analytical charts of the user activity</value></data>
+  <data name="actLinkAccSettingReferUserName" xml:space="preserve"><value>Setting the username and password of the marketer in the accounting software {0}</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndOrderOpr" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and type of order</value></data>
+  <data name="PrdActSendToAcc" xml:space="preserve"><value>Transfer the selected product to other systems</value></data>
+  <data name="actcknowledge" xml:space="preserve"><value>knowledge dashboard</value></data>
+  <data name="ActManageCityLinkAcc" xml:space="preserve"><value>Manage and transfer the connection of CRM cities to other systems</value></data>
+  <data name="OrdActSendPayToAcc" xml:space="preserve"><value>Transfer selected payment to accounting</value></data>
+  <data name="actcDyForms" xml:space="preserve"><value>Cardable forms</value></data>
+  <data name="TelegramActEditContactFromCompanyPerson" xml:space="preserve"><value>Edit and connect to other personnel</value></data>
+  <data name="muCommission" xml:space="preserve"><value>Commission</value></data>
+  <data name="DyFrmActExitFromIsCheckedSubform" xml:space="preserve"><value>Exit verify and lack of change the subform</value></data>
+  <data name="WareHouseMovementActDocLinkAccDetails" xml:space="preserve"><value>Show details of the sheet of movement between warehouse connection with the system {0}</value></data>
+  <data name="actCtshVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="DocActVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="DyFrmActSendDataToLinkDbObjectAll" xml:space="preserve"><value>Submit information to all fields connected to the form</value></data>
+  <data name="actrptOrdDeliverySchedule" xml:space="preserve"><value>Report showing orders based on schedule</value></data>
+  <data name="PrdActExportToAccLink" xml:space="preserve"><value>Send a group of CRM products to {0} system</value></data>
+  <data name="actemSendEmail" xml:space="preserve"><value>Send e-mail</value></data>
+  <data name="actPayRollUserCycleShowItemsFromOther" xml:space="preserve"><value>Show payroll of other courses</value></data>
+  <data name="CtmEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="DeleteDetails" xml:space="preserve"><value>Delete details</value></data>
+  <data name="actordSaleOrder" xml:space="preserve"><value>Sale order</value></data>
+  <data name="actLinkAccSettingGetExcelFileForLink" xml:space="preserve"><value>Download Excel file {1} for linking with accounting software {0}</value></data>
+  <data name="StsupActDeleteAllStsupWithDep" xml:space="preserve"><value>Delete the sheet along with all the Information</value></data>
+  <data name="FOMenuLinkedCompany" xml:space="preserve"><value>Related Contacts</value></data>
+  <data name="PordActExportToAccLink" xml:space="preserve"><value>Send group pre-invoices from CRM to {0} system</value></data>
+  <data name="mnuGoToPrdSpecificationFields" xml:space="preserve"><value>Definition of product specifications</value></data>
+  <data name="SurveyActShowScores" xml:space="preserve"><value>Show points earned</value></data>
+  <data name="DyFrmActCheckRequestSubForm" xml:space="preserve"><value>Request verify / change the subform</value></data>
+  <data name="muCustomerDb" xml:space="preserve"><value>Contact bank</value></data>
+  <data name="PordActSendAllFilesToAcc" xml:space="preserve"><value>Transfer all files to accounting</value></data>
+  <data name="muPayRolls" xml:space="preserve"><value>Payroll</value></data>
+  <data name="mnuGoToPrdSpecificationGroups" xml:space="preserve"><value>Product Specification Group Definition</value></data>
+  <data name="actstsupPrintFormat" xml:space="preserve"><value>Definition of the types of printing formats of the stock supply request sheet</value></data>
+  <data name="actSetSeoConfigsToAllPrds" xml:space="preserve"><value>Group SEO assignment to all products</value></data>
+  <data name="OtherSystemsActDownloadExcel" xml:space="preserve"><value>Download sample excel file</value></data>
+  <data name="actSetSeoConfigsToPrdBySG" xml:space="preserve"><value>Group SEO product allocation based on selected subgroup</value></data>
+  <data name="actSetSeoConfigsToPrdByFG" xml:space="preserve"><value>Group SEO product allocation based on the selected main group</value></data>
+  <data name="actDefineInternalMessagePriorityI" xml:space="preserve"><value>Define the types of internal message priorities</value></data>
+  <data name="actGetNewVersion" xml:space="preserve"><value>Get new version (download)</value></data>
+  <data name="OrdActTspTransfer" xml:space="preserve"><value>Communication with the Moadian system</value></data>
+  <data name="actCompany" xml:space="preserve"><value>Go to the contact information archive</value></data>
+  <data name="DraftActManageDraftLinkAcc" xml:space="preserve"><value>Manage the connection and transfer of CRM warehouse remittance sheets with other systems</value></data>
+  <data name="actGotoCompanyFormWithData" xml:space="preserve"><value>Go to form contacts information according to the extracted information</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpReferUser" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and marketer</value></data>
+  <data name="WareHouseMovementActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="FOMenuTopHeaderPrdGroup" xml:space="preserve"><value>Categories of products</value></data>
+  <data name="DyFrmActPrintSubForm" xml:space="preserve"><value>Print the subform</value></data>
+  <data name="actMobSetting" xml:space="preserve"><value>Mobile app settings</value></data>
+  <data name="actLtrReceiveVerifyWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actQuickRegisterCompany" xml:space="preserve"><value>Quickly record contact info</value></data>
+  <data name="FOMenuCrmIdealHelp" xml:space="preserve"><value>Knowledge Base</value></data>
+  <data name="actDefineEducation" xml:space="preserve"><value>Basic information of define the educations</value></data>
+  <data name="actSurvey" xml:space="preserve"><value>Surveys</value></data>
+  <data name="actpordDefinePayType" xml:space="preserve"><value>Definition of pre-order payment types</value></data>
+  <data name="muSms" xml:space="preserve"><value>SMS</value></data>
+  <data name="OrdActSendToAcc" xml:space="preserve"><value>Order transfer to accounting</value></data>
+  <data name="actDefinePrjCategory" xml:space="preserve"><value>Basic information of define the types of category in projects</value></data>
+  <data name="OrdActVerifyByWrokflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actbordBuyOrderPaymentIndicator" xml:space="preserve"><value>Buy order payment indicator</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpType" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and contact type</value></data>
+  <data name="FOMenuInquiryInsuranceValidate" xml:space="preserve"><value>Inquiry into the validity of insurance</value></data>
+  <data name="muBuyOrderBaseInfo" xml:space="preserve"><value>Basic definitions of buy orders</value></data>
+  <data name="OrdIndicatorActSendSms" xml:space="preserve"><value>Send SMS</value></data>
+  <data name="muLinkAccTarazSamaneh" xml:space="preserve"><value>Taraz samaneh accounting software</value></data>
+  <data name="actordPrintFormat" xml:space="preserve"><value>Define the print format in order</value></data>
+  <data name="actDefineTimeAttendanceBase" xml:space="preserve"><value>Basic information of define the time attendance base</value></data>
+  <data name="actpordDefinePreOrderType" xml:space="preserve"><value>Define the types in pre order</value></data>
+  <data name="actpordDefultSetting" xml:space="preserve"><value>Pre order default settings</value></data>
+  <data name="WhActManageWarehouseLinkAcc" xml:space="preserve"><value>Manage the connection and transfer of CRM warehouses with other systems</value></data>
+  <data name="muDailyActivityChart" xml:space="preserve"><value>Daily activity chart</value></data>
+  <data name="actrptcmpprsCalenderEvent" xml:space="preserve"><value>Report the contact calendar events</value></data>
+  <data name="CtshDyFieldActCopyDyFieldsToOtherGroup" xml:space="preserve"><value>Copy plugins from one group to another</value></data>
+  <data name="PordActGetPordFOLink" xml:space="preserve"><value>Get the show link in the club</value></data>
+  <data name="muLinkAccNoAvaranII" xml:space="preserve"><value>Noavaran II- summary accounting software</value></data>
+  <data name="actGetCtshItemNameExcelFile" xml:space="preserve"><value>Get the product name of the cost estimate sheet as an excel file</value></data>
+  <data name="actManageTellNumber" xml:space="preserve"><value>Manage and modify phone numbers according to city and province</value></data>
+  <data name="CmpActExportToAccLink" xml:space="preserve"><value>Send group of contacts from CRM to {0} system</value></data>
+  <data name="actBOrdGoToTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="muConversations" xml:space="preserve"><value>Conversations</value></data>
+  <data name="actManageCmpUP" xml:space="preserve"><value>Management the username and password to enter the contacts club</value></data>
+  <data name="actArchiveProject" xml:space="preserve"><value>Archive group of projects based on the items filtered</value></data>
+  <data name="muDyFormsRpt" xml:space="preserve"><value>Reports</value></data>
+  <data name="muSpecificSettings" xml:space="preserve"><value>Specific settings</value></data>
+  <data name="actScoreCalculation" xml:space="preserve"><value>Calculating points</value></data>
+  <data name="ProjectActDeleteAllCmpProjectsWithDepByTag" xml:space="preserve"><value>Delete &lt;span class='span-color-red'&gt;all projects&lt;/span&gt; with all information</value></data>
+  <data name="FOMenuCmpMnBgInfo" xml:space="preserve"><value>Wallet</value></data>
+  <data name="actemReceivedEmails" xml:space="preserve"><value>Receive email</value></data>
+  <data name="DraftActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="actCalendarEvents" xml:space="preserve"><value>Calendar management form</value></data>
+  <data name="actDefinecnvsTopics" xml:space="preserve"><value>Basic information of define the types of  conversation's topic</value></data>
+  <data name="actShowPendingOperations" xml:space="preserve"><value>Display operations in progress in the background</value></data>
+  <data name="WhActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="actOrderSetting" xml:space="preserve"><value>Sale order settings</value></data>
+  <data name="acthrDefineLeaveStayType" xml:space="preserve"><value>Define stay types in the mission</value></data>
+  <data name="FOMenuDiscountCode" xml:space="preserve"><value>Discount Code</value></data>
+  <data name="actLtrSendIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="actrptWrhsStockI" xml:space="preserve"><value>Warehouse inventory</value></data>
+  <data name="muLinkedUsersAndSecurity" xml:space="preserve"><value>Communications and Security</value></data>
+  <data name="actCenterLinkedI" xml:space="preserve"><value>Communication between centers</value></data>
+  <data name="actShowCrmIdealAPIUserInfo" xml:space="preserve"><value>Show the username and password of the web service user</value></data>
+  <data name="actResetPrdCode" xml:space="preserve"><value>Reset or rebuild the code of all products</value></data>
+  <data name="actGotoDefineProducts" xml:space="preserve"><value>Entry to form the product definition</value></data>
+  <data name="actLtrSendVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actcTicket" xml:space="preserve"><value>Ticket dashboard</value></data>
+  <data name="actLoadSupportSoft" xml:space="preserve"><value>Support software</value></data>
+  <data name="actShowVersionInfo" xml:space="preserve"><value>Show the version features</value></data>
+  <data name="actExit" xml:space="preserve"><value>Exit current user</value></data>
+  <data name="actFund" xml:space="preserve"><value>Revolving fund</value></data>
+  <data name="PayRollListActExitVerifyUserCycleAll" xml:space="preserve"><value>Exit confirmation and no change the all Payroll</value></data>
+  <data name="ProjectActDeleteAllCmpProjectsWithDep" xml:space="preserve"><value>Delete all projects with all information</value></data>
+  <data name="PrdActLinkedPrdWithAcc" xml:space="preserve"><value>Establish a connection and transfer information between CRM products and other systems</value></data>
+  <data name="actSalesTargeting" xml:space="preserve"><value>Sales Targeting</value></data>
+  <data name="actordDefineDeliveryTerm" xml:space="preserve"><value>Define the types of delivery in order</value></data>
+  <data name="actcSerach" xml:space="preserve"><value>Search dashboard</value></data>
+  <data name="actRptWrhsReserveStockI" xml:space="preserve"><value>Report of reserved warehouse inventory</value></data>
+  <data name="CmpActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="muProducts" xml:space="preserve"><value>Products</value></data>
+  <data name="acthrDailyMission" xml:space="preserve"><value>Daily</value></data>
+  <data name="DyFrmActCopyFields" xml:space="preserve"><value>Copy the fields</value></data>
+  <data name="actcStatus" xml:space="preserve"><value>Status dashboard</value></data>
+  <data name="FOMenuContactUs" xml:space="preserve"><value>Contact us</value></data>
+  <data name="actbordDefinePayType" xml:space="preserve"><value>Definition of buy order payment types</value></data>
+  <data name="actVerifyByWrokflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="LeaveEdit" xml:space="preserve"><value>Edit</value></data>
+  <data name="DraftActExportToAccLink" xml:space="preserve"><value>Send group warehouse drafts sheet from CRM to {0} system</value></data>
+  <data name="VerifyRequestHistory" xml:space="preserve"><value>Application records</value></data>
+  <data name="StsupActCanceledStockSupply" xml:space="preserve"><value>Cancellation of the sheet</value></data>
+  <data name="CmpActCmpImportExcel" xml:space="preserve"><value>Receive group of the contacts information from Excel file</value></data>
+  <data name="ProjectActDelete" xml:space="preserve"><value>Delete project</value></data>
+  <data name="actLinkAccSettingGetCrmCompanyGroup" xml:space="preserve"><value>Get the list of the first group of contacts for accounting software {0}</value></data>
+  <data name="PayRollListActDeleteUserCycleAll" xml:space="preserve"><value>Delete all payroll</value></data>
+  <data name="acthrHourlyLeave" xml:space="preserve"><value>Hourly</value></data>
+  <data name="muGoToStoreUrl" xml:space="preserve"><value>Enter the online store</value></data>
+  <data name="CmpActUpdateCompanyIVRCallBlockDateTime" xml:space="preserve"><value>Call time blocking</value></data>
+  <data name="actGetCtshPrdWordlFile" xml:space="preserve"><value>Get cost estimation sheet products as a Word file</value></data>
+  <data name="actrptWrhsStock" xml:space="preserve"><value>Report of the warehouse stock</value></data>
+  <data name="muProject" xml:space="preserve"><value>Project</value></data>
+  <data name="actScoreRules" xml:space="preserve"><value>Scoring rules</value></data>
+  <data name="actFundExitFromVerifyRequest" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="StsupActExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="OrdActCreateMobAppDomain" xml:space="preserve"><value>Creating a mobile application domain name</value></data>
+  <data name="DraftActSerialDownloadExcel" xml:space="preserve"><value>Download sample excel file</value></data>
+  <data name="actDefinePrsTitle" xml:space="preserve"><value>Basic information of define person title</value></data>
+  <data name="OrdActManageOrdLinkAcc" xml:space="preserve"><value>Manage the connection and transmission of CRM orders with other systems</value></data>
+  <data name="actDefinecmpCampaign" xml:space="preserve"><value>Definition of campaign types in companies</value></data>
+  <data name="actDefinecnvsStatus" xml:space="preserve"><value>Basic information of define  the project's status  in the  conversations</value></data>
+  <data name="actOrdGoToTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="actDefinecmpTitle" xml:space="preserve"><value>Basic information of define titles in the organization</value></data>
+  <data name="StsupActVerifyByWrokflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actShowFiles" xml:space="preserve"><value>Manage contact related files</value></data>
+  <data name="actBOrdIssueOrder" xml:space="preserve"><value>Issuance of sale order</value></data>
+  <data name="actrptCmpOrderStockAcc" xml:space="preserve"><value>Report of total inventory sales</value></data>
+  <data name="actrptPrdStockComm" xml:space="preserve"><value>Commercial products inventory report</value></data>
+  <data name="FOMuUploadFileFormat" xml:space="preserve"><value>Upload file formats</value></data>
+  <data name="actTransferToOtherUser" xml:space="preserve"><value>Transmission the setting to other user</value></data>
+  <data name="muSecurity" xml:space="preserve"><value>muSecurity</value></data>
+  <data name="FOMuShoppingCart" xml:space="preserve"><value>Shopping cart</value></data>
+  <data name="DocActVerifyDoc" xml:space="preserve"><value>Verify the warehouse receipt</value></data>
+  <data name="actSetSeoToSecondGroups" xml:space="preserve"><value>Assigning SEO groups to subgroups</value></data>
+  <data name="actordDefinePayGroupII" xml:space="preserve"><value>Definition of types of second order payment groups</value></data>
+  <data name="actIssueReturnedOrder" xml:space="preserve"><value>Issuing a return invoice from a current invoice</value></data>
+  <data name="actSendSms" xml:space="preserve"><value>Send sms</value></data>
+  <data name="actrptCompanyReport" xml:space="preserve"><value>Report of Contacts</value></data>
+  <data name="actDeletePrdSpecificationAll" xml:space="preserve"><value>Delete all attributes from all groups</value></data>
+  <data name="actcInternalTaskI" xml:space="preserve"><value>Internal messages</value></data>
+  <data name="muCartables" xml:space="preserve"><value>Cartables</value></data>
+  <data name="muBuyOrder" xml:space="preserve"><value>Buy Order</value></data>
+  <data name="actSetting" xml:space="preserve"><value>Basic information of define the profile of application owner</value></data>
+  <data name="actDefineInternalMessageGroup" xml:space="preserve"><value>Basic information of define the types of status of cycle in the Internal message</value></data>
+  <data name="actLinkAccSettingPreOrder" xml:space="preserve"><value>Default  pre-order settings in accounting</value></data>
+  <data name="actBackUp" xml:space="preserve"><value>Backup of the current information</value></data>
+  <data name="acthrHrmAppSettings" xml:space="preserve"><value>HRM mobile app settings</value></data>
+  <data name="muLetters" xml:space="preserve"><value>Secretariat Letters</value></data>
+  <data name="PordIndicatorActDeletePreOrder" xml:space="preserve"><value>Delete of selected pre-order</value></data>
+  <data name="OrdActSendPayToAccLink" xml:space="preserve"><value>Transfer payment of current order to system {0}</value></data>
+  <data name="actBOrdIssueDoc" xml:space="preserve"><value>Issuance Warehouse receipt</value></data>
+  <data name="actPayRollUserDefaultItems" xml:space="preserve"><value>Allocate default payroll items to user</value></data>
+  <data name="muSaleOrderBaseInfo" xml:space="preserve"><value>Basic order definitions</value></data>
+  <data name="actLinkAccSettingSyncProductGroup" xml:space="preserve"><value>Product group sync</value></data>
+  <data name="FOMenuMyScore" xml:space="preserve"><value>See my score</value></data>
+  <data name="actcmpChangeShpSettlementType" xml:space="preserve"><value>The possibility of changing the credit status of contacts</value></data>
+  <data name="actManageDeliverySchedule" xml:space="preserve"><value>Manage delivery schedule pattern</value></data>
+  <data name="actsmsShowSendTank" xml:space="preserve"><value>The tank sending SMS</value></data>
+  <data name="actTelegSetting" xml:space="preserve"><value>Telegram Settings</value></data>
+  <data name="actordIssueQuickSetting" xml:space="preserve"><value>Page layout settings</value></data>
+  <data name="TelegramProxy" xml:space="preserve"><value>Proxy</value></data>
+  <data name="OrdActShowDocLinkOrd" xml:space="preserve"><value>Show warehouse sheet and invoice relationship</value></data>
+  <data name="LeaveOrMissionExec" xml:space="preserve"><value>Fulfillment</value></data>
+  <data name="WareHouseMovementActImportFromAccLink" xml:space="preserve"><value>Receive the movement between the warehouses sheets information from {0} system</value></data>
+  <data name="acthrDefineLeaveVehicleType" xml:space="preserve"><value>Define vehicle types in the mission</value></data>
+  <data name="PrdActImportFromAccLink" xml:space="preserve"><value>Receive product information from the system {0}</value></data>
+  <data name="actLinkAccSettingSetBankToOrdPayType" xml:space="preserve"><value>Group insertion of check payment type in sales order based on bank name in two systems</value></data>
+  <data name="StsupActVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actordGuaranty" xml:space="preserve"><value>Define types of invoice Guarantes</value></data>
+  <data name="acthrHourlyMission" xml:space="preserve"><value>Hourly</value></data>
+  <data name="muSmartCommunication" xml:space="preserve"><value>Smart communication</value></data>
+  <data name="actGotoCmps" xml:space="preserve"><value>Go to contacts form</value></data>
+  <data name="actcmsManageFooter" xml:space="preserve"><value>Build and manage custom footer</value></data>
+  <data name="actOrderGroupVerifyExit" xml:space="preserve"><value>Exit of confirm group of orders that they are filtered</value></data>
+  <data name="actSalesTargetReport" xml:space="preserve"><value>Sales Target Report</value></data>
+  <data name="actpordDefineDiscountPolicy" xml:space="preserve"><value>Defining types of pre-order discount policies</value></data>
+  <data name="muLinkAcc" xml:space="preserve"><value>{0} accounting software</value></data>
+  <data name="FOMuCompanyChangePassword" xml:space="preserve"><value>Change password</value></data>
+  <data name="FOMenuCKnowledge" xml:space="preserve"><value>knowledge dashboard</value></data>
+  <data name="muPreOrder" xml:space="preserve"><value>Pre Order</value></data>
+  <data name="ReportDesignerWeb" xml:space="preserve"><value>Downlad the designer of report's web</value></data>
+  <data name="actCmpIIDefSysSetting" xml:space="preserve"><value>Go to the default settings</value></data>
+  <data name="mnuEmailReceive" xml:space="preserve"><value>Receive email</value></data>
+  <data name="OtherSystemsActDeleteImportedInfo" xml:space="preserve"><value>Delete info transferred from software {0} to CRM</value></data>
+  <data name="actpordDefineDeliveryTerm" xml:space="preserve"><value>Define the types of delivery in pre-order</value></data>
+  <data name="actPordGoToTelegram" xml:space="preserve"><value>Telegram</value></data>
+  <data name="actuLinkedOprAccessForUser" xml:space="preserve"><value>Communication between users and various types of pre-orders and sales and purchase orders</value></data>
+  <data name="LeaveDelete" xml:space="preserve"><value>Delete</value></data>
+  <data name="actRegisterCompany" xml:space="preserve"><value>Register contact information</value></data>
+  <data name="muLinkAccSoftware" xml:space="preserve"><value>{0} software</value></data>
+  <data name="WareHouseMovementActSendToAcc" xml:space="preserve"><value>Transfer of tab of move between warehouses to accounting</value></data>
+  <data name="FOMenuReports" xml:space="preserve"><value>Reports</value></data>
+  <data name="actCurrencyUnit" xml:space="preserve"><value>Defint the types of currency unit of product</value></data>
+  <data name="actordDefinePayType" xml:space="preserve"><value>Definition of order payment types</value></data>
+  <data name="FOMenuSetting" xml:space="preserve"><value>Settings</value></data>
+  <data name="OrdActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="muShowDetailsUserCount" xml:space="preserve"><value>Show details</value></data>
+  <data name="actOrdExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="actpordPreOrderPaymentIndicator" xml:space="preserve"><value>Pre order payment Indicator</value></data>
+  <data name="FOMenuLoanPayments" xml:space="preserve"><value>Loan payments</value></data>
+  <data name="BordActSendToAcc" xml:space="preserve"><value>Buy order transfer to accounting</value></data>
+  <data name="actUserRoll" xml:space="preserve"><value>Define the types of user roles</value></data>
+  <data name="actDefineProjectFieldTitle" xml:space="preserve"><value>Entry to define and set  information tree's fields</value></data>
+  <data name="FOMenuInquiryInsurancePolicies" xml:space="preserve"><value>Inquiry about the rates of different types of insurance policies</value></data>
+  <data name="muHelpTools" xml:space="preserve"><value>Tools - Help</value></data>
+  <data name="acthrDailyLeave" xml:space="preserve"><value>Daily</value></data>
+  <data name="actGoPrdDefineProducts" xml:space="preserve"><value>Go to product definition form</value></data>
+  <data name="CmpActAutoIssueCalcPreOrder" xml:space="preserve"><value>Automatic pre-order issuance</value></data>
+  <data name="FOMenuCompanyMoneyBag" xml:space="preserve"><value>Wallet</value></data>
+  <data name="actrptWrhsReserveStock" xml:space="preserve"><value>Reserved warehouse inventory</value></data>
+  <data name="PordActSendAllPayToAcc" xml:space="preserve"><value>Transfer all payments to accounting</value></data>
+  <data name="actuLinkedUserPositions" xml:space="preserve"><value>Communication of organizational positions with each other</value></data>
+  <data name="SmsSendActRecieveFileFromTelegram" xml:space="preserve"><value>Recieve the file from telegram</value></data>
+  <data name="actsmsReceiveSms" xml:space="preserve"><value>SMS is received</value></data>
+  <data name="actDeleteAllCmpWithDepFormWithData" xml:space="preserve"><value>Delete all contacts info according to the extracted information</value></data>
+  <data name="actordIssueQuickExitSetting" xml:space="preserve"><value>Exit page layout settings</value></data>
+  <data name="actSmsSetting" xml:space="preserve"><value>Automatic SMS settings</value></data>
+  <data name="actPreOrderIndicator" xml:space="preserve"><value>Pre order indicator</value></data>
+  <data name="muBuySellWh" xml:space="preserve"><value>Buy - Sell - Warehouse</value></data>
+  <data name="BordActImportFromAcclink" xml:space="preserve"><value>Receive buy order information from {0} system</value></data>
+  <data name="actDocIndicator" xml:space="preserve"><value>Warehouse indicator</value></data>
+  <data name="ReceivedSMSActUpdateLinkedCmp" xml:space="preserve"><value>Update communication with contacts</value></data>
+  <data name="actDefineCnvsSalesFunnelSteps" xml:space="preserve"><value>Setting up the sales funnel of the project progress model</value></data>
+  <data name="FOMenuTopHeaderLogin" xml:space="preserve"><value>Login</value></data>
+  <data name="LeaveExitVerify" xml:space="preserve"><value>Exit confirmation</value></data>
+  <data name="actBOrdExitFromIsFix" xml:space="preserve"><value>Exit confirmation and no change</value></data>
+  <data name="actuLinkedDyFormAccessForUser" xml:space="preserve"><value>Communication between users and the forms of the form builder</value></data>
+  <data name="actDefineProvince" xml:space="preserve"><value>Basic information of define the provinces</value></data>
+  <data name="CmpActImportFromAccLink" xml:space="preserve"><value>Receive contact information from the system {0}</value></data>
+  <data name="actcForget" xml:space="preserve"><value>Forget dashboard</value></data>
+  <data name="actDefinecnvsStatusGroups" xml:space="preserve"><value>Basic information of define the types of progress model  in the project's conversations</value></data>
+  <data name="DyFrmActCheckWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actDefineCurrencyUnitRate" xml:space="preserve"><value>Define the exchange currency rate</value></data>
+  <data name="OrdActExportToAccLink" xml:space="preserve"><value>Send group invoices from CRM to {0} system</value></data>
+  <data name="CmpActSendCmpUPBySMS" xml:space="preserve"><value>Send the username and password of the contact club via SMS</value></data>
+  <data name="actrptCallCountInCompanyType" xml:space="preserve"><value>Report the number of calls according to type of contact</value></data>
+  <data name="actLeaveExecBeforeNowAllUser" xml:space="preserve"><value>Fulfillment of leave and past missions of all users</value></data>
+  <data name="OrdActShowValidityItems" xml:space="preserve"><value>Show validity products</value></data>
+  <data name="CmpActShowCmpFromOtherSystem" xml:space="preserve"><value>Show information from {0}</value></data>
+  <data name="actpordPrintFormat" xml:space="preserve"><value>Define the print format in pre order</value></data>
+  <data name="actrptCmpAccountingBalance" xml:space="preserve"><value>Contact general account balance report</value></data>
+  <data name="CmpActCalcCmpScore" xml:space="preserve"><value>Calculation of audience points</value></data>
+  <data name="FOMuTicket" xml:space="preserve"><value>Tickets</value></data>
+  <data name="actrptWrhsPrdCardex" xml:space="preserve"><value>Report of the cardex of warehouse product</value></data>
+  <data name="muDyForms" xml:space="preserve"><value>Form builder</value></data>
+  <data name="muSendRequest" xml:space="preserve"><value>Send request</value></data>
+  <data name="FOMenuPreOrder" xml:space="preserve"><value>Pre order</value></data>
+  <data name="actuLinkedRolls" xml:space="preserve"><value>Communication of user roles with each other</value></data>
+  <data name="actuLinkedUsers" xml:space="preserve"><value>Communication users with each other</value></data>
+  <data name="DyFrmActFoSysPart" xml:space="preserve"><value>Go to the part used in Front Office</value></data>
+  <data name="muCloseForm" xml:space="preserve"><value>Close form</value></data>
+  <data name="StsupActIssueBuyOrder" xml:space="preserve"><value>Issuing a buy order</value></data>
+  <data name="actPayRollUserCycleVerify" xml:space="preserve"><value>Verify the payroll</value></data>
+  <data name="actAboutMe" xml:space="preserve"><value>About Software</value></data>
+  <data name="TelegramActGetTelegramContacts" xml:space="preserve"><value>Get a list of telegram contacts</value></data>
+  <data name="actDefinePrjGroup" xml:space="preserve"><value>Basic information of define group in the project</value></data>
+  <data name="actDefinePrjGrade" xml:space="preserve"><value>Basic information of define grade in the project</value></data>
+  <data name="actHumanResourceBaseInfo" xml:space="preserve"><value>Basic definitions</value></data>
+  <data name="PrdValidityIndicatorActSendEmail" xml:space="preserve"><value>Send email</value></data>
+  <data name="muReports" xml:space="preserve"><value>Reports</value></data>
+  <data name="actLeave" xml:space="preserve"><value>Leave</value></data>
+  <data name="UserActManageUserLinkAcc" xml:space="preserve"><value>Manage the connection and transmission of CRM user with other systems</value></data>
+  <data name="actwhDoc" xml:space="preserve"><value>Entry the product with the warehouse document</value></data>
+  <data name="actrptOrdItemsDeliverySchedule" xml:space="preserve"><value>Report showing schedule based on products</value></data>
+  <data name="muShow" xml:space="preserve"><value>Show</value></data>
+  <data name="muHelp" xml:space="preserve"><value>Help</value></data>
+  <data name="muFund" xml:space="preserve"><value>Fund</value></data>
+  <data name="muFile" xml:space="preserve"><value>File</value></data>
+  <data name="muExit" xml:space="preserve"><value>Exit</value></data>
+  <data name="muCall" xml:space="preserve"><value>Phone calls</value></data>
+  <data name="actsmsUserSendCredit" xml:space="preserve"><value>Allocate the credit to send sms to the users</value></data>
+  <data name="DyFrmActReSendAutoMessages" xml:space="preserve"><value>Resend automatic messages</value></data>
+  <data name="actsmsShowGSMSendTank" xml:space="preserve"><value>SMS - Show tank send SMS</value></data>
+  <data name="actFOSetting" xml:space="preserve"><value>Settings</value></data>
+  <data name="actSetSeoConfigsToAllFG" xml:space="preserve"><value>SEO group assignment to all major groups</value></data>
+  <data name="actSetSeoConfigsToAllSG" xml:space="preserve"><value>Assign SEO group to all subgroups</value></data>
+  <data name="OtherSystemsActLinkCountryWithAcc" xml:space="preserve"><value>Establish a connection between CRM countries with the software {0}</value></data>
+  <data name="DyFrmActCheckRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="actpordDefinePayGroupI" xml:space="preserve"><value>Definition of types of first payment groups for pre-order</value></data>
+  <data name="muPayrollFund" xml:space="preserve"><value>Commission - Fund - salary</value></data>
+  <data name="muSelectSysPartDyForm" xml:space="preserve"><value>Form selection</value></data>
+  <data name="OtherSystemsActLinkUserWithAcc" xml:space="preserve"><value>Establish a connection between CRM users with the software {0}</value></data>
+  <data name="actcmsManageWidget" xml:space="preserve"><value>Managing the creation of widgets</value></data>
+  <data name="muCompany" xml:space="preserve"><value>Contact</value></data>
+  <data name="actNewsDeleteAllLikes" xml:space="preserve"><value>Delete all likes / dislikes</value></data>
+  <data name="muKaraAfzar" xml:space="preserve"><value>KaraAfzar Ideal</value></data>
+  <data name="actRollPermission" xml:space="preserve"><value>Assignment of permissions for each role</value></data>
+  <data name="muSettings" xml:space="preserve"><value>Concessionaire</value></data>
+  <data name="actLtrReceiveExitFromIsVerify" xml:space="preserve"><value>Exit confirmation and no change</value></data>
+  <data name="muRptWareHouse" xml:space="preserve"><value>Warehouse</value></data>
+  <data name="DocActVerifyWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="PrjActDefinecnvsStatusGroups" xml:space="preserve"><value>Entry to define the progress model</value></data>
+  <data name="FOMuLinkedCompany" xml:space="preserve"><value>Related contacts</value></data>
+  <data name="actLtrSendExitFromIsVerify" xml:space="preserve"><value>Exit confirmation and no change</value></data>
+  <data name="FOMenuSupport" xml:space="preserve"><value>Support</value></data>
+  <data name="actrptPrdSaleByGroupAndDateAndcmpGSGroup" xml:space="preserve"><value>Reports of the sales number and rial gross of product in range time and desired product group and group and subgroup</value></data>
+  <data name="BordActSendAllPayToAccLink" xml:space="preserve"><value>Transferring all current buy order payments to the {0} system</value></data>
+  <data name="FOMenuSurveys" xml:space="preserve"><value>Surveys</value></data>
+  <data name="actordDefultSetting" xml:space="preserve"><value>Order Defult Settings</value></data>
+  <data name="actFixOrderOprWithoutNumber" xml:space="preserve"><value>Modify the order type without change in number</value></data>
+  <data name="muPreOrderBaseInfo" xml:space="preserve"><value>Basic pre-order definitions</value></data>
+  <data name="FOMuCompanyMessages" xml:space="preserve"><value>My messages</value></data>
+  <data name="actLinkAccSettingGetPrdFirstGroup" xml:space="preserve"><value>Get the list of the first group of products accounting software {0}</value></data>
+  <data name="actAddPrdValidityToPrjPrdH" xml:space="preserve"><value>Inserting validity items in service details</value></data>
+  <data name="TelegramActDeleteTelegramChat" xml:space="preserve"><value>Delete all messages from telegram</value></data>
+  <data name="actLinkAccSettingGetCmpGroupII" xml:space="preserve"><value>Get the the contacts (second) group of accounting software {0}</value></data>
+  <data name="actwhDraft" xml:space="preserve"><value>Exit the product from the warehouse with draft</value></data>
+  <data name="actcmpChangeOperation" xml:space="preserve"><value>The displacement and updates the information</value></data>
+  <data name="muMonthlyOrdChart" xml:space="preserve"><value>Monthly sales management chart</value></data>
+  <data name="actLtrSendEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="actLinkAccSettingRetOrdPayType" xml:space="preserve"><value>Default setting of returned sales invoice payment type in accounting</value></data>
+  <data name="actCtshExitFromIsFix" xml:space="preserve"><value>Exit verify and lack of change</value></data>
+  <data name="actDefinecmpSubGroups" xml:space="preserve"><value>Basic information of define subgroup in the organization</value></data>
+  <data name="actEmailAddNewDefaultBodyText" xml:space="preserve"><value>Email - Define default email texts</value></data>
+  <data name="actsmsGSMSetting" xml:space="preserve"><value>GSM modem connection settings in sms</value></data>
+  <data name="actTestFpt" xml:space="preserve"><value>Test FTP</value></data>
+  <data name="OtherSystemsActLinkProvinceWithAcc" xml:space="preserve"><value>Establish a connection between CRM provinces with the software {0}</value></data>
+  <data name="actrptWrhsPrdMinStockI" xml:space="preserve"><value>Minimum inventory</value></data>
+  <data name="muCmpFiles" xml:space="preserve"><value>Contact related files</value></data>
+  <data name="FOMuSurvey" xml:space="preserve"><value>Survey</value></data>
+  <data name="muSaleOrder" xml:space="preserve"><value>Order</value></data>
+  <data name="WareHouseMovementActManageDocLinkAcc" xml:space="preserve"><value>Manage the connection and transfer of CRM sheets of movement between warehouse  with other systems</value></data>
+  <data name="actOtherMobSetting" xml:space="preserve"><value>Settings of other mobile applications</value></data>
+  <data name="FOMenuTopHeaderRegister" xml:space="preserve"><value>Register</value></data>
+  <data name="actBOrdEditFormatDesign" xml:space="preserve"><value>Change in the choice print format</value></data>
+  <data name="OrdActSendCommToAccLink" xml:space="preserve"><value>Transfer current invoice commission to the {0} system</value></data>
+  <data name="DyFormImportExcel" xml:space="preserve"><value>Import Excel</value></data>
+  <data name="DraftActSendToAcc" xml:space="preserve"><value>Transfer of warehouse (draft) to accounting</value></data>
+  <data name="actDefinecmpGroups" xml:space="preserve"><value>Basic information of define group in the organization</value></data>
+  <data name="actVerifyPreOrder" xml:space="preserve"><value>Verify the pre order</value></data>
+  <data name="actbordBuyOrderOpr" xml:space="preserve"><value>Definition of buy order types</value></data>
+  <data name="actdyDefineFormWorkflows" xml:space="preserve"><value>Define the workflows</value></data>
+  <data name="actDeletePrdSpecificationByPrd" xml:space="preserve"><value>Remove all features of this product</value></data>
+  <data name="muTools" xml:space="preserve"><value>Tools</value></data>
+  <data name="FOMuTickets" xml:space="preserve"><value>Tickets</value></data>
+  <data name="muScore" xml:space="preserve"><value>Scoring</value></data>
+  <data name="WorkFlowCancelRequest" xml:space="preserve"><value>Cancellation</value></data>
+  <data name="actDeleteAllItems" xml:space="preserve"><value>Delete entirely the order</value></data>
+  <data name="muOrder" xml:space="preserve"><value>Sales Order</value></data>
+  <data name="actLinkAccSettingGetUsers" xml:space="preserve"><value>Get the list of users of accounting software {0}</value></data>
+  <data name="muFoRpt" xml:space="preserve"><value>Reports</value></data>
+  <data name="muForms" xml:space="preserve"><value>Forms of the form builder</value></data>
+  <data name="TelegramActDeleteLocalTelegramChat" xml:space="preserve"><value>Delete all messages from local telegram</value></data>
+  <data name="TelegramActDeleteLocalTelegramInfo" xml:space="preserve"><value>Delete all info from the local telegram</value></data>
+  <data name="LeaveRequestsHistory" xml:space="preserve"><value>View request records</value></data>
+  <data name="DocActIssueDocFirstQtyPeriodFromAcc" xml:space="preserve"><value>Issuance of document of the first inventory of the period</value></data>
+  <data name="actDefineSalesTarget" xml:space="preserve"><value>Define Sales Targeting</value></data>
+  <data name="actHumanResource" xml:space="preserve"><value>Human Resource</value></data>
+  <data name="actPayRollItems" xml:space="preserve"><value>Definition of payroll items</value></data>
+  <data name="actordSurvey" xml:space="preserve"><value>Surveys</value></data>
+  <data name="actcTimeAttendance" xml:space="preserve"><value>Time attendance dashboard</value></data>
+  <data name="actPasteAllRoll" xml:space="preserve"><value>Transmission the access copied from role</value></data>
+  <data name="DocActImportFromAcc" xml:space="preserve"><value>Receive information from other systems</value></data>
+  <data name="actPordExitIsFixed" xml:space="preserve"><value>Exiting non-editing mode</value></data>
+  <data name="OrdPayindicatorActRegisterpayBankDocNumber" xml:space="preserve"><value>Bank serial number registration</value></data>
+  <data name="actuuAddBLNumber" xml:space="preserve"><value>User add the number to blacklist</value></data>
+  <data name="actLinkAccSettingSetBankToPordPayType" xml:space="preserve"><value>Group insertion of the check payment type in the pre-order based on the bank name in two systems</value></data>
+  <data name="StsupActVerifyStockSupply" xml:space="preserve"><value>Verify of the stock supply request sheet</value></data>
+  <data name="actExportResultToExcel" xml:space="preserve"><value>Download the result in an Excel file</value></data>
+  <data name="actArchiveProjectExit" xml:space="preserve"><value>Exit of group archive  of projects based on the items filtered</value></data>
+  <data name="actrptCallCountInGroup" xml:space="preserve"><value>Report the number of calls according to group and subgroup</value></data>
+  <data name="TelegramActGetMessageFromTelegramManual" xml:space="preserve"><value>Get the message from telegram to manually</value></data>
+  <data name="actLinkAccSettingSyncProductSecondGroup" xml:space="preserve"><value>Synchronize product second groups</value></data>
+  <data name="actDefineUserMoneyBag" xml:space="preserve"><value>User wallet</value></data>
+  <data name="mnNotUseWithoutCooordination" xml:space="preserve"><value>Operation (without coordination is not used)</value></data>
+  <data name="FOMuHomePage" xml:space="preserve"><value>Home page</value></data>
+  <data name="actChangePassword" xml:space="preserve"><value>Change password</value></data>
+  <data name="actBOrdGotoDefineProducts" xml:space="preserve"><value>Entry to form the product definition</value></data>
+  <data name="actPayRollPrintFormat" xml:space="preserve"><value>Definition of payroll print format</value></data>
+  <data name="actctshManageDyField" xml:space="preserve"><value>Build and manage plugins</value></data>
+  <data name="OtherSystemsActLinkPrdWithAcc" xml:space="preserve"><value>Establish a connection between CRM products and {0} software</value></data>
+  <data name="DraftActVerifyWithWorkflow" xml:space="preserve"><value>Verification by cycle</value></data>
+  <data name="actPayRollUserCycleVerifyExit" xml:space="preserve"><value>Exit confirmation and no change</value></data>
+  <data name="actLtrReceiveVerifyRequest" xml:space="preserve"><value>Request verify / change</value></data>
+  <data name="PrdValidityIndicatorActSendSms" xml:space="preserve"><value>Send SMS</value></data>
+  <data name="actcDaily" xml:space="preserve"><value>Daily dashboard</value></data>
+  <data name="actLinkAccSettingGetPrdSecondGroup" xml:space="preserve"><value>Get the list of the second group of products accounting software {0}</value></data>
+  <data name="PrdActExportToAcc" xml:space="preserve"><value>Transfer information from CRM to other systems</value></data>
+  <data name="actReporter" xml:space="preserve"><value>Designer of report</value></data>
+  <data name="muLinkedUsers" xml:space="preserve"><value>Users relations</value></data>
+  <data name="actWareHouseMovementIsFixed" xml:space="preserve"><value>No editing</value></data>
+  <data name="actrptWrhsPrdCardexI" xml:space="preserve"><value>Warehouse cardex</value></data>
+  <data name="PordActSendAllPayToAccLink" xml:space="preserve"><value>Transferring all current pre-order payments to the {0} system</value></data>
+  <data name="actDefineUsers" xml:space="preserve"><value>Define user</value></data>
+  <data name="ActManageProvinceLinkAcc" xml:space="preserve"><value>Manage and transfer the connection of CRM provinces to other systems</value></data>
+  <data name="actordOrderOpr" xml:space="preserve"><value>Define the types of order</value></data>
+  <data name="actcDailyTel" xml:space="preserve"><value>Daily tel dashboard</value></data>
+  <data name="actAIUserCredit" xml:space="preserve"><value>Users'' AI Assistant Credit</value></data>
+  <data name="actemSendedEmails" xml:space="preserve"><value>E-mails were sent</value></data>
+  <data name="muShowCIVoiceRecordInformation" xml:space="preserve"><value>muShowCIVoiceRecordInformation</value></data>
+  <data name="actLinkAccSettingGetPrdPriceGroup" xml:space="preserve"><value>Get sales price list from accounting software {0}</value></data>
+  <data name="actemReceiveEmail" xml:space="preserve"><value>Email is received</value></data>
+  <data name="actScoresReport" xml:space="preserve"><value>Scoring Report</value></data>
+  <data name="muFO" xml:space="preserve"><value>Contact club and shop</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="muGeneralReports" xml:space="preserve"><value>General reports</value></data>
+  <data name="Menu" xml:space="preserve"><value>Menu</value></data>
+  <data name="actOrdGotoDefineProducts" xml:space="preserve"><value>Entry to form the product definition</value></data>
+  <data name="actrptCallCountInCompanyPresentation" xml:space="preserve"><value>Report the number of calls according to presentation with contact</value></data>
+  <data name="PordActManagePordLinkAcc" xml:space="preserve"><value>Manage the connection and transmission of CRM pre-orders with other systems</value></data>
+  <data name="actpordDeliveryTime" xml:space="preserve"><value>Define the delivery time in pre order</value></data>
+  <data name="BordActSendPayToAccLink" xml:space="preserve"><value>Payment transfer of the current buy order to the system {0}</value></data>
+  <data name="muDailyOrdChart" xml:space="preserve"><value>Daily sales management chart</value></data>
+  <data name="mnuSReport" xml:space="preserve"><value>Reports</value></data>
+  <data name="actctshCostsheet" xml:space="preserve"><value>Issuance of costsheet</value></data>
+  <data name="BordActSendPayToAcc" xml:space="preserve"><value>Transfer selected payment to accounting</value></data>
+  <data name="actcBookMarks" xml:space="preserve"><value>Bookmark dashboard</value></data>
+  <data name="DyFrmActCheckDyForm" xml:space="preserve"><value>Verify the form</value></data>
+  <data name="actDefineCash" xml:space="preserve"><value>Definition of fund types</value></data>
+  <data name="actDefineCity" xml:space="preserve"><value>Basic information of define the cities</value></data>
+  <data name="actDefineLogo" xml:space="preserve"><value>Define of the default logos</value></data>
+  <data name="muOtherSys" xml:space="preserve"><value>Software {0}</value></data>
+  </root>

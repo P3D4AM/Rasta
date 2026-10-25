@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>General</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>../../crm-project/bin/System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>../../crm-project/bin/System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebaseAdmin">
+      <HintPath>../../crm-project/bin/FirebaseAdmin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>../../crm-project/bin/System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>../../../../.dotnet/shared/Microsoft.NETCore.App/8.0.32/Microsoft.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../../crm-project/bin/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>../../crm-project/bin/Google.Apis.Auth.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,29 @@
+using System;
+using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics;
+
+namespace Mobile.SmsFor;
+
+[GeneratedCode("System.Web.Services", "4.8.4084.0")]
+[DebuggerStepThrough]
+[DesignerCategory("code")]
+public class sms_count_bank_genderCompletedEventArgs : AsyncCompletedEventArgs
+{
+	private object[] results;
+
+	public array_tree[] Result
+	{
+		get
+		{
+			((AsyncCompletedEventArgs)this).RaiseExceptionIfNecessary();
+			return (array_tree[])results[0];
+		}
+	}
+
+	internal sms_count_bank_genderCompletedEventArgs(object[] results, Exception exception, bool cancelled, object userState)
+		: base(exception, cancelled, userState)
+	{
+		this.results = results;
+	}
+}
