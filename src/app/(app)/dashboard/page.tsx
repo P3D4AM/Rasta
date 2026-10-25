@@ -1,26 +1,35 @@
 "use client";
 
+/**
+ * داشبورد رستا — بازسازی Cartables/HomePage.cshtml محصول CRMIdeal
+ *
+ * ساختار اصلی:
+ *  ۱) quick-access-box: هشت قرص دسترسی سریع (StyHomePage.css:
+ *     600px وسط‌چین، bg #e7effc، radius 50px، padding 12px 20px)
+ *  ۲) تب‌های نمودار (فعالیت روزانه / سفارش روزانه / سفارش ماهانه)
+ *     معادل _PartialChartDailyActivity و ... در ناحیه Cartables
+ *  ۳) box-PublicNotice: اطلاعیه سامانه (گوشه پایین، border #8598be)
+ *  ۴) کارت‌های KPI و کارتابل شخصی (ادامه صفحه)
+ */
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Building2, Target, PhoneCall, ClipboardList, Package, TrendingUp,
-  AlertTriangle, FileText, Users, ArrowLeft, Activity as ActivityIcon,
+  Building2, Target, PhoneCall, ClipboardList, TrendingUp,
+  AlertTriangle, ArrowLeft, Activity as ActivityIcon, Megaphone,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PageHeader } from "@/components/rasta/page-header";
+import { QuickAccessBox } from "@/components/rasta/app-shell";
 import { StatusBadge } from "@/components/rasta/status-badge";
 import { useList, api } from "@/hooks/use-list";
-import { formatMoney, formatDate, formatDateTime } from "@/lib/format";
-import { formatJalaliLong, toPersianDigits, JALALI_MONTHS, gregorianToJalali } from "@/lib/jalali";
-import {
-  ACTIVITY_TYPE_LABELS, DEAL_STAGE_LABELS, DEAL_STAGES,
-} from "@/lib/constants";
+import { formatMoney, formatDateTime } from "@/lib/format";
+import { toPersianDigits } from "@/lib/jalali";
+import { ACTIVITY_TYPE_LABELS } from "@/lib/constants";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type DashboardData = {
   kpis: {
@@ -43,8 +52,18 @@ type TaskRow = {
   status: string; company: { name: string } | null;
 };
 
+/* تب‌های نمودار — معادل تب‌های Charts در صفحه اصلی محصول */
+const CHART_TABS = [
+  { key: "sales", label: "مدیریت فروش روزانه" },
+  { key: "activity", label: "فعالیت روزانه" },
+  { key: "monthly", label: "مدیریت فروش ماهانه" },
+] as const;
+
+type ChartTabKey = (typeof CHART_TABS)[number]["key"];
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [chartTab, setChartTab] = useState<ChartTabKey>("sales");
   const { toast } = useToast();
   const myTasks = useList<TaskRow>("/api/tasks?status=OPEN&scope=mine&pageSize=5");
 
@@ -63,123 +82,135 @@ export default function DashboardPage() {
     }
   }
 
-  const today = new Date();
-  const [, jm] = gregorianToJalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
-
   const kpi = data?.kpis;
-  const pipeline = DEAL_STAGES.map((s) => ({
-    stage: s,
-    label: DEAL_STAGE_LABELS[s],
-    count: data?.stages[s]?.count ?? 0,
-    sum: data?.stages[s]?.sum ?? 0,
-  }));
+
+  /* دادهٔ نمودار بر اساس تب انتخابی (مثل DrawChartDailyOrders) */
+  const chartData =
+    chartTab === "sales"
+      ? (data?.salesByMonth ?? []).map((m) => ({ name: m.label, value: m.total }))
+      : chartTab === "monthly"
+      ? (data?.salesByMonth ?? []).map((m) => ({ name: m.label, value: m.total }))
+      : (data?.recentActivities ?? []).slice(0, 8).map((a) => ({
+          name: a.subject.slice(0, 14),
+          value: 1,
+        }));
 
   return (
-    <div>
-      <PageHeader
-        title="داشبورد"
-        subtitle={`${formatJalaliLong(today)} — ${JALALI_MONTHS[jm - 1]}`}
-        actions={
-          <Button asChild variant="outline" size="sm">
-            <Link href="/activities">
-              <PhoneCall className="w-4 h-4 me-1" />
-              ثبت فعالیت
-            </Link>
-          </Button>
-        }
-      />
+    <div className="relative pb-16">
+      {/* ═══ ۱) دسترسی سریع — قلب صفحه اصلی CRMIdeal ═══ */}
+      <QuickAccessBox />
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard icon={Building2} label="کل مشتریان" value={kpi ? toPersianDigits(kpi.totalCompanies) : "…"} sub={kpi ? `${toPersianDigits(kpi.activeCompanies)} فعال` : ""} tone="emerald" />
-        <KpiCard icon={Target} label="فرصت‌های باز" value={kpi ? toPersianDigits(kpi.openDeals) : "…"} sub={kpi ? `ارزش: ${formatMoney(kpi.openDealsValue)} ریال` : ""} tone="sky" />
-        <KpiCard icon={TrendingUp} label="فروش موفق این ماه" value={kpi ? toPersianDigits(kpi.wonThisMonth) : "…"} sub={kpi ? `${formatMoney(kpi.wonThisMonthValue)} ریال` : ""} tone="amber" />
+      {/* ═══ ۲) تب نمودارها (Rep-p-r-l-10 → نمودار در تب) ═══ */}
+      <section className="crm-section mt-10">
+        <div className="crm-section-header flex flex-wrap items-center justify-between gap-2 px-4 py-2.5">
+          <h6 className="text-[15px] font-semibold flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            {CHART_TABS.find((t) => t.key === chartTab)?.label}
+          </h6>
+          <div className="flex items-center gap-1.5">
+            {CHART_TABS.map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setChartTab(t.key)}
+                className={cn(
+                  "px-3 py-1 rounded-full text-[13px] transition-colors",
+                  chartTab === t.key
+                    ? "bg-white text-[#528fcc] font-medium"
+                    : "text-white/85 hover:bg-white/15"
+                )}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="p-4 h-72">
+          {data ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e9f2" />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} reversed />
+                <YAxis tick={{ fontSize: 11 }} orientation="right" allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{
+                    fontFamily: "inherit",
+                    fontSize: 12,
+                    borderRadius: 8,
+                    direction: "rtl",
+                  }}
+                  formatter={(v: number) => [toPersianDigits(v), "مقدار"]}
+                />
+                <Bar dataKey="value" fill="#509acf" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <Skeleton className="w-full h-full" />
+          )}
+        </div>
+      </section>
+
+      {/* ═══ ۳) KPI ها ═══ */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        <KpiCard icon={Building2} label="کل مشتریان" value={kpi ? toPersianDigits(kpi.totalCompanies) : "…"} sub={kpi ? `${toPersianDigits(kpi.activeCompanies)} فعال` : ""} />
+        <KpiCard icon={Target} label="فرصت‌های باز" value={kpi ? toPersianDigits(kpi.openDeals) : "…"} sub={kpi ? `ارزش: ${formatMoney(kpi.openDealsValue)} ریال` : ""} />
+        <KpiCard icon={TrendingUp} label="فروش موفق این ماه" value={kpi ? toPersianDigits(kpi.wonThisMonth) : "…"} sub={kpi ? `${formatMoney(kpi.wonThisMonthValue)} ریال` : ""} />
         <KpiCard
           icon={AlertTriangle}
           label="وظایف من"
           value={kpi ? toPersianDigits(kpi.myOpenTasks) : "…"}
           sub={kpi && kpi.myOverdueTasks > 0 ? `${toPersianDigits(kpi.myOverdueTasks)} مورد عقب‌افتاده` : "بدون تأخیر"}
-          tone={kpi && kpi.myOverdueTasks > 0 ? "rose" : "slate"}
+          tone={kpi && kpi.myOverdueTasks > 0 ? "rose" : "plain"}
         />
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-4 mt-4">
-        {/* Pipeline funnel */}
-        <Card className="lg:col-span-2">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-bold flex items-center gap-2">
-              <Target className="w-4 h-4 text-primary" />
-              قیف فروش
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={pipeline} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis dataKey="label" tick={{ fontSize: 11 }} reversed />
-                  <YAxis tick={{ fontSize: 11 }} orientation="right" allowDecimals={false} />
-                  <Tooltip
-                    contentStyle={{ fontFamily: "inherit", fontSize: 12, borderRadius: 8 }}
-                    formatter={(_, __, item) => [
-                      `${toPersianDigits(item.payload.count)} فرصت`,
-                      item.payload.label,
-                    ]}
-                  />
-                  <Bar dataKey="count" fill="oklch(0.508 0.118 165.612)" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* My tasks today */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-bold flex items-center justify-between">
-              <span className="flex items-center gap-2">
-                <ClipboardList className="w-4 h-4 text-primary" />
-                کارتابل من
-              </span>
-              <Button asChild variant="ghost" size="sm" className="text-xs">
-                <Link href="/tasks">
-                  همه
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                </Link>
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="max-h-72 overflow-y-auto">
+      {/* ═══ ۴) کارتابل من + آخرین فعالیت‌ها ═══ */}
+      <div className="grid lg:grid-cols-2 gap-4 mt-4">
+        {/* کارتابل من (Cartables-RowBox) */}
+        <section className="crm-section">
+          <div className="crm-section-header flex items-center justify-between px-4 py-2.5">
+            <h6 className="text-[15px] font-semibold flex items-center gap-2">
+              <ClipboardList className="w-4 h-4" />
+              کارتابل من
+            </h6>
+            <Link href="/tasks" className="text-[12px] text-white/90 hover:text-white flex items-center gap-1">
+              همه
+              <ArrowLeft className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="p-3 max-h-72 overflow-y-auto crm-scroll">
             {myTasks.loading ? (
               Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-12 mb-2" />)
             ) : myTasks.rows.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-8">وظیفه بازی ندارید 🎉</p>
+              <p className="text-sm text-muted-foreground text-center py-8">وظیفه بازی ندارید</p>
             ) : (
               myTasks.rows.map((t) => (
                 <TaskItem key={t.id} task={t} onToggle={toggleTask} />
               ))
             )}
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </section>
 
-      <div className="grid lg:grid-cols-2 gap-4 mt-4">
-        {/* Recent activities */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-bold flex items-center gap-2">
-              <ActivityIcon className="w-4 h-4 text-primary" />
+        {/* آخرین فعالیت‌ها */}
+        <section className="crm-section">
+          <div className="crm-section-header flex items-center justify-between px-4 py-2.5">
+            <h6 className="text-[15px] font-semibold flex items-center gap-2">
+              <ActivityIcon className="w-4 h-4" />
               آخرین فعالیت‌ها
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="max-h-80 overflow-y-auto">
+            </h6>
+            <Link href="/activities" className="text-[12px] text-white/90 hover:text-white flex items-center gap-1">
+              همه
+              <ArrowLeft className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="p-3 max-h-72 overflow-y-auto crm-scroll">
             {!data ? (
               Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-14 mb-2" />)
             ) : data.recentActivities.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">فعالیتی ثبت نشده است.</p>
             ) : (
               data.recentActivities.map((a) => (
-                <div key={a.id} className="flex items-start gap-3 py-2.5 border-b last:border-0">
+                <div key={a.id} className="flex items-start gap-3 py-2.5 border-b border-[#eef1f7] last:border-0">
                   <StatusBadge value={a.type} label={ACTIVITY_TYPE_LABELS[a.type] ?? a.type} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{a.subject}</p>
@@ -193,113 +224,82 @@ export default function DashboardPage() {
                 </div>
               ))
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </section>
+      </div>
 
-        {/* Quick stats grid */}
-        <div className="grid grid-cols-2 gap-4 content-start">
-          <MiniStat icon={PhoneCall} label="فعالیت‌های امروز" value={kpi ? toPersianDigits(kpi.activitiesToday) : "…"} />
-          <MiniStat icon={FileText} label="پیش‌فاکتورهای باز من" value={kpi ? toPersianDigits(kpi.myQuotationsCount) : "…"} />
-          <MiniStat icon={Users} label="مشتریان فعال" value={kpi ? toPersianDigits(kpi.activeCompanies) : "…"} />
-          <MiniStat icon={Package} label="محصولات" value={kpi ? toPersianDigits(kpi.totalProducts) : "…"} />
-          <Card className="col-span-2">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-bold">فرصت‌های ناموفق این ماه</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-extrabold text-rose-600">
-                {kpi ? toPersianDigits(kpi.lostThisMonth) : "…"}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                بررسی دلایل شکست به بهبود فرایند فروش کمک می‌کند.
-              </p>
-            </CardContent>
-          </Card>
+      {/* ═══ اطلاعیه سامانه (box-PublicNotice — گوشه پایین سمت چپ) ═══ */}
+      <div className="fixed bottom-4 left-4 z-[100] hidden lg:block">
+        <div className="bg-white rounded-lg border border-[#8598be] p-3 w-56 shadow-sm">
+          <h3 className="text-[13px] font-semibold flex items-center gap-1.5 mb-1.5 text-[#1f2733]">
+            <Megaphone className="w-4 h-4 text-[#528fcc]" />
+            اطلاعیه سامانه
+          </h3>
+          <p className="text-[11.5px] leading-5 text-muted-foreground">
+            خوش آمدید! سامانه رستا — بازسازی مدرن و سبک CRM ایده‌آل. ماژول خزانه و بانک‌داری فعال شد.
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
-const TONES: Record<string, string> = {
-  emerald: "bg-emerald-500/10 text-emerald-600",
-  sky: "bg-sky-500/10 text-sky-600",
-  amber: "bg-amber-500/10 text-amber-600",
-  rose: "bg-rose-500/10 text-rose-600",
-  slate: "bg-slate-500/10 text-slate-600",
-};
-
+/* کارت KPI با ظاهر هماهنگ با قرص‌های CRMIdeal */
 function KpiCard({
-  icon: Icon, label, value, sub, tone,
+  icon: Icon,
+  label,
+  value,
+  sub,
+  tone = "plain",
 }: {
   icon: React.ComponentType<{ className?: string }>;
-  label: string; value: string; sub?: string; tone: string;
+  label: string;
+  value: string;
+  sub?: string;
+  tone?: "plain" | "rose";
 }) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">{label}</p>
-            <p className="text-2xl font-extrabold mt-1.5">{value}</p>
-            {sub && <p className="text-[11px] text-muted-foreground mt-1">{sub}</p>}
-          </div>
-          <div className={`rounded-xl p-2.5 ${TONES[tone]}`}>
-            <Icon className="w-5 h-5" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function MiniStat({
-  icon: Icon, label, value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string; value: string;
-}) {
-  return (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardContent className="p-4 flex items-center gap-3">
-        <div className="rounded-lg bg-primary/10 text-primary p-2">
-          <Icon className="w-4 h-4" />
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">{label}</p>
-          <p className="text-lg font-extrabold">{value}</p>
-        </div>
-      </CardContent>
-    </Card>
+    <div
+      className={cn(
+        "rounded-[8px] p-4 border",
+        tone === "rose" ? "bg-[#fdeef3] border-[#f3c3d4]" : "bg-[#e7effc] border-[#d3e0f7]"
+      )}
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+          <Icon className="w-4 h-4 text-[#012875]" />
+        </span>
+        <span className="text-[13px] text-[#012875]">{label}</span>
+      </div>
+      <div className="text-2xl font-bold text-[#012875]">{value}</div>
+      {sub ? <div className="text-[11px] text-[#5c6b8a] mt-1">{sub}</div> : null}
+    </div>
   );
 }
 
 function TaskItem({
-  task, onToggle,
+  task,
+  onToggle,
 }: {
   task: TaskRow;
   onToggle: (id: string, done: boolean) => void;
 }) {
-  const overdue = task.dueAt && new Date(task.dueAt) < new Date();
   return (
-    <div className="flex items-start gap-2.5 py-2 border-b last:border-0">
+    <div className="flex items-center gap-3 py-2.5 border-b border-[#eef1f7] last:border-0">
       <input
         type="checkbox"
-        className="mt-1 w-4 h-4 accent-emerald-600 rounded"
+        className="w-4 h-4 accent-[#012875]"
+        checked={task.status === "DONE"}
         onChange={(e) => onToggle(task.id, e.target.checked)}
-        aria-label={`انجام: ${task.title}`}
       />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{task.title}</p>
-        <p className="text-[11px] text-muted-foreground">
-          {task.company?.name && <>{task.company.name} · </>}
-          {overdue ? (
-            <span className="text-rose-600 font-bold">سررسید گذشته — </span>
-          ) : null}
-          {formatDate(task.dueAt)}
+        <p className="text-xs text-muted-foreground">
+          {task.company?.name ?? "—"}
+          {task.dueAt ? ` · ${formatDateTime(task.dueAt)}` : ""}
         </p>
       </div>
-      <StatusBadge value={task.priority} label={task.priority === "URGENT" ? "فوری" : task.priority === "HIGH" ? "مهم" : ""} />
+      <StatusBadge value={task.priority} label={task.priority} />
     </div>
   );
 }

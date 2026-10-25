@@ -1,0 +1,8 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 109" width="109" height="109">
+  <!-- Rasta mark — navy on transparent (login / light backgrounds) -->
+  <g fill="none" stroke="#012875" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 30 24 L 30 56 A 24 24 0 0 0 78 56 L 78 50" />
+    <path d="M 44 66 A 12 10 0 0 0 66 66 L 66 62" />
+  </g>
+  <circle cx="78" cy="40" r="5.5" fill="#012875"/>
+</svg>

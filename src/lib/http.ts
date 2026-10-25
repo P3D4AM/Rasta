@@ -79,15 +79,12 @@ export function parseListQuery(req: Request, defaultPageSize = 20): ListQuery {
 export async function nextDocNumber(
   model: "quotation" | "salesOrder" | "purchaseOrder"
 ): Promise<number> {
-  const last = await (model === "quotation"
-    ? db.quotation
-    : model === "salesOrder"
-      ? db.salesOrder
-      : db.purchaseOrder
-  ).findFirst({
-    orderBy: { number: "desc" },
-    select: { number: true },
-  });
+  const last =
+    model === "quotation"
+      ? await db.quotation.findFirst({ orderBy: { number: "desc" }, select: { number: true } })
+      : model === "salesOrder"
+        ? await db.salesOrder.findFirst({ orderBy: { number: "desc" }, select: { number: true } })
+        : await db.purchaseOrder.findFirst({ orderBy: { number: "desc" }, select: { number: true } });
   return (last?.number ?? 1000) + 1;
 }
 

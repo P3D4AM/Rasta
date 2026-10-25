@@ -108,3 +108,30 @@ Work Log:
 Stage Summary:
 - Phase 2 (انبار و خرید) delivered, E2E-verified and pushed to develop; branch policy: main = release line (untouched), develop = active
 - Next per roadmap: Phase 3 مالی (خزانه/بانک/درگاه پرداخت) — awaiting owner go-ahead
+
+---
+Task ID: 5
+Agent: main (Z.ai)
+Task: بازسازی میلیمتری UI مطابق CRMIdeal + فاز ۳ (مالی) — دستور مالک پروژه
+
+Work Log:
+- استخراج دقیق سیستم طراحی از سورس اصلی: MainStyleNew.css، StyPublic.css، StyLogin.css، StyHomePage.css، _LayoutMain.cshtml، sidebar-menu.js، jsPublicFunction.js، Areas/Fund+Banking+OnlinePayment، Models دیکامپایل‌شده (CrmFund/CrmFundGroups/CrmBanking*)، Resources.Menus.resx (۸۷۷ کلید)
+- توکن‌های طراحی: فونت Ravi (۸ وزن، کپی به public/fonts)، ریل سرمه‌ای #012875، متن منو #e7eaf2، قرص‌ها #e7effc، حاشیه pill #8598be، هدر کارت #528fcc، لاگین #509ACF/#0373BD
+- بازسازی globals.css: فونت‌فیس Ravi + پالت کامل CRMIdeal به‌صورت توکن (--crm-navy و…) + کلاس‌های crm-rail/crm-pill/crm-section/crm-qa-item با متریک میلیمتری
+- بازسازی app-shell.tsx مطابق _LayoutMain: ریل آیکونی تمام‌قد سرمه‌ای (۸۰px→۲۶۰px با زیرمنوی کشویی و رفتار ShowSideBarMenuIcons)، هدر ۱۱۰px با pill جستجو + بخش کاربر (کره/ایمیل #fdcc3b/پیامک/زنگ #df63a0/زنگ #29b2c2/پروفایل با دراپ‌داون ۱۹۵px) + باکس لوگوی شرکت
+- درخت منو مطابق mu* های CRMIdeal: خانه/مشتریان/فروش/انبار و خرید (با صفحات فاز ۲)/خزانه و بانک (فاز ۳)/ارتباطات/کارتابل/گزارش‌ها/مدیریت و تنظیمات + خروج
+- بازسازی صفحه ورود مطابق Login.cshtml: پنل آبی #509ACF + آیکون‌های چسبیده #0373BD + دکمه سه‌بعدی + پنل معرفی #f3f3f3
+- بازسازی داشبورد مطابق HomePage.cshtml: ۸ قرص دسترسی سریع (#e7effc، ۱۷px ravi-regular، فلش #50a5d2) + تب نمودارها + KPI + کارتابل + اطلاعیه گوشه پایین
+- فاز ۳ — اسکیمای Prisma: FundGroup (درخت) + FundTransaction (شماره سند خودکار، دریافت/پرداخت، گردش کار تایید) + Bank/BankBranch/BankAccountType/BankAccount (کارت/شبا/پیش‌فرض) + OnlinePayment (زرین‌پال/ملت/پارسیان)
+- فاز ۳ — API: /api/fund/groups (CRUD درخت)، /api/fund/transactions (لیست+فیلتر تاریخ/گروه/نوع/تایید + فوتر جمع GetFundSumFooter + درج/ویرایش/تایید/لغو تایید)، /api/banking/banks (بانک+شعبه)، /api/banking/accounts، /api/payments/gateways (تنظیمات درگاه)، /api/payments/online (شروع پرداخت زرین‌پال sandbox + تایید دستی)
+- فاز ۳ — UI: /fund (درخت گروه‌ها + جدول + فوتر جمع + دیالوگ دریافت/پرداخت با تاریخ جلالی)، /banking (تب بانک‌ها و شعب / حساب‌ها)، /settings/payments (۳ کارت درگاه + لیست پرداخت‌ها)
+- merge با فاز ۲ موجود روی develop: ادغام اسکیما/سید/constants/http/app-shell (منوی انبار و خرید با لینک‌های واقعی warehouses/inventory/purchases)، رفع تداخل‌ها، رفع باگ MODULES تکراری
+- فیکس تایپ‌های باقی‌مانده از قبل: reports route (کلید تکراری/ایندکس null)، reports page (recharts label)، roles orderBy، orders include، quotations export، layout cast، nextDocNumber union
+- tsconfig: exclude examples/skills/agent-ctx → tsc --noEmit = 0 خطا، eslint = 0 خطا/هشدار
+- E2E (agent-browser): لاگین، داشبورد جدید، باز/بسته شدن ریل + زیرمنوها، درج سند خزانه (تست موفق)، فوتر جمع، بانک‌داری (هر دو تب)، پرداخت آنلاین، صفحات فاز ۲ با UI جدید — ۰ خطای کنسول؛ تأیید بصری VLM برای داشبورد و لاگین
+- داده دموی فاز ۳: ۶ گروه خزانه درختی، ۹ سند رسید/پرداخت، ۴ بانک، ۴ شعبه، ۳ نوع حساب، ۴ حساب بانکی، ۱ پرداخت آنلاین pending، تنظیمات درگاه‌ها
+
+Stage Summary:
+- UI رستا از این پس بازسازی میلیمتری CRMIdeal است (فونت Ravi + پالت کامل + ریل سرمه‌ای + pillها + الگوی کارت #528fcc)
+- فاز ۳ (مالی) کامل: خزانه + بانک‌داری + پرداخت آنلاین — E2E تست‌شده
+- نسخه 0.2.0 — ورود: admin/admin123

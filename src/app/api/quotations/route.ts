@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { requirePermission, handle, json, apiError, parseListQuery, nextDocNumber } from "@/lib/http";
 import { Prisma } from "@prisma/client";
 
-type ItemInput = {
+export type ItemInput = {
   productId?: string | null;
   description?: string | null;
   qty?: number | string;

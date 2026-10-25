@@ -38,7 +38,9 @@ export async function GET() {
       }),
       db.activity.groupBy({ by: ["type"], _count: { _all: true } }),
       db.deal.findMany({
-        where: { closedAt: { not: null }, closedAt: { gte: new Date(now.getFullYear(), now.getMonth() - 5, 1) } },
+        where: {
+          closedAt: { gte: new Date(now.getFullYear(), now.getMonth() - 5, 1) },
+        },
         select: { stage: true, closedAt: true, amount: true },
       }),
       db.salesOrder.aggregate({
@@ -69,7 +71,7 @@ export async function GET() {
 
     return json({
       salesByUser: salesByUser.map((r) => ({
-        name: userMap[r.ownerId] ?? "—",
+        name: (r.ownerId && userMap[r.ownerId]) || "—",
         total: Math.round(r._sum.total ?? 0),
         count: r._count._all,
       })),

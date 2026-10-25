@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150" width="250" height="150">
+  <!-- Rasta logo + wordmark — white (rail expanded mode, 104px) -->
+  <g transform="translate(10,20) scale(1.02)" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 30 24 L 30 56 A 24 24 0 0 0 78 56 L 78 50" />
+    <path d="M 44 66 A 12 10 0 0 0 66 66 L 66 62" />
+  </g>
+  <g transform="translate(10,20)">
+    <circle cx="78" cy="40" r="5.5" fill="#ffffff"/>
+  </g>
+  <text x="120" y="88" text-anchor="middle" direction="rtl"
+        font-family="Vazirmatn, Tahoma, sans-serif" font-size="52" font-weight="800"
+        fill="#ffffff">رستا</text>
+  <text x="120" y="118" text-anchor="middle"
+        font-family="Vazirmatn, Tahoma, sans-serif" font-size="16" font-weight="400"
+        fill="#c9d4ec">مدیریت ارتباط با مشتری</text>
+</svg>

@@ -28,6 +28,7 @@ type Role = {
 const EDITABLE_MODULES: ModuleKey[] = [
   "dashboard", "companies", "contacts", "deals", "activities", "tasks",
   "products", "quotations", "orders", "reports", "users", "roles",
+  "fund", "banking", "payments", "settings",
 ];
 
 type PermRow = { module: string; canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean };

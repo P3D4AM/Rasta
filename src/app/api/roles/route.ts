@@ -19,7 +19,7 @@ export async function GET(req: Request) {
 
     const [rows, total] = await Promise.all([
       db.role.findMany({
-        orderBy: { createdAt: "desc" },
+        orderBy: { name: "asc" },
         skip,
         take,
         include: { permissions: true, _count: { select: { users: true } } },

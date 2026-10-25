@@ -125,7 +125,7 @@ export default function ReportsPage() {
                     nameKey="name"
                     innerRadius={60}
                     outerRadius={95}
-                    label={(e: never) => (e as { value: number }).value}
+                    label={undefined}
                   >
                     {data.dealsByStage.map((d) => (
                       <Cell key={d.stage} fill={STAGE_COLORS[d.stage] ?? "#64748b"} />
@@ -152,9 +152,9 @@ export default function ReportsPage() {
                   <YAxis tick={{ fontSize: 11 }} orientation="right" />
                   <Tooltip
                     contentStyle={{ fontFamily: "inherit", fontSize: 12, borderRadius: 8 }}
-                    formatter={(v) => [`${toPersianDigits(v)} میلیون ریال`, "فروش"]}
+                    formatter={(v: string | number) => [`${toPersianDigits(v)} میلیون ریال`, "فروش"]}
                   />
-                  <Bar dataKey="m" fill="oklch(0.508 0.118 165.612)" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="m" fill="#509acf" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

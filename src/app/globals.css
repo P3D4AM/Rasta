@@ -1,7 +1,56 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Rasta CRM — local Vazirmatn font (no external CDN needed) */
+/* ============================================================
+   RASTA — بازسازی دقیق زبان طراحی CRMIdeal
+   توکن‌ها با دقت میلیمتری از Content/MainStyleNew.css،
+   StyPublic.css، StyLogin.css و StyHomePage.css نسخه 3.1.18 استخراج شده‌اند.
+   ============================================================ */
+
+/* فونت Ravi — فونت اصلی محصول اصلی (از بسته استقرار) */
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ravi";
+  src: url("/fonts/Ravi-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-display: swap;
+}
+/* وزیرمتن — فونت منوهای سایدبار در لایه قدیمی (StyPublic.css: .s-m-t label) */
 @font-face {
   font-family: "Vazirmatn";
   src: url("/fonts/Vazirmatn-UI-FD-Regular.ttf") format("truetype");
@@ -26,20 +75,14 @@
   font-weight: 800;
   font-display: swap;
 }
-@font-face {
-  font-family: "Vazirmatn";
-  src: url("/fonts/Vazirmatn-UI-FD-Black.ttf") format("truetype");
-  font-weight: 900;
-  font-display: swap;
-}
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Ravi", "Vazirmatn", Tahoma, Arial, sans-serif;
+  --font-mono: ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -69,6 +112,24 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* رنگ‌های امضای CRMIdeal به‌صورت توکن Tailwind */
+  --color-crm-navy: var(--crm-navy);
+  --color-crm-navy-deep: var(--crm-navy-deep);
+  --color-crm-menu-text: var(--crm-menu-text);
+  --color-crm-sky: var(--crm-sky);
+  --color-crm-sky-soft: var(--crm-sky-soft);
+  --color-crm-pill-border: var(--crm-pill-border);
+  --color-crm-pill-btn: var(--crm-pill-btn);
+  --color-crm-pill-btn-text: var(--crm-pill-btn-text);
+  --color-crm-search-ico: var(--crm-search-ico);
+  --color-crm-user-gray: var(--crm-user-gray);
+  --color-crm-yellow: var(--crm-yellow);
+  --color-crm-pink: var(--crm-pink);
+  --color-crm-cyan: var(--crm-cyan);
+  --color-crm-header-blue: var(--crm-header-blue);
+  --color-crm-header-blue-soft: var(--crm-header-blue-soft);
+  --color-crm-login-blue: var(--crm-login-blue);
+  --color-crm-hover: var(--crm-hover);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -76,80 +137,188 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.985 0.002 160);
-  --foreground: oklch(0.18 0.02 165);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 165);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 165);
-  --primary: oklch(0.508 0.118 165.612);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.955 0.01 160);
-  --secondary-foreground: oklch(0.32 0.05 165);
-  --muted: oklch(0.955 0.008 160);
-  --muted-foreground: oklch(0.52 0.02 165);
-  --accent: oklch(0.94 0.03 160);
-  --accent-foreground: oklch(0.32 0.06 165);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.90 0.012 160);
-  --input: oklch(0.90 0.012 160);
-  --ring: oklch(0.508 0.118 165.612);
-  --chart-1: oklch(0.508 0.118 165.612);
-  --chart-2: oklch(0.646 0.222 41.116);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.21 0.03 170);
-  --sidebar-foreground: oklch(0.94 0.01 160);
-  --sidebar-primary: oklch(0.70 0.14 162);
-  --sidebar-primary-foreground: oklch(0.16 0.03 170);
-  --sidebar-accent: oklch(0.28 0.04 168);
-  --sidebar-accent-foreground: oklch(0.97 0.01 160);
-  --sidebar-border: oklch(0.28 0.03 168);
-  --sidebar-ring: oklch(0.70 0.14 162);
+  /* هندسه: گردی کارت‌ها 5px مثل .node در StyPublic.css */
+  --radius: 0.375rem;
+
+  /* ===== پالت CRMIdeal (استخراج مستقیم) ===== */
+  --crm-navy: #012875;        /* ریل منو، آواتار، کره زمین */
+  --crm-navy-deep: #022873;   /* نام شرکت در هدر */
+  --crm-menu-text: #e7eaf2;   /* متن/آیکون منو روی سرمه‌ای */
+  --crm-sky: #e7effc;         /* قرص‌های دسترسی سریع و کارتابل */
+  --crm-sky-soft: #ddf0f9;    /* سایه هدر و hover پروفایل */
+  --crm-pill-border: #8598be; /* حاشیه pill جستجو/کاربر */
+  --crm-pill-btn: #dae6fe;    /* پس‌زمینه دکمه «شرایط جستجو» */
+  --crm-pill-btn-text: #8596bd;
+  --crm-search-ico: #48659c;
+  --crm-user-gray: #575757;
+  --crm-yellow: #fdcc3b;      /* آیکون ایمیل */
+  --crm-pink: #df63a0;        /* زنگ پیام‌ها */
+  --crm-cyan: #29b2c2;        /* زنگ تاییدها */
+  --crm-header-blue: #528fcc; /* هدر کارت‌های صفحه (متن سفید) */
+  --crm-header-blue-soft: #b8d2f1;
+  --crm-login-blue: #509acf;  /* پنل صفحه ورود */
+  --crm-hover: #ddf0f9;
+
+  /* ===== نگاشت shadcn روی پالت CRMIdeal ===== */
+  --background: #ffffff; /* body.light-only → white !important */
+  --foreground: #1f2733;
+  --card: #ffffff;
+  --card-foreground: #1f2733;
+  --popover: #ffffff;
+  --popover-foreground: #1f2733;
+  --primary: #012875;
+  --primary-foreground: #ffffff;
+  --secondary: #e7effc;
+  --secondary-foreground: #012875;
+  --muted: #f4f6fa;
+  --muted-foreground: #6b7280;
+  --accent: #e7effc;
+  --accent-foreground: #012875;
+  --destructive: #e80c4d; /* Error-Login border */
+  --border: #cacaca;       /* مهر دات‌دار CRMIdeal */
+  --input: #8598be;
+  --ring: #509acf;
+  --chart-1: #012875;
+  --chart-2: #509acf;
+  --chart-3: #29b2c2;
+  --chart-4: #fdcc3b;
+  --chart-5: #df63a0;
+  --sidebar: #012875;
+  --sidebar-foreground: #e7eaf2;
+  --sidebar-primary: #e7eaf2;
+  --sidebar-primary-foreground: #012875;
+  --sidebar-accent: #0a3a8f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(231, 234, 242, 0.14);
+  --sidebar-ring: #509acf;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0d1321;
+  --foreground: #e7eaf2;
+  --card: #101a30;
+  --card-foreground: #e7eaf2;
+  --popover: #101a30;
+  --popover-foreground: #e7eaf2;
+  --primary: #7fa6e8;
+  --primary-foreground: #0d1321;
+  --secondary: #16223c;
+  --secondary-foreground: #e7eaf2;
+  --muted: #16223c;
+  --muted-foreground: #9aa8c4;
+  --accent: #16223c;
+  --accent-foreground: #e7eaf2;
+  --destructive: #ff5c8a;
+  --border: rgba(231, 234, 242, 0.14);
+  --input: rgba(231, 234, 242, 0.2);
+  --ring: #7fa6e8;
+  --chart-1: #7fa6e8;
+  --chart-2: #29b2c2;
+  --chart-3: #fdcc3b;
+  --chart-4: #df63a0;
+  --chart-5: #509acf;
+  --sidebar: #0d1321;
+  --sidebar-foreground: #e7eaf2;
+  --sidebar-primary: #e7eaf2;
+  --sidebar-primary-foreground: #0d1321;
+  --sidebar-accent: #16223c;
+  --sidebar-accent-foreground: #e7eaf2;
+  --sidebar-border: rgba(231, 234, 242, 0.14);
+  --sidebar-ring: #7fa6e8;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    direction: rtl;
+  }
   body {
     @apply bg-background text-foreground;
-    font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+    font-family: "Ravi", "Vazirmatn", Tahoma, Arial, sans-serif;
+    font-size: 14px;
+  }
+}
+
+@layer utilities {
+  /* ارقام فارسی در سراسر UI مثل محصول اصلی */
+  .fa-digits {
+    font-variant-numeric: normal;
+    font-feature-settings: normal;
+  }
+
+  /* ====== ریل منوی سرمه‌ای (بازسازی #s-m-t) ====== */
+  .crm-rail {
+    background-color: #012875;
+    border-radius: 10px 0 0 10px; /* MainStyleNew.css: #s-m-t */
+  }
+  .crm-rail-node {
+    border: 1px solid transparent;
+    border-radius: 5px; /* .node */
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .crm-rail-node:hover {
+    background-color: rgba(231, 234, 242, 0.08);
+  }
+  .crm-rail-node.Selected {
+    border-color: rgba(231, 234, 242, 0.35);
+    background-color: rgba(231, 234, 242, 0.06);
+  }
+  .crm-rail-item-title {
+    color: #e7eaf2 !important;
+    font-family: "Ravi", "Vazirmatn", Tahoma, sans-serif;
+    font-weight: 300; /* ravi-light */
+    font-size: 15px;
+  }
+  .crm-rail-icon {
+    color: #e7eaf2 !important;
+  }
+  .crm-rail-divider {
+    border-bottom: 1px solid rgba(202, 202, 202, 0.35); /* .mnu-divider */
+    margin: 7px 0;
+  }
+
+  /* ====== قرص (pill) هدر ====== */
+  .crm-pill {
+    border: 1px solid #8598be;
+    border-radius: 50px;
+  }
+
+  /* ====== کارت صفحه با هدر آبی (SectionBody + Mainheader) ====== */
+  .crm-section {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.06);
+  }
+  .crm-section-header {
+    background-color: #528fcc; /* .SectionBody label.Mainheader */
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* ====== قرص دسترسی سریع داشبورد (qa-item) ====== */
+  .crm-qa-item {
+    background-color: #e7effc;
+    border-radius: 50px;
+    padding: 12px 20px;
+    transition: background-color 0.2s ease;
+  }
+  .crm-qa-item:hover {
+    background-color: #dbe7fb;
+  }
+
+  /* اسکرول‌بار نازک مثل CRMIdeal */
+  .crm-scroll::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  .crm-scroll::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba(128, 128, 128, 0.35);
+    border-radius: 10px;
+  }
+  .crm-scroll::-webkit-scrollbar-thumb {
+    background: #263238;
+    border-radius: 10px;
   }
 }

@@ -17,7 +17,10 @@ export type ModuleKey =
   | "users"
   | "roles"
   | "reports"
-  | "settings";
+  | "settings"
+  | "fund"
+  | "banking"
+  | "payments";
 
 export type ActionKey = "view" | "create" | "edit" | "delete";
 
@@ -38,6 +41,9 @@ export const MODULES: Record<ModuleKey, { label: string; href: string; icon: str
   users: { label: "کاربران", href: "/settings/users", icon: "UserCog" },
   roles: { label: "نقش‌ها", href: "/settings/roles", icon: "ShieldCheck" },
   settings: { label: "تنظیمات", href: "/settings", icon: "Settings" },
+  fund: { label: "خزانه", href: "/fund", icon: "Wallet" },
+  banking: { label: "بانک‌داری", href: "/banking", icon: "Landmark" },
+  payments: { label: "پرداخت آنلاین", href: "/settings/payments", icon: "CreditCard" },
 };
 
 export const ACTIONS: Record<ActionKey, string> = {
@@ -157,3 +163,28 @@ export const PURCHASE_STATUS_LABELS: Record<string, string> = {
 
 /** آستانه هشدار رو به اتمام شدن موجودی */
 export const LOW_STOCK_THRESHOLD = 5;
+
+// ── Fund (خزانه) — مطابق CRMIdeal.Areas.Fund ──
+// در خزانه CRMIdeal: FundDebit = دریافت وجه (ورود نقد به خزانه)، FundCredit = پرداخت وجه
+export const FUND_TRANSACTION_TYPES = ["RECEIVE", "PAY"] as const;
+export const FUND_TRANSACTION_TYPE_LABELS: Record<string, string> = {
+  RECEIVE: "دریافت وجه",
+  PAY: "پرداخت وجه",
+};
+
+// ── Banking (بانک‌داری) — مطابق CRMIdeal.Areas.Banking ──
+export const BANK_ACCOUNT_TYPES = ["CURRENT", "SAVING", "GHARZ", "SHORT_TERM"] as const;
+export const BANK_ACCOUNT_TYPE_LABELS: Record<string, string> = {
+  CURRENT: "جاری",
+  SAVING: "سپرده",
+  GHARZ: "قرض‌الحسنه",
+  SHORT_TERM: "کوتاه‌مدت",
+};
+
+// ── درگاه‌های پرداخت آنلاین (مثل CRMIdeal.Areas.OnlinePayment) ──
+export const PAYMENT_GATEWAYS = ["ZARINPAL", "MELLAT", "PARSIAN"] as const;
+export const PAYMENT_GATEWAY_LABELS: Record<string, string> = {
+  ZARINPAL: "زرین‌پال",
+  MELLAT: "ملت",
+  PARSIAN: "پارسیان",
+};

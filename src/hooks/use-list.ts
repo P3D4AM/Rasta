@@ -8,6 +8,8 @@ export type ListState<T> = {
   error: string | null;
   /** url of the last successfully loaded page */
   loadedUrl: string | null;
+  /** raw response (includes extras like `footer`) */
+  data: unknown;
 };
 
 /**
@@ -20,6 +22,7 @@ export function useList<T>(url: string | null) {
     total: 0,
     error: null,
     loadedUrl: null,
+    data: null,
   });
   const [refreshKey, setRefreshKey] = useState(0);
   const mounted = useRef(true);
@@ -47,11 +50,12 @@ export function useList<T>(url: string | null) {
           total: data.total ?? 0,
           error: null,
           loadedUrl: url,
+          data,
         });
       })
       .catch((e: Error) => {
         if (!current || !mounted.current) return;
-        setState((s) => ({ ...s, error: e.message, rows: [], total: 0, loadedUrl: url }));
+        setState((s) => ({ ...s, error: e.message, rows: [], total: 0, loadedUrl: url, data: null }));
       });
     return () => {
       current = false;
@@ -67,6 +71,7 @@ export function useList<T>(url: string | null) {
     error: state.error,
     loading,
     refresh,
+    data: state.data as { footer?: { totalReceive: number; totalPay: number; remain: number } } | null,
   };
 }
 

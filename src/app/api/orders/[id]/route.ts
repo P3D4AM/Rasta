@@ -14,7 +14,6 @@ export async function GET(
       where: { id },
       include: {
         company: { select: { id: true, name: true, address: true, phone: true, taxId: true } },
-        contact: true,
         owner: { select: { firstName: true, lastName: true } },
         quotation: { select: { id: true, number: true } },
         items: { include: { product: { select: { name: true, unit: true } } } },

@@ -18,6 +18,7 @@ const MODULES = [
   "dashboard", "companies", "contacts", "deals", "activities", "tasks",
   "products", "quotations", "orders", "warehouses", "inventory", "purchases",
   "reports", "users", "roles",
+  "fund", "banking", "payments", "settings",
 ];
 
 function fullPerms() {
@@ -39,6 +40,7 @@ function salesPerms() {
     { module: "quotations", canView: true, canCreate: true, canEdit: true, canDelete: false },
     { module: "orders", canView: true, canCreate: true, canEdit: true, canDelete: false },
     { module: "inventory", canView: true, canCreate: false, canEdit: false, canDelete: false },
+    { module: "fund", canView: true, canCreate: true, canEdit: false, canDelete: false },
   ];
 }
 
@@ -60,6 +62,13 @@ async function main() {
   await db.purchaseOrder.deleteMany();
   await db.warehouse.deleteMany();
   await db.activityLog.deleteMany();
+  await db.onlinePayment.deleteMany();
+  await db.bankAccount.deleteMany();
+  await db.bankAccountType.deleteMany();
+  await db.bankBranch.deleteMany();
+  await db.bank.deleteMany();
+  await db.fundTransaction.deleteMany();
+  await db.fundGroup.deleteMany();
   await db.payment.deleteMany();
   await db.salesOrderItem.deleteMany();
   await db.salesOrder.deleteMany();
@@ -80,9 +89,18 @@ async function main() {
   await db.setting.createMany({
     data: [
       { key: "app.name", value: "رستا" },
-      { key: "app.version", value: "1.0.0" },
+      { key: "app.version", value: "0.2.0" },
       { key: "org.name", value: "شرکت نمونه پارس" },
       { key: "fiscal.taxRate", value: "9" },
+      // درگاه‌های پرداخت (فاز ۳ — مثل Areas/OnlinePayment محصول اصلی)
+      { key: "gateway.zarinpal.enabled", value: "false" },
+      { key: "gateway.zarinpal.merchantId", value: "" },
+      { key: "gateway.zarinpal.sandbox", value: "true" },
+      { key: "gateway.mellat.enabled", value: "false" },
+      { key: "gateway.mellat.terminalId", value: "" },
+      { key: "gateway.mellat.userName", value: "" },
+      { key: "gateway.parsian.enabled", value: "false" },
+      { key: "gateway.parsian.pin", value: "" },
     ],
   });
 
@@ -104,10 +122,13 @@ async function main() {
             ...salesPerms(),
             ...purchasePerms(),
             { module: "reports", canView: true, canCreate: false, canEdit: false, canDelete: false },
-          ].reduce<Record<string, Record<string, unknown>>>((acc, p) => {
-            acc[p.module] = p; // later entries override earlier
-            return acc;
-          }, {})
+          ].reduce<Record<string, { module: string; canView: boolean; canCreate: boolean; canEdit: boolean; canDelete: boolean }>>(
+            (acc, p) => {
+              acc[p.module] = p; // later entries override earlier
+              return acc;
+            },
+            {}
+          )
         ),
       },
     },
@@ -319,7 +340,6 @@ async function main() {
       number: 1001,
       quotationId: null,
       companyId: companies[6].id,
-      dealId: undefined,
       issueDate: daysAgo(9),
       status: "ISSUED",
       ownerId: sales2.id,
@@ -480,6 +500,121 @@ async function main() {
           { productId: products[5].id, description: products[5].name, qty: 40, unitPrice: 22000000, taxRate: 9, lineTotal: 40 * 22000000 * 1.09 },
         ],
       },
+    },
+  });
+
+  /* ═══════════════ فاز ۳ — مالی: خزانه + بانک‌داری + پرداخت آنلاین ═══════════════ */
+
+  // ── درخت گروه‌های خزانه (مثل _PartialFundGroupTree) ──
+  const gCash = await db.fundGroup.create({ data: { name: "تنخواه نقدی", order: 1 } });
+  const gBank = await db.fundGroup.create({ data: { name: "حساب‌های بانکی", order: 2 } });
+  const gPetty = await db.fundGroup.create({
+    data: { name: "پتی‌کاسپند", parentId: gCash.id, order: 1 },
+  });
+  const gMain = await db.fundGroup.create({
+    data: { name: "تنخواه مرکزی", parentId: gCash.id, order: 2 },
+  });
+  const gIncome = await db.fundGroup.create({
+    data: { name: "دریافت‌های فروش", parentId: gBank.id, order: 1 },
+  });
+  const gExpense = await db.fundGroup.create({
+    data: { name: "هزینه‌های جاری", parentId: gBank.id, order: 2 },
+  });
+
+  // ── اسناد خزانه (رسید/پرداخت — مثل CrmFund با FundDebit/FundCredit) ──
+  const fundRows: {
+    number: number; group: string; type: "RECEIVE" | "PAY"; amount: number;
+    day: number; desc: string; verified: boolean;
+  }[] = [
+    { number: 1, group: gMain.id, type: "RECEIVE", amount: 500_000_000, day: 40, desc: "شارژ اولیه تنخواه مرکزی از حساب شرکت", verified: true },
+    { number: 2, group: gPetty.id, type: "RECEIVE", amount: 60_000_000, day: 35, desc: "انتقال وجه به پتی‌کاسپند واحد فروش", verified: true },
+    { number: 3, group: gIncome.id, type: "RECEIVE", amount: 145_800_000, day: 28, desc: "دریافت وجه فاکتور فروش شماره ۲", verified: true },
+    { number: 4, group: gExpense.id, type: "PAY", amount: 18_500_000, day: 25, desc: "هزینه تبلیغات بنری نمایشگاه", verified: true },
+    { number: 5, group: gPetty.id, type: "PAY", amount: 4_200_000, day: 20, desc: "خرید لوازم اداری", verified: false },
+    { number: 6, group: gIncome.id, type: "RECEIVE", amount: 98_000_000, day: 14, desc: "چک مشتری — شرکت آریا صنعت", verified: false },
+    { number: 7, group: gExpense.id, type: "PAY", amount: 32_000_000, day: 10, desc: "پرداخت اجاره دفتر مرکزی", verified: true },
+    { number: 8, group: gMain.id, type: "RECEIVE", amount: 210_000_000, day: 5, desc: "دریافت پیش‌پرداخت پروژه پارس‌داده", verified: false },
+    { number: 9, group: gExpense.id, type: "PAY", amount: 9_800_000, day: 2, desc: "هزینه پذیرایی جلسات مشتریان", verified: false },
+  ];
+  for (const row of fundRows) {
+    await db.fundTransaction.create({
+      data: {
+        number: row.number,
+        groupId: row.group,
+        custodianId: admin.id,
+        type: row.type,
+        amount: row.amount,
+        date: daysAgo(row.day),
+        description: row.desc,
+        isVerified: row.verified,
+        verifiedById: row.verified ? manager.id : null,
+        verifiedAt: row.verified ? daysAgo(row.day - 1) : null,
+        createdById: admin.id,
+      },
+    });
+  }
+
+  // ── بانک‌ها و شعب (مثل Areas/Banking: بانک → شعبه → حساب) ──
+  const bankMelli = await db.bank.create({ data: { code: "01", name: "بانک ملی ایران" } });
+  const bankMellat = await db.bank.create({ data: { code: "12", name: "بانک ملت" } });
+  const bankSaman = await db.bank.create({ data: { code: "56", name: "بانک سامان" } });
+  const bankParsian = await db.bank.create({ data: { code: "54", name: "بانک پارسیان" } });
+
+  const brMelliMarkazi = await db.bankBranch.create({
+    data: { bankId: bankMelli.id, name: "شعبه مرکزی تهران", tel: "021-33901111" },
+  });
+  const brMellatSadeghiye = await db.bankBranch.create({
+    data: { bankId: bankMellat.id, name: "شعبه صادقیه", tel: "021-44670000" },
+  });
+  const brSamanVanak = await db.bankBranch.create({
+    data: { bankId: bankSaman.id, name: "شعبه ونک", tel: "021-88960000" },
+  });
+  const brParsianValiasr = await db.bankBranch.create({
+    data: { bankId: bankParsian.id, name: "شعبه ولیعصر", tel: "021-88770000" },
+  });
+
+  // ── انواع حساب (BankAccountType) ──
+  const accCurrent = await db.bankAccountType.create({ data: { name: "جاری" } });
+  const accSaving = await db.bankAccountType.create({ data: { name: "سپرده" } });
+  const accGharz = await db.bankAccountType.create({ data: { name: "قرض‌الحسنه" } });
+
+  // ── حساب‌های بانکی (BankAccount) ──
+  await db.bankAccount.createMany({
+    data: [
+      {
+        branchId: brMelliMarkazi.id, accountTypeId: accCurrent.id,
+        accountNumber: "0104567890011", cardNumber: "6104-3378-1234-5678",
+        shabaNumber: "IR820120010000004567890011", accountOwner: "شرکت نمونه پارس", isDefault: true,
+        desc: "حساب اصلی درآمد فروش",
+      },
+      {
+        branchId: brMellatSadeghiye.id, accountTypeId: accCurrent.id,
+        accountNumber: "1234567890", cardNumber: "6104-3378-8765-4321",
+        shabaNumber: "IR120120000000001234567890", accountOwner: "شرکت نمونه پارس",
+        desc: "حساب هزینه‌های جاری",
+      },
+      {
+        branchId: brSamanVanak.id, accountTypeId: accSaving.id,
+        accountNumber: "8888-7777-6666-5555", shabaNumber: "IR560560000000888877776666",
+        accountOwner: "شرکت نمونه پارس", desc: "سپرده سرمایه‌گذاری کوتاه‌مدت",
+      },
+      {
+        branchId: brParsianValiasr.id, accountTypeId: accGharz.id,
+        accountNumber: "5544-3322-1100-9988", accountOwner: "خیریه نیکوکار",
+        desc: "حساب قرض‌الحسنه پرسنلی",
+      },
+    ],
+  });
+
+  // ── یک پرداخت آنلاین نمونه (درگاه غیرفعال → وضعیت Pending) ──
+  await db.onlinePayment.create({
+    data: {
+      gateway: "ZARINPAL",
+      amount: 25_000_000,
+      description: "پرداخت آنلاین فاکتور فروش شماره ۱ — درگاه هنوز فعال نیست",
+      status: "PENDING",
+      payerName: "شرکت آریا صنعت",
+      payerMobile: "09121234567",
     },
   });
 

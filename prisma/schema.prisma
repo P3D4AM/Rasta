@@ -30,15 +30,18 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  ownedCompanies Company[]  @relation("CompanyOwner")
-  ownedDeals     Deal[]     @relation("DealOwner")
-  createdTasks   Task[]     @relation("TaskCreator")
-  assignedTasks  Task[]     @relation("TaskAssignee")
+  ownedCompanies Company[]         @relation("CompanyOwner")
+  ownedDeals     Deal[]            @relation("DealOwner")
+  createdTasks   Task[]            @relation("TaskCreator")
+  assignedTasks  Task[]            @relation("TaskAssignee")
   activities     Activity[]
   quotations     Quotation[]
   orders         SalesOrder[]
-  stockMovements StockMovement[] @relation("StockMovementUser")
-  ownedPurchases PurchaseOrder[] @relation("PurchaseOwner")
+  stockMovements StockMovement[]   @relation("StockMovementUser")
+  ownedPurchases PurchaseOrder[]   @relation("PurchaseOwner")
+  fundCustodian  FundTransaction[] @relation("FundCustodian")
+  fundVerifier   FundTransaction[] @relation("FundVerifier")
+  fundCreator    FundTransaction[] @relation("FundCreator")
 }
 
 model Role {
@@ -85,12 +88,12 @@ model Company {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  contacts   Contact[]
-  deals      Deal[]
-  activities Activity[]
-  tasks      Task[]
-  quotations Quotation[]
-  orders     SalesOrder[]
+  contacts       Contact[]
+  deals          Deal[]
+  activities     Activity[]
+  tasks          Task[]
+  quotations     Quotation[]
+  orders         SalesOrder[]
   purchaseOrders PurchaseOrder[] @relation("PurchaseSupplier")
 }
 
@@ -131,7 +134,7 @@ model Deal {
   ownerId         String?
   owner           User?     @relation("DealOwner", fields: [ownerId], references: [id])
   createdAt       DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  updatedAt       DateTime  @updatedAt
 
   activities Activity[]
   tasks      Task[]
@@ -139,23 +142,23 @@ model Deal {
 }
 
 model Activity {
-  id        String   @id @default(cuid())
-  type      String   @default("NOTE") // CALL | MEETING | EMAIL | SMS | NOTE
-  direction String? // INCOMING | OUTGOING
-  subject   String
-  body      String?
-  companyId String?
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  contactId String?
-  contact   Contact? @relation(fields: [contactId], references: [id])
-  dealId    String?
-  deal      Deal?    @relation(fields: [dealId], references: [id])
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  occurredAt DateTime @default(now())
-  nextStep  String?
-  nextAt    DateTime?
-  createdAt DateTime @default(now())
+  id         String    @id @default(cuid())
+  type       String    @default("NOTE") // CALL | MEETING | EMAIL | SMS | NOTE
+  direction  String? // INCOMING | OUTGOING
+  subject    String
+  body       String?
+  companyId  String?
+  company    Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId  String?
+  contact    Contact?  @relation(fields: [contactId], references: [id])
+  dealId     String?
+  deal       Deal?     @relation(fields: [dealId], references: [id])
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  occurredAt DateTime  @default(now())
+  nextStep   String?
+  nextAt     DateTime?
+  createdAt  DateTime  @default(now())
 
   @@index([companyId])
   @@index([dealId])
@@ -199,10 +202,10 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  quotationItems QuotationItem[]
-  orderItems     SalesOrderItem[]
-  stockLevels    StockLevel[]
-  stockMovements StockMovement[]
+  quotationItems     QuotationItem[]
+  orderItems         SalesOrderItem[]
+  stockLevels        StockLevel[]
+  stockMovements     StockMovement[]
   purchaseOrderItems PurchaseOrderItem[]
 }
 
@@ -247,24 +250,24 @@ model QuotationItem {
 }
 
 model SalesOrder {
-  id            String    @id @default(cuid())
-  number        Int       @unique
+  id            String     @id @default(cuid())
+  number        Int        @unique
   quotationId   String?
   quotation     Quotation? @relation(fields: [quotationId], references: [id])
   companyId     String
-  company       Company   @relation(fields: [companyId], references: [id])
-  issueDate     DateTime  @default(now())
-  status        String    @default("DRAFT") // DRAFT | ISSUED | PAID | CANCELED
+  company       Company    @relation(fields: [companyId], references: [id])
+  issueDate     DateTime   @default(now())
+  status        String     @default("DRAFT") // DRAFT | ISSUED | PAID | CANCELED
   note          String?
   ownerId       String?
-  owner         User?     @relation(fields: [ownerId], references: [id])
-  subtotal      Float     @default(0)
-  discountTotal Float     @default(0)
-  taxTotal      Float     @default(0)
-  total         Float     @default(0)
-  paidTotal     Float     @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  owner         User?      @relation(fields: [ownerId], references: [id])
+  subtotal      Float      @default(0)
+  discountTotal Float      @default(0)
+  taxTotal      Float      @default(0)
+  total         Float      @default(0)
+  paidTotal     Float      @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   items    SalesOrderItem[]
   payments Payment[]
@@ -308,9 +311,9 @@ model Warehouse {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  stockLevels   StockLevel[]
-  movementsFrom StockMovement[] @relation("FromWarehouse")
-  movementsTo   StockMovement[] @relation("ToWarehouse")
+  stockLevels    StockLevel[]
+  movementsFrom  StockMovement[] @relation("FromWarehouse")
+  movementsTo    StockMovement[] @relation("ToWarehouse")
   purchaseOrders PurchaseOrder[]
 }
 
@@ -328,23 +331,23 @@ model StockLevel {
 }
 
 model StockMovement {
-  id             String     @id @default(cuid())
-  type           String // IN | OUT | TRANSFER | ADJUST
-  productId      String
-  product        Product    @relation(fields: [productId], references: [id])
+  id              String     @id @default(cuid())
+  type            String // IN | OUT | TRANSFER | ADJUST
+  productId       String
+  product         Product    @relation(fields: [productId], references: [id])
   fromWarehouseId String?
-  fromWarehouse  Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
-  toWarehouseId  String?
-  toWarehouse    Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
-  quantity       Float // IN/OUT/TRANSFER: positive; ADJUST: signed delta
-  unitCost       Float?
-  refType        String? // MANUAL | PURCHASE_ORDER | SALES_ORDER
-  refId          String?
-  note           String?
-  userId         String?
-  user           User?      @relation("StockMovementUser", fields: [userId], references: [id])
-  movedAt        DateTime   @default(now())
-  createdAt      DateTime   @default(now())
+  fromWarehouse   Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+  toWarehouseId   String?
+  toWarehouse     Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
+  quantity        Float // IN/OUT/TRANSFER: positive; ADJUST: signed delta
+  unitCost        Float?
+  refType         String? // MANUAL | PURCHASE_ORDER | SALES_ORDER
+  refId           String?
+  note            String?
+  userId          String?
+  user            User?      @relation("StockMovementUser", fields: [userId], references: [id])
+  movedAt         DateTime   @default(now())
+  createdAt       DateTime   @default(now())
 
   @@index([productId])
   @@index([toWarehouseId])
@@ -376,16 +379,16 @@ model PurchaseOrder {
 }
 
 model PurchaseOrderItem {
-  id          String        @id @default(cuid())
+  id              String        @id @default(cuid())
   purchaseOrderId String
-  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
-  productId   String?
-  product     Product?      @relation(fields: [productId], references: [id])
-  description String?
-  qty         Float         @default(1)
-  unitPrice   Float         @default(0)
-  taxRate     Float         @default(0)
-  lineTotal   Float         @default(0)
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String?
+  product         Product?      @relation(fields: [productId], references: [id])
+  description     String?
+  qty             Float         @default(1)
+  unitPrice       Float         @default(0)
+  taxRate         Float         @default(0)
+  lineTotal       Float         @default(0)
 }
 
 // ─────────────────────────── System ───────────────────────────
@@ -406,4 +409,114 @@ model ActivityLog {
   createdAt DateTime @default(now())
 
   @@index([entity, entityId])
+}
+
+// ─────────────────────────── Finance (فاز ۳ — بازسازی Areas/Fund + Areas/Banking + Areas/OnlinePayment) ───────────────────────────
+// نگاشت: CrmFund → FundTransaction، CrmFundGroups → FundGroup،
+// CrmBankingBanks/Branches/Accounts → Bank/BankBranch/BankAccount
+
+model FundGroup {
+  id        String      @id @default(cuid())
+  name      String
+  parentId  String?
+  parent    FundGroup?  @relation("FundGroupTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children  FundGroup[] @relation("FundGroupTree")
+  order     Int         @default(0)
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  transactions FundTransaction[]
+}
+
+model FundTransaction {
+  id           String    @id @default(cuid())
+  number       Int       @unique // شماره سند خزانه (مثل FundNumber)
+  groupId      String
+  group        FundGroup @relation(fields: [groupId], references: [id])
+  // کاربر خزانه‌دار (CrmUserId در محصول اصلی)
+  custodianId  String
+  custodian    User      @relation("FundCustodian", fields: [custodianId], references: [id])
+  // RECEIVE = دریافت وجه (FundDebit) | PAY = پرداخت وجه (FundCredit)
+  type         String
+  amount       Float
+  date         DateTime
+  description  String?
+  // گردش کار تایید (FundIsVerified + FundVerifierId)
+  isVerified   Boolean   @default(false)
+  verifiedById String?
+  verifier     User?     @relation("FundVerifier", fields: [verifiedById], references: [id])
+  verifiedAt   DateTime?
+  createdById  String
+  createdBy    User      @relation("FundCreator", fields: [createdById], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([groupId, date])
+  @@index([custodianId])
+}
+
+model Bank {
+  id        String       @id @default(cuid())
+  code      String? // کد بانک (BankingBankCode)
+  name      String
+  desc      String?
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  branches  BankBranch[]
+}
+
+model BankBranch {
+  id        String   @id @default(cuid())
+  bankId    String
+  bank      Bank     @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  name      String // نام شعبه (BranchListName)
+  tel       String? // تلفن شعبه (BranchListTel)
+  createdAt DateTime @default(now())
+
+  accounts BankAccount[]
+}
+
+model BankAccountType {
+  id       String        @id @default(cuid())
+  name     String // جاری | سپرده | قرض‌الحسنه | کوتاه‌مدت
+  accounts BankAccount[]
+
+  @@unique([name])
+}
+
+model BankAccount {
+  id            String          @id @default(cuid())
+  branchId      String
+  branch        BankBranch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  accountTypeId String
+  accountType   BankAccountType @relation(fields: [accountTypeId], references: [id])
+  accountNumber String // شماره حساب (BankingAccountNumber)
+  cardNumber    String? // شماره کارت (BankingAccountCardNumber)
+  shabaNumber   String? // شماره شبا (BankingAccountShabaNumber)
+  accountOwner  String // صاحب حساب (BankingAccountOwner)
+  isDefault     Boolean         @default(false)
+  desc          String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@unique([accountNumber])
+}
+
+// پرداخت آنلاین — بازسازی Areas/OnlinePayment (ملت/پارسیان/زرین‌پال)
+model OnlinePayment {
+  id          String    @id @default(cuid())
+  gateway     String // ZARINPAL | MELLAT | PARSIAN
+  amount      Float
+  description String?
+  authority   String? // کد پیگیری درگاه
+  status      String    @default("PENDING") // PENDING | VERIFIED | FAILED | CANCELED
+  refId       String? // شماره مرجع تراکنش موفق
+  orderId     String?
+  payerName   String?
+  payerMobile String?
+  paidAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([status])
 }
