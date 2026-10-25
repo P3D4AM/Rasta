@@ -13,6 +13,9 @@ import {
   Package,
   FileText,
   ReceiptText,
+  Warehouse,
+  Boxes,
+  ShoppingCart,
   BarChart3,
   UserCog,
   ShieldCheck,
@@ -58,6 +61,9 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Package,
   FileText,
   ReceiptText,
+  Warehouse,
+  Boxes,
+  ShoppingCart,
   BarChart3,
   UserCog,
   ShieldCheck,
@@ -67,8 +73,9 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
 const NAV_GROUPS: { label: string; modules: ModuleKey[] }[] = [
   { label: "اصلی", modules: ["dashboard", "tasks", "activities", "deals"] },
   { label: "اطلاعات پایه", modules: ["companies", "contacts", "products"] },
-  { label: "فروش", modules: ["quotations", "orders", "reports"] },
-  { label: "مدیریت", modules: ["users", "roles"] },
+  { label: "فروش", modules: ["quotations", "orders"] },
+  { label: "انبار و خرید", modules: ["warehouses", "inventory", "purchases"] },
+  { label: "مدیریت", modules: ["reports", "users", "roles"] },
 ];
 
 export function AppShell({ user, children }: { user: SessionUser; children: React.ReactNode }) {

@@ -17,11 +17,13 @@ export function JalaliDateInput({
   onChange,
   placeholder = "۱۴۰۴/۰۱/۰۱",
   className,
+  disabled = false,
 }: {
   value: string | null;
   onChange: (iso: string | null) => void;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
 }) {
   // Official React "adjust state during render" pattern (replaces setState-in-effect)
   const [inner, setInner] = useState<InnerState>(() => ({
@@ -66,8 +68,9 @@ export function JalaliDateInput({
         placeholder={placeholder}
         value={inner.text}
         onChange={(e) => handleChange(e.target.value)}
+        disabled={disabled}
       />
-      {inner.text && (
+      {inner.text && !disabled && (
         <button
           type="button"
           className="absolute end-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
