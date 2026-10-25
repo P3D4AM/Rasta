@@ -25,6 +25,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { formatDateTime } from "@/lib/format";
 import { toPersianDigits } from "@/lib/jalali";
 
@@ -93,7 +94,8 @@ export default function ProjectPreviewPage({ params }: { params: Promise<{ id: s
   useEffect(() => { load(); }, [load]);
 
   useEffect(() => {
-    api<{ isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then((me) => {
+    fetchMe().then((me) => {
+      if (!me) return;
       const has = (form: string, act: string) => me.isAdmin || (me.permissions[form] ?? []).includes(act);
       setPerm({
         edit: has("frmDefineProjects", "actPost"),
@@ -103,7 +105,7 @@ export default function ProjectPreviewPage({ params }: { params: Promise<{ id: s
         archive: has("frmDefineProjects", "actCanSetArchive"),
         ticketStop: has("frmDefineProjects", "actCanSetPrjIsTicket"),
       });
-    }).catch(() => {});
+    });
   }, []);
 
   async function saveConversation() {

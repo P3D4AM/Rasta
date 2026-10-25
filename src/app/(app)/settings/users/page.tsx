@@ -28,6 +28,7 @@ import { JalaliDateInput } from "@/components/rasta/jalali-date-input";
 import { PageHeader } from "@/components/rasta/page-header";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { formatDate } from "@/lib/format";
 import { toPersianDigits } from "@/lib/jalali";
 import { WEEK_DAYS } from "@/lib/constants";
@@ -71,7 +72,7 @@ export default function UsersPage() {
   const [idx, setIdx] = useState(0);
   const [detail, setDetail] = useState<UDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [me, setMe] = useState<{ id: string; isAdmin: boolean; permissions: Record<string, string[]> } | null>(null);
+  const [me, setMe] = useState<{ id?: string; isAdmin: boolean; permissions: Record<string, string[]> } | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState<emptyUser>(emptyForm);
@@ -114,7 +115,7 @@ export default function UsersPage() {
   useEffect(() => { loadList(); }, [loadList]);
 
   useEffect(() => {
-    api<{ id: string; isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then(setMe).catch(() => {});
+    fetchMe().then((m) => { if (m) setMe(m); });
     Promise.all([
       api<{ rows: { id: string; name: string }[] }>("/api/roles?light=1"),
       api<{ rows: { id: string; name: string }[] }>("/api/user-org/positions"),

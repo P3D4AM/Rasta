@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { PageHeader } from "@/components/rasta/page-header";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { toPersianDigits } from "@/lib/jalali";
 
 type Pos = { id: string; name: string; code: string | null; manager: string | null; parentId: string | null; parent: { name: string } | null; _count: { users: number; children: number } };
@@ -48,7 +49,7 @@ export default function UserOrgPage() {
 
   useEffect(() => {
     load();
-    api<{ isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then(setMe).catch(() => {});
+    fetchMe().then((m) => { if (m) setMe(m); });
   }, [load]);
 
   function open(entity: "positions" | "groups" | "departments", row: Pos | Simple | null) {

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { toPersianDigits } from "@/lib/jalali";
 
@@ -65,11 +66,12 @@ export function ProjectsPanel({ companyId }: { companyId: string }) {
   useEffect(() => { load(); }, [load]);
 
   useEffect(() => {
-    api<{ isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then((me) => {
+    fetchMe().then((me) => {
+      if (!me) return;
       const has = (form: string, act: string) => me.isAdmin || (me.permissions[form] ?? []).includes(act);
       setCanInsert(has("frmDefineProjects", "actPost"));
       setCanCnvs(has("frmConversations", "actInsert"));
-    }).catch(() => {});
+    });
   }, []);
 
   async function toggleExpand(id: string) {

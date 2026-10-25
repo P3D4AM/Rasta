@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { JalaliDateInput } from "@/components/rasta/jalali-date-input";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { toPersianDigits } from "@/lib/jalali";
 
 type Title = { id: string; title: string; titleGroupId: string | null; statusGroupId: string | null; gradeId: string | null; priorityId: string | null; activeNumRWithTitle: boolean; postFix: string | null; remindDay: number | null; foCmpCanSee: boolean; isTicket: boolean };
@@ -31,7 +32,7 @@ type Category = { id: string; name: string; parentId: string | null };
 type StatusGroup = { id: string; name: string; isActive: boolean };
 type Department = { id: string; name: string };
 type LightUser = { id: string; firstName: string; lastName: string };
-type Me = { isAdmin: boolean; permissions: Record<string, string[]> };
+type Me = { id?: string; isAdmin: boolean; permissions: Record<string, string[]> };
 
 type FormState = {
   title: string;
@@ -108,7 +109,7 @@ export function ProjectForm({ mode, companyId, projectId }: { mode: "insert" | "
         api<{ rows: StatusGroup[] }>("/api/project-defs/statusGroups"),
         api<{ rows: LightUser[] }>("/api/users?light=1"),
         api<{ rows: Department[] }>("/api/user-org/departments"),
-        api<Me>("/api/auth/me"),
+        fetchMe(),
       ]);
       setDefs({
         titles: titles.rows, titleGroups: titleGroups.rows, groups: groups.rows,
@@ -117,7 +118,7 @@ export function ProjectForm({ mode, companyId, projectId }: { mode: "insert" | "
       });
       setUsers(usersRes.rows);
       setDepartments(deps.rows);
-      setMe(meRes);
+      setMe(meRes as Me);
 
       if (mode === "edit" && projectId) {
         const res = await fetch(`/api/projects/${projectId}`);
@@ -179,7 +180,7 @@ export function ProjectForm({ mode, companyId, projectId }: { mode: "insert" | "
 
   /** قالب عنوان پیش‌فرض — پر کردن خودکار فیلدها مثل خود CRMIdeal */
   function applyTitle(titleId: string) {
-    const t = defs.titles.find((x) => x.id === titleId);
+    const t = defs.titles.find((x) => x.title === titleId);
     setForm((f) => ({
       ...f,
       title: t?.title ?? "",

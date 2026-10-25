@@ -20,6 +20,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { PageHeader } from "@/components/rasta/page-header";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { toPersianDigits } from "@/lib/jalali";
 
 type Role = {
@@ -68,7 +69,7 @@ export default function RolesPage() {
 
   useEffect(() => {
     load();
-    api<{ isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then(setMe).catch(() => {});
+    fetchMe().then((m) => { if (m) setMe(m); });
   }, [load]);
 
   function openDialog(role: Role | null) {

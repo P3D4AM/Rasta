@@ -19,6 +19,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { PageHeader } from "@/components/rasta/page-header";
 import { useToast } from "@/hooks/use-toast";
 import { api } from "@/hooks/use-list";
+import { fetchMe } from "@/lib/client-me";
 import { toPersianDigits } from "@/lib/jalali";
 
 type Row = Record<string, unknown> & { id: string };
@@ -53,7 +54,7 @@ export default function ProjectDefsPage() {
 
   useEffect(() => {
     load();
-    api<{ isAdmin: boolean; permissions: Record<string, string[]> }>("/api/auth/me").then(setMe).catch(() => {});
+    fetchMe().then((m) => { if (m) setMe(m); });
   }, [load]);
 
   const has = useCallback((act: string) => !!me && (me.isAdmin || (me.permissions["frmMain"] ?? []).includes(act)), [me]);

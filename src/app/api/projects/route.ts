@@ -29,7 +29,9 @@ export async function GET(req: Request) {
       if (ticketMode === "current") where.isFinished = false;
       else if (ticketMode === "archive") where.isFinished = true;
     } else {
+      // مثل خود محصول: تب جاری/آرشیو فقط پروژه‌های عادی را نشان می‌دهند؛ تیکت‌ها تب خودشان را دارند
       where.isFinished = isFinished;
+      where.isTicket = false;
     }
     if (search) {
       where.OR = [
@@ -147,11 +149,18 @@ export async function POST(req: Request) {
     }
 
     // شماره‌گذاری prjNumR — مثل CRMfnReturnProjectNumR + ActivePrjNumRWithTitle
+    // در CRMIdeal شمارنده به‌تفکیک عنوان دنباله خودش را دارد؛ چون ستون number در رستا
+    // یکتای سراسری است، شماره‌های گرفته‌شده رد می‌شوند تا هم ترتیب عنوان حفظ شود هم یکتایی.
     const titleDef = await db.projectTitle.findFirst({ where: { title } });
     let number: number;
     if (titleDef?.activeNumRWithTitle) {
       const last = await db.project.findFirst({ where: { title }, orderBy: { number: "desc" }, select: { number: true } });
       number = (last?.number ?? 1000) + 1;
+      let taken = await db.project.findFirst({ where: { number }, select: { id: true } });
+      while (taken) {
+        number += 1;
+        taken = await db.project.findFirst({ where: { number }, select: { id: true } });
+      }
     } else {
       const last = await db.project.findFirst({ orderBy: { number: "desc" }, select: { number: true } });
       number = (last?.number ?? 1000) + 1;
