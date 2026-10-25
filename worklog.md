@@ -135,3 +135,23 @@ Stage Summary:
 - UI رستا از این پس بازسازی میلیمتری CRMIdeal است (فونت Ravi + پالت کامل + ریل سرمه‌ای + pillها + الگوی کارت #528fcc)
 - فاز ۳ (مالی) کامل: خزانه + بانک‌داری + پرداخت آنلاین — E2E تست‌شده
 - نسخه 0.2.0 — ورود: admin/admin123
+
+---
+Task ID: 6
+Agent: main (Z.ai)
+Task: اصلاح UI بر اساس بازخورد مالک — «هنوز کلی فاصله داره؛ رنگ‌بندی و آیکون‌ها و ساختار صفحات مثل خود CRMIdeal نیست»
+
+Work Log:
+- ریشه‌یابی از سورس واقعی محصول: _LayoutMain.cshtml (157KB) + ترتیب واقعی CSS از BundleConfig: fonts→icofont→flag→bootstrap-4-1→MainStyle→RepMainStyle→StySetting→StyPublic→کامپوننت‌ها→MainStyleNew
+- کشف کلیدی در MainStyleNew.css: ریل منو (#s-m-t) سرمه‌ای #012875 تمام‌قد با گوشه گرد 10px و عرض ~79px؛ آیکون/عنوان #e7eaf2 با !important (رنگ‌بندی قدیمی هر-منو در نسخه 3.1.18 override شده)
+- آیکون‌های واقعی: فونت Font Awesome 4.4 خود محصول؛ هدر و کارتابل‌ها SVG خطی inline — لوگو 75px بسته / 104px باز + شعار ravi-medium 9px
+- درخت منوی واقعی از CRM.Resources.Menus.resx (878 کلید mu/mnu) + کلاس‌های s-b-mnu: ۱۸ منوی ریشه CRMIdeal با زیرمنوها
+- پروتوتایپ استاتیک در سندباکست: project-analysis/crm-project/__prototype__/index.html با خود CSS/فونت/تصاویر محصول — تأیید مرورگر+VLM
+- قرص کارتابل (Cartables-RowBox): خانه/جستجو/یادآور/کارنامه روزانه/وضعیت/نشانک‌ها/کارهای داخلی/حضور و غیاب/دانش‌نامه/فراموشی‌ها/تلگرام
+- انتقال به رستا: کپی fontawesome-webfont از Content/fonts محصول + app-shell بازنویسی با آیکون‌های FA4 و درخت منوی کامل + جدول Kendo Bootstrap در data-table
+- tsc/lint پاک؛ E2E کامل + VLM تأیید؛ رفع دو بار تداخل auto-snapshot با cherry-pick/reset
+
+Stage Summary:
+- ظاهر رستا از خود سورس CRMIdeal استخراج شد: ریل سرمه‌ای #012875 + آیکون‌های FA4 محصول + درخت منو + قرص کارتابل + جدول Kendo
+- پروتوتایپ مرجع: project-analysis/crm-project/__prototype__/index.html
+- develop = 63195a7f + این commit؛ main فروزن روی 1275fdaf
