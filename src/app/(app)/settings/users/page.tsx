@@ -737,24 +737,24 @@ export default function UsersPage() {
         <DialogContent className="max-w-xl">
           <DialogHeader><DialogTitle>تعیین ساعت ورود — {detail ? nameOf(detail) : ""}</DialogTitle></DialogHeader>
           <p className="text-[11px] text-muted-foreground">
-            اگر هیچ قاعده‌ای ثبت نشود، ورود بدون محدودیت است. هر قاعده یک پنجرهٔ «ممنوع» تعریف می‌کند — دقیقاً مثل
-            CRMspCheckUserLoginAllowedTimes خود CRMIdeal: اگر زمان فعلی داخل پنجره بیفتد، ورود رد می‌شود و هر بُعد
-            (تاریخ/روز/ساعت) مستقل چک می‌شود؛ مثلاً روزِ ثبت‌شده در آن قاعده، کل آن روز را می‌بندد و بازهٔ ساعت همان قاعده هر روز اعمال می‌شود.
+            اگر هیچ قاعده‌ای ثبت نشود، ورود بدون محدودیت است. هر قاعده یک پنجرهٔ «مجاز» تعریف می‌کند — دقیقاً مثل
+            CRMspCheckUserLoginAllowedTimes خود CRMIdeal (نسخهٔ نهایی V5): کاربر فقط در پنجره‌های ثبت‌شده می‌تواند وارد شود و هر بُعد
+            (تاریخ/روز/ساعت) مستقل چک می‌شود؛ مثلاً روزِ ثبت‌شده در آن قاعده، فقط همان روز را باز می‌کند و بازهٔ ساعت همان قاعده هر روز اعمال می‌شود.
           </p>
           <div className="border rounded-lg overflow-hidden">
             <table className="w-full text-xs">
               <thead className="bg-muted/60 text-muted-foreground">
                 <tr>
-                  <th className="px-2 py-2 text-start font-medium">روز ممنوع</th>
+                  <th className="px-2 py-2 text-start font-medium">روز مجاز</th>
                   <th className="px-2 py-2 text-start font-medium">از ساعت</th>
                   <th className="px-2 py-2 text-start font-medium">تا ساعت</th>
-                  <th className="px-2 py-2 text-start font-medium">بازهٔ تاریخ ممنوع</th>
+                  <th className="px-2 py-2 text-start font-medium">بازهٔ تاریخ مجاز</th>
                   <th className="px-2 py-2" />
                 </tr>
               </thead>
               <tbody>
                 {loginTimes.length === 0 ? (
-                  <tr><td colSpan={5} className="text-center py-4 text-muted-foreground">بدون قاعدهٔ ممنوعیتی (ورود آزاد)</td></tr>
+                  <tr><td colSpan={5} className="text-center py-4 text-muted-foreground">بدون قاعده (ورود بدون محدودیت)</td></tr>
                 ) : (
                   loginTimes.map((t) => (
                     <tr key={t.id} className="border-t">
@@ -776,7 +776,7 @@ export default function UsersPage() {
             </table>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 items-end">
-            <T label="روز ممنوع">
+            <T label="روز مجاز">
               <Select value={timeForm.dayOfWeek} onValueChange={(v) => setTimeForm({ ...timeForm, dayOfWeek: v })}>
                 <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -785,9 +785,9 @@ export default function UsersPage() {
                 </SelectContent>
               </Select>
             </T>
-            <T label="از ساعت ممنوع (HH:mm)"><Input dir="ltr" value={timeForm.fromTime} onChange={(e) => setTimeForm({ ...timeForm, fromTime: e.target.value })} /></T>
-            <T label="تا ساعت ممنوع (HH:mm)"><Input dir="ltr" value={timeForm.toTime} onChange={(e) => setTimeForm({ ...timeForm, toTime: e.target.value })} /></T>
-            <Button size="sm" onClick={addTime}>افزودن قاعدهٔ ممنوعیت</Button>
+            <T label="از ساعت مجاز (HH:mm)"><Input dir="ltr" value={timeForm.fromTime} onChange={(e) => setTimeForm({ ...timeForm, fromTime: e.target.value })} /></T>
+            <T label="تا ساعت مجاز (HH:mm)"><Input dir="ltr" value={timeForm.toTime} onChange={(e) => setTimeForm({ ...timeForm, toTime: e.target.value })} /></T>
+            <Button size="sm" onClick={addTime}>افزودن قاعدهٔ مجاز</Button>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setTimesOpen(false)}>بستن</Button>

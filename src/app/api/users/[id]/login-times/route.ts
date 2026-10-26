@@ -4,7 +4,8 @@ import { gregorianToJalali } from "@/lib/jalali";
 
 /**
  * تعیین ساعت ورود — بازسازی UserLoginAllowedTimes خود CRMIdeal.
- * هر قاعده یک پنجرهٔ «ممنوع» است (اعمال در ورود: CRMspCheckUserLoginAllowedTimes — تاریخ/روز/ساعت/IP مستقل).
+ * هر قاعده یک پنجرهٔ «مجاز» (whitelist) است — کاربر تنها در پنجره‌های ثبت‌شده می‌تواند وارد شود
+ * (اعمال در ورود: CRMspCheckUserLoginAllowedTimes نسخهٔ نهایی V5 گام ۳۷۲۵ — متن کامل از data.zip مالک).
  * GET  → لیست قواعد کاربر
  * POST → افزودن قاعده (روز هفته null = هر روز) — هم‌زمان FDatePersian/TDatePersian کلید شمسی YYYYMMDD مثل خود محصول
  * DELETE ?all=1 → حذف همه قواعد

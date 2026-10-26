@@ -6,7 +6,7 @@ import { gregorianToJalali } from "@/lib/jalali";
 /**
  * ورود — بازسازی چک‌های ترتیبی LoginI در AccountController خود CRMIdeal:
  *   رمز → فعال‌بودن در وب (UserIsActiveInWebApp=IsActive) → انقضای حساب (ExpireDate → msgErrorUsernameExpired)
- *   → داشتن نقش فعال (UsersPermission) → ساعت/روز/تاریخ/IP مجاز ورود (UserLoginAllowedTimes → CRMspCheckUserLoginAllowedTimes)
+ *   → داشتن نقش فعال (UsersPermission) → ساعت/روز/تاریخ/IP مجاز ورود (UserLoginAllowedTimes → CRMspCheckUserLoginAllowedTimes — whitelist: ورود فقط در پنجره‌های ثبت‌شده)
  * نکته: کپچا، سقف کاربر همزمان (لایسنس)، QR حضورغیاب هوشمند و شیفت‌بندی در رستا وجود ندارد (لایسنس/HRM فعال نیست).
  */
 
@@ -17,11 +17,15 @@ function faDateKey(d: Date): string {
 }
 
 /**
- * بازسازی عیناً CRMspCheckUserLoginAllowedTimes (کاتالوگ SQL — V3 گام ۷۲۵، متن کامل):
- * هر بُعد (تاریخ/روز/ساعت/IP) به‌صورت مستقل روی کل ردیف‌های کاربر چک می‌شود؛
- * اگر کاربر برای بُعدی قاعده‌ای ثبت کرده باشد و «اکنون» داخل پنجرهٔ آن قاعده بیفتد،
- * ورود رد می‌شود (ردیف‌ها پنجرهٔ ممنوع هستند، نه مجاز). بدون قاعده در یک بُعد = بدون محدودیت آن بُعد.
- * خروجی: AllowUserLogin + Reason (Date,Day,Time,IPAddress) دقیقاً مثل SP.
+ * بازسازی عیناً CRMspCheckUserLoginAllowedTimes — نسخهٔ نهایی V5 گام ۳۷۲۵ (متن کامل از data.zip مالک — statements.pack):
+ * «if there are not any record for user in UserLoginAllowedTimes then user can login,
+ *  but, if there are some records for user in UserLoginAllowedTimes, then user can login
+ *  to system by these records (just)»
+ * یعنی ردیف‌ها پنجرهٔ «مجاز» (whitelist) هستند، نه ممنوع: هر بُعد (تاریخ/روز/ساعت/IP) مستقل چک می‌شود؛
+ * اگر برای بُعدی قاعده‌ای ثبت شده باشد، «اکنون» باید داخل حداقل یکی از پنجره‌های همان بُعد بیفتد، وگرنه
+ * ورود با انباشت Reason (Date,Day,Time,IPAddress) رد می‌شود. بدون قاعده در یک بُعد = بدون محدودیت آن بُعد.
+ * نکتهٔ تاریخی: نسخهٔ V3 این SP باگ `<> NULL` داشت (هیچ‌وقت بلاک نمی‌کرد) و RZ980506 در V5 معنای نهایی را
+ * تثبیت کرد؛ پیاده‌سازی قبلی رستا بر اساس V3 معنا را برعکس گرفته بود (پنجرهٔ ممنوع) — با متن کامل V5 اصلاح شد.
  */
 async function checkUserLoginAllowedTimes(
   userId: string,
@@ -38,7 +42,7 @@ async function checkUserLoginAllowedTimes(
   let allow = true;
   let reason = "";
 
-  // ── Date Control — @CurrDate BETWEEN FDatePersian AND TDatePersian ──
+  // ── Date Control — اگر قاعدهٔ تاریخ هست، «اکنون» باید داخل حداقل یکی از پنجره‌ها باشد (V5: @CurrDate BETWEEN FDatePersian AND TDatePersian) ──
   const dateRows = rows.filter((r) => (r.FDatePersian ?? "").trim() !== "" || r.fromDate || r.toDate);
   if (dateRows.length > 0) {
     const hit = dateRows.some((r) => {
@@ -50,29 +54,29 @@ async function checkUserLoginAllowedTimes(
       const { fromDate, toDate } = r;
       return (!fromDate || now >= fromDate) && (!toDate || now <= toDate);
     });
-    if (hit) {
+    if (!hit) {
       allow = false;
       reason += "Date,";
     }
   }
 
-  // ── Day Control — @CurrDay BETWEEN DayNumber AND DayNumber (=برابری روز) ──
+  // ── Day Control — اگر قاعدهٔ روز هست، امروز باید جزو روزهای ثبت‌شده باشد (V5: @CurrDay BETWEEN DayNumber AND DayNumber) ──
   const dayRows = rows.filter((r) => r.dayOfWeek != null);
-  if (dayRows.length > 0 && dayRows.some((r) => r.dayOfWeek === crmDay)) {
+  if (dayRows.length > 0 && !dayRows.some((r) => r.dayOfWeek === crmDay)) {
     allow = false;
     reason += "Day,";
   }
 
-  // ── Time Control — @CurrTime BETWEEN FTime AND TTime ──
+  // ── Time Control — اگر قاعدهٔ ساعت هست، «اکنون» باید داخل حداقل یکی از پنجره‌ها باشد (V5: @CurrTime BETWEEN FTime AND TTime) ──
   const timeRows = rows.filter((r) => (r.fromTime ?? "").trim() !== "");
-  if (timeRows.length > 0 && timeRows.some((r) => nowHHmm >= r.fromTime && nowHHmm <= r.toTime)) {
+  if (timeRows.length > 0 && !timeRows.some((r) => nowHHmm >= r.fromTime && nowHHmm <= r.toTime)) {
     allow = false;
     reason += "Time,";
   }
 
-  // ── IP Control — @CurrIPAddress = IPAddress ──
+  // ── IP Control — اگر قاعدهٔ IP هست، نشانی فعلی باید با یکی از آنها برابر باشد (V5: @CurrIPAddress = IPAddress) ──
   const ipRows = rows.filter((r) => (r.ipAddress ?? "").trim() !== "");
-  if (ipRows.length > 0 && ip != null && ipRows.some((r) => r.ipAddress === ip)) {
+  if (ipRows.length > 0 && !(ip != null && ipRows.some((r) => r.ipAddress === ip))) {
     allow = false;
     reason += "IPAddress,";
   }
@@ -104,12 +108,12 @@ export async function POST(req: Request) {
     if (!user.isAdmin && !user.roleId) {
       return apiError("نقشی برای این کاربر تعریف نشده است. با مدیر سیستم تماس بگیرید.", 403);
     }
-    // ساعت/روز/تاریخ/IP ممنوع — بازسازی عیناً CRMspCheckUserLoginAllowedTimes
+    // ساعت/روز/تاریخ/IP مجاز — بازسازی عیناً CRMspCheckUserLoginAllowedTimes (whitelist)
     const ip =
       req.headers
         .get("x-forwarded-for")
         ?.split(",")[0]
-        .trim() ?? req.headers.get("x-real-ip");
+        .trim() ?? req.headers.get("x-real-ip") ?? "127.0.0.1"; // اتصال مستقیم = localhost (مثل Request.UserHostAddress خود محصول همیشه مقدار داشت)
     const { allow, reason } = await checkUserLoginAllowedTimes(user.id, ip);
     if (!allow) {
       const why = reason.replace(/,$/, "");

@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * E2E رفتاری — بازسازی عیناً CRMspCheckUserLoginAllowedTimes:
+ * E2E رفتاری — بازسازی عیناً CRMspCheckUserLoginAllowedTimes (نسخهٔ نهایی V5 گام ۳۷۲۵ — whitelist):
+ * «if there are some records for user in UserLoginAllowedTimes, then user can login to system by these records (just)»
  * سنجه‌ها:
  *  1. بدون قاعده → ورود آزاد
- *  2. قاعدهٔ ساعتِ ممنوطِ پوشش‌دهندهٔ «اکنون» → بلاک با دلیل (Time)
- *  3. قاعدهٔ ساعتِ خارج از «اکنون» → ورود آزاد (اثبات چرخش معنا: پنجره = ممنوع، نه مجاز)
- *  4. قاعدهٔ روزِ امروز → بلاک با دلیل Day (انباشت دلیل: Day,Time)
- *  5. حذف همه → ورود آزاد
+ *  2. قاعدهٔ ساعتِ پوشش‌دهندهٔ «اکنون» → ورود آزاد (پنجره = مجاز)
+ *  3. قاعدهٔ ساعتِ خارج از «اکنون» → بلاک با دلیل Time (whitelist: تنها پنجره‌های ثبت‌شده)
+ *  4. یک قاعده: روزِ فردا + پنجرهٔ ساعتِ آینده → هر دو بُعد رد → انباشت دلیل Day,Time
+ *  5. استقلال ابعاد: روزِ امروز + ساعتِ آینده → فقط Time می‌بندد (Day باز)
+ *  6. حذف همه → ورود آزاد
  */
 const BASE = "http://localhost:3000";
 const adminCreds = { username: "admin", password: "admin123" };
@@ -41,13 +43,16 @@ async function post(path, body, cookie) {
 }
 
 async function login(creds) {
-  const r = await post("/api/auth/login", creds);
-  return r;
+  return post("/api/auth/login", creds);
 }
 
 function errMsg(r) {
   if (typeof r.data === "string") return r.data;
   return (r.data && (r.data.error || r.data.message)) || JSON.stringify(r.data);
+}
+
+async function clearRules(base, cookie) {
+  await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: cookie } });
 }
 
 async function main() {
@@ -65,48 +70,56 @@ async function main() {
   const uid = target.id;
 
   const base = `/api/users/${uid}/login-times`;
-  // پاک‌سازی اولیه
-  await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: adminCookie } });
+  await clearRules(base, adminCookie);
 
   // ── ۱. بدون قاعده ──
   let t = await login(targetCreds);
   assert(t.status === 200, "۱) بدون قاعده → ورود آزاد");
 
-  // ── ۲. پنجرهٔ ممنوعِ پوشش‌دهندهٔ اکنون (۲۴ ساعت) ──
+  // ── ۲. پنجرهٔ مجازِ پوشش‌دهندهٔ اکنون (تمام‌روز) ──
   let r = await post(base, { fromTime: "00:00", toTime: "23:59" }, adminCookie);
-  assert(r.status === 201, "۲-الف) ثبت قاعدهٔ ساعت ممنوع ۰۰:۰۰-۲۳:۵۹");
+  assert(r.status === 201, "۲-الف) ثبت قاعدهٔ ساعت مجاز ۰۰:۰۰-۲۳:۵۹");
   t = await login(targetCreds);
-  const blocked = t.status === 403;
-  assert(blocked, "۲-ب) ورود داخل پنجرهٔ ممنوع → رد (403)");
-  if (blocked) {
-    const m = errMsg(t);
-    const hasTime = m.includes("Time");
-    assert(hasTime, `۲-ج) دلیل شامل Time است — پیام: «${m}»`);
-  }
-  await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: adminCookie } });
+  assert(t.status === 200, "۲-ب) ورود داخل پنجرهٔ مجاز → آزاد (whitelist)");
+  await clearRules(base, adminCookie);
 
-  // ── ۳. پنجرهٔ ممنوعِ خارج از اکنون (۲ ساعت بعد، ۳۰ دقیقه‌ای) ──
+  // ── ۳. پنجرهٔ مجازِ خارج از اکنون (۳۰ تا ۶۰ دقیقه بعد) ──
   const from = shiftHHmm(30);
   const to = shiftHHmm(60);
   r = await post(base, { fromTime: from, toTime: to }, adminCookie);
   assert(r.status === 201, `۳-الف) ثبت قاعدهٔ ${from}-${to} (آینده)`);
   t = await login(targetCreds);
-  assert(t.status === 200, "۳-ب) پنجرهٔ ممنوعِ خارج از اکنون → ورود آزاد (معنا = ممنوع، نه مجاز)");
-  await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: adminCookie } });
+  const blockedTime = t.status === 403;
+  assert(blockedTime, "۳-ب) پنجرهٔ مجازِ خارج از اکنون → رد (403)");
+  if (blockedTime) {
+    const m = errMsg(t);
+    assert(/Time/.test(m), `۳-ج) دلیل شامل Time است — پیام: «${m}»`);
+  }
+  await clearRules(base, adminCookie);
 
-  // ── ۴. روز امروز + ساعت ممنوع هم‌زمان → انباشت دلیل ──
-  const crmDay = (new Date().getDay() + 1) % 7; // شنبه=0 … جمعه=6
-  r = await post(base, { dayOfWeek: crmDay, fromTime: "00:00", toTime: "23:59" }, adminCookie);
-  assert(r.status === 201, "۴-الف) ثبت قاعدهٔ روزِ امروز + تمام‌روز");
+  // ── ۴. یک قاعده: روزِ فردا + پنجرهٔ ساعتِ آینده → هر دو بُعد رد → انباشت Day,Time ──
+  const crmDay = (new Date().getDay() + 1) % 7; // شنبه=0 … جمعه=6 (امروز)
+  const tomorrow = (crmDay + 1) % 7;
+  r = await post(base, { dayOfWeek: tomorrow, fromTime: shiftHHmm(30), toTime: shiftHHmm(60) }, adminCookie);
+  assert(r.status === 201, "۴-الف) ثبت قاعدهٔ روزِ فردا + ساعتِ آینده");
   t = await login(targetCreds);
-  const m4 = t.status === 403 ? errMsg(t) : "";
+  const m4 = errMsg(t);
   assert(t.status === 403 && /Day/.test(m4) && /Time/.test(m4), `۴-ب) انباشت دلیل Day+Time — «${m4}»`);
+  await clearRules(base, adminCookie);
 
-  // ── ۵. حذف همه ──
-  const del = await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: adminCookie } });
-  assert(del.status === 200, "۵-الف) حذف همهٔ قواعد");
+  // ── ۵. استقلال ابعاد: روزِ امروز + ساعتِ آینده → فقط بُعد ساعت می‌بندد (Day باز، Time بسته) ──
+  r = await post(base, { dayOfWeek: crmDay, fromTime: shiftHHmm(30), toTime: shiftHHmm(60) }, adminCookie);
+  assert(r.status === 201, "۵-الف) ثبت روزِ امروز + پنجرهٔ ساعتِ آینده");
   t = await login(targetCreds);
-  assert(t.status === 200, "۵-ب) پس از حذف → ورود آزاد");
+  const m5 = errMsg(t);
+  assert(t.status === 403 && /Time/.test(m5) && !/Day/.test(m5), `۵-ب) فقط Time می‌بندد، Day باز است (استقلال ابعاد) — «${m5}»`);
+  await clearRules(base, adminCookie);
+
+  // ── ۶. حذف همه ──
+  const del = await fetch(BASE + `${base}?all=1`, { method: "DELETE", headers: { Cookie: adminCookie } });
+  assert(del.status === 200, "۶-الف) حذف همهٔ قواعد");
+  t = await login(targetCreds);
+  assert(t.status === 200, "۶-ب) پس از حذف → ورود آزاد");
 
   console.log(failures === 0 ? "\nALL PASS ✅" : `\n${failures} FAILURE(S) ❌`);
   process.exit(failures === 0 ? 0 : 1);
