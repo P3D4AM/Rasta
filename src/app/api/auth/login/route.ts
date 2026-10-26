@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { createSession, verifyPassword } from "@/lib/auth";
 import { handle, json, apiError } from "@/lib/http";
+import { gregorianToJalali } from "@/lib/jalali";
 
 /**
  * ورود — بازسازی چک‌های ترتیبی LoginI در AccountController خود CRMIdeal:
@@ -9,29 +10,74 @@ import { handle, json, apiError } from "@/lib/http";
  * نکته: کپچا، سقف کاربر همزمان (لایسنس)، QR حضورغیاب هوشمند و شیفت‌بندی در رستا وجود ندارد (لایسنس/HRM فعال نیست).
  */
 
-function toMinutes(hhmm: string): number {
-  const [h, m] = hhmm.split(":").map((x) => Number(x) || 0);
-  return h * 60 + m;
+/** تاریخ امروز به کلید شمسی YYYYMMDD — مثل FDatePersian خود CRMIdeal (بدون اسلش). */
+function faDateKey(d: Date): string {
+  const [jy, jm, jd] = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  return `${jy}${String(jm).padStart(2, "0")}${String(jd).padStart(2, "0")}`;
 }
 
-async function isLoginTimeAllowed(userId: string): Promise<boolean> {
+/**
+ * بازسازی عیناً CRMspCheckUserLoginAllowedTimes (کاتالوگ SQL — V3 گام ۷۲۵، متن کامل):
+ * هر بُعد (تاریخ/روز/ساعت/IP) به‌صورت مستقل روی کل ردیف‌های کاربر چک می‌شود؛
+ * اگر کاربر برای بُعدی قاعده‌ای ثبت کرده باشد و «اکنون» داخل پنجرهٔ آن قاعده بیفتد،
+ * ورود رد می‌شود (ردیف‌ها پنجرهٔ ممنوع هستند، نه مجاز). بدون قاعده در یک بُعد = بدون محدودیت آن بُعد.
+ * خروجی: AllowUserLogin + Reason (Date,Day,Time,IPAddress) دقیقاً مثل SP.
+ */
+async function checkUserLoginAllowedTimes(
+  userId: string,
+  ip: string | null,
+): Promise<{ allow: boolean; reason: string }> {
   const rows = await db.userLoginAllowedTime.findMany({ where: { userId } });
-  if (rows.length === 0) return true; // بدون ردیف = بدون محدودیت (مثل CRMIdeal)
 
   const now = new Date();
-  // روز هفته شمسی: شنبه=0 … جمعه=6 — از UTC offset تهران (+3:30) محاسبه می‌شود
-  const tehran = new Date(now.getTime() + 3.5 * 3600 * 1000);
-  const jsDay = tehran.getUTCDay(); // 0=Sunday…6=Saturday
-  const weekDay = (jsDay + 1) % 7; // شنبه=0
-  const nowMinutes = tehran.getUTCHours() * 60 + tehran.getUTCMinutes();
+  const fa = faDateKey(now);
+  // CRMIdeal DayNumber: ۰=شنبه … ۶=جمعه — از getDay جاوااسکریپت (۰=یکشنبه) تبدیل می‌شود
+  const crmDay = (now.getDay() + 1) % 7; // شنبه=0 … جمعه=6
+  const nowHHmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-  return rows.some((r) => {
-    if (r.dayOfWeek != null && r.dayOfWeek !== weekDay) return false;
-    if (r.fromDate && now < r.fromDate) return false;
-    if (r.toDate && now > r.toDate) return false;
-    if (nowMinutes < toMinutes(r.fromTime) || nowMinutes > toMinutes(r.toTime)) return false;
-    return true;
-  });
+  let allow = true;
+  let reason = "";
+
+  // ── Date Control — @CurrDate BETWEEN FDatePersian AND TDatePersian ──
+  const dateRows = rows.filter((r) => (r.FDatePersian ?? "").trim() !== "" || r.fromDate || r.toDate);
+  if (dateRows.length > 0) {
+    const hit = dateRows.some((r) => {
+      if ((r.FDatePersian ?? "").trim() !== "") {
+        const from = (r.FDatePersian ?? "").trim();
+        const to = (r.TDatePersian ?? "").trim() || from;
+        return fa >= from && fa <= to;
+      }
+      const { fromDate, toDate } = r;
+      return (!fromDate || now >= fromDate) && (!toDate || now <= toDate);
+    });
+    if (hit) {
+      allow = false;
+      reason += "Date,";
+    }
+  }
+
+  // ── Day Control — @CurrDay BETWEEN DayNumber AND DayNumber (=برابری روز) ──
+  const dayRows = rows.filter((r) => r.dayOfWeek != null);
+  if (dayRows.length > 0 && dayRows.some((r) => r.dayOfWeek === crmDay)) {
+    allow = false;
+    reason += "Day,";
+  }
+
+  // ── Time Control — @CurrTime BETWEEN FTime AND TTime ──
+  const timeRows = rows.filter((r) => (r.fromTime ?? "").trim() !== "");
+  if (timeRows.length > 0 && timeRows.some((r) => nowHHmm >= r.fromTime && nowHHmm <= r.toTime)) {
+    allow = false;
+    reason += "Time,";
+  }
+
+  // ── IP Control — @CurrIPAddress = IPAddress ──
+  const ipRows = rows.filter((r) => (r.ipAddress ?? "").trim() !== "");
+  if (ipRows.length > 0 && ip != null && ipRows.some((r) => r.ipAddress === ip)) {
+    allow = false;
+    reason += "IPAddress,";
+  }
+
+  return { allow, reason };
 }
 
 export async function POST(req: Request) {
@@ -58,9 +104,19 @@ export async function POST(req: Request) {
     if (!user.isAdmin && !user.roleId) {
       return apiError("نقشی برای این کاربر تعریف نشده است. با مدیر سیستم تماس بگیرید.", 403);
     }
-    // ساعت/روز/تاریخ مجاز ورود
-    if (!(await isLoginTimeAllowed(user.id))) {
-      return apiError("در زمان فعلی اجازه ورود به سیستم را ندارید.", 403);
+    // ساعت/روز/تاریخ/IP ممنوع — بازسازی عیناً CRMspCheckUserLoginAllowedTimes
+    const ip =
+      req.headers
+        .get("x-forwarded-for")
+        ?.split(",")[0]
+        .trim() ?? req.headers.get("x-real-ip");
+    const { allow, reason } = await checkUserLoginAllowedTimes(user.id, ip);
+    if (!allow) {
+      const why = reason.replace(/,$/, "");
+      return apiError(
+        why ? `در تاریخ/روز/ساعت یا نشانی فعلی، اجازهٔ ورود به سیستم را ندارید. (${why})` : "در زمان فعلی اجازهٔ ورود به سیستم را ندارید.",
+        403,
+      );
     }
 
     await db.user.update({

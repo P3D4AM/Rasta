@@ -13,7 +13,9 @@
 //     (مثل CompanyID/ProjectID). مدل‌های تولیدی شناسهٔ Int identity دارند مثل خود محصول.
 //   • فیلدهای مخصوص رستا که معادل اصلی ندارند، بدون @map مانده‌اند و با «فقط رستا» کامنت شده‌اند.
 //   • مدل‌های تولیدی فقط ستون اسکالر FK دارند (رابطه‌های Prisma فاز بعدی per-module سیم‌کشی می‌شوند).
-//   • مقادیر پیش‌فرض/ایندکس‌ها/بدنهٔ SPها در SSDL نیستند — پس از دریافت «کاتالوگ SQL» مالک تکمیل می‌شود.
+//   • مقادیر پیش‌فرض/ایندکس‌ها/بدنهٔ SPها در SSDL نیستند — «کاتالوگ SQL» مالک دریافت شد (۵۹٬۱۲۴ دستور، جلدهای V1–V8)
+//     و در این نسخه اعمال شد: ۱۲ پیش‌فرض (GUId=newid، موبایل 100/60) + ۶ ایندکس فیزیکی عیناً + ۶ ستون مهاجرتی غایب.
+//     جزئیات کامل: docs/analysis/03-sql-catalog-application.md
 //
 // SQLite در توسعه فرم Enum/Decimal/list ندارد — وضعیت‌ها String هستند و در src/lib/constants.ts اعتبارسنجی می‌شوند؛
 // برای استقرار، provider به PostgreSQL تغییر می‌کند.
@@ -130,8 +132,8 @@ model User {
   MobImeiCode            String?
   MobHRMImeiCode         String?
   ActiveMobMovementTracking Boolean?
-  MobMovementTrackingDistanceInterval Float?
-  MobMovementTrackingTimeInterval Int?
+  MobMovementTrackingDistanceInterval Float?   @default(100) // عیناً: DF_Users_MobMovementTrackingDistanceInterval = (100)
+  MobMovementTrackingTimeInterval Int?      @default(60) // عیناً: DF_Users_MobMovementTrackingTimeInterval = (60)
   MobDeActiveScreenshot  Boolean?
   MobCallerIdDeActive    Boolean?
   MobAppDevSetting       String?
@@ -255,7 +257,7 @@ model Task {
   Year1                Int?     // در اصل smallint NOT NULL
   Month1               Int?
   RegisterDatePersian  String?  // در اصل NOT NULL
-  GUId                 String?
+  GUId                 String?   @default(uuid()) // عیناً: DF_CrmUserTasks_GUId = (newid())
   AppType              String?
   LanguageID           Int?
   FirstRegisterDatePersian String?
@@ -276,6 +278,7 @@ model Task {
   UserTaskDateEnd      DateTime?
   UserTaskDateEndPersian String?
   UserTaskCId          Int?
+  UserTaskTimeNext        String?   // عیناً V1-جدول‌ساز: [UserTaskTimeNext] [varchar](12) NULL — زمان تکرار بعدی
   UserTaskDidItDatePersian String?
   UserTaskDidItInfoJson String?
 
@@ -351,6 +354,8 @@ model Company {
   AddType                 Int?      // نوع درج (دستی/سریع/تبدیل) — در اصل NOT NULL
   cmpRegistrationNumber   String?   // شمارهٔ ثبت
   GUId                    String?
+  FirstRegisterDateTime   DateTime? // عیناً V4-گام ۲۶۴۴: ALTER ADD FirstRegisterDateTime datetime
+  cmpOfficialKind         Int?      // عیناً V7-گام ۳۲۳۱۵: نوع رسمی شرکت (int) — پس از نسخهٔ فروزن
   cmpBuyLimit             String?
   cmpAccountNumber        String?
   cmpAccInquiry           String?
@@ -494,6 +499,7 @@ model Contact {
   prsOrderView      Int?
   prsWorkingOut     Boolean?  // خارج از شرکت
   GUId              String?
+  FirstRegisterDateTime   DateTime? // عیناً V4-گام ۲۶۳۹: ALTER ADD FirstRegisterDateTime datetime
   CompanyPersonTemplateID Int?
   AppType           String?
   LanguageID        Int?
@@ -521,6 +527,8 @@ model Contact {
   deals      Deal[]
   activities Activity[]
   quotations Quotation[]
+  @@index([mobile])    // عیناً: IX_CrmCompanyPersons (prsMobile) — V2-گام ۶۸۶
+  @@index([companyId])  // عیناً: IX_CrmCompanyPersons_CmpId (prsCompanyId) — V5-گام ۱۱۲۷۹
   @@map("CrmCompanyPersons")  // جدول اصلی CRMIdeal: CrmCompanyPersons
 }
 
@@ -551,7 +559,7 @@ model ProjectTitleGroup {
   Year1              Int?       // در اصل smallint NOT NULL
   Month1             Int?       // در اصل smallint NOT NULL
   RegisterDatePersian String?   // در اصل NOT NULL
-  GUId               String?
+  GUId               String?   @default(uuid()) // عیناً: DF_CrmProjectTitleGroups_GUId = (newid())
   AppType            String?
   LanguageID         Int?
 
@@ -609,7 +617,7 @@ model ProjectGroup {
   Year1               Int?
   Month1              Int?
   RegisterDatePersian String? // در اصل NOT NULL
-  GUId                String?
+  GUId                String?   @default(uuid()) // عیناً: DF_CrmProjectGroups_GUId = (newid())
   AppType             String?
   LanguageID          Int?
   FirstRegisterUserId Int?
@@ -694,7 +702,7 @@ model ProjectCategory {
   Year1           Int?       // در اصل int NOT NULL
   Month1          Int?
   RegisterDatePersian String? // در اصل NOT NULL
-  GUId            String?
+  GUId            String?   @default(uuid()) // عیناً: DF_CrmProjectCategory_GUId = (newid())
   AppType         String?
   LanguageID      Int?
 
@@ -716,7 +724,8 @@ model CnvsStatusGroup {
   Year1               Int?
   Month1              Int?
   RegisterDatePersian String?
-  GUId                String?
+  GUId                String?   @default(uuid()) // عیناً: DF_CrmConversationStatusGroups_GUId = (newid())
+  NoRegCnvsOlderStatue    Boolean?  // عیناً V7-گام ۳۰۲۸۴: پرچم مذاکرات قدیمی‌ترِ بدون وضعیت ثبت‌شده
   AppType             String?
   LanguageID          Int?
   FirstRegisterUserId Int?
@@ -919,6 +928,7 @@ model Project {
 
   @@index([companyId, isFinished])
   @@index([remindDate])
+  @@index([companyId])  // عیناً: IX_CrmProjects_CompanyId (prjCompanyId) — V5-گام ۱۲۱۴۸
   @@map("CrmProjects")  // جدول اصلی CRMIdeal: CrmProjects
 }
 
@@ -991,6 +1001,9 @@ model ProjectConversation {
   cnvsJs                String?
 
   @@index([projectId, cnvsDate])
+  @@index([companyId])  // عیناً: IX_CrmConversation_CompanyId (cnvsCompanyId) — V5-گام ۱۲۱۴۵
+  @@index([projectId])   // عیناً: IX_CrmConversation_ProjectId (cnvsProjectId) — V5-گام ۱۲۱۴۶
+  @@index([statusId])    // عیناً: IX_CrmConversation_StatusId (cnvsStatusId) — V5-گام ۱۲۱۴۷
   @@map("CrmConversation")  // جدول اصلی CRMIdeal: CrmConversation
 }
 
@@ -1018,7 +1031,7 @@ model UserPosition {
   Year1                Int?
   Month1               Int?
   RegisterDatePersian  String?   // در اصل NOT NULL
-  GUId                 String?
+  GUId                 String?   @default(uuid()) // عیناً: DF_UserPositions_GUId = (newid())
   AppType              String?
   LanguageID           Int?
 
@@ -1041,7 +1054,7 @@ model UserGroup {
   Year1               Int?
   Month1              Int?
   RegisterDatePersian String?
-  GUId                String?
+  GUId                String?   @default(uuid()) // عیناً: DF_UserGroups_GUId = (newid())
   AppType             String?
   LanguageID          Int?
 
@@ -1068,6 +1081,7 @@ model UserDepartment {
   FirstRegisterDatePersian     String?
   FirstRegisterDate            DateTime?
   DefaultTicketUserId          Int?     // کاربر پیش‌فرض تیکت این واحد
+  DefaultReferUserIdForCnvs     Int?     // عیناً V5-گام ۹۵۴۵: کاربر پیش‌فرض ارجاع مذاکرهٔ این واحد
   TicketFooterText            String?  // پانویس تیکت (ntext)
   LeaveVerificationWorkFlowId  Int?
   MissionVerificationWorkFlowId Int?
@@ -1100,7 +1114,7 @@ model UserLoginAllowedTime {
   Year1                 Int?
   Month1                Int?
   RegisterDatePersian   String?
-  GUId                  String?
+  GUId                  String?   @default(uuid()) // عیناً: DF_UserLoginAllowedTimes_GUId = (newid())
   AppType               String?
   LanguageID            Int?
   FirstRegisterUserId   Int?
@@ -1131,7 +1145,7 @@ model FundGroup {
   Year1               Int?
   Month1              Int?
   RegisterDatePersian String?
-  GUId                String?
+  GUId                String?   @default(uuid()) // عیناً: DF_CrmFundGroups_GUId = (newid())
   AppType             String?
   LanguageID          Int?
   GroupVerificationWorkFlowId Int?
@@ -1174,7 +1188,7 @@ model FundTransaction {
   Year1            Int?
   Month1           Int?
   RegisterDatePersian String?
-  GUId             String?
+  GUId             String?   @default(uuid()) // عیناً: DF_CrmFund_GUId = (newid())
   AppType          String?
   LanguageID       Int?
   FirstRegisterDate DateTime?

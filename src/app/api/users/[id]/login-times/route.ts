@@ -1,14 +1,23 @@
 import { db } from "@/lib/db";
 import { requirePerm, handle, json, apiError } from "@/lib/http";
+import { gregorianToJalali } from "@/lib/jalali";
 
 /**
- * تعیین ساعت ورود — بازسازی UserLoginAllowedTimes (اعمال در ورود: روز/بازه تاریخ/ساعت)
+ * تعیین ساعت ورود — بازسازی UserLoginAllowedTimes خود CRMIdeal.
+ * هر قاعده یک پنجرهٔ «ممنوع» است (اعمال در ورود: CRMspCheckUserLoginAllowedTimes — تاریخ/روز/ساعت/IP مستقل).
  * GET  → لیست قواعد کاربر
- * POST → افزودن قاعده (روز هفته null = هر روز)
+ * POST → افزودن قاعده (روز هفته null = هر روز) — هم‌زمان FDatePersian/TDatePersian کلید شمسی YYYYMMDD مثل خود محصول
  * DELETE ?all=1 → حذف همه قواعد
  */
 
 const reHHmm = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+/** کلید شمسی YYYYMMDD از Date — مثل FDatePersian خود CRMIdeal (فرم Delphi هم‌زمان هر دو را پر می‌کرد). */
+function faDateKey(d: Date | null): string | null {
+  if (!d || isNaN(d.getTime())) return null;
+  const [jy, jm, jd] = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  return `${jy}${String(jm).padStart(2, "0")}${String(jd).padStart(2, "0")}`;
+}
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   return handle(async () => {
@@ -36,15 +45,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (dayOfWeek != null && (dayOfWeek < 0 || dayOfWeek > 6)) {
       return apiError("روز هفته نامعتبر است (۰=شنبه … ۶=جمعه).", 400);
     }
+    const fromDate = dateVal(body?.fromDate);
+    const toDate = dateVal(body?.toDate);
     const created = await db.userLoginAllowedTime.create({
       data: {
         userId: id,
         dayOfWeek,
-        fromDate: dateVal(body?.fromDate),
-        toDate: dateVal(body?.toDate),
+        fromDate,
+        toDate,
         fromTime,
         toTime,
         ipAddress: clean(body?.ipAddress),
+        FDatePersian: faDateKey(fromDate),
+        TDatePersian: faDateKey(toDate),
       },
     });
     return json(created, 201);
