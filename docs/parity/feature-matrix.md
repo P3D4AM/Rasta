@@ -14,7 +14,7 @@
 | تست واحد Vitest (`npm run test:unit`) | **۱۴/۱۴ سبز** ✅ (فاز ۵) |
 | تست یکپارچه‌سازی (`npm run test:integration`) | **۳۵/۳۵ سبز** ✅ — سرور واقعی + DB آزمایشی ایزوله (فاز ۵) |
 | E2E Playwright (`npm run test:e2e`) | **۱۰/۱۰ سبز** ✅ — Chromium (فاز ۵) |
-| CI | پیکربندی شد (`ci.yml` — ۴ کار) — اولین اجرا پس از push |
+| CI (GitHub Actions) | **اجرا شد — ۴/۴ کار سبز** ✅ (quality/integration/e2e/build) |
 | `npx prisma validate` | معتبر ✅ |
 | E2E `scripts/e2e-login-times.mjs` | ۱۴/۱۴ PASS ✅ (رفتار `CRMspCheckUserLoginAllowedTimes` — نسخهٔ نهایی V5، whitelist؛ پس از اصلاح با data.zip) |
 | E2E `scripts/e2e-forbidden-titles.mjs` | ۱۴/۱۴ PASS ✅ (عناوین پروژهٔ ممنوع) |

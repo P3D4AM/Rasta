@@ -10,8 +10,8 @@
 |---|---|---|---|
 | واحد | `npm run test:unit` | **۱۴/۱۴ سبز** (۲ فایل) | ~۰.۵s |
 | یکپارچه‌سازی | `npm run test:integration` | **۳۵/۳۵ سبز** (۳ فایل) | ~۱۵s (شامل spawn سرور) |
-| E2E مرورگر | `npm run test:e2e` | **۱۰/۱۰ سبز** (۲ فایل، Chromium) | ~۵۶s |
-| CI | `.github/workflows/ci.yml` | **پیکربندی شد — هنوز اجرا نشده** (اولین اجرا پس از push) | — |
+| E2E مرورگر | `npm run test:e2e` | **۱۰/۱۰ سبز** (۲ فایل، Chromium) | ~۵۶s محلی / ~۴ دقیقه CI |
+| CI | `.github/workflows/ci.yml` | **اجرا شد — هر ۴ کار سبز** ✅ (quality/integration/e2e/build — run #40300664505 روی کامیت cdd016d) | ~۱۲ دقیقه |
 
 ## ۲) تست‌های واحد (`tests/unit/`)
 
