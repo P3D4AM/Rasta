@@ -13,7 +13,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Plus, Pencil, Trash2, ChevronsRight, ChevronRight, ChevronLeft, ChevronsLeft,
-  UserRound, KeyRound, Clock, Users2, Landmark, Search,
+  UserRound, KeyRound, Clock, Users2, Landmark, Search, Ban,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -51,6 +51,7 @@ type UDetail = URow & {
 };
 
 type LoginTime = { id: string; dayOfWeek: number | null; fromTime: string; toTime: string; fromDate: string | null; toDate: string | null; ipAddress: string | null };
+type ForbidRow = { ProjectsForbiddenForUserID: number; ForbiddenProjectTitle: string | null };
 type BankAcc = { id: string; accountTypeName: string; accountNumber: string; cardNumber: string | null; shabaNumber: string | null; accountTitle: string; bankName: string | null; branchName: string | null; isDefault: boolean };
 
 type emptyUser = Record<string, string | boolean>;
@@ -94,6 +95,12 @@ export default function UsersPage() {
   const [branches, setBranches] = useState<{ id: string; name: string; bank: { name: string } }[]>([]);
   const [accTypes, setAccTypes] = useState<{ id: string; name: string }[]>([]);
   const [count, setCount] = useState<{ total: number; active: number; inactive: number; admins: number; byRole: { name: string; count: number }[] } | null>(null);
+
+  // عناوین پروژهٔ ممنوع — بازسازی CrmProjectsForbiddenForUser خود CRMIdeal
+  const [forbidOpen, setForbidOpen] = useState(false);
+  const [forbidRows, setForbidRows] = useState<ForbidRow[]>([]);
+  const [forbidInput, setForbidInput] = useState("");
+  const [allTitles, setAllTitles] = useState<{ id: string; title: string }[]>([]);
 
   const has = useCallback((act: string) => !!me && (me.isAdmin || (me.permissions["frmDefineUsers"] ?? []).includes(act)), [me]);
   const current = rows[idx] ?? null;
@@ -240,6 +247,49 @@ export default function UsersPage() {
     }
   }
 
+  async function openForbid() {
+    if (!detail) return;
+    try {
+      const d = await api<{ rows: ForbidRow[] }>(`/api/users/${detail.id}/forbidden-titles`);
+      setForbidRows(d.rows);
+      try {
+        const t = await api<{ rows: { id: string; title: string }[] }>("/api/project-defs/titles");
+        setAllTitles(t.rows);
+      } catch {
+        setAllTitles([]);
+      }
+      setForbidInput("");
+      setForbidOpen(true);
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  }
+
+  async function addForbid() {
+    if (!detail) return;
+    const title = forbidInput.trim();
+    if (!title) return;
+    try {
+      await api(`/api/users/${detail.id}/forbidden-titles`, { method: "POST", body: { title } });
+      const d = await api<{ rows: ForbidRow[] }>(`/api/users/${detail.id}/forbidden-titles`);
+      setForbidRows(d.rows);
+      setForbidInput("");
+      toast({ title: "عنوان پروژه برای کاربر ممنوع شد." });
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  }
+
+  async function removeForbid(title: string) {
+    if (!detail) return;
+    try {
+      await api(`/api/users/${detail.id}/forbidden-titles?title=${encodeURIComponent(title)}`, { method: "DELETE" });
+      setForbidRows((r) => r.filter((x) => (x.ForbiddenProjectTitle ?? "") !== title));
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  }
+
   async function openBank() {
     if (!detail) return;
     try {
@@ -379,6 +429,9 @@ export default function UsersPage() {
                 )}
                 {has("actLoginAllowedTimes") && detail && (
                   <Button variant="outline" size="sm" className="h-8" onClick={openTimes}><Clock className="w-4 h-4 me-1" />تعیین ساعت ورود</Button>
+                )}
+                {has("actEditMoreInfo") && detail && (
+                  <Button variant="outline" size="sm" className="h-8" onClick={openForbid}><Ban className="w-4 h-4 me-1" />عناوین پروژهٔ ممنوع</Button>
                 )}
               </div>
 
@@ -738,6 +791,57 @@ export default function UsersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setTimesOpen(false)}>بستن</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── دیالوگ عناوین پروژهٔ ممنوع — بازسازی CrmProjectsForbiddenForUser ── */}
+      <Dialog open={forbidOpen} onOpenChange={setForbidOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>عناوین پروژهٔ ممنوع — {detail ? nameOf(detail) : ""}</DialogTitle></DialogHeader>
+          <p className="text-[11px] text-muted-foreground">
+            عناوین ممنوع، از فهرست عناوین فرم پروژه و از نمایش پروژه‌های همان عنوان برای این کاربر حذف می‌شوند —
+            بازسازی جدول CrmProjectsForbiddenForUser و SPهای
+            CRMspSelectCrmProjectsForbiddenForUser / NotForbiddenForUser خود CRMIdeal (ادمین سیستم معاف است).
+          </p>
+          <div className="border rounded-lg overflow-hidden">
+            <table className="w-full text-xs">
+              <thead className="bg-muted/60 text-muted-foreground">
+                <tr>
+                  <th className="px-2 py-2 text-start font-medium">عنوان ممنوع</th>
+                  <th className="px-2 py-2" />
+                </tr>
+              </thead>
+              <tbody>
+                {forbidRows.length === 0 ? (
+                  <tr><td colSpan={2} className="text-center py-4 text-muted-foreground">بدون عنوان ممنوع (دسترسی کامل)</td></tr>
+                ) : (
+                  forbidRows.map((f) => (
+                    <tr key={f.ProjectsForbiddenForUserID} className="border-t">
+                      <td className="px-2 py-2">{f.ForbiddenProjectTitle ?? "—"}</td>
+                      <td className="px-2 py-2 text-end">
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => removeForbid(f.ForbiddenProjectTitle ?? "")}>
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex gap-2 items-end">
+            <div className="flex-1 space-y-1">
+              <Label className="text-xs">عنوان پروژه</Label>
+              <Input list="forbid-titles-list" value={forbidInput} onChange={(e) => setForbidInput(e.target.value)} placeholder="نام عنوان یا انتخاب از فهرست" />
+              <datalist id="forbid-titles-list">
+                {allTitles.map((t) => <option key={t.id} value={t.title} />)}
+              </datalist>
+            </div>
+            <Button size="sm" onClick={addForbid}>ممنوع کردن</Button>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setForbidOpen(false)}>بستن</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

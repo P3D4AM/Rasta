@@ -4,6 +4,9 @@ import { requirePerm, handle, json, apiError } from "@/lib/http";
 /**
  * /api/project-defs/[entity] — تعاریف پایه پروژه‌ها (فرم‌های تعریف خود CRMIdeal با مجوز frmMain/actDefine*)
  * entity ∈ titles | titleGroups | groups | grades | priorities | categories | statusGroups | statuses
+ * titles?forMe=1 → حذف عناوین ممنوع کاربر جاری — بازسازی CRMspSelectCrmProjectsNotForbiddenForUser
+ *   (فهرست مجاز = تعاریف عناوین − عناوین ممنوع کاربر؛ در اورجینال علاوه بر جدول تعاریف، DISTINCT(prjTitle)
+ *   از خود پروژه‌ها هم UNION می‌شد برای داده‌های قدیمی — در رستا منبع عناوین فقط جدول تعاریف است)
  */
 
 type EntityConf = {
@@ -144,11 +147,23 @@ const CONF: Record<string, EntityConf> = {
 
 export async function GET(req: Request, { params }: { params: Promise<{ entity: string }> }) {
   return handle(async () => {
-    await requirePerm("frmMain", "actView");
+    const user = await requirePerm("frmMain", "actView");
     const { entity } = await params;
     const conf = CONF[entity];
     if (!conf) return apiError("نوع تعریف نامعتبر است.", 404);
-    const rows = await conf.list();
+
+    let rows = await conf.list();
+
+    // عناوین ممنوع کاربر — مثل CRMspSelectCrmProjectsNotForbiddenForUser (کاتالوگ SQL، V2)
+    if (entity === "titles" && new URL(req.url).searchParams.get("forMe") === "1" && !user.isAdmin) {
+      const forbidden = await db.crmProjectsForbiddenForUser.findMany({
+        where: { rastaUserId: user.id },
+        select: { ForbiddenProjectTitle: true },
+      });
+      const banned = new Set(forbidden.map((f) => (f.ForbiddenProjectTitle ?? "").trim()).filter(Boolean));
+      rows = (rows as { title: string }[]).filter((r) => !banned.has(r.title.trim()));
+    }
+
     return json({ rows });
   });
 }

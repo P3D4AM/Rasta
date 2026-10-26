@@ -6,13 +6,24 @@ import { requirePerm, handle, json, apiError } from "@/lib/http";
  * GET  ?companyId=&tab=current|archive|ticket&ticketMode=all|current|archive&search=
  *      → درخت پروژه‌ها + شمارنده‌ها (مثل CRMspSelectCompanyProjectsCount)
  *      بدون companyId → لیست سراسری پروژه‌ها (کارتابل/گزارش)
- * POST → درج پروژه (ChkBeforeSubmitProject_Lang + شماره‌گذاری prjNumR)
+ *      — عناوین ممنوع کاربر از نتیجه حذف می‌شوند (کوئری فرم‌های اورجینال:
+ *        prjTitle NOT IN (SELECT ForbiddenProjectTitle FROM CrmProjectsForbiddenForUser WHERE CrmUserId=:UserID))
+ * POST → درج پروژه (ChkBeforeSubmitProject_Lang + شماره‌گذاری prjNumR) — عنوان ممنوع رد می‌شود
  * DELETE ?companyId= → حذف همه پروژه‌های مخاطب با وابستگی‌ها (DeleteAllCmpProjectsWithDep)
  */
 
+/** عناوین پروژهٔ ممنوعِ کاربر جاری — خالی برای ادمین/بدون قاعده (مثل اورجینال: ادمین معاف است). */
+async function forbiddenTitlesOf(userId: string): Promise<Set<string>> {
+  const rows = await db.crmProjectsForbiddenForUser.findMany({
+    where: { rastaUserId: userId },
+    select: { ForbiddenProjectTitle: true },
+  });
+  return new Set(rows.map((r) => (r.ForbiddenProjectTitle ?? "").trim()).filter(Boolean));
+}
+
 export async function GET(req: Request) {
   return handle(async () => {
-    await requirePerm("frmProjectPreview", "actView");
+    const me = await requirePerm("frmProjectPreview", "actView");
     const url = new URL(req.url);
     const companyId = url.searchParams.get("companyId") ?? "";
     const tab = url.searchParams.get("tab") ?? "current"; // current | archive | ticket
@@ -40,6 +51,12 @@ export async function GET(req: Request) {
         { referenceNumber: { contains: search } },
         { subject: { contains: search } },
       ];
+    }
+
+    // عناوین ممنوع کاربر جاری — پروژه‌های با عنوان ممنوع از نتیجه حذف می‌شوند (عیناً کوئری فرم اورجینال)
+    if (!me.isAdmin) {
+      const banned = await forbiddenTitlesOf(me.id);
+      if (banned.size > 0) where.title = { ...(where.title as object), notIn: [...banned] };
     }
 
     const [projects, count] = await Promise.all([
@@ -122,13 +139,21 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   return handle(async () => {
-    const user = await requirePerm("frmDefineProjects", "actPost");
+    const me = await requirePerm("frmDefineProjects", "actPost");
     const body = await req.json().catch(() => null);
     const title = String(body?.title ?? "").trim();
     const statusGroupId = String(body?.statusGroupId ?? "").trim();
     const companyId = String(body?.companyId ?? "").trim();
     if (!title || !statusGroupId || !companyId) {
       return apiError("عنوان، مدل پیشرفت و مخاطب الزامی است.", 400);
+    }
+
+    // عنوان ممنوع کاربر — مثل اورجینال که عنوان ممنوع در فرم اصلاً عرضه نمی‌شد؛ اینجا درج هم رد می‌شود
+    if (!me.isAdmin) {
+      const banned = await forbiddenTitlesOf(me.id);
+      if (banned.has(title)) {
+        return apiError("این عنوان پروژه برای شما ممنوع شده است.", 403);
+      }
     }
 
     // چک‌های تکراری‌نبودن — مثل ChkBeforeSubmitProject (پسوند/توضیح/استعلام/عطف)
@@ -174,11 +199,11 @@ export async function POST(req: Request) {
     let finishedDurationSec: number | null = null;
     if (isFinished) {
       const { can } = await import("@/lib/auth");
-      if (!can(user, "frmDefineProjects", "actCanSetArchive")) {
+      if (!can(me, "frmDefineProjects", "actCanSetArchive")) {
         return apiError("شما اجازه آرشیو پروژه را ندارید.", 403);
       }
       finishedDate = dateVal(body?.finishedDate) ?? new Date();
-      finishedUserId = user.id;
+      finishedUserId = me.id;
       finishedDurationSec = Math.max(0, Math.round((finishedDate.getTime() - startDate.getTime()) / 1000));
     }
 
@@ -199,7 +224,7 @@ export async function POST(req: Request) {
         categoryId: str(body?.categoryId),
         statusGroupId,
         companyId,
-        starterUserId: str(body?.starterUserId) ?? user.id,
+        starterUserId: str(body?.starterUserId) ?? me.id,
         startDate,
         startDay: str(body?.startDay),
         startTime: str(body?.startTime),
@@ -217,8 +242,8 @@ export async function POST(req: Request) {
         toDoTime: dateVal(body?.toDoTime),
         toDoTimeRegister: dateVal(body?.toDoTimeRegister),
         toDoTimeSec: body?.toDoTimeSec != null && body.toDoTimeSec !== "" ? Number(body.toDoTimeSec) || null : null,
-        registeredById: user.id,
-        lastEditedById: user.id,
+        registeredById: me.id,
+        lastEditedById: me.id,
       },
     });
     return json(project, 201);

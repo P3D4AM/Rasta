@@ -6125,6 +6125,9 @@ model CrmProjectsForbiddenForUser {
   AppType String?
   LanguageID Int?
   CId Int?
+  rastaUserId String? // فقط رستا — نگاشت cuid کاربر (CrmUserId اصلی int است و cuid را نمی‌پذیرد)
+
+  @@index([rastaUserId]) // فقط رستا — جستجوی عناوین ممنوع کاربر
 }
 
 // CrmShowTableFieldInFO — 18 ستون

@@ -65,6 +65,9 @@ const fullPerms = () => buildPerms(FORM_ACTIONS);
 const salesPerms = () =>
   buildPerms([
     ["frmHomePage", ["actView"]],
+    // فرم اصلی — در اورجینال همهٔ نقش‌ها پس از ورود فرم اصلی را می‌دیدند؛
+    // بدون آن، دیالوگ «تعریف پروژه» نمی‌تواند تعاریف (عناوین و…) را بخواند
+    ["frmMain", ["actView"]],
     ["frmCompanyI", ["actView", "actInsert", "actEdit", "actprjInsert"]],
     ["frmCompanyPersons", ["actView", "actInsert", "actEdit"]],
     ["frmDefineProjects", ["actPost"]],

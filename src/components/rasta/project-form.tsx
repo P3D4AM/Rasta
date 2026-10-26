@@ -100,7 +100,8 @@ export function ProjectForm({ mode, companyId, projectId }: { mode: "insert" | "
   const load = useCallback(async () => {
     try {
       const [titles, titleGroups, groups, grades, priorities, categories, statusGroups, usersRes, deps, meRes] = await Promise.all([
-        api<{ rows: Title[] }>("/api/project-defs/titles"),
+        // عناوین با حذف عناوین ممنوع کاربر جاری — مثل CRMspSelectCrmProjectsNotForbiddenForUser
+        api<{ rows: Title[] }>("/api/project-defs/titles?forMe=1"),
         api<{ rows: TitleGroup[] }>("/api/project-defs/titleGroups"),
         api<{ rows: Group[] }>("/api/project-defs/groups"),
         api<{ rows: Grade[] }>("/api/project-defs/grades"),
