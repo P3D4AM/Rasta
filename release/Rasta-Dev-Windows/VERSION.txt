@@ -1,0 +1,10 @@
+Rasta CRM — Dev Release (Windows)
+نسخه / Version: v0.3.0-dev.1
+تاریخ ساخت / Build date: 2026-10-26 10:46 UTC
+کامیت مبنا / Base commit: 23c8571d49cf801cf0d06d62568530b25b483eaf (develop — github.com/P3D4AM/Rasta)
+اجرای برنامه / Runtime: Node.js v24.22.1 win-x64 (همراه بسته — نصب جداگانه لازم نیست)
+دیتابیس / Database: SQLite مستقل داخل بسته (data/rasta.db — دادهٔ نمونه)
+وضعیت تست ویندوز / Windows verification: NOT VERIFIED ON WINDOWS
+  (بسته در لینوکس ساخته و به‌صورت معادل تست شده است؛ اجرای واقعی روی ویندوز بر عهدهٔ دریافت‌کننده)
+
+حساب‌های آزمایشی / Demo accounts: admin/admin123 · manager/manager123 · sales1/sales123 · sales2/sales123

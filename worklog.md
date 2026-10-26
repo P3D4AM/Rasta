@@ -315,3 +315,27 @@ Work Log:
 
 Stage Summary:
 - CI فقط پیکربندی نماند — واقعاً اجرا و سبز شد؛ معیار پایان فاز (تست قابل تکرار و مستند) برآورده شد
+
+---
+Task ID: 13
+Agent: main (Z.ai)
+Task: انتشار نسخهٔ توسعه‌ای ویندوز (Dev Release) — بستهٔ واقعی قابل اجرا از وضعیت develop برای بررسی دستی مالک
+
+Work Log:
+- بررسی وضعیت: develop @ 23c8571 (CI سبز) — سندباکس جدید؛ مخزن واقعی در project-analysis/rasta-repo (ریموت + توکن سالم)؛ pull انجام شد
+- ممیزی: Next.js 16 با output=standalone · Prisma/SQLite با DATABASE_URL مطلقِ محیط توسعه · start با bun · کلاینت پرایسما فقط موتور لینوکسی داشت
+- آزمون production standalone (قبل از بسته): سرور واقعی بالا آمد؛ ورود مرورگری موفق (کوکی Secure روی loopback پذیرفته شد)؛ CRUD شرکت 201؛ بدون نشست API→401 و صفحه→307/login — ولی لاگ پر از prisma:query شامل ستون Password بود
+- اصلاحات کد برای انتشار (روی develop): db.ts لاگ کوئری فقط در غیرproduction · افزودن وابستگی مستقیم jose (phantom dep) · binaryTargets=["native","windows"] در schema.prisma (موتور کوئری ویندوزی تولید شد) · eslint ignores برای release/.next-test · .gitignore مصنوعات بسته
+- انتخاب معماری بسته (مستند در build-release.mjs): Next.js standalone + node.exe ویندوزی v24.22.1 LTS همراه بسته (بدون نیاز به نصب هیچ ابزاری) + SQLite مستقل + دیتابیس اولیهٔ pre-seeded (prisma db push بدون accept-data-loss + seed در زمان ساخت — بدون نیاز به پرایسما روی سیستم کاربر) · پاک‌سازی ~110MB (موتور لینوکسی، wasm-base64، typescript، @img/sharp)
+- کشف و تست تجربی: فاصله در مسیر file: URL مجاز است ولی %20 نه (تست واقعی پرایسما) · standalone فایل .env را خودکار لود نمی‌کند (env از اسکریپت پاس می‌شود) · next build فایل .env مخزن را داخل standalone کپی می‌کند → از بسته حذف شد (تلهٔ DATABASE_URL مطلق)
+- بستهٔ release/Rasta-Dev-Windows: Start-Rasta.ps1 (ساخت .env با راز تصادفی، کپی غیرمخرب seed، تشخیص پورت اشغالی و انتخاب امن جایگزین، readiness poll 90s، بازکردن مرورگر، خلاصهٔ فارسی) · Stop-Rasta.ps1 (pid file + fallback پورت، نام فرآیند node|next-server، تأیید آزاد شدن پورت) · Install-Rasta.ps1 (سلامت بسته + Unblock-File + میان‌بر دسکتاپ اختیاری) · Start-Rasta.bat · README-FA · TROUBLESHOOTING-FA · FEATURE-STATUS (از ماتریس فاز صفر — صادقانه با PARTIAL/UI/BLOCKED) · VERSION.txt · .env.example — همهٔ ps1 با BOM UTF-8 برای PowerShell 5.1 و سازگار با Win10
+- تست واقعی بسته با PowerShell 7.5.3 روی لینوکس (تنها تفاوت: node.exe و موتور پرایسما لینوکسی): **26/26 PASS** — Install/Start واقعی · پورت اشغالی 3000→انتخاب امن 3001 · گوش‌دادن فقط 127.0.0.1 · .env با راز تصادفی ۶۴ نویسه‌ای · دیتابیس مستقل · 401/307 بدون نشست · ورود مرورگری admin→داشبورد · درج شرکت 201 (10→11) · sales1: مجاز 200 / غیرمجاز 403 · لاگ‌ها بدون secret و بدون prisma:query · Stop→پورت آزاد و بدون فرآیند ماندده · ری‌استارت→ماندگاری داده ✓ · توقف نهایی تمیز
+- دو رفع اشکال حاصل از تست: Stop نام فرآیند را next-server هم بپذیرد (روی لینوکس Next.js عنوان فرآیند را عوض می‌کند) + ثبت پورت واقعی در logs/rasta.port و اولویت آن در Stop (وقتی پورت جابه‌جا شده)
+- بستهٔ نهایی: Rasta-Dev-Windows-v0.3.0-dev.1-win-x64.zip (54.8MB) + SHA-256 — بدون .env/دیتابیس/secret؛ نتیجهٔ تست به docs/testing/test-inventory.md §۸ و roadmap اضافه شد
+- صحت‌سنجی‌های پایه پس از تغییرات کد: tsc=0 · lint=0 · unit+integration 49/49 · e2e 10/10
+- انتشار GitHub Pre-release با برچسب v0.3.0-dev.1 از کامیت develop (main دست‌نخورده) — در جریان همین تسک
+
+Stage Summary:
+- بستهٔ ویندوزی واقعی ساخته شد، با اسکریپت‌های خودش ۲۶/۲۶ تست شد و به‌عنوان Pre-release منتشر شد
+- وضعیت ویندوز صادقانه: NOT VERIFIED ON WINDOWS (تست معادل لینوکسی)
+- ساخت تکرارپذیر: npm run build && node release/build-release.mjs
