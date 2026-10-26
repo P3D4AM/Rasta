@@ -1676,6 +1676,8 @@ model City {
   LinkAccFirstTransferDate DateTime?
   LinkAccLastTransferDate DateTime?
   LinkAccData String?
+  rastaUserId String? // فقط رستا — نگاشت cuid ویرایشگر (UserId اصلی int است و cuid را نمی‌پذیرد)
+  rastaFirstRegisterUserId String? // فقط رستا — نگاشت cuid ثبت‌کنندهٔ اولیه
 }
 
 // Country — 19 ستون
@@ -1699,6 +1701,8 @@ model Country {
   LinkAccFirstTransferDate DateTime?
   LinkAccLastTransferDate DateTime?
   LinkAccData String?
+  rastaUserId String? // فقط رستا — نگاشت cuid ویرایشگر (UserId اصلی int است و cuid را نمی‌پذیرد)
+  rastaFirstRegisterUserId String? // فقط رستا — نگاشت cuid ثبت‌کنندهٔ اولیه
 }
 
 // CrmAddressing — 29 ستون
@@ -7908,6 +7912,8 @@ model Province {
   LinkAccFirstTransferDate DateTime?
   LinkAccLastTransferDate DateTime?
   LinkAccData String?
+  rastaUserId String? // فقط رستا — نگاشت cuid ویرایشگر (UserId اصلی int است و cuid را نمی‌پذیرد)
+  rastaFirstRegisterUserId String? // فقط رستا — نگاشت cuid ثبت‌کنندهٔ اولیه
 }
 
 // ScoreRules — 71 ستون

@@ -266,3 +266,39 @@ Stage Summary:
 - main = 3d99e6a (ideal/data.zip + README) | develop = 7b2f0f9 + کامیت اسناد این تسک
 - سه SP کلیدی تا نسخهٔ نهایی خوانده و رفتارشان تثبیت شد؛ الگوی کار برای همهٔ SPهای بعدی: «آخرین ردیف در ترتیب V1→V8 = نسخهٔ نهایی»
 - گلوگاه CRM_SQL_Runner برداشته شد؛ فازهای گزارش/فرم‌ساز/یکپارچه‌سازی دیگر محدودیت متنی ندارند
+
+---
+Task ID: 12
+Agent: main (Z.ai)
+Task: فاز ۵ — زیرساخت تست (Vitest/Playwright/CI) + ممیزی کامل ApiBaseInfo (۲۳۳ اکشن) + پیاده‌سازی گروه اول (جغرافیا) با تست
+
+Work Log:
+- بررسی وضعیت: develop @ 73b24d9 پاک و به‌روز؛ مرور مستندات فاز صفر (feature-matrix / legacy-module-inventory / data-model-gaps / roadmap)
+- کاوش شواهد ApiBaseInfoController (۳۰٬۶۵۹ خط): استخراج ماشینی هر ۲۳۳ اکشن (امضا/عملیات/SP/اعتبارسنجی) → /tmp/apibaseinfo_inventory.json؛ ۶۵ Select + ۵۶ Insert + ۵۶ Update + ۵۶ Delete
+- ابزار استخراج پیام‌های legacy: scripts/dotnet_resx.py — پارس کامل فرمت .NET satellite resources (هش h*33^c ترتیب صعودی، نام‌های UTF-16 با طول ۷-بیتی، مقادیر UTF-8)؛ استخراج عیناً از fa-IR:
+  RedundancyMessage=«از این آیتم در جایی استفاده شده و شما اجازه حذف آن را ندارید»، CheckEmpty{Country,Province,City}، CheckDuplicate{...}Code، Check{...}CodeDigit، پیام‌های ApiBase (ErrorItemIsNotEntered و…)، Labels (کشور/استان/شهر)
+- زنجیرهٔ شواهد رفتار داخلی: CompanyInfoController.CompanyDefine{Country,Province,City}{Insert,Edit,Delete} — چک کد تکراری (ویرایش با استثنای خود رکورد) + کد عددی (checkIsNumber) + وابستگی حذف (کشور→استان/شرکت/مخاطب؛ استان→شهر/شرکت/مخاطب؛ شهر→شرکت/مخاطب) + گیت‌های DynamicAuthorize (ثبت/ویرایش=actPost؛ حذف=actDelete؛ گرید=frmMain×actDefine*)
+- قرارداد SPها از statements.pack: ApispSelect{Country,Province,City} (شکل ستون‌ها + نام‌ها) + ApispInsert{Province,City} (MissingCountryId/CountryNotFound/MissingProvinceId/ProvinceNotFound) + ApispInsert* (ممیزی yyyyMMdd شمسی)
+- زیرساخت تست:
+  * Vitest 5 (vitest.config.ts — دو پروژه unit/integration) + @playwright/test + chromium
+  * tests/helpers/global-setup.ts: DB آزمایشی تازه (prisma db push + seed قطعی) → spawn سرور next dev روی پورت تصادفی (با node نه bun — کشف: پرایسما زیر بون ۵۰۰ می‌دهد) با distDir یکتا-به-ازای-اجرای (.next-test-<pid> — رفع تداخل قفل/سرور توسعه) → گرم‌کردن مسیرها → teardown کامل (بستن درخت پروسه + بازگرداندن tsconfig + حذف مصنوعات)
+  * tests/fixtures/seed-test.ts: seed قطعی (admin/operator/viewer با مجوزهای مستند + دادهٔ جغرافیایی برای سناریوهای وابستگی) — هیچ تماسی با دیتابیس توسعه
+  * tests/helpers/integration-env.ts: کلاینت HTTP با کوکی + runtime از provide/inject با fallback فایل
+  * playwright.config.ts + scripts/e2e-server.mjs (همان خط لوله برای E2E)
+  * اسکریپت‌ها: test / test:unit / test:integration / test:e2e
+  * CI: .github/workflows/ci.yml — ۴ کار موازی (quality/integration/e2e/build) روی push/PR به develop و main
+- اصلاحات حین کار: .gitignore داشت کل /tests/ را نادیده می‌گرفت (حذف خط) + افزودن الگوهای مصنوعات؛ next.config.ts: distDir قابل‌تزریق (RASTA_TEST_DIST_DIR)
+- پیاده‌سازی گروه اول (جغرافیا) با الگوی قرمز→سبز:
+  * قرمز: ۲۱ تست یکپارچه‌سازی برای قرارداد S1..S7 (سربرگ فایل با ارجاع سطر‌به‌سطر شواهد) — اجرا: 404 (مسیر نبود)
+  * سبز: prisma/schema.prisma (ستون‌های rastaUserId/rastaFirstRegisterUserId برای ۳ مدل — الگوی مستند CrmProjectsForbiddenForUser) + فرم‌های frmDefine{Country,Province,City} در constants.ts (+ actDefine* در frmMain) + src/lib/baseinfo.ts (سرویس با پیام‌های عین منبع + ممیزی شمسی + وابستگی‌های حذف + گیت‌ها) + ۶ فایل route زیر /api/base-info/
+  * db push به دیتابیس توسعه (افزودنی/غیرمخرب — سرور توسعه سالم ماند)
+- نتیجهٔ اجرای نهایی (واقعی): tsc=0 | lint=0/0 | unit 14/14 | integration 35/35 | E2E 10/10 (Chromium)
+- مستندات: docs/testing/test-strategy.md + docs/testing/test-inventory.md + docs/parity/apibaseinfo-matrix.md (۲۳۳ اکشن در ۶۴ ردیف؛ گروه‌بندی اولویت P1..P6؛ TESTED=12 جغرافیا، ANALYZED=221، VERIFIED=0 صادقانه) + roadmap (فاز ۵ 🟡 + باز‌شماره فازها) + feature-matrix (جدول تست خط مبنا + ردیف Setting + درصد API ۳۰٪)
+- حادثهٔ محیطی (شفاف): یک pkill الگو-دار سرور توسعهٔ پورت ۳۰۰۰ را هم بست → بلافاصله با همان دستور قبلی بازگردانده شد (۴۰۱=/api/auth/me=سالم)؛ فایل‌های git هیچ آسیبی ندیدند؛ حین اجرای E2E یک‌بار موقتاً بسته شد (فشار حافظه ۴GB با دو سرور next) و پس از تست بازگردانده شد
+
+Stage Summary:
+- زیرساخت تست پایدار و مستند راه‌افتاد: سه لایه + CI + seed قطعی — همه با یک دستور، بدون سرور/DB دستی
+- مسیر کامل «شواهد → قرارداد → تست قرمز → پیاده‌سازی → تست سبز → مستندسازی» یک بار طی شد (جغرافیا) — الگوی تکرارشونده برای ۲۲۱ اکشن بعدی
+- ماتریس ApiBaseInfo: ۲۳۳ اکشن / ۶۴ موجودیت؛ ۹۶/۶۴ مدل Prisma آماده؛ شکاف‌های نیمه‌بسته مستند (InsertBankingBranch ناموجود، کوئری‌های ویژهٔ P6)
+- وضعیت‌ها: TESTED=12 | ANALYZED=221 | VERIFIED=0 (طبق قاعدهٔ صداقت)
+- CI پیکربندی شد؛ اولین اجرا پس از push این کامیت

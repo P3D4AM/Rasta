@@ -7,10 +7,14 @@
 
 ## ۱) وضعیت تست و خط پایهٔ فنی (اثبات‌شده در این فاز)
 
-| بررسی | نتیجهٔ واقعی اجرا (۲۰۲۶-۱۰-۲۶) |
+| بررسی | نتیجهٔ واقعی اجرا (۲۰۲۶-۱۰-۲۶ — فاز ۵) |
 |---|---|
-| `npx tsc --noEmit` | ۰ خطا ✅ |
-| `npm run lint` | ۰ خطا ✅ |
+| `npx tsc --noEmit` | ۰ خطا ✅ (بازتولید فاز ۵ پس از تغییرات) |
+| `npm run lint` | ۰ خطا و ۰ هشدار ✅ (فاز ۵) |
+| تست واحد Vitest (`npm run test:unit`) | **۱۴/۱۴ سبز** ✅ (فاز ۵) |
+| تست یکپارچه‌سازی (`npm run test:integration`) | **۳۵/۳۵ سبز** ✅ — سرور واقعی + DB آزمایشی ایزوله (فاز ۵) |
+| E2E Playwright (`npm run test:e2e`) | **۱۰/۱۰ سبز** ✅ — Chromium (فاز ۵) |
+| CI | پیکربندی شد (`ci.yml` — ۴ کار) — اولین اجرا پس از push |
 | `npx prisma validate` | معتبر ✅ |
 | E2E `scripts/e2e-login-times.mjs` | ۱۴/۱۴ PASS ✅ (رفتار `CRMspCheckUserLoginAllowedTimes` — نسخهٔ نهایی V5، whitelist؛ پس از اصلاح با data.zip) |
 | E2E `scripts/e2e-forbidden-titles.mjs` | ۱۴/۱۴ PASS ✅ (عناوین پروژهٔ ممنوع) |
@@ -18,7 +22,7 @@
 | data.zip مالک (`ideal/data.zip`) | متن کامل هر ۵۹٬۱۲۴ دستور — ۳٬۱۱۰ SP بریدهٔ V5–V8 بازیابی شد؛ اصلاح رفتاری ساعت ورود (whitelist) انجام شد |
 | `npm run build` | در پایان همین فاز اجرا شد؛ نتیجه در §۶ |
 
-ادعاهای worklog تا امروز (tsc/lint/E2E ۲۶/۲۶) همگی بازتولید شدند — ادعای کذبی یافت نشد. اما دو حقیقت مهم: (۱) هیچ فریم‌ورک تست واحد (jest/vitest) یا E2E پایدار (playwright) وجود ندارد؛ «تست» فعلاً دو اسکریپت Node دست‌ساز است و بقیهٔ ادعاهای فازهای ۱–۳ (ورود/پروژه‌ها/تعاریف/…) با curl دستی انجام شده و اسکریپت ماندگاری ندارد. (۲) در package.json اسکریپت `test` وجود ندارد.
+ادعاهای worklog تا امروز (tsc/lint/E2E ۲۶/۲۶) همگی بازتولید شدند — ادعای کذبی یافت نشد. **وضعیت فاز ۵:** شکاف‌های (۱) نبودِ فریم‌ورک تست و (۲) نبودِ اسکریپت `test` هر دو بسته شد — Vitest واحد/یکپارچه‌سازی + Playwright E2E + CI راه‌افتاد؛ دو اسکریپت دست‌ساز قبلی همچنان سرجایشان‌اند (تست رفتار SP-محور) اما از این پس استاندارد اجرا، اسکریپت‌های package.json هستند.
 
 ## ۲) ماتریس ۴۶ Area
 
@@ -27,7 +31,7 @@
 | Area قدیمی | معادل رستا | UI | API/منطق | مدل داده | مجوزها | تست | وضعیت کلی | مهم‌ترین باقی‌مانده (با شواهد) |
 |---|---|---|---|---|---|---|---|---|
 | Company | `/companies`, `/contacts`, `/companies/[id]` | IMPLEMENTED | IMPLEMENTED (CRUD+جستجو) | IMPLEMENTED (CrmCompany+Persons عیناً) | IMPLEMENTED (frmCompany) | E2E فاز ۴ | IN_PROGRESS | ۱۷۲ نما: آدرس‌ها، کیف پول (CompanyMoneyBag)، شرکت مرتبط، ثبت سریع، درج اکسل، تاریخچهٔ تماس |
-| Setting | `/settings`, `/settings/*` (۶ صفحه) | IN_PROGRESS | IN_PROGRESS | IMPLEMENTED (Users/Rolls عیناً + ۲۰ مدل تعریفی) | IMPLEMENTED | E2E فاز ۴ | IN_PROGRESS | ۴۶ کنترلر/۱۴۲ نما: تعاریف پایهٔ خارج از پوشش فعلی (نوع شرکت/شغل/منبع آشنایی و ده‌ها مورد در CrmSysForms) |
+| Setting | `/settings`, `/settings/*` (۶ صفحه) | IN_PROGRESS | IN_PROGRESS (تعاریف جغرافیایی API: ۱۲ اکشن TESTED فاز ۵) | IMPLEMENTED (Users/Rolls عیناً + ۲۰ مدل تعریفی + Country/Province/City با ستون‌های rasta*) | IMPLEMENTED (frmDefine{Country,Province,City} + frmMain×actDefine*) | یکپارچه‌سازی فاز ۵ (۲۱ تست) | IN_PROGRESS | ۴۶ کنترلر/۱۴۲ نما: تعاریف پایهٔ خارج از پوشش فعلی — گروه‌های P1..P6 ماتریس ApiBaseInfo (۲۲۱ اکشن ANALYZED) |
 | Orders | `/orders` | IMPLEMENTED | IMPLEMENTED (فاکتور+اقلام+پرداخت+اتصال انبار تراکنشی) | رستا-بومی (SalesOrder~WSOrder) | IMPLEMENTED (frmOrders) | E2E فاز ۲ | IN_PROGRESS | تایید گروهی (actOrderGroupVerify)، ارسال به مودیان (Tsp)، ارسال به حسابداری، سریال اقلام |
 | PreOrders | `/quotations` | IMPLEMENTED | IMPLEMENTED (پیش‌فاکتور→فاکتور، سقف تخفیف نقش) | رستا-بومی (Quotation~WSPreOrder) | IMPLEMENTED | E2E فاز ۲ | IN_PROGRESS | تایید گروهی، نمایش دلایل نبودِ گروه کالا (SP شواهد دارد) |
 | BuyOrders | `/purchases` | IMPLEMENTED | IMPLEMENTED (سفارش خرید→رسید انبار) | رستا-بومی (PurchaseOrder) | IMPLEMENTED | E2E فاز ۲ | IN_PROGRESS | ارسال به حسابداری (BordAct*)، فایل اقلام |
@@ -94,7 +98,7 @@
 | شاخص | CRMIdeal | رستا | نسبت |
 |---|---|---|---|
 | کنترلر/API | ۲۶ (Web API) + ۳۱۸ MVC + ۸۲ Mobile | ۵۹ فایل route | — |
-| اکشن‌ها | ۴۶۳ POST (Web API فقط) | ۱۲۸ متد REST دقیق (GET 41 / POST 30 / DELETE 27 / PUT 17 / PATCH 13) | ۲۸٪ |
+| اکشن‌ها | ۴۶۳ POST (Web API فقط) | ۱۴۰ متد REST دقیق (۱۲۸ قبلی + ۱۲ تعاریف جغرافیایی فاز ۵: GET 44 / POST 33 / DELETE 30 / PUT 20 / PATCH 13) | ۳۰٪ |
 | یکپارچه‌سازی خارجی | ۲۲+ | ۳ (تنظیم درگاه؛ فراخوان واقعی BLOCKED شبکه) | ~۱۳٪ |
 
 توجه: ممیزی امنیتی این فاز (۲۰۲۶-۱۰-۲۶، بازرسی تک‌تک ۵۹ فایل route): همهٔ مسیرها گارد سمت‌سرور دارند — ۵۵ فایل با `requirePerm/requirePermission/requireUser` (نشست + مجوز فرم×اکشن) و ۴ مسیر auth (login بنا به ماهیتش عمومی است؛ me/logout/change-password نشست را داخلی چک می‌کنند و بدون ورود ۴۰۱ می‌دهند). اکشن‌به‌اکشن‌های ApiBaseInfoController (۲۳۳ اکشن تعاریف پایه) بزرگ‌ترین گلوگاه توسعه‌ای سمت API است.

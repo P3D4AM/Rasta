@@ -63,7 +63,8 @@ export type FormId =
   | "frmDeals" | "frmActivities" | "frmTasks"
   | "frmPreOrder" | "frmOrder" | "frmProduct" | "frmBuyOrder"
   | "frmWareHouse" | "frmStock" | "frmFund" | "frmBanking" | "frmOnlinePayment"
-  | "frmReports" | "frmDefineUsers" | "frmUserRoll" | "frmRollPermission" | "frmSetting";
+  | "frmReports" | "frmDefineUsers" | "frmUserRoll" | "frmRollPermission" | "frmSetting"
+  | "frmDefineCountry" | "frmDefineProvince" | "frmDefineCity";
 
 export const STD_ACTS = ["actView", "actInsert", "actEdit", "actDelete"] as const;
 
@@ -107,7 +108,14 @@ export const FORMS: FormMeta[] = [
     "actDefineProjectTitle", "actDefineProjectTitleGroup", "actDefinePrjGroup", "actDefinePrjGrade",
     "actDefinePrjPriority", "actDefinePrjCategory", "actDefinecnvsStatusGroups", "actDefinecnvsStatus",
     "actDefineUserPositions", "actDefineUserGroups", "actDefineDepartments",
+    "actDefineCountry", "actDefineProvince", "actDefineCity",
   ] },
+  // تعاریف جغرافیایی — بازسازی CompanyDefine{Country,Province,City} (CompanyInfoController):
+  // actInsert/actEdit فقط گیتِ بازکردن فرم‌ها هستند؛ عمل ثبت/ویرایش با actPost گیت می‌شود
+  // (DynamicAuthorize روی POST هر دو CompanyDefineXInsert و CompanyDefineXEdit = actPost) و حذف با actDelete.
+  { id: "frmDefineCountry", label: "تعریف کشورها", section: "اطلاعات پایه - تنظیمات", actions: ["actInsert", "actPost", "actEdit", "actDelete"] },
+  { id: "frmDefineProvince", label: "تعریف استان‌ها", section: "اطلاعات پایه - تنظیمات", actions: ["actInsert", "actPost", "actEdit", "actDelete"] },
+  { id: "frmDefineCity", label: "تعریف شهرها", section: "اطلاعات پایه - تنظیمات", actions: ["actInsert", "actPost", "actEdit", "actDelete"] },
 ];
 
 export const FORMS_BY_ID: Record<string, FormMeta> = Object.fromEntries(FORMS.map((f) => [f.id, f]));
@@ -138,6 +146,9 @@ export const ACT_LABELS: Record<string, string> = {
   actDefineUserPositions: "تعریف سمت‌های سازمانی",
   actDefineUserGroups: "تعریف گروه‌های کاربری",
   actDefineDepartments: "تعریف دپارتمان‌ها",
+  actDefineCountry: "تعریف کشورها",
+  actDefineProvince: "تعریف استان‌ها",
+  actDefineCity: "تعریف شهرها",
 };
 
 // نگاشت ماژول‌های قدیمی رستا به فرم‌های CRMIdeal (برای مسیرهای API موجود)

@@ -46,7 +46,6 @@ local-*
 *.log
 dev.log
 dev.out.log
-test
 prompt
 
 server.log
@@ -81,7 +80,7 @@ download/
 agent-ctx/
 /examples/
 /mini-services/
-/tests/
+# /tests/ حذف شد — پوشهٔ تست‌های خودمان باید کامیت شود (vitest/playwright)
 
 # بسته خام نسخه قدیمی — برای گیت بزرگ است (محدودیت ۱۰۰MB گیت‌هاب)
 # نسخه متنیِ دیکامپایل‌شده در project-analysis/decompiled/ کامیت می‌شود
@@ -90,3 +89,10 @@ project-analysis/crm-project/
 
 # اسکرین‌شات‌ها به docs/screenshots منتقل شده‌اند
 /rasta-*.png
+
+# تست‌ها: مصنوعات اجرا (خروجی playwright/vitest و سرور آزمایشی)
+.next-test-*/
+test-results/
+playwright-report/
+tests/.tmp/
+coverage/
