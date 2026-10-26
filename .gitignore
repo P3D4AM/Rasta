@@ -96,3 +96,17 @@ test-results/
 playwright-report/
 tests/.tmp/
 coverage/
+
+# ============================================================
+# Release (بستهٔ توسعه‌ای ویندوز)
+# اسکریپت‌ها و راهنماها در release/ کامیت می‌شوند؛
+# مصنوعات باینری (app/runtime/data/seed/logs/ZIP) با release/build-release.mjs ساخته می‌شوند
+# ============================================================
+/release/.cache/
+/release/Rasta-Dev-Windows/app/
+/release/Rasta-Dev-Windows/runtime/
+/release/Rasta-Dev-Windows/data/
+/release/Rasta-Dev-Windows/seed/
+/release/Rasta-Dev-Windows/logs/
+/release/*.zip
+/release/*.sha256

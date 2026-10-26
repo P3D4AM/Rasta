@@ -7,7 +7,9 @@ const globalForPrisma = globalThis as unknown as {
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ['query'],
+    // در حالت production لاگ کوئری‌ها خاموش است: متن SQL شامل داده‌های حساس
+    // (هش رمز، توکن‌ها) می‌شود و حجم لاگ را بی‌دلیل بالا می‌برد.
+    log: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : ['query'],
   })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db

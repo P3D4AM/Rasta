@@ -22,6 +22,9 @@
 
 generator client {
   provider = "prisma-client-js"
+  // بستهٔ ویندوزی (release/Rasta-Dev-Windows): موتور کوئری ویندوز باید همراه کلاینت تولید شود
+  // تا پرایسما روی ویندوز بدون نصب ابزار توسعه اجرا شود (native = لینوکسِ محیط build).
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {

@@ -49,6 +49,10 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     "examples/**", "skills",
     // legacy CRMIdeal reference material (decompiled C# + raw site) — not part of the app
     "project-analysis/**",
+    // release artifacts: assembled Windows package + node.js cache (خروجی build-release.mjs)
+    "release/**",
+    // سرورهای آزمایشی vitest/playwright با distDir یکتا
+    ".next-test-*/**",
   ]
 }];
 
