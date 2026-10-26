@@ -12,8 +12,10 @@
 | `npx tsc --noEmit` | ۰ خطا ✅ |
 | `npm run lint` | ۰ خطا ✅ |
 | `npx prisma validate` | معتبر ✅ |
-| E2E `scripts/e2e-login-times.mjs` | ۱۲/۱۲ PASS ✅ (رفتار `CRMspCheckUserLoginAllowedTimes`) |
+| E2E `scripts/e2e-login-times.mjs` | ۱۴/۱۴ PASS ✅ (رفتار `CRMspCheckUserLoginAllowedTimes` — نسخهٔ نهایی V5، whitelist؛ پس از اصلاح با data.zip) |
 | E2E `scripts/e2e-forbidden-titles.mjs` | ۱۴/۱۴ PASS ✅ (عناوین پروژهٔ ممنوع) |
+| E2E (باز اجرا پس از data.zip) | ۲۸/۲۸ PASS ✅ (۱۴+۱۴) |
+| data.zip مالک (`ideal/data.zip`) | متن کامل هر ۵۹٬۱۲۴ دستور — ۳٬۱۱۰ SP بریدهٔ V5–V8 بازیابی شد؛ اصلاح رفتاری ساعت ورود (whitelist) انجام شد |
 | `npm run build` | در پایان همین فاز اجرا شد؛ نتیجه در §۶ |
 
 ادعاهای worklog تا امروز (tsc/lint/E2E ۲۶/۲۶) همگی بازتولید شدند — ادعای کذبی یافت نشد. اما دو حقیقت مهم: (۱) هیچ فریم‌ورک تست واحد (jest/vitest) یا E2E پایدار (playwright) وجود ندارد؛ «تست» فعلاً دو اسکریپت Node دست‌ساز است و بقیهٔ ادعاهای فازهای ۱–۳ (ورود/پروژه‌ها/تعاریف/…) با curl دستی انجام شده و اسکریپت ماندگاری ندارد. (۲) در package.json اسکریپت `test` وجود ندارد.

@@ -243,3 +243,26 @@ Stage Summary:
 - خط مبنا: هسته‌های فروش/انبار/مالی/پروژه/کاربر IMPLEMENTED ولی هیچ Area به VERIFIED کامل نمی‌رسد (فقط ۲ رفتار SP با E2E)؛ ۳۱ Area هنوز NOT_ANALYZED
 - مسدودهای فعال به مالک: متن ۳٬۱۱۰ SP بریده (CRM_SQL_Runner)؛ اسکرین‌شات محصول اصلی برای مقایسهٔ UI
 - فاز پیشنهادی بعد (۵): زیرساخت تست vitest/playwright + بازسازی ApiBaseInfo (۲۳۳ اکشن تعاریف پایه)
+
+---
+Task ID: 11
+Agent: main (Z.ai)
+Task: دریافت data.zip (کاتالوگ CSV/TSV مالک) از filebin — پوش به main/ideal + به‌روزرسانی README + اعمال یافته‌ها
+
+Work Log:
+- دانلود data.zip (46,224,597 bytes، SHA-256 7fd76621…) از filebin/axxgipv48t0qswsb — ساختار: data/catalog.tsv (ایندکس ۵۹٬۱۲۴ دستور × ۱۴ ستون) + data/statements.pack (۳۶۱MB متن کامل پیوسته) + data/sources.json (۱۱ منبع)
+- کشف و راستی‌آزمایی: statements.pack متن کامل هر ۵۹٬۱۲۴ دستور را دارد (off/len) — مجموع len = ۳۶۱٬۰۲۱٬۰۶۹ = حجم pack دقیقاً؛ ۰ ردیف خارج از مرز
+- گلوگاه تسک ۹ حل شد: هر ۳٬۱۱۰ SP بریدهٔ جلدهای V5–V8 بازیابی شد (۵٬۳۰۳ نام یکتا؛ صفر مورد جا‌مانده) — دیگر نیازی به CRM_SQL_Runner نیست
+- flags: D=17 (مخرب) و P=122 (پارامتری) — دقیقاً مطابق جلد صفر؛ sources.json: V1..V8 + UPDPROJ(12) + UPDOTHER(7) + FORMS(699)
+- یافتهٔ حیاتی ۱ — چک ورود: متن نهایی V5 گام ۳۷۲۵ نشان داد ردیف‌های UserLoginAllowedTimes پنجرهٔ «مجاز» (whitelist) هستند («user can login to system by these records (just)»)؛ پیاده‌سازی قبلی (بر اساس متن V3 دارای باگ <> NULL) معنا را برعکس گرفته بود
+  → اصلاح checkUserLoginAllowedTimes (معکوس کامل) + IP ناشناخته = رد مثل SP + اتصال مستقیم = 127.0.0.1 + واژگان UI دیالوگ (ممنوع→مجاز) — کامیت 7b2f0f9
+  → E2E بازنویسی با سنجه‌های whitelist + استقلال ابعاد: ۱۴/۱۴ PASS؛ forbidden-titles رگرسیون: ۱۴/۱۴ PASS — جمعاً 28/28
+- یافتهٔ حیاتی ۲ — عناوین ممنوع: نسخهٔ نهایی SPها در V8 است (نه V4 که مبنای تسک ۹ بود)؛ V8 گام ۳۲۰۱ پارامتر @CenterId و ستون CId اضافه کرده (ممنوعیت قابل تخصیص به مرکز) — رفتار فعلی (بدون ماژول مراکز) معادل حالت بدون مرکز SP است؛ برای فاز مراکز مستند شد (بدون تغییر کد)
+- پوش data.zip به main/ideal (کامیت 3d99e6a) + بخش جدید «نسخهٔ ماشین‌خوان» در ideal/README_SQL_Catalog.md: ساختار TSV/Pack، ستون‌ها، نمونهٔ خواندن پایتون، اصلاح‌های رفتاری حاصل
+- اسناد develop به‌روز شد: 03-sql-catalog-application.md (§۴.۱ بازنویسی با متن نهایی V5 + شفافیت تاریخچهٔ اصلاح؛ §۴.۲ افزودهٔ V8؛ §۵.۳ حل مسدود؛ §۶ وضعیت 28/28) + parity/data-model-gaps.md + parity/feature-matrix.md + roadmap.md (مسدودها)
+- تاییدها: tsc=0 | eslint=0 | E2E 28/28 PASS
+
+Stage Summary:
+- main = 3d99e6a (ideal/data.zip + README) | develop = 7b2f0f9 + کامیت اسناد این تسک
+- سه SP کلیدی تا نسخهٔ نهایی خوانده و رفتارشان تثبیت شد؛ الگوی کار برای همهٔ SPهای بعدی: «آخرین ردیف در ترتیب V1→V8 = نسخهٔ نهایی»
+- گلوگاه CRM_SQL_Runner برداشته شد؛ فازهای گزارش/فرم‌ساز/یکپارچه‌سازی دیگر محدودیت متنی ندارند
