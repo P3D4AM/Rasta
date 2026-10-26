@@ -202,3 +202,21 @@ Work Log:
 Stage Summary:
 - develop = a86a2d0 — اسکیمای رستا آینهٔ ساختاری CRMIdeal است: ۳۹۶ جدول فیزیکی با نام‌های اصلی؛ پایهٔ سیم‌کابی فازهای بعدی (پیامک/ایمیل/تلگرام/حضورغیاب/فرم‌ساز/اتصال مالی)
 - تسک «پوش کاتالوگ SQL به main/ideal + README مخصوص» به‌دلیل نرسیدن فایل در سندباکس انجام‌نشده ماند — صادقانه به مالک گزارش شد؛ پس از دریافت فایل در همان جلسه انجام می‌شود
+
+---
+Task ID: 9
+Agent: main (Z.ai)
+Task: دریافت کاتالوگ SQL مالک (filebin جدید) — پوش به main/ideal + README مخصوص + بازبینی کل پروژه و اعمال عیناً
+
+Work Log:
+- دانلود SQL_Catalog_Word_v1.0.zip از filebin (۱۲.۸MB، SHA-256 تأیید ✓) — ۵۹٬۱۲۴ دستور SQL از CRM__Update_187.exe در ۱۱ جلد Word + CHECKSUMS همه ✓
+- پوش: main/ideal/SQL_Catalog_Word_v1.0.zip + ideal/README_SQL_Catalog.md (کامیت fbe2938)
+- پارسر کامل ۵۹٬۱۲۴ مدخل (scripts سندباکس) → استخراج: ۴۶۲ CREATE TABLE/۳٬۹۹۴ ستون، ۳٬۲۱۴ ALTER-ADD، ۲۷۰ DEFAULT، ۱۵۶ ایندکس، ۵۰۱ PK، ۹۴۸ FK، ۵٬۳۰۲ SP (۱٬۴۴۴ متن کامل)، ۲۱۴ تابع، ۳۵ نما، ۷ تریگر
+- اعمال عیناً: ۱۲ پیش‌فرض (GUId=newid در ۱۰ جدول، Users.Mob 100/60) + ۶ ایندکس فیزیکی (IX_CrmCompanyPersons/_CmpId، IX_CrmConversation_CompanyId/ProjectId/StatusId، IX_CrmProjects_CompanyId) + ۶ ستون مهاجرتی (Company.FirstRegisterDateTime/cmpOfficialKind، Contact.FirstRegisterDateTime، CnvsStatusGroup.NoRegCnvsOlderStatue، Task.UserTaskTimeNext، UserDepartment.DefaultReferUserIdForCnvs) (کامیت 95d2b58)
+- اصلاح رفتاری چک ورود از متن کامل CRMspCheckUserLoginAllowedTimes: ابعاد مستقل، ردیف=پنجرهٔ ممنوع (معنای قبلی معکوس بود)، IP، انباشت Reason — E2E ۱۲ سنجه PASS
+- قابلیت جدید «عناوین پروژهٔ ممنوع» عیناً از CrmProjectsForbiddenForUser + دو SP + کوئری فرم‌ها: API/فیلتر titles?forMe=1/فیلتر لیست پروژه/گارد ۴۰۳/دیالوگ UI/rastaUserId نگاشت cuid — E2E ۱۴ سنجه PASS (کامیت c11ee25)
+- گزارش فاز: docs/analysis/03-sql-catalog-application.md + کشف کاربر متصل نوع ۲۴ + صف فاز بعد (ماتریس Forbidden/JustAccess مخاطب، V5–V8 بریده) (کامیت 280dd69)
+
+Stage Summary:
+- main = fbe2938 · develop = 280dd69 · tsc=0 · eslint=0 · E2E 26/26 PASS
+- تسک معوقهٔ تسک ۸ (پوش کاتالوگ) بسته شد
