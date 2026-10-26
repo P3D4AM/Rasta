@@ -1,0 +1,1562 @@
+// ─────────────────────────── Identity & Access ───────────────────────────
+// بازسازی عیناً از جدول Users خود CRMIdeal (۱۰۱ ستون) + CrmsysRolls + CrmsysRollPermission + CrmUserTasks
+
+// کاربر — جدول اصلی: Users (۱۰۱ ستون در نسخهٔ اصلی)
+model User {
+  id           String    @id @default(cuid()) @map("UserId")
+  username     String    @unique @map("UserName") // nvarchar(50) NOT NULL
+  passwordHash String    @map("Password") // در اصل nvarchar(50) — رستا هش scrypt نگه می‌دارد (انحراف امنتی مثبت)
+  firstName    String    @map("FName")
+  lastName     String    @map("LName")
+  email        String? // فقط رستا — در اصل ایمیل کاربر در EmailUsersInfo جدا است (جدولش در بخش ۲ حاضر است)
+  phone        String? // فقط رستا — در اصل تلفن کاربر در ستون Tel
+  isAdmin      Boolean   @default(false) @map("IsAdmin") // در اصل nvarchar(50) — رستا Boolean
+  isActive     Boolean   @default(true) @map("IsActive")
+  roleId       String? // فقط رستا — در اصل مجوز از CrmsysRollPermission/UsersPermission تخصیص می‌یابد
+  role         Role?     @relation(fields: [roleId], references: [id])
+  lastLoginAt  DateTime? // فقط رستا — آخرین ورود برای کارتابل
+  createdAt    DateTime  @default(now()) @map("RegisterDate")
+  updatedAt    DateTime  @updatedAt // فقط رستا
+
+  // ── بازسازی ستون‌های Users محصول CRMIdeal (AccountsController/UserDefine) ──
+  nickName       String? @map("Nickname")
+  persCode       String? @map("PersCode")
+  fatherName     String? @map("FatherName")
+  nationalCode   String? @map("NationalCode")
+  identityNumber String? @map("IdentityNumber")
+  insuranceCode  String? @map("InsuranceCode")
+  mobile         String? @map("Mobile")
+  mobileII       String? @map("MobileII")
+  address        String? @map("Address")
+  tel            String? @map("Tel")
+  telDesc        String? @map("TelDesc")
+  description    String? @map("Description")
+  positionId     String?  @map("PositionId")
+  position       UserPosition? @relation(fields: [positionId], references: [id])
+  userGroupId    String? @map("UserGroupId") // گروه کاربری — در اصل int → FK به UserGroups؛ رستا رشتهٔ cuid در همان ستون اصلی
+  userGroup      UserGroup? @relation(fields: [userGroupId], references: [id])
+  departmentId   String? @map("DepartmentInfo") // در اصل nvarchar(max) — رستا FK متنی به UserDepartments
+  department     UserDepartment? @relation(fields: [departmentId], references: [id])
+  responsibleUserId String? @map("ResponsibleUserId")
+  responsible    User?   @relation("ResponsibleUser", fields: [responsibleUserId], references: [id])
+  responsibles   User[]  @relation("ResponsibleUser")
+  alternativeUserIds  String? @map("AlternativeUserIds") // CSV
+  extensions     String? @map("UserExtensions")
+  callPreNumber  String? @map("CallPreNumber")
+  startDate      DateTime? @map("StartDate")
+  expireDate     DateTime? @map("ExpireDate")
+  defCmpPrjTitle String? @map("DefCmpPrjTitle")
+  signature      Bytes? // فقط رستا — در اصل امضا در جدول UserSignature (بخش ۲) + SignatureId
+  disableInternalMessageAlarmVoice Boolean @default(false) @map("DisableInternalMessageAllarmVoice")
+  disableReceiveCnvsInfoAllarm     Boolean @default(false) @map("DisableReceiveCNVSInfoAllarm")
+  accessDailyChartAllUsers Boolean @default(false) @map("UserAccessDailyChrtAllUsers")
+  accessSaleChartAllUsers  Boolean @default(false) @map("UserAccessSaleChrtAllUsers")
+
+  // ── ستون‌های اصلی غایب — عیناً از Users خود CRMIdeal ──
+  Row                    Int?      // شماره ردیف
+  UserId1                Int?      // آخرین ویرایشگر (رکورد) — در اصل int
+  StartDatePersian       String?
+  ExpireDatePersian      String?
+  MobHRMLoginMode        Int?
+  UserLoginCheckLocationType Int?
+  UserLoginCheckLocations String?
+  Month1                 Int?      // ماه ثبت (شمارهٔ ماه شمسی)
+  RegisterDatePersian    String?   // تاریخ ثبت شمسی (nvarchar(8)) — در اصل NOT NULL
+  IPAddress              String?   // آخرین IP ورود
+  SignatureId            Int?      // FK به UserSignature (امضای تصویری)
+  ComputerName           String?
+  GUId                   String?   // شناسهٔ GUID سینک
+  CallreIdDeActive       Boolean?
+  CallreIdDeActiveLines  String?
+  EmailAttachFileLocation String?
+  AppType                String?   // نوع اپ (varchar(20))
+  CanSetFree             Boolean?
+  UserCIPatternFormulaPopUp String?
+  UseClientNameForNetworking  Boolean?
+  LanguageID             Int?
+  AllowCopyOtherLanguage Boolean?
+  FirstRegisterUserId    Int?      // ثبت‌کنندهٔ اولیه
+  FirstRegisterDatePersian String?
+  FirstRegisterDate      DateTime?
+  UserIsActiveInWinApp   Boolean?
+  UserIsActiveInWebApp   Boolean?
+  UserIsActiveInMobApp   Boolean?
+  UserIsActiveInFOSetting Boolean?
+  UserIsActiveInHRM      Boolean?
+  UserIsActiveInCIC      Boolean?
+  CoordinateLatitude     String?
+  CoordinateLongitude    String?
+  CoordinateLastDate     DateTime?
+  CoordinateLastDatePersian String?
+  MobAppBaseInfoNeedUpdate Boolean?
+  MobAppBaseInfoNeedUpdateDetail String?
+  MaxNumberCmpDraft      Int?
+  LinkAccUserIdStr       String?
+  LinkAccUserCode        String?
+  MobDeActiveAccessToLocation Boolean?
+  MobAppBaseInfoLastUpdate DateTime?
+  DeActiveSmartTimeAttendance Boolean?
+  MobImeiCode            String?
+  MobHRMImeiCode         String?
+  ActiveMobMovementTracking Boolean?
+  MobMovementTrackingDistanceInterval Float?
+  MobMovementTrackingTimeInterval Int?
+  MobDeActiveScreenshot  Boolean?
+  MobCallerIdDeActive    Boolean?
+  MobAppDevSetting       String?
+  MobUserAppUseCnt       Int?
+  MobHRMUserAppUseCnt    Int?
+  MobCICUserAppUseCnt    Int?
+  CallerIdDeActiveFromMobile Boolean?
+  ActiveDirectoryUser    String?
+  LinkAccFirstTransferDate DateTime?
+  LinkAccLastTransferDate DateTime?
+  LinkAccData            String?
+  UserCIds               String?
+  UserLastCId            Int?
+  UserCId                Int?
+  ShiftWorkingId         Int?
+  DeActiveLoginWithoutShift Boolean?
+  AppLocationRequired    Boolean?
+  CrmNotifDeactivInHrm   Boolean?
+  LastCheckEmailDate     DateTime?
+
+  ownedCompanies Company[]         @relation("CompanyOwner")
+  ownedDeals     Deal[]            @relation("DealOwner")
+  createdTasks   Task[]            @relation("TaskCreator")
+  assignedTasks  Task[]            @relation("TaskAssignee")
+  activities     Activity[]
+  quotations     Quotation[]
+  orders         SalesOrder[]
+  stockMovements StockMovement[]   @relation("StockMovementUser")
+  ownedPurchases PurchaseOrder[]  @relation("PurchaseOwner")
+  fundCustodian  FundTransaction[] @relation("FundCustodian")
+  fundVerifier   FundTransaction[] @relation("FundVerifier")
+  fundCreator    FundTransaction[] @relation("FundCreator")
+
+  // ناوینی‌های کاربر روی پروژه — مثل ۱۰ navigation کاربر CrmProjects
+  startedProjects     Project[] @relation("ProjectStarter")
+  finishedProjects    Project[] @relation("ProjectFinisher")
+  ticketStopProjects  Project[] @relation("ProjectTicketStopper")
+  readProjects        Project[] @relation("ProjectFirstReader")
+  respondedProjects   Project[] @relation("ProjectFirstResponder")
+  firstDoingProjects  Project[] @relation("ProjectFirstDoer")
+  registeredProjects  Project[] @relation("ProjectRegistrar")
+  lastEditedProjects  Project[] @relation("ProjectLastEditor")
+  cnvsReferUser       ProjectConversation[] @relation("CnvsReferUser")
+  cnvsRegisterUser    ProjectConversation[] @relation("CnvsRegistrar")
+
+  loginAllowedTimes UserLoginAllowedTime[]
+  bankAccounts     BankAccount[] @relation("UserBankAccounts")
+  @@map("Users")  // جدول اصلی CRMIdeal: Users
+}
+
+// نقش — بازسازی CrmsysRolls (۱۳ ستون — شامل سقف درصد تخفیف به تفکیک نقش)
+model Role {
+  id          String           @id @default(cuid()) @map("ID")
+  name        String           @unique @map("RollName")
+  description String?           @map("Description")
+  limitPreOrderDiscountActive  Boolean @default(false) @map("LimitPreOrderDiscountActive")
+  limitPreOrderDiscountPercent Float   @default(0)     @map("LimitPreOrderDiscountPercent") // در اصل numeric
+  limitOrderDiscountActive     Boolean @default(false) @map("LimitOrderDiscountActive")
+  limitOrderDiscountPercent   Float   @default(0)     @map("LimitOrderDiscountPercent")
+  GUId           String?
+  AppType        String?
+  LanguageID     Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  users       User[]
+  permissions RolePermission[]
+  @@map("CrmsysRolls")  // جدول اصلی CRMIdeal: CrmsysRolls
+}
+
+// مجوز — بازسازی CrmsysRollPermission: نقش × فرم × اکشن (مثل خود CRMIdeal)
+// نکتهٔ ساختاری: در اصل RollId/FormId/FormActionId هر سه int و FK به CrmsysRolls/CrmsysForms/CrmsysFormActions هستند؛
+// رستا نام‌ها را رشته‌ای نگه می‌دارد (تداوم کد) — جدول‌های CrmsysForms/CrmsysFormActions در بخش ۲ حاضرند.
+model RolePermission {
+  id        String  @id @default(cuid()) @map("ID")
+  roleId    String  @map("RollId")
+  role      Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  formId    String  @map("FormId") // نام فرم مثل خود CRMIdeal: frmDefineUsers, frmPreOrder, frmDefineProjects...
+  actionId  String  @map("FormActionId") // اکشن ریز: actView, actInsert, actEdit, actDelete, actCanSetArchive...
+  GUId      String?
+  AppType   String?
+  LanguageID Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  CId       Int?
+
+  @@unique([roleId, formId, actionId])
+  @@map("CrmsysRollPermission")  // جدول اصلی CRMIdeal: CrmsysRollPermission
+}
+
+// وظیفه — جدول اصلی: CrmUserTasks (۴۵ ستون) — کارتابل شخصی خود CRMIdeal
+model Task {
+  id          String    @id @default(cuid()) @map("UserTaskId")
+  title       String    @map("UserTaskTitle")
+  description String?   @map("UserTaskDescription")
+  dueAt       DateTime? @map("UserTaskDate") // در اصل NOT NULL — برای تداوم اپ اختیاری
+  doneAt      DateTime? @map("UserTaskDidItDate")
+  status      String    @default("OPEN") // OPEN | DONE | CANCELED — فقط رستا؛ در اصل ستون UserTaskDidIt (bit) است
+  priority    String    @default("NORMAL") // فقط رستا — در اصل UserTaskPriorityId → CrmUserTaskPriorities (بخش ۲)
+  assigneeId  String    @map("UserId")
+  assignee    User      @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  creatorId   String?   @map("FirstRegisterUserId")
+  creator     User?     @relation("TaskCreator", fields: [creatorId], references: [id])
+  companyId   String?   @map("UserTaskCompanyIds") // در اصل CSV از شناسهٔ شرکت‌ها (nvarchar(2000)) — رستا تک‌مقدار
+  dealId      String? // فقط رستا — اتصال به فرصت
+  createdAt   DateTime  @default(now()) @map("RegisterDate")
+  updatedAt   DateTime  @updatedAt // فقط رستا
+
+  // ── ستون‌های اصلی غایب — عیناً از CrmUserTasks ──
+  UserTaskDatePersian  String?  // تاریخ شمسی انجام — در اصل NOT NULL
+  UserTaskTime         String?
+  UserTaskGroupId      Int?     // FK به CrmUserTaskGroups (بخش ۲)
+  UserTaskPriorityId   Int?     // FK به CrmUserTaskPriorities (بخش ۲)
+  UserTaskShowAllarm   Int?
+  UserTaskDidIt        Boolean? // انجام‌شده (bit) — معادل اصلیِ status رستا
+  UserTaskRemindDate   String?
+  UserTaskRemindTime   String?
+  UserTaskRemindDateTime DateTime?
+  UserTaskIsPublic     Boolean?
+  Year1                Int?     // در اصل smallint NOT NULL
+  Month1               Int?
+  RegisterDatePersian  String?  // در اصل NOT NULL
+  GUId                 String?
+  AppType              String?
+  LanguageID           Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate     DateTime?
+  UserTaskTimeEnd      String?
+  ObjectTypeId         Int?
+  ObjectId             Int?
+  UserTaskNoTimeOverlap Boolean?
+  UserTaskRepeatDaily   Boolean?
+  UserTaskRepeatWeekly  Boolean?
+  UserTaskRepeatMonthly Boolean?
+  UserTaskRepeatYearly  Boolean?
+  UserTaskRemindRepeatDaily   Boolean?
+  UserTaskRemindRepeatWeekly  Boolean?
+  UserTaskRemindRepeatMonthly Boolean?
+  UserTaskRemindRepeatYearly  Boolean?
+  UserTaskLinkIdStr    String?
+  UserTaskDateEnd      DateTime?
+  UserTaskDateEndPersian String?
+  UserTaskCId          Int?
+  UserTaskDidItDatePersian String?
+  UserTaskDidItInfoJson String?
+
+  company     Company? @relation(fields: [companyId], references: [id])
+  deal        Deal?    @relation(fields: [dealId], references: [id])
+
+  @@index([assigneeId, status])
+  @@map("CrmUserTasks")  // جدول اصلی CRMIdeal: CrmUserTasks
+}
+
+// ─────────────────────────── CRM Core ───────────────────────────
+// شرکت — جدول اصلی: CrmCompany (۱۲۰ ستون) | مخاطب/شخص — جدول اصلی: CrmCompanyPersons (۸۰ ستون)
+
+model Company {
+  id          String   @id @default(cuid()) @map("CompanyID")
+  name        String   @map("cmpName")
+  nameEn      String?  @map("cmpNameEng")
+  type        String   @default("CUSTOMER") // فقط رستا — در اصل cmpTypeId → CrmCompanyType (بخش ۲)
+  industry    String?  @map("cmpActivityType")
+  taxId       String?  @map("cmpNationalCode") // کد ملی حقوقی (نزدیک‌ترین معادل شناسه مالیاتی)
+  econCode    String?  @map("cmpEconomicCode") // کد اقتصادی
+  phone       String?  @map("cmpTel")
+  email       String?  @map("cmpEmail")
+  website     String?  @map("cmpWebSite")
+  province    String? // فقط رستا — در اصل cmpProvinceId → Province (بخش ۲)
+  city        String? // فقط رستا — در اصل cmpCityId → City (بخش ۲)
+  address     String?  @map("cmpAddress")
+  description String?  @map("cmpDescription")
+  status      String   @default("ACTIVE") // فقط رستا — در اصل ستون وضعیت جدا ندارد
+  ownerId     String?  @map("cmpSuppUserId") // کارشناس مسئول/پشتیبان (cmpSuppUserId)
+  owner       User?    @relation("CompanyOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now()) @map("RegisterDate")
+  updatedAt   DateTime @updatedAt // فقط رستا
+
+  // ── ستون‌های اصلی غایب — عیناً از CrmCompany (۱۲۰ ستون) ──
+  ImportDate              String?   // تاریخ درج شمسی — در اصل nvarchar(8) NOT NULL
+  ImportDateTime          DateTime?
+  cmpNumber               Int?      // شمارهٔ شرکت (شماره‌گذاری خودکار در اصل)
+  cmpTitleId              Int?      // FK به CrmCompanyTitle
+  cmpFame                 String?   // آوازه/نام تجاری
+  cmpGroupId              Int?      // گروه یک — FK به CrmCompanyGroups
+  cmpSubGroupId           Int?      // زیرگروه — FK به CrmCompanySubGroups
+  cmpGroupIdII            Int?      // گروه دو — FK به CrmCompanyGroupsII
+  cmpGroupIdIII           Int?      // گروه سه — FK به CrmCompanyGroupsIII
+  cmpGroupIdIV            Int?      // گروه چهار — FK به CrmCompanyGroupsIV
+  cmpTypeId               Int?      // نوع شرکت — FK به CrmCompanyType
+  cmpPresentationId       Int?      // معرفی‌نامه — FK به CrmCompanyPresentation
+  cmpPreTel               String?
+  cmpTelUpTo              String?
+  cmpTelDesc              String?
+  cmpPreTelII             String?
+  cmpTelII                String?
+  cmpTelUpToII            String?
+  cmpTelIIDesc            String?
+  cmpMobile               String?
+  cmpFax                  String?
+  cmpFaxDesc              String?
+  cmpCountryId            Int?      // FK به Country
+  cmpProvinceId           Int?      // FK به Province
+  cmpCityId               Int?      // FK به City
+  cmpAddressDesc          String?
+  cmpZipCode              String?
+  cmpPostBox              String?
+  cmpInteresting          String?   // علاقه‌مندی‌ها
+  cmpSpecialPoint         String?   // نکات ویژه
+  cmpUserName             String?   // کاربری باشگاه مشتریان
+  cmpPassword             String?   // رمز باشگاه مشتریان
+  cmpFirstRegisterUserId  Int?
+  UserId                  Int?      // ثبت‌کنندهٔ رکورد — در اصل int NOT NULL
+  Year1                   Int?      // در اصل smallint NOT NULL
+  Month1                  Int?      // در اصل smallint NOT NULL
+  RegisterDatePersian     String?   // در اصل nvarchar(8) NOT NULL
+  AddType                 Int?      // نوع درج (دستی/سریع/تبدیل) — در اصل NOT NULL
+  cmpRegistrationNumber   String?   // شمارهٔ ثبت
+  GUId                    String?
+  cmpBuyLimit             String?
+  cmpAccountNumber        String?
+  cmpAccInquiry           String?
+  cmpFreight              String?
+  cmpInquiry              String?
+  cmpReferUserId          Int?      // معرف
+  AppType                 String?
+  cmpSpecialWordForCI     String?
+  cmpCode                 String?
+  cmpEffectiveDatePersian String?
+  cmpEffectiveDateTime    DateTime?
+  LanguageID              Int?
+  FirstRegisterUserId     Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate       DateTime?
+  cmpCoordinateLatitude   String?
+  cmpCoordinateLongitude  String?
+  cmpCoordinateLastDate   DateTime?
+  cmpCoordinateLastDatePersian String?
+  cmpCoordinateZoomLevel  Int?
+  cmpCoordinateLastUserId Int?
+  cmpFOAccessLinkedCompany Boolean?
+  cmpLinkAccCodeId        Int?
+  cmpLinkAccCode          String?
+  cmpLinkAccCustomerId    Int?
+  cmpLinkAccCustomerIdStr String?
+  cmpIsDraft              Boolean?
+  cmpKind                 Int?
+  cmpMainPersonId         Int?      // رابط اصلی (FK به CrmCompanyPersons)
+  cmpNameOfficial         String?
+  cmpTicketAllowInCurrntCount Int? // سقف تیکت جاری
+  cmpTicketAllowAddBeforeAnswerCount Int?
+  cmpIVRLinkRule          String?
+  cmpCampaignIds          String?   // کمپین‌ها (CSV)
+  cmpTicketCountCurrentWithStop Boolean?
+  cmpFOManagers           String?
+  cmpOfficialCityId       Int?
+  cmpOfficialAddress      String?
+  cmpOfficialZipCode      String?
+  cmpOfficialDesc         String?
+  cmpOfficialTel          String?
+  TspCmpTob               Int?
+  TspCmpBbc               String?
+  TspCmpBpn               String?
+  cmpShpSettlementTypeId  Int?
+  cmpShpSettlementCreditIssueType Int?
+  cmpShpSettlementCreditPerBuy Float?
+  cmpShpSettlementTotalCredit Float?
+  cmpShpSettlementCreditRemainShow Boolean?
+  cmpLinkAccFirstTransferDate DateTime?
+  cmpLinkAccLastTransferDate  DateTime?
+  cmpCRMShopIsActive      Boolean?
+  cmpCRMShopActiveDate   DateTime?
+  cmpIVRCallBlockDateTime DateTime?
+  cmpIVRCallBlockUserId  Int?
+  cmpIVRCallBlockRegisterDate DateTime?
+  cmpIVRCallBlockRegisterDatePersian String?
+  cmpLinkAccData          String?
+  cmpFOIsActive           Boolean?  // باشگاه مشتریان فعال
+  cmpFOActiveDate         DateTime?
+  cmpFOActiveUserId       Int?
+  cmpFOLoginExpireDate    DateTime?
+  cmpFOLoginExpireUserId  Int?
+  cmpCIds                 String?
+  cmpFOInfo               String?
+  cmpLastCId              Int?
+  cmpQuickRegisterDefSettingId Int?
+
+  contacts       Contact[]
+  deals          Deal[]
+  projects       Project[]
+  activities     Activity[]
+  tasks          Task[]
+  quotations     Quotation[]
+  orders         SalesOrder[]
+  purchaseOrders PurchaseOrder[] @relation("PurchaseSupplier")
+  @@map("CrmCompany")  // جدول اصلی CRMIdeal: CrmCompany
+}
+
+model Contact {
+  id        String   @id @default(cuid()) @map("CompanyPersonID")
+  companyId String   @map("prsCompanyId")
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  firstName String   @map("prsFName")
+  lastName  String?  @map("prsLName")
+  jobTitle  String? // فقط رستا — در اصل prsJobId → CrmPersonJobs (بخش ۲)
+  phone     String?  @map("prsTel")
+  mobile    String?  @map("prsMobile")
+  email     String?  @map("prsEmail")
+  isPrimary Boolean  @default(false) // فقط رستا
+  note      String?  @map("prsDescription")
+  createdAt DateTime @default(now()) @map("RegisterDate")
+  updatedAt DateTime @updatedAt // فقط رستا
+
+  // ── ستون‌های اصلی غایب — عیناً از CrmCompanyPersons (۸۰ ستون) ──
+  prsTitleId        Int?     // عنوان (خانم/آقای/دکتر) — FK به CrmPersonTitle
+  prsJobId          Int?     // شغل — FK به CrmPersonJobs
+  prsTypeId         Int?     // نوع — FK به CrmPersonType
+  prsGroupId        Int?     // گروه — FK به CrmPersonGroups
+  prsSexId          Int?     // جنسیت — FK به Sex
+  prsEducationId    Int?     // تحصیلات — FK به Education
+  prsPreTel         String?
+  prsTelUpTo        String?
+  prsTelDesc        String?
+  prsTelII          String?
+  prsFax            String?
+  prsFaxDesc        String?
+  prsWebSite        String?
+  prsEmailII        String?
+  prsCountryId      Int?
+  prsProvinceId     Int?
+  prsCityId         Int?
+  prsAddress        String?
+  prsAddressDesc    String?
+  prsZipCode        String?
+  prsPostBox        String?
+  prsNationalCode   String?
+  prsIdentityNumber String?
+  prsFatherName     String?
+  prsBirthDate      String?   // شمسی nvarchar(8)
+  prsBirthDateTime  DateTime?
+  prsBirthPlace     String?
+  prsIsMarried      Boolean?
+  prsMarriageDate   String?
+  prsMarriageDateTime DateTime?
+  prsEducationField String?
+  prsSkill          String?
+  prsStudyField     String?
+  prsInteresting    String?
+  prsSpecialPoint   String?
+  UserId            Int?      // در اصل NOT NULL
+  Year1             Int?       // در اصل smallint NOT NULL
+  Month1            Int?       // در اصل smallint NOT NULL
+  RegisterDatePersian String?  // در اصل NOT NULL
+  AddType           Int?       // در اصل NOT NULL
+  ImportDate        String?
+  ImportDateTime    DateTime?
+  prsFirstRegisterUserId Int?
+  prsDepartmentId   Int?      // دپارتمان شخص
+  prsStopSendSms    Boolean?
+  prsOrderView      Int?
+  prsWorkingOut     Boolean?  // خارج از شرکت
+  GUId              String?
+  CompanyPersonTemplateID Int?
+  AppType           String?
+  LanguageID        Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  prsTelegramId     Int?
+  FirstRegisterDate DateTime?
+  prsCoordinateLatitude  String?
+  prsCoordinateLongitude String?
+  prsCoordinateLastDate   DateTime?
+  prsCoordinateLastDatePersian String?
+  prsCoordinateZoomLevel  Int?
+  prsCoordinateLastUserId Int?
+  prsUserName       String?   // کاربری باشگاه
+  prsPassword       String?   // رمز باشگاه
+  prsFOIsActive     Boolean?
+  prsFOActiveDate   DateTime?
+  prsFOActiveUserId Int?
+  prsFOLoginExpireDate DateTime?
+  prsFOLoginExpireUserId Int?
+  prsCIds           String?
+  prsFOInfo         String?
+  prsLastCId        Int?
+
+  deals      Deal[]
+  activities Activity[]
+  quotations Quotation[]
+  @@map("CrmCompanyPersons")  // جدول اصلی CRMIdeal: CrmCompanyPersons
+}
+
+// ─────────────────────────── ماژول پروژه‌ها (فاز ۴) ───────────────────────────
+// پروژه = پرونده/تیکت متصل به مخاطب — جدول اصلی: CrmProjects (۸۲ ستون) | مذاکره: CrmConversation (۵۹ ستون)
+// نکته: گانت/زمان‌بند/وظیفه/عضو پروژه در خود CRMIdeal وجود ندارد (مطالعه سورس) — ساخته نمی‌شود.
+
+// سرفصل پروژه — CrmProjectTitleGroups (۲۱ ستون — شامل متن توافق‌نامه/SLA و سقف تیکت هم‌جریان)
+model ProjectTitleGroup {
+  id           String  @id @default(cuid()) @map("ProjectTitleGroupId")
+  name         String  @map("ProjectTitleGroup")
+  description  String? @map("ProjectTitleGroupDesc") // در CRMIdeal با Kendo Editor + تصویر (ntext)
+  color         String? @map("ProjectTitleGroupColor")
+  agreementActive Boolean @default(false) @map("ProjectTitleGroupAgreementActive")
+  agreementDesc   String? @map("ProjectTitleGroupAgreementDesc") // متن توافق‌نامه/SLA (ntext)
+  subjectDefaultContext String? @map("ProjectTitleGroupSubjectDefaultContext")
+  ticketAllowInCurrentCount Int? @map("ProjectTitleGroupTicketAllowInCurrentCount")
+  orderView    Int     @default(0) // فقط رستا — در اصل OrderView جدا ندارد (ترتیب از OrderView کل رکوردها)
+  createdAt    DateTime @default(now()) @map("RegisterDate")
+  updatedAt    DateTime @updatedAt // فقط رستا
+
+  ProjectTitleGroupUserDepartmentId Int? // دپارتمان مسئول سرفصل
+  ProjectTitleGroupTicketCountCurrentWithStop Boolean?
+  FirstRegisterUserId Int?     // در اصل int NOT NULL
+  FirstRegisterDate  DateTime? // در اصل datetime NOT NULL
+  FirstRegisterDatePersian String? // در اصل varchar(8) NOT NULL
+  UserId             Int?      // در اصل int NOT NULL
+  Year1              Int?       // در اصل smallint NOT NULL
+  Month1             Int?       // در اصل smallint NOT NULL
+  RegisterDatePersian String?   // در اصل NOT NULL
+  GUId               String?
+  AppType            String?
+  LanguageID         Int?
+
+  titles   ProjectTitle[]
+  projects Project[]
+  @@map("CrmProjectTitleGroups")  // جدول اصلی CRMIdeal: CrmProjectTitleGroups
+}
+
+// عنوان پیش‌فرض پروژه — CrmProjectTitles (۲۴ ستون)
+model ProjectTitle {
+  id              String  @id @default(cuid()) @map("ProjectTitleID")
+  title           String  @map("ProjectTitle")
+  titleGroupId    String? @map("ProjectTitleGroupId")
+  titleGroup      ProjectTitleGroup? @relation(fields: [titleGroupId], references: [id])
+  statusGroupId   String? @map("ProjectTitleStatusGroupId") // مدل پیشرفت پیش‌فرض
+  gradeId         String? @map("ProjectTitleGradeId") // مقطع پیش‌فرض
+  priorityId      String? @map("ProjectTitlePriorityId") // اولویت پیش‌فرض
+  description     String? @map("ProjectTitleDesc")
+  activeNumRWithTitle Boolean @default(false) @map("ActivePrjNumRWithTitle")
+  postFix         String? @map("PrjPostFix")
+  remindDay       Int?    @map("PrjRemindDay")
+  foCmpCanSee     Boolean @default(false) @map("PrjFOCmpCanSee")
+  isTicket        Boolean @default(false) @map("PrjIsTicket")
+  createdAt       DateTime @default(now()) @map("RegisterDate")
+  updatedAt       DateTime @updatedAt // فقط رستا
+
+  PrjTitleGroupId Int? // در CrmProjectTitles دو ستون مرتبط وجود دارد: ProjectTitleGroupId و PrjTitleGroupId
+  UserId         Int? // در اصل NOT NULL
+  Year1          Int?
+  Month1         Int?
+  RegisterDatePersian String? // در اصل NOT NULL
+  GUId           String?
+  AppType        String?
+  LanguageID     Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+
+  grade    ProjectGrade?   @relation(fields: [gradeId], references: [id])
+  priority ProjectPriority? @relation(fields: [priorityId], references: [id])
+  statusGroup CnvsStatusGroup? @relation(fields: [statusGroupId], references: [id])
+  @@map("CrmProjectTitles")  // جدول اصلی CRMIdeal: CrmProjectTitles
+}
+
+// گروه پروژه — CrmProjectGroups (۱۳ ستون)
+model ProjectGroup {
+  id          String    @id @default(cuid()) @map("ProjectGroupID")
+  name        String    @map("ProjectGroup")
+  description String? // فقط رستا — در اصل ستون توضیح جدا ندارد
+  orderView   Int       @default(0) // فقط رستا
+  createdAt   DateTime  @default(now()) @map("RegisterDate")
+  updatedAt   DateTime  @updatedAt // فقط رستا
+
+  UserId              Int? // در اصل NOT NULL
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String? // در اصل NOT NULL
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate   DateTime?
+
+  projects Project[]
+  @@map("CrmProjectGroups")  // جدول اصلی CRMIdeal: CrmProjectGroups
+}
+
+// مقطع پروژه — CrmProjectGrade (۱۳ ستون)
+model ProjectGrade {
+  id          String    @id @default(cuid()) @map("ProjectGradeID")
+  name        String    @map("ProjectGrade")
+  description String? // فقط رستا
+  orderView   Int       @default(0) // فقط رستا
+  createdAt   DateTime  @default(now()) @map("RegisterDate")
+  updatedAt   DateTime  @updatedAt // فقط رستا
+
+  UserId              Int?
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String?
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate   DateTime?
+
+  projects  Project[]
+  titles    ProjectTitle[]
+  @@map("CrmProjectGrade")  // جدول اصلی CRMIdeal: CrmProjectGrade
+}
+
+// اولویت پروژه — CrmProjectPriority (۱۵ ستون)
+model ProjectPriority {
+  id          String    @id @default(cuid()) @map("ProjectPriorityID")
+  name        String    @map("Priority")
+  color       String?   @map("Color") // رنگ اولویت در UI
+  description String?   @map("PriorityDesc")
+  orderView   Int       @default(0) // فقط رستا
+  createdAt   DateTime  @default(now()) @map("RegisterDate")
+  updatedAt   DateTime  @updatedAt // فقط رستا
+
+  UserId              Int?
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String?
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate   DateTime?
+
+  projects Project[]
+  titles   ProjectTitle[]
+  @@map("CrmProjectPriority")  // جدول اصلی CRMIdeal: CrmProjectPriority
+}
+
+// دسته‌بندی درختی پروژه — CrmProjectCategory (۱۹ ستون)
+model ProjectCategory {
+  id            String  @id @default(cuid()) @map("ProjectCategoryId")
+  name          String  @map("CategoryName")
+  parentId      String? @map("ParentId")
+  parent        ProjectCategory? @relation("ProjectCategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children      ProjectCategory[] @relation("ProjectCategoryTree")
+  statusGroupId String? @map("CnvsStatusGroupId") // مدل پیشرفت پیش‌فرض دسته
+  statusGroup  CnvsStatusGroup? @relation(fields: [statusGroupId], references: [id])
+  orderView     Int     @default(0) @map("OrderView")
+  createdAt     DateTime @default(now()) @map("RegisterDate")
+  updatedAt     DateTime @updatedAt // فقط رستا
+
+  ParentHistory   String?  // مسیر درخت (nvarchar(max))
+  Depth           Int?
+  IsLeaf          Boolean?
+  FirstRegisterUserId Int? // در اصل NOT NULL
+  FirstRegisterDate   DateTime? // در اصل NOT NULL
+  FirstRegisterDatePersian String? // در اصل NOT NULL
+  UserId          Int?       // در اصل NOT NULL
+  Year1           Int?       // در اصل int NOT NULL
+  Month1          Int?
+  RegisterDatePersian String? // در اصل NOT NULL
+  GUId            String?
+  AppType         String?
+  LanguageID      Int?
+
+  projects Project[]
+  @@map("CrmProjectCategory")  // جدول اصلی CRMIdeal: CrmProjectCategory
+}
+
+// مدل پیشرفت — CrmConversationStatusGroups (۱۹ ستون)
+model CnvsStatusGroup {
+  id          String    @id @default(cuid()) @map("ConversationStatusGroupID")
+  name        String    @map("ConversationStatusGroup")
+  description String?   @map("ConversationStatusGroupDesc")
+  orderView   Int       @default(0) // فقط رستا
+  isActive    Boolean   @default(true) // فقط رستا — در اصل ستون معکوس DeActive است (پایین اضافه شده)
+  createdAt   DateTime  @default(now()) @map("RegisterDate")
+  updatedAt   DateTime  @updatedAt // فقط رستا
+
+  UserId              Int?
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String?
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate   DateTime?
+  FOCnvsReferUserId   Int?      // کاربر ارجاع پیش‌فرض باشگاه
+  FOCnvsReferMultiUser String?
+  NoRegCnvsOlderStatus Boolean?
+  DeActive            Boolean?  // معکوس isActive — ستون اصلی خود CRMIdeal
+  ConversationStatusGroupColor String?
+
+  statuses   CnvsStatus[]
+  projects   Project[]
+  categories ProjectCategory[]
+  titles     ProjectTitle[]
+  @@map("CrmConversationStatusGroups")  // جدول اصلی CRMIdeal: CrmConversationStatusGroups
+}
+
+// وضعیت مذاکره — CrmConversationStatus (۵۴ ستون)
+// نکتهٔ مهم: نتیجه‌های وضعیت (پایان پروژه/صدور فاکتور/...) در خود CRMIdeal جدول جداگانهٔ CrmConversationStatusResult
+// دارند که در بخش ۲ کامل حاضر است؛ فیلدهای نتیجه در این مدل، نگاشت منطقی رستا هستند.
+model CnvsStatus {
+  id                String  @id @default(cuid()) @map("ConversationStatusID")
+  groupId           String  @map("GroupId")
+  group             CnvsStatusGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  name              String  @map("Status")
+  progressPercent   Int     @default(0) @map("ProgressPercent")
+  orderView         Int     @default(0) @map("StatusOrder")
+  // نتیجه‌های وضعیت — مثل CRMIdeal (منطق رستا؛ جدول مرجع کامل CrmConversationStatusResult در بخش ۲):
+  prjFinished       Boolean @default(false)
+  addPrjActive      Boolean @default(false)
+  issuePreOrderActive Boolean @default(false)
+  issueOrderActive  Boolean @default(false)
+  noCnvsDup         Boolean @default(false)
+  isDefault         Boolean @default(false) // فقط رستا — وضعیت پیش‌فرض درج
+  isActive          Boolean @default(true) // فقط رستا — در اصل DeActive
+  color             String? @map("StatusColor")
+  createdAt         DateTime @default(now()) @map("RegisterDate")
+  updatedAt         DateTime @updatedAt // فقط رستا
+
+  StatusDesc        String?
+  UserId            Int?
+  Year1             Int?
+  Month1            Int?
+  RegisterDatePersian String?
+  GUId              String?
+  AppType           String?
+  LanguageID        Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  EventPolicyIsActive Boolean?
+  SMSBodyPatternFormula String?
+  SendSMSWeb        Boolean?
+  SendSMSGSM        Boolean?
+  EmailSubjectPatternFormula String?
+  EmailBodyPatternFormula String?
+  SendEmail         Boolean?
+  SendImmediately   Boolean?
+  SendDelayDays     Int?
+  SendForAllCmpPersons Boolean?
+  UserCanCheckBeforeSend Boolean?
+  ForcedStatus      Boolean?
+  FODefault         Boolean?
+  ProcessKindId     Int?
+  SendInCnvsAllarmDate Boolean?
+  EmailUserInfoId   Int?
+  SendSMSUserName   String?
+  SendSMSPassword   String?
+  SendSMSNumber     String?
+  SendSMSProviderId Int?      // FK به SmsProviders (بخش ۲)
+  StatusUsedUserIds String?
+  DoingTimeEndCallerCnvsStatusIds String?
+  NoRegCnvsOlderStatus Boolean?
+  CnvsCountLimit    Int?
+  CnvsDoingTimeLimit Int?
+  DeActive          Boolean?
+  IVRLinkRule       String?
+  DeadlineIsActive  Boolean?
+  DeadlineMinutes   BigInt?
+  DeadlineStartResultId Int?
+  DeadlineFinishStatusId Int?
+  DeadlineFinishResultId Int?
+  DeadlineStartDate DateTime?
+  DeadlineStartDatePersian String?
+  DeadlineFinishDate DateTime?
+  DeadlineFinishDatePersian String?
+
+  conversations ProjectConversation[]
+  @@map("CrmConversationStatus")  // جدول اصلی CRMIdeal: CrmConversationStatus
+}
+
+// پروژه — بازسازی CrmProjects (۸۲ ستون) — پرونده/تیکت متصل به مخاطب
+model Project {
+  id               String   @id @default(cuid()) @map("ProjectID")
+  number           Int      @unique @map("prjNumR") // شماره‌گذاری اتومات — در اصل bigint
+  referenceNumber  String?  @map("prjNumRef")
+  postFix          String?  @map("prjPostFix") // پسوند عنوان — یکتا به تفکیک مخاطب
+  inquiryNumber    String?  @map("prjInquiryNum")
+  title            String   @map("prjTitle")
+  subject          String?  @map("prjSubject")
+  description      String?  @map("prjDesc")
+  descriptionAdditional String? @map("prjDescI")
+  titleGroupId     String? // فقط رستا — در اصل سرفصل از طریق عنوان/متن (prjTitleGroup رشته‌ای پایین)
+  titleGroup       ProjectTitleGroup? @relation(fields: [titleGroupId], references: [id])
+  groupId          String?  @map("prjGroupId")
+  group            ProjectGroup?   @relation(fields: [groupId], references: [id])
+  gradeId          String?  @map("prjGradeId")
+  grade            ProjectGrade?   @relation(fields: [gradeId], references: [id])
+  priorityId       String?  @map("prjPriorityId")
+  priority         ProjectPriority? @relation(fields: [priorityId], references: [id])
+  categoryId       String?  @map("prjCategoryId")
+  category         ProjectCategory? @relation(fields: [categoryId], references: [id])
+  statusGroupId    String   @map("prjcnvsStatusGroupId") // مدل پیشرفت — اجباری مثل CRMIdeal
+  statusGroup      CnvsStatusGroup @relation(fields: [statusGroupId], references: [id])
+  companyId        String   @map("prjCompanyId") // مخاطب — اجباری
+  company          Company @relation(fields: [companyId], references: [id])
+  starterUserId    String?  @map("prjStarterUserId")
+  starter          User?   @relation("ProjectStarter", fields: [starterUserId], references: [id])
+  startDate        DateTime? @map("prjStartDateTime")
+  startDay         String?  @map("prjStartDay")
+  startTime        String?  @map("prjStartTime")
+  isFinished       Boolean  @default(false) @map("prjIsFinished")
+  finishedDate     DateTime? @map("prjFinishedDateTime")
+  finishedDay      String?  @map("prjFinishedDay")
+  finishedTime     String?  @map("prjFinishedTime")
+  finishedUserId   String?  @map("prjFinishedUserId")
+  finishedUser     User?   @relation("ProjectFinisher", fields: [finishedUserId], references: [id])
+  finishedDurationSec Int?  @map("prjFinishedDuration")
+  remindDate       DateTime? @map("prjRemindDateTime")
+  orderView        Int?     @map("prjOrderView")
+  isTicket         Boolean  @default(false) @map("prjIsTicket")
+  ticketStop       Boolean  @default(false) @map("prjTicketStop")
+  ticketStopUserId String?  @map("prjTicketStopUserId")
+  ticketStopUser   User?    @relation("ProjectTicketStopper", fields: [ticketStopUserId], references: [id])
+  ticketStopDate   DateTime? @map("prjTicketStopRegisterDate")
+  foCmpCanSee     Boolean  @default(false) @map("prjFOCmpCanSee")
+  foCmpCanInsCnvs Boolean  @default(true)  @map("prjFOCmpCanInsCnvs")
+  userDepartmentId String?  @map("prjUserDepartmentId")
+  userDepartment   UserDepartment? @relation(fields: [userDepartmentId], references: [id])
+  toDoTime         DateTime? @map("prjToDoTime")
+  toDoTimeRegister DateTime? @map("prjToDoTimeRegister")
+  toDoTimeDone     DateTime? @map("prjToDoTimeDone")
+  toDoTimeSec      Int?      @map("prjToDoTimeSec")
+  readDate         DateTime? @map("prjReadDate")
+  readUserId       String?   @map("prjReadUserId")
+  readUser         User?   @relation("ProjectFirstReader", fields: [readUserId], references: [id])
+  readDurationSec  Int?      @map("prjReadDuration")
+  responseDate     DateTime? @map("prjResponseDate")
+  responseUserId   String?   @map("prjResponseUserId")
+  responseUser     User?   @relation("ProjectFirstResponder", fields: [responseUserId], references: [id])
+  responseDurationSec Int?  @map("prjResponseDuration")
+  firstDoingDate   DateTime? @map("prjFirstDoingDate")
+  firstDoingUserId String?   @map("prjFirstDoingUserId")
+  firstDoingUser   User?   @relation("ProjectFirstDoer", fields: [firstDoingUserId], references: [id])
+  firstDoingDurationSec Int? @map("prjFirstDoingDuration")
+  registeredById   String?  @map("prjFirstRegisterUserId")
+  registeredBy     User?   @relation("ProjectRegistrar", fields: [registeredById], references: [id])
+  lastEditedById   String? // فقط رستا — در اصل آخرین ویرایشگر رکورد از UserId1/CId قابل پیگیری است
+  lastEditedBy     User?   @relation("ProjectLastEditor", fields: [lastEditedById], references: [id])
+  createdAt        DateTime @default(now()) @map("RegisterDate")
+  updatedAt        DateTime @updatedAt // فقط رستا
+
+  // ── ستون‌های اصلی غایب — عیناً از CrmProjects ──
+  prjStartDate            String? // تاریخ شروع شمسی nvarchar(8)
+  prjFinishedDate         String? // تاریخ آرشیو شمسی nvarchar(8)
+  prjFinishedStatusId     Int?    // نتیجه‌وضعیتی که پروژه را آرشیو کرد (FK به CrmConversationStatusResult)
+  prjFirstRegisterDate    String? // تاریخ ثبت اولیه شمسی
+  prjFirstRegisterDateTime DateTime?
+  prjTitleGroup           String? // متن سرفصل (denormalized)
+  prjRemindDate           String? // یادآوری شمسی
+  prjHaveSms              Boolean?
+  prjSmsPrsIds            String?
+  prjSmsText              String?
+  prjSmsSendDate          DateTime?
+  prjSmsSendDatePersian   String?
+  prjIsTicketNew          Boolean?
+  prjFOCmpCanNotInsCnvs   Boolean?
+  prjToDoTimeRegisterHistory String?
+  prjTicketStopRegisterDatePersian String?
+  prjcmpPresentationId   Int?
+  prjcmpCampaignIds       String?
+  prjcmpQuickRegisterDefSettingId Int?
+  prjValidityPrdId        Int?
+  prjValidityOrdItemId     Int?
+  prjCId                  Int?
+  UserId                  Int? // در اصل int NOT NULL
+  Year1                   Int? // در اصل smallint NOT NULL
+  Month1                  Int?
+  RegisterDatePersian     String? // در اصل NOT NULL
+  GUId                    String?
+  AppType                 String?
+  LanguageID              Int?
+  FirstRegisterUserId      Int?
+  FirstRegisterDateTime   DateTime?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate        DateTime?
+
+  conversations ProjectConversation[]
+
+  @@index([companyId, isFinished])
+  @@index([remindDate])
+  @@map("CrmProjects")  // جدول اصلی CRMIdeal: CrmProjects
+}
+
+// مذاکره پروژه — بازسازی CrmConversation (۵۹ ستون) — درصد پروژه از آخرین مذاکره
+model ProjectConversation {
+  id            String   @id @default(cuid()) @map("ConversationID")
+  projectId     String   @map("cnvsProjectId")
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  companyId     String   @map("cnvsCompanyId") // مخاطب — در اصل int
+  statusId      String   @map("cnvsStatusId")
+  status        CnvsStatus @relation(fields: [statusId], references: [id])
+  referUserId   String?  @map("cnvsReferUserId")
+  referUser     User?    @relation("CnvsReferUser", fields: [referUserId], references: [id])
+  cnvsDate      DateTime @default(now()) @map("cnvsDateTime")
+  cnvsDay       String?  @map("cnvsDay")
+  cnvsTime      String?  @map("cnvsTime")
+  description   String   @map("cnvsDesc")
+  doingTimeSec  Int?     @map("cnvsDoingTimeSec")
+  registeredById String  @map("cnvsFirstRegisterUserId")
+  registeredBy  User     @relation("CnvsRegistrar", fields: [registeredById], references: [id])
+  createdAt     DateTime @default(now()) @map("RegisterDate")
+
+  // ── ستون‌های اصلی غایب — عیناً از CrmConversation ──
+  cnvsDateFa          String?  @map("cnvsDate") // تاریخ شمسی مذاکره — ستون اصلی cnvsDate است (فیلد cnvsDate رستا به cnvsDateTime نگاشت شده)
+  cnvsSubject           String?
+  cnvsTopicId           Int?     // FK به CrmConversationTopics (بخش ۲)
+  cnvsPersonId          String?  // مخاطب حاضر در مذاکره — در اصل int
+  cnvsUserId            String?  // کاربر انجام‌دهنده — در اصل int
+  cnvsReferDesc         String?
+  cnvsPriorityId        Int?     // FK به CrmConversationPriority (بخش ۲)
+  cnvsRemindDate        String?
+  cnvsRemindTime        String?
+  cnvsRemindDateTime    DateTime?
+  cnvsRemindOk          Boolean?
+  cnvsIsBookMark        Boolean?
+  cnvsFirstRegisterDate String?
+  cnvsFirstRegisterDateTime DateTime?
+  UserId                Int? // در اصل NOT NULL
+  Year1                 Int?
+  Month1                Int?
+  RegisterDatePersian   String? // در اصل NOT NULL
+  FirstRegisterDate     DateTime?
+  GUId                  String?
+  cnvsRemindDateForAllarm String?
+  cnvsRemindDateTimeForAllarm DateTime?
+  AppType               String?
+  LanguageID            Int?
+  FirstRegisterUserId   Int?
+  FirstRegisterDatePersian String?
+  ApiId                 String?
+  cnvsFOCmpCanSee       Boolean?
+  cnvsIsTicket          Boolean?
+  cnvsCoordinateLatitude String?
+  cnvsCoordinateLongitude String?
+  cnvsCoordinateLastDate DateTime?
+  cnvsCoordinateLastDatePersian String?
+  cnvsTicketIsRead      Boolean?
+  cnvsDoingTime         String? // در اصل time
+  cnvsIsCopy            Boolean?
+  cnvsIsTicketNew       Boolean?
+  cnvsDoingTimeFrom     String? // در اصل time
+  cnvsDoingTimeTo       String? // در اصل time
+  cnvsStatusProcessKindId Int?
+  cnvsStatusGroupId     Int?
+  cnvsHappyVote         Int?
+  cnvsStatusResultId    Int?  // نتیجهٔ وضعیت مذاکره
+  cnvsStatusResultDoingTimeEndDate DateTime?
+  cnvsKnowledgeTankIds  String?
+  cnvsCId               Int?
+  cnvsJs                String?
+
+  @@index([projectId, cnvsDate])
+  @@map("CrmConversation")  // جدول اصلی CRMIdeal: CrmConversation
+}
+
+// ─────────────────────── ساختار سازمانی کاربران (Accounts) ───────────────────────
+// سمت سازمانی — UserPositions (۲۰ ستون — درخت + انتقال گروهی کاربران در CRMIdeal)
+model UserPosition {
+  id        String   @id @default(cuid()) @map("PositionId")
+  name      String   @map("PositionName")
+  code      String?  @map("PositionCode")
+  manager   String?  @map("PositionManager") // مدیر سمت
+  tel       String?  @map("PositionTel")
+  email     String?  @map("PositionEmail")
+  address   String?  @map("PositionAddress")
+  orderView Int      @default(0) @map("OrderView")
+  parentId  String?  @map("ParentId")
+  parent    UserPosition? @relation("PositionTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children  UserPosition[] @relation("PositionTree")
+  createdAt DateTime @default(now()) @map("RegisterDate")
+  updatedAt DateTime @updatedAt // فقط رستا
+
+  FirstRegisterUserId  Int?     // در اصل int NOT NULL
+  FirstRegisterDate    DateTime? // در اصل datetime NOT NULL
+  FirstRegisterDatePersian String? // در اصل varchar(8) NOT NULL
+  UserId               Int?      // در اصل int NOT NULL
+  Year1                Int?
+  Month1               Int?
+  RegisterDatePersian  String?   // در اصل NOT NULL
+  GUId                 String?
+  AppType              String?
+  LanguageID           Int?
+
+  users User[]
+  @@map("UserPositions")  // جدول اصلی CRMIdeal: UserPositions
+}
+
+// گروه کاربری — UserGroups (۱۳ ستون) — فقط گروه‌بندی نمایشی، در منطق مجوز استفاده نمی‌شود
+model UserGroup {
+  id          String   @id @default(cuid()) @map("UserGroupId")
+  name        String   @map("GroupName")
+  description String? // فقط رستا
+  createdAt   DateTime @default(now()) @map("RegisterDate")
+  updatedAt   DateTime @updatedAt // فقط رستا
+
+  FirstRegisterUserId Int?
+  FirstRegisterDate   DateTime?
+  FirstRegisterDatePersian String?
+  UserId              Int?
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String?
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+
+  users User[]
+  @@map("UserGroups")  // جدول اصلی CRMIdeal: UserGroups
+}
+
+// دپارتمان — UserDepartments (۱۸ ستون)
+model UserDepartment {
+  id          String   @id @default(cuid()) @map("DepartmentID")
+  name        String   @map("Department")
+  description String? // فقط رستا
+  createdAt   DateTime @default(now()) @map("RegisterDate")
+  updatedAt   DateTime @updatedAt // فقط رستا
+
+  UserId                       Int?
+  Year1                        Int?
+  Month1                       Int?
+  RegisterDatePersian          String?
+  GUId                         String?
+  AppType                      String?
+  LanguageID                   Int?
+  FirstRegisterUserId          Int?
+  FirstRegisterDatePersian     String?
+  FirstRegisterDate            DateTime?
+  DefaultTicketUserId          Int?     // کاربر پیش‌فرض تیکت این واحد
+  TicketFooterText            String?  // پانویس تیکت (ntext)
+  LeaveVerificationWorkFlowId  Int?
+  MissionVerificationWorkFlowId Int?
+  CId                          Int?
+
+  users    User[]
+  projects Project[]
+  @@map("UserDepartments")  // جدول اصلی CRMIdeal: UserDepartments
+}
+
+// ساعت/روز/IP مجاز ورود — UserLoginAllowedTimes (۲۲ ستون — اعمال در ورود)
+model UserLoginAllowedTime {
+  id        String   @id @default(cuid()) @map("UserLoginAllowedTimeId")
+  userId    String   @map("crmUserId")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayOfWeek Int?     @map("DayNumber") // ۰=شنبه … ۶=جمعه — null = هر روز
+  fromDate  DateTime? @map("FDatetime")
+  toDate    DateTime? @map("TDatetime")
+  fromTime  String   @map("FTime") // HH:mm
+  toTime    String   @map("TTime")
+  ipAddress String?  @map("IPAddress") // خالی = هر IP
+  createdAt DateTime @default(now()) @map("RegisterDate")
+
+  FDatePersian          String?
+  TDatePersian          String?
+  FirstUserId           Int?
+  FirstRegisterDate     DateTime?
+  FirstRegisterDatePersian String?
+  UserId                Int?
+  Year1                 Int?
+  Month1                Int?
+  RegisterDatePersian   String?
+  GUId                  String?
+  AppType               String?
+  LanguageID            Int?
+  FirstRegisterUserId   Int?
+
+  @@index([userId])
+  @@map("UserLoginAllowedTimes")  // جدول اصلی CRMIdeal: UserLoginAllowedTimes
+}
+
+// ─────────────────────────── Finance (فاز ۳) ───────────────────────────
+// نگاشت جدول‌های اصلی: CrmFund → FundTransaction، CrmFundGroups → FundGroup،
+// CrmBankingBanks/Branches/Accounts → Bank/BankBranch/BankAccount
+// خزانه — CrmFundGroups (۱۵ ستون)
+model FundGroup {
+  id        String      @id @default(cuid()) @map("FundGroupId")
+  name      String      @map("GroupName")
+  parentId  String?     @map("ParentId")
+  parent    FundGroup?  @relation("FundGroupTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children  FundGroup[] @relation("FundGroupTree")
+  order     Int         @default(0) // فقط رستا
+  isActive  Boolean     @default(true) // فقط رستا
+  createdAt DateTime    @default(now()) @map("RegisterDate")
+  updatedAt DateTime    @updatedAt // فقط رستا
+
+  FirstRegisterUserId Int?     // در اصل NOT NULL
+  FirstRegisterDate   DateTime?
+  FirstRegisterDatePersian String?
+  UserId              Int?
+  Year1               Int?
+  Month1              Int?
+  RegisterDatePersian String?
+  GUId                String?
+  AppType             String?
+  LanguageID          Int?
+  GroupVerificationWorkFlowId Int?
+
+  transactions FundTransaction[]
+  @@map("CrmFundGroups")  // جدول اصلی CRMIdeal: CrmFundGroups
+}
+
+// تراکنش خزانه — CrmFund (۲۸ ستون)
+// نکتهٔ ساختاری: در اصل نوع تراکنش با جفت‌ستون FundCredit (دریافت) / FundDebit (پرداخت) مشخص می‌شود.
+model FundTransaction {
+  id           String    @id @default(cuid()) @map("FundId")
+  number       Int       @unique @map("FundNumber") // در اصل bigint
+  groupId      String    @map("FundGroupId")
+  group        FundGroup @relation(fields: [groupId], references: [id])
+  custodianId  String    @map("CrmUserId") // کاربر خزانه‌دار
+  custodian    User      @relation("FundCustodian", fields: [custodianId], references: [id])
+  type         String    // RECEIVE | PAY — فقط رستا (در اصل Credit/Debit پایین)
+  amount       Float     // فقط رستا
+  FundCredit   Float?    // دریافت وجه (ستون اصلی)
+  FundDebit    Float?    // پرداخت وجه (ستون اصلی)
+  FundRemain   Float?    // مانده
+  date         DateTime  @map("FundDate")
+  FundDatePersian String? // در اصل varchar(8) NOT NULL
+  description  String?   @map("FundDesc")
+  isVerified   Boolean   @default(false) @map("FundIsVerified")
+  verifiedById String?   @map("FundVerifierId")
+  verifier     User?     @relation("FundVerifier", fields: [verifiedById], references: [id])
+  verifiedAt   DateTime? @map("FundVerifiedRegisterDate")
+  createdById  String?   @map("FirstRegisterUserId")
+  createdBy    User?     @relation("FundCreator", fields: [createdById], references: [id])
+  createdAt    DateTime  @default(now()) @map("RegisterDate")
+  updatedAt    DateTime  @updatedAt // فقط رستا
+
+  FundOrderView    Int?
+  FundVerificationWorkFlowId Int?
+  FundVerifierRequestId Int?
+  FundVerifiedRegisterDatePersian String?
+  FirstRegisterDatePersian String?
+  Year1            Int?
+  Month1           Int?
+  RegisterDatePersian String?
+  GUId             String?
+  AppType          String?
+  LanguageID       Int?
+  FirstRegisterDate DateTime?
+  UserId            Int?     // در اصل int NOT NULL
+
+  @@index([groupId, date])
+  @@index([custodianId])
+  @@map("CrmFund")  // جدول اصلی CRMIdeal: CrmFund
+}
+
+// بانک — CrmBankingBanks (۱۶ ستون)
+model Bank {
+  id        String       @id @default(cuid()) @map("BankingBankID")
+  code      String?     @map("Code")
+  name      String       @map("BankName")
+  desc      String?     @map("BankDesc")
+  isActive  Boolean      @default(true) // فقط رستا
+  createdAt DateTime     @default(now()) @map("RegisterDate")
+  Year1     Int?
+  Month1    Int?
+  RegisterDatePersian String?
+  GUId      String?
+  AppType   String?
+  LanguageID Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  BankLinkAccData String?
+  UserId   Int?      // ثبت‌کنندهٔ رکورد
+
+  branches  BankBranch[]
+  @@map("CrmBankingBanks")  // جدول اصلی CRMIdeal: CrmBankingBanks
+}
+
+// شعبه — CrmBankingBranches (۲۰ ستون)
+model BankBranch {
+  id        String   @id @default(cuid()) @map("BankingBranchID")
+  bankId    String   @map("BankId")
+  bank      Bank     @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  name      String   @map("BranchName")
+  tel       String?  @map("BranchTel")
+  createdAt DateTime @default(now()) @map("RegisterDate")
+  BranchCode   String?
+  BranchAddress String?
+  BranchTelII  String?
+  BranchDesc   String?
+  UserId       Int?   // در اصل NOT NULL
+  Year1        Int?    // در اصل smallint NOT NULL
+  Month1       Int?    // در اصل smallint NOT NULL
+  RegisterDatePersian String? // در اصل NOT NULL
+  GUId         String?
+  AppType      String?
+  LanguageID   Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  BranchLinkAccData String?
+
+  accounts BankAccount[]
+  @@map("CrmBankingBranches")  // جدول اصلی CRMIdeal: CrmBankingBranches
+}
+
+// نوع حساب — CrmBankingAccountType (۱۳ ستون)
+model BankAccountType {
+  id       String        @id @default(cuid()) @map("BankingAccountTypeID")
+  name     String        @map("AccountType") // جاری | سپرده | قرض‌الحسنه | کوتاه‌مدت
+  UserId   Int?
+  Year1    Int?
+  Month1   Int?
+  RegisterDate DateTime @default(now()) @map("RegisterDate")
+  RegisterDatePersian String?
+  GUId     String?
+  AppType  String?
+  LanguageID Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+
+  accounts BankAccount[]
+
+  @@unique([name])
+  @@map("CrmBankingAccountType")  // جدول اصلی CRMIdeal: CrmBankingAccountType
+}
+
+// حساب بانکی — CrmBankingAccounts (۲۸ ستون)
+model BankAccount {
+  id            String          @id @default(cuid()) @map("BankingAccountID")
+  branchId      String          @map("BranchId")
+  branch        BankBranch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  accountTypeId String          @map("AccTypeId")
+  accountType   BankAccountType @relation(fields: [accountTypeId], references: [id])
+  accountNumber String          @map("AccountNumber")
+  cardNumber    String?         @map("AccountCardNumber")
+  shabaNumber   String?         @map("AccountShabaNumber")
+  accountOwner  String          @map("AccountOwner")
+  isDefault     Boolean         @default(false) @map("IsDefault")
+  desc          String?         @map("AccountDesc")
+  userId        String?         @map("CrmUserId") // حساب بانکی کاربر (AccountsController.UserBankingAccounts)
+  user          User?           @relation("UserBankAccounts", fields: [userId], references: [id])
+  createdAt     DateTime        @default(now()) @map("RegisterDate")
+  updatedAt     DateTime        @updatedAt // فقط رستا
+
+  MasterId      Int?
+  AccountType   String? // متن نوع حساب (ستون جدا از AccTypeId در اصل)
+  UserId        Int?   // در اصل NOT NULL
+  Year1         Int?
+  Month1        Int?
+  RegisterDatePersian String? // در اصل NOT NULL
+  GUId          String?
+  AppType       String?
+  LanguageID    Int?
+  FirstRegisterUserId Int?
+  FirstRegisterDatePersian String?
+  FirstRegisterDate DateTime?
+  BankId        Int?
+  AccountTitle  String?
+  IsDefaultII   Boolean?
+  MobHRMVisible Boolean?
+  AccountLinkAccData String?
+
+  @@unique([accountNumber])
+  @@map("CrmBankingAccounts")  // جدول اصلی CRMIdeal: CrmBankingAccounts
+}
+
+// ─────────────────────────── مدل‌های اختصاصی رستا (معادل مستقیم در CRMIdeal ندارند) ───────────────────────────
+// هرکدام از این‌ها یا ساختار مدرن خودِ رستا هستند یا جایگزین ساختاری‌شان (جدول اصلی نسخهٔ قدیم)
+// کامل با ساختار اصلی در بخش ۲ همین فایل حاضر است و سیم‌کشی اپ به آن‌ها فازبه‌فاز انجام می‌شود:
+//   Product → WSProducts | Quotation → WSPreOrder | SalesOrder → WSOrder | Payment → WSOrderPayments |
+//   Warehouse → WsWareHouse | StockLevel/StockMovement → WSStockSupply(+Items) | PurchaseOrder → WSBuyOrder |
+//   Deal → قیف فروش در اصل از CrmConversationStatusSalesFunnelSteps | Setting → CrmWebSetting |
+//   Activity → ثبت رویداد در اصل پیوست مذاکره/وظیفه است | ActivityLog → لاگ داخلی رستا |
+//   OnlinePayment → در اصل CrmOnlinePayBankInfo/درگاه‌ها (بخش ۲)
+
+model Deal {
+  id              String    @id @default(cuid())
+  title           String
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId       String?
+  contact         Contact?  @relation(fields: [contactId], references: [id])
+  stage           String    @default("NEW") // NEW | CONTACTED | PROPOSAL | NEGOTIATION | WON | LOST
+  amount          Float?
+  probability     Int?
+  priority        String    @default("NORMAL")
+  expectedCloseAt DateTime?
+  closedAt        DateTime?
+  closeNote       String?
+  ownerId         String?
+  owner           User?     @relation("DealOwner", fields: [ownerId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  activities Activity[]
+  tasks      Task[]
+  quotations Quotation[]
+}
+
+model Activity {
+  id         String    @id @default(cuid())
+  type       String    @default("NOTE") // CALL | MEETING | EMAIL | SMS | NOTE
+  direction  String?
+  subject    String
+  body       String?
+  companyId  String?
+  company    Company?  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId  String?
+  contact    Contact?  @relation(fields: [contactId], references: [id])
+  dealId     String?
+  deal       Deal?     @relation(fields: [dealId], references: [id])
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  occurredAt DateTime  @default(now())
+  nextStep   String?
+  nextAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([companyId])
+  @@index([dealId])
+  @@index([userId])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  code        String?  @unique
+  unit        String   @default("عدد")
+  price       Float    @default(0)
+  cost        Float?
+  taxRate     Float    @default(0)
+  isActive    Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  quotationItems     QuotationItem[]
+  orderItems         SalesOrderItem[]
+  stockLevels        StockLevel[]
+  stockMovements     StockMovement[]
+  purchaseOrderItems PurchaseOrderItem[]
+}
+
+model Quotation {
+  id            String    @id @default(cuid())
+  number        Int       @unique
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  contactId     String?
+  contact       Contact?  @relation(fields: [contactId], references: [id])
+  dealId        String?
+  deal          Deal?     @relation(fields: [dealId], references: [id])
+  issueDate     DateTime  @default(now())
+  validUntil    DateTime?
+  status        String    @default("DRAFT")
+  note          String?
+  ownerId       String?
+  owner         User?     @relation(fields: [ownerId], references: [id])
+  subtotal      Float     @default(0)
+  discountTotal Float     @default(0)
+  taxTotal      Float     @default(0)
+  total         Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  items  QuotationItem[]
+  orders SalesOrder[]
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?  @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float     @default(1)
+  unitPrice   Float     @default(0)
+  discount    Float     @default(0)
+  taxRate     Float     @default(0)
+  lineTotal   Float     @default(0)
+}
+
+model SalesOrder {
+  id            String     @id @default(cuid())
+  number        Int        @unique
+  quotationId   String?
+  quotation     Quotation? @relation(fields: [quotationId], references: [id])
+  companyId     String
+  company       Company    @relation(fields: [companyId], references: [id])
+  issueDate     DateTime   @default(now())
+  status        String     @default("DRAFT")
+  note          String?
+  ownerId       String?
+  owner         User?      @relation(fields: [ownerId], references: [id])
+  subtotal      Float      @default(0)
+  discountTotal Float      @default(0)
+  taxTotal      Float      @default(0)
+  total         Float      @default(0)
+  paidTotal     Float      @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  items    SalesOrderItem[]
+  payments Payment[]
+}
+
+model SalesOrderItem {
+  id          String     @id @default(cuid())
+  orderId     String
+  order       SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?   @relation(fields: [productId], references: [id])
+  description String?
+  qty         Float      @default(1)
+  unitPrice   Float      @default(0)
+  discount    Float      @default(0)
+  taxRate     Float      @default(0)
+  lineTotal   Float      @default(0)
+}
+
+model Payment {
+  id        String     @id @default(cuid())
+  orderId   String
+  order     SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount    Float
+  method    String     @default("CASH")
+  paidAt    DateTime   @default(now())
+  note      String?
+  createdAt DateTime   @default(now())
+}
+
+model Warehouse {
+  id        String   @id @default(cuid())
+  name      String
+  code      String?  @unique
+  location  String?
+  isDefault Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stockLevels    StockLevel[]
+  movementsFrom  StockMovement[] @relation("FromWarehouse")
+  movementsTo    StockMovement[] @relation("ToWarehouse")
+  purchaseOrders PurchaseOrder[]
+}
+
+model StockLevel {
+  id          String    @id @default(cuid())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  quantity    Float     @default(0)
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([productId, warehouseId])
+  @@index([warehouseId])
+}
+
+model StockMovement {
+  id              String     @id @default(cuid())
+  type            String
+  productId       String
+  product         Product    @relation(fields: [productId], references: [id])
+  fromWarehouseId String?
+  fromWarehouse   Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+  toWarehouseId   String?
+  toWarehouse     Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
+  quantity        Float
+  unitCost        Float?
+  refType         String?
+  refId           String?
+  note            String?
+  userId          String?
+  user            User?      @relation("StockMovementUser", fields: [userId], references: [id])
+  movedAt         DateTime   @default(now())
+  createdAt       DateTime   @default(now())
+
+  @@index([productId])
+  @@index([toWarehouseId])
+  @@index([fromWarehouseId])
+  @@index([refType, refId])
+}
+
+model PurchaseOrder {
+  id          String     @id @default(cuid())
+  number      Int        @unique
+  supplierId  String
+  supplier    Company    @relation("PurchaseSupplier", fields: [supplierId], references: [id])
+  warehouseId String?
+  warehouse   Warehouse? @relation(fields: [warehouseId], references: [id])
+  issueDate   DateTime   @default(now())
+  expectedAt  DateTime?
+  receivedAt  DateTime?
+  status      String     @default("DRAFT")
+  note        String?
+  ownerId     String?
+  owner       User?      @relation("PurchaseOwner", fields: [ownerId], references: [id])
+  subtotal    Float      @default(0)
+  taxTotal    Float      @default(0)
+  total       Float      @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  items PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String?
+  product         Product?      @relation(fields: [productId], references: [id])
+  description     String?
+  qty             Float         @default(1)
+  unitPrice       Float         @default(0)
+  taxRate         Float         @default(0)
+  lineTotal       Float         @default(0)
+}
+
+model Setting {
+  key   String @id
+  value String
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userName  String?
+  action    String
+  entity    String?
+  entityId  String?
+  meta      String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+}
+
+model OnlinePayment {
+  id          String    @id @default(cuid())
+  gateway     String // ZARINPAL | MELLAT | PARSIAN
+  amount      Float
+  description String?
+  authority   String?
+  status      String    @default("PENDING")
+  refId       String?
+  orderId     String?
+  payerName   String?
+  payerMobile String?
+  paidAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([status])
+}
+
