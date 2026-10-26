@@ -74,3 +74,45 @@ unzip SQL_Catalog_Word_v1.0.zip -d SQL_Catalog_Word
 ```
 
 همهٔ جلدها با Word 2010+ یا WPS باز می‌شوند؛ جلدهای ۷ و ۸ بزرگ‌ترند و باز شدنشان چند لحظه طول می‌کشد. برای تأیید صحت، SHA-256 هر جلد را با `CHECKSUMS.txt` مقایسه کنید.
+
+---
+
+## نسخهٔ ماشین‌خوان: `data.zip` (TSV + Pack)
+
+همان کاتالوگ در قالب ماشین‌خوان — برای پردازش برنامه‌ای و پوشش کامل متن SQL. تاریخ دریافت: ۲۶ اکتبر ۲۰۲۶ — حجم: ۴۶٬۲۲۴٬۵۹۷ بایت — SHA-256: `7fd7662188840546156f1b9aa0c7c8f88cd482cd4d7798ce7493843fae996903`
+
+### محتوا (۳ فایل)
+
+| فایل | حجم | محتوا |
+|---|---|---|
+| `data/catalog.tsv` | ~۶۲MB | ایندکس تمام ۵۹٬۱۲۴ دستور — ۱۴ ستون: `id, src, seq, type, object, object_fa, type_fa, short, full, off, len, flags, comp, src_label` |
+| `data/statements.pack` | ~۳۶۱MB | **متن کامل UTF-8 هر ۵۹٬۱۲۴ دستور** — فایل پیوسته؛ هر دستور در بایت‌های `[off, off+len)` |
+| `data/sources.json` | ~۵KB | ۱۱ منبع با بازهٔ نسخه‌ها: V1…V8 + `UPDPROJ` (۱۲) + `UPDOTHER` (۷) + `FORMS` (۶۹۹ کوئری ۱۴۳ فرم فعال) |
+
+### چرا این نسخهٔ مکمل حیاتی است
+
+جلدهای V5–V8 نسخهٔ Word فقط پیش‌نمایش ۱۲۰۰ کاراکتری دارند؛ `statements.pack` **متن کامل همهٔ دستورها** را دارد. نتیجهٔ راستی‌آزمایی (۲۰۲۶-۱۰-۲۶): هر ۵٬۳۰۳ رویهٔ ذخیره‌شدهٔ یکتا متن کامل دارند — از جمله **۳٬۱۱۰ SP که در Word بریده بودند**؛ گلوگاه «نیازمند CRM_SQL_Runner» برداشته شد. صحت‌سنجی: مجموع `len` دقیقاً برابر حجم pack (۳۶۱٬۰۲۱٬۰۶۹ بایت)، هیچ ردیفی خارج از مرز نیست.
+
+### ستون‌های مهم `catalog.tsv`
+
+- `src`/`seq`/`src_label` — جلد مبدأ و شمارهٔ ترتیبی همان جلد
+- `type` — نوع معتبر کاتالوگ: `CREATE_PROC` (۱۷٬۴۳۸)، `IF` (۲۹٬۶۴۳)، `DECLARE`، `UPDATE`، `EXEC`، `CREATE_FUNC` (۵۵۴)، `CREATE_VIEW` (۱۲۲)، `CREATE_IDX` (۱۱۵)، `ALTER_COL/TBL`، `SCRIPT`، …
+- `object`/`object_fa` — نام شیء (با پیشوند `dbo.` در مواردی) و نام فارسی
+- `off`/`len` — آفست و طول بایت متن کامل در `statements.pack`
+- `flags` — `D` = ۱۷ دستور مخرب (DROP TABLE/…)، `P` = ۱۲۲ کوئری پارامتری — دقیقاً مطابق جلد صفر
+- `comp` — شناسهٔ دستور در به‌روزرسانی اصلی (`cmd32`، `qry6`، …)
+
+### خواندن متن کامل یک دستور
+
+```python
+import csv
+rows = list(csv.DictReader(open("data/catalog.tsv", encoding="utf-8-sig"), delimiter="\t"))
+pack = open("data/statements.pack", "rb")
+def text(row):
+    pack.seek(int(row["off"])); return pack.read(int(row["len"])).decode("utf-8")
+# آخرین نسخهٔ یک SP = آخرین ردیف آن در ترتیب V1→V8
+```
+
+### اصلاح رفتاری ناشی از این نسخه (نمونهٔ کاربرد)
+
+متن نهایی `CRMspCheckUserLoginAllowedTimes` (V5 گام ۳۷۲۵ — که در Word بریده بود) نشان داد ردیف‌های `UserLoginAllowedTimes` پنجرهٔ **مجاز** (whitelist) هستند؛ پیاده‌سازی قبلی رستا که از متن V3 (دارای باگ `<> NULL`) معنای «ممنوع» گرفته بود، با کامیت develop اصلاح شد. نمونهٔ دوم: SPهای عناوین پروژهٔ ممنوع نسخهٔ نهایی‌شان در V8 است و پارامتر `@CenterId`/ستون `CId` اضافه کرده‌اند (محدودسازی ممنوعیت به مرکز) — برای فاز ماژول مراکز ثبت شد.
