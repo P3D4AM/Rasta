@@ -33,13 +33,13 @@ public class ErrorHandlingMiddleware
             _logger.LogWarning("Read-only guard violation on {Path}: {Msg}", context.Request.Path, ex.Message);
             await Write(context, HttpStatusCode.Forbidden, ResultStatus.Error, "درخواست با سیاست فقط-خواندنی سرویس ناسازگار است.");
         }
-        catch (Microsoft.Data.SqlClient.SqlException ex)
+        catch (System.Data.Common.DbException ex)
         {
             // جزئیات SQL فقط در لاگ داخلی — پاسخ عمومی
-            _logger.LogError(ex, "SQL error {Number} on {Path}", ex.Number, context.Request.Path);
-            var msg = ex.Number is 4060 or 18456 or 1 or 2 or 53
-                ? "اتصال به دیتابیس Ideal برقرار نشد؛ تنظیمات اتصال یا مجوز SQL Login را بررسی کنید."
-                : "خطای دیتابیس در پردازش درخواست؛ با مدیر سیستم تماس بگیرید.";
+            _logger.LogError(ex, "Database error on {Path}", context.Request.Path);
+            var msg = "خطای دیتابیس در پردازش درخواست؛ وضعیت اتصال یا مجوزهای SQL Login را با مدیر سیستم بررسی کنید.";
+            if (ex is Microsoft.Data.SqlClient.SqlException se && se.Number is 4060 or 18456 or 1 or 2 or 53)
+                msg = "اتصال به دیتابیس Ideal برقرار نشد؛ تنظیمات اتصال یا مجوز SQL Login را بررسی کنید.";
             await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, msg);
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Connection string", StringComparison.Ordinal))
@@ -55,8 +55,12 @@ public class ErrorHandlingMiddleware
         {
             var traceId = context.TraceIdentifier;
             _logger.LogError(ex, "Unhandled error on {Path} trace={Trace}", context.Request.Path, traceId);
+            var detail = context.RequestServices.GetService<Microsoft.Extensions.Configuration.IConfiguration>()
+                ?.GetValue("IdealBridge:ShowErrorDetails", false) == true
+                ? $" || {ex.GetType().Name}: {ex.Message}"
+                : string.Empty;
             await Write(context, HttpStatusCode.InternalServerError, ResultStatus.Error,
-                $"خطای داخلی سرویس. شناسهٔ ردیابی: {traceId}");
+                $"خطای داخلی سرویس. شناسهٔ ردیابی: {traceId}{detail}");
         }
     }
 

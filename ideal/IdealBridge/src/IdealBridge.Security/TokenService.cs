@@ -74,7 +74,12 @@ public class TokenService
         {
             var dir = Path.GetDirectoryName(Path.GetFullPath(_filePath));
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-            var json = System.Text.Json.JsonSerializer.Serialize(_tokens, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            var json = System.Text.Json.JsonSerializer.Serialize(_tokens, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true,
+                // بدون گریز از + و / و حروف فارسی — این فایل محلی است و در HTML رندر نمی‌شود
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            });
             // نوشتن اتمیک
             var tmp = _filePath + ".tmp";
             File.WriteAllText(tmp, json);

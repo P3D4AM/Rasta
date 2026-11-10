@@ -70,7 +70,7 @@ public static class ReadOnlyCommandGuard
         if (firstWord is "EXEC" or "EXECUTE")
         {
             var rest = text.Substring(match.Length).Trim();
-            var spName = rest.TrimStart('[').Split(']', '.', '(')[0].Trim();
+            var spName = rest.TrimStart('[').Split(']', '.', '(', ' ', '\t', '\r', '\n')[0].Trim();
             if (!AllowedStoredProcedures.Contains(spName))
                 throw new ReadOnlyViolationException($"EXEC فقط برای SPهای فهرست سفید مجاز است: «{spName}» مجاز نیست.");
             // EXEC ... باید فقط نام SP باشد؛ جلوگیری از EXEC('...') داینامیک

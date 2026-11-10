@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ─── گزینه‌ها ───
 builder.Services.Configure<IdealBridgeOptions>(builder.Configuration.GetSection(IdealBridgeOptions.SectionName));
 var options = builder.Configuration.GetSection(IdealBridgeOptions.SectionName).Get<IdealBridgeOptions>() ?? new IdealBridgeOptions();
+builder.Services.AddSingleton(options);
 
 // ─── لایهٔ زیرساخت (اتصال فقط-خواندنی به Ideal) ───
 builder.Services.AddSingleton<IDbConnectionFactory>(sp =>
@@ -65,7 +66,11 @@ builder.Services.AddRateLimiter(rl =>
 });
 
 // ─── کنترلرها + Swagger ───
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    // Status به‌صورت رشته («Success»/«Fail»/«Error») — هم‌خوان با API قدیمی Ideal
+    o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
