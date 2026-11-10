@@ -1,0 +1,73 @@
+using System.Net;
+using System.Text.Json;
+using IdealBridge.Domain.Common;
+
+namespace IdealBridge.Api.Middleware;
+
+/// <summary>
+/// مدیریت یکنواخت خطاها:
+///  - ReadOnlyViolationException → 403 (تخلف فقط-خواندنی — هرگز متن SQL برنمی‌گردد)
+///  - SqlException/DB خطا → 503 با پیام عمومی (بدون افشای جزئیات داخلی SQL Server)
+///  - خطای اعتبارسنجی → 400
+///  - خطای ناشناخته → 500 با شناسهٔ ردیابی
+/// </summary>
+public class ErrorHandlingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ErrorHandlingMiddleware> _logger;
+
+    public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
+        {
+            await _next(context);
+        }
+        catch (IdealBridge.Infrastructure.Database.ReadOnlyViolationException ex)
+        {
+            _logger.LogWarning("Read-only guard violation on {Path}: {Msg}", context.Request.Path, ex.Message);
+            await Write(context, HttpStatusCode.Forbidden, ResultStatus.Error, "درخواست با سیاست فقط-خواندنی سرویس ناسازگار است.");
+        }
+        catch (Microsoft.Data.SqlClient.SqlException ex)
+        {
+            // جزئیات SQL فقط در لاگ داخلی — پاسخ عمومی
+            _logger.LogError(ex, "SQL error {Number} on {Path}", ex.Number, context.Request.Path);
+            var msg = ex.Number is 4060 or 18456 or 1 or 2 or 53
+                ? "اتصال به دیتابیس Ideal برقرار نشد؛ تنظیمات اتصال یا مجوز SQL Login را بررسی کنید."
+                : "خطای دیتابیس در پردازش درخواست؛ با مدیر سیستم تماس بگیرید.";
+            await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, msg);
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("Connection string", StringComparison.Ordinal))
+        {
+            _logger.LogError("Connection string not configured");
+            await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, "تنظیمات اتصال دیتابیس Ideal تکمیل نشده است.");
+        }
+        catch (BadHttpRequestException) when (context.Response.StatusCode == 400)
+        {
+            await Write(context, HttpStatusCode.BadRequest, ResultStatus.Fail, "درخواست نامعتبر است.");
+        }
+        catch (Exception ex)
+        {
+            var traceId = context.TraceIdentifier;
+            _logger.LogError(ex, "Unhandled error on {Path} trace={Trace}", context.Request.Path, traceId);
+            await Write(context, HttpStatusCode.InternalServerError, ResultStatus.Error,
+                $"خطای داخلی سرویس. شناسهٔ ردیابی: {traceId}");
+        }
+    }
+
+    private static async Task Write(HttpContext ctx, HttpStatusCode status, ResultStatus result, string message)
+    {
+        if (ctx.Response.HasStarted) return;
+        ctx.Response.Clear();
+        ctx.Response.StatusCode = (int)status;
+        ctx.Response.ContentType = "application/json; charset=utf-8";
+        var body = JsonSerializer.Serialize(ApiResponse<object>.Failed(message, result),
+            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        await ctx.Response.WriteAsync(body);
+    }
+}
