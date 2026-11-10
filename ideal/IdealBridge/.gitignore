@@ -1,0 +1,39 @@
+# ═══ IdealBridge — .gitignore ═══
+# خروجی‌های build
+bin/
+obj/
+out/
+publish/
+*.user
+*.suo
+
+# فایل‌های اجرایی/بستهٔ محلی
+*.dll
+*.exe
+*.pdb
+*.zip
+
+# اسرار — هرگز در Git قرار نگیرند
+appsettings.Production.json
+appsettings.Local.json
+*.secret.json
+tokens.json
+tokens.json.tmp
+*.tokens.json
+
+# لاگ‌ها و فایل‌های موقت
+logs/
+*.log
+*.tmp
+
+# ابزارها
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# تست
+TestResults/
+*.trx
+coverage/
