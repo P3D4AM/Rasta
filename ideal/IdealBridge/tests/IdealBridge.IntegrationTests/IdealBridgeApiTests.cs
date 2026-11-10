@@ -265,7 +265,7 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
     public async Task Empty_Data_Returns_Empty_Array_With_Success()
     {
         Auth();
-        _factory.Fake.ScriptHandler = sql => null;   // نتیجهٔ خالی برای همه
+        _factory.Fake.ScriptHandler = sql => new DataTable();   // نتیجهٔ خالی برای همه
         try
         {
             var resp = await _client.GetAsync("/api/v1/companies");
@@ -403,7 +403,7 @@ public class IdealBridgeApiFactory : WebApplicationFactory<Program>
         DataTable CompanyTable()
         {
             var t = MakeTable(companyCols);
-            void Row(int id, int number, string code, string name, string tel, string mobile, string country, string province, string city, string address, string lat, string lng, int? referUid, string referUser, bool isDraft, DateTime regDate)
+            void Row(int id, int number, string code, string name, string tel, string mobile, string country, string province, string city, string address, string lat, string lng, int? referUid, string? referUser, bool isDraft, DateTime regDate)
             {
                 var r = t.NewRow();
                 r["CompanyID"] = id; r["cmpNumber"] = number; r["cmpCode"] = code; r["cmpName"] = name;

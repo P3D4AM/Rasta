@@ -2,6 +2,8 @@ using System.Data;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 
+#nullable disable // دوقلوی آزمونشی — nullable مرجع ADO.NET ناهمخوان است
+
 namespace IdealBridge.IntegrationTests;
 
 /// <summary>
@@ -20,24 +22,24 @@ public class FakeDbConnection : DbConnection
     private ConnectionState _state = ConnectionState.Closed;
 
     /// <summary>sql (normalized) → DataTable نتیجه. اگر null برگرداند → خالی.</summary>
-    public Func<string, DataTable?>? ScriptHandler { get; set; }
+    public Func<string, DataTable> ScriptHandler { get; set; }
 
     /// <summary>اگر set شده باشد، OpenAsync این خطا را می‌دهد (شبیه‌سازی قطع اتصال).</summary>
-    public Exception? FailOnOpen { get; set; }
+    public Exception FailOnOpen { get; set; }
 
     /// <summary>هر متنی که در متن دستور پیدا شود → پرتاب خطای SQL شبیه‌سازی‌شده.</summary>
-    public string? FailWhenSqlContains { get; set; }
+    public string FailWhenSqlContains { get; set; }
 
     public List<string> ExecutedCommands { get; } = new();
 
     private string Normalize(string sql) => Regex.Replace(sql, @"\s+", " ").Trim();
 
-    public DataTable? ExecuteScript(string sql)
+    public DataTable ExecuteScript(string sql)
     {
         ExecutedCommands.Add(Normalize(sql));
-        if (FailWhenSqlContains != null && sql.Contains(FailWhenSqlContains, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(FailWhenSqlContains) && sql.Contains(FailWhenSqlContains, StringComparison.OrdinalIgnoreCase))
             throw new SimulatedDbException("SIMULATED_SQL_FAILURE: simulated database error");
-        return ScriptHandler?.Invoke(Normalize(sql));
+        return ScriptHandler?.Invoke(Normalize(sql)) ?? new DataTable();
     }
 
     protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel) => throw new NotSupportedException();
@@ -60,7 +62,7 @@ public class FakeDbConnection : DbConnection
 
 public class FakeDbCommand : DbCommand
 {
-    private FakeDbConnection? FakeConn => Connection as FakeDbConnection;
+    private FakeDbConnection FakeConn => (FakeDbConnection)Connection;
     private readonly FakeDbParameterCollection _parameters = new();
 
     public override string CommandText { get; set; } = "";
@@ -68,9 +70,9 @@ public class FakeDbCommand : DbCommand
     public override CommandType CommandType { get; set; }
     public override bool DesignTimeVisible { get; set; }
     public override UpdateRowSource UpdatedRowSource { get; set; }
-    protected override DbConnection? DbConnection { get; set; }
+    protected override DbConnection DbConnection { get; set; }
     protected override DbParameterCollection DbParameterCollection => _parameters;
-    protected override DbTransaction? DbTransaction { get; set; }
+    protected override DbTransaction DbTransaction { get; set; }
 
     public override void Cancel() { }
     public override int ExecuteNonQuery() => throw new NotSupportedException("IdealBridge فقط خواندنی است");
@@ -104,7 +106,7 @@ public class FakeDbCommand : DbCommand
     {
         var table = FakeConn!.ExecuteScript(CommandText) ?? new DataTable();
         var result = table.Copy();
-        object? Param(string name)
+        object Param(string name)
         {
             var idx = _parameters.IndexOf(name);
             if (idx < 0) return null;
@@ -149,7 +151,7 @@ public class FakeDbParameter : DbParameter
     public override string SourceColumn { get; set; } = "";
     public override bool SourceColumnNullMapping { get; set; }
     public override int Size { get; set; }
-    public override object? Value { get; set; }
+    public override object Value { get; set; }
     public override void ResetDbType() { }
 }
 
@@ -196,9 +198,9 @@ public class FakeDbDataReader : DbDataReader
     public override object GetValue(int ordinal) => _table.Rows[_row][ordinal];
     public override bool GetBoolean(int ordinal) => (bool)GetValue(ordinal);
     public override byte GetByte(int ordinal) => (byte)GetValue(ordinal);
-    public override long GetBytes(int ordinal, long dataOffset, byte[]? buffer, int bufferOffset, int length) => 0;
+    public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) => 0;
     public override char GetChar(int ordinal) => (char)GetValue(ordinal);
-    public override long GetChars(int ordinal, long dataOffset, char[]? buffer, int bufferOffset, int length) => 0;
+    public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length) => 0;
     public override string GetDataTypeName(int ordinal) => _table.Columns[ordinal].DataType.Name;
     public override DateTime GetDateTime(int ordinal) => (DateTime)GetValue(ordinal);
     public override decimal GetDecimal(int ordinal) => (decimal)GetValue(ordinal);
