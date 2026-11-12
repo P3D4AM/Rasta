@@ -1,0 +1,107 @@
+name: IdealBridge CI
+
+# CI مخصوص پروژهٔ IdealBridge (شاخهٔ ideal) — فاز ۱۱
+# توجه: فایل workflow عمداً بیرون از ideal/IdealBridge است (الزام GitHub Actions)
+# و در «بررسی محدوده» به‌عنوان مسیر مجاز لحاظ شده است.
+
+on:
+  push:
+    branches: [ ideal ]
+    paths:
+      - 'ideal/IdealBridge/**'
+      - '.github/workflows/idealbridge-ci.yml'
+  pull_request:
+    branches: [ ideal ]
+    paths:
+      - 'ideal/IdealBridge/**'
+      - '.github/workflows/idealbridge-ci.yml'
+
+jobs:
+  build-and-test:
+    name: Restore + Build + Tests (net10.0)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ideal/IdealBridge
+
+    steps:
+      - name: Checkout (تاریخچهٔ کامل برای بررسی محدوده)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: بررسی محدودهٔ تغییرات (خارج از ideal/IdealBridge ممنوع)
+        shell: bash
+        run: |
+          # در PR: مقایسهٔ با شاخهٔ مبدا؛ در Push: مقایسهٔ با commit قبلی
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="origin/${{ github.base_ref }}"
+            git fetch origin "${{ github.base_ref }}" --depth=1 || true
+          else
+            BASE="${{ github.event.before }}"
+          fi
+          # اگر مبنا قابل تعیین نبود (اولین push) با main مقایسه می‌کنیم
+          if ! git rev-parse --verify --quiet "$BASE^{commit}" >/dev/null 2>&1; then
+            git fetch origin main --depth=1 || true
+            BASE="origin/main"
+          fi
+          CHANGED=$(git diff --name-only "$BASE"...HEAD | grep -v '^ideal/IdealBridge/' | grep -v '^\.github/workflows/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "::error::تغییرات خارج از محدودهٔ مجاز شناسایی شد (فقط ideal/IdealBridge و .github/workflows مجاز است):"
+            echo "$CHANGED"
+            exit 1
+          fi
+          echo "✔ محدودهٔ تغییرات مجاز است."
+
+      - name: Restore
+        run: dotnet restore IdealBridge.sln
+
+      - name: Build (Release)
+        run: dotnet build IdealBridge.sln -c Release --no-restore
+
+      - name: Unit Tests
+        run: dotnet test tests/IdealBridge.UnitTests -c Release --no-build --logger "trx" --results-directory ./test-results/unit
+
+      - name: Integration Tests
+        run: dotnet test tests/IdealBridge.IntegrationTests -c Release --no-build --logger "trx" --results-directory ./test-results/integration
+
+      - name: بررسی نبود Secret در سورس
+        shell: bash
+        working-directory: ideal/IdealBridge
+        run: |
+          set -e
+          FAIL=0
+          # ۱) توکن‌ها/کلیدهای شناخته‌شده در هیچ فایری (به‌جز خروجی build) نباشند
+          if grep -rInE "(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{30,}|gho_[A-Za-z0-9]{30,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|BEGIN (RSA|EC|OPENSSH) PRIVATE KEY)" \
+               --exclude-dir=bin --exclude-dir=obj . 2>/dev/null; then
+            echo "::error::توکن/کلید واقعی در مخزن یافت شد!"; FAIL=1
+          fi
+          # ۲) فایل‌های پیکربندی: ConnectionString و Password باید خالی باشند
+          BAD=$(grep -rInE '"(ConnectionString|Password|AdminKey)"[[:space:]]*:[[:space:]]*"[^"]+"' \
+               --include="appsettings*.json" . 2>/dev/null | \
+               grep -vE ':[[:space:]]*""[,}]?[[:space:]]*$' || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::مقدار غیرخالی محرمانه در appsettings (Connection String/رمز/کلید باید خالی و از Environment Variable تزریق شود):"; echo "$BAD"; FAIL=1
+          fi
+          # ۳) در سورس غیر از تست‌ها، Connection String با رمز واقعی نباشد
+          BAD=$(grep -rInE "(Password|Pwd)=[^*$ ]+" \
+               --include="*.cs" src tools 2>/dev/null | \
+               grep -viE "(Password=\.\.\.|Password=\*\*\*|Password=\\\"|Pwd=\.\.\.)" || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::رمز واقعی در کد سورس یافت شد:"; echo "$BAD"; FAIL=1
+          fi
+          [ "$FAIL" = "0" ] && echo "✔ هیچ Secret در سورس نیست."
+          exit $FAIL
+
+      - name: Publish Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: ideal/IdealBridge/test-results/
+          retention-days: 7
