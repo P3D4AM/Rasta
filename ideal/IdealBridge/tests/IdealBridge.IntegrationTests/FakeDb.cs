@@ -261,7 +261,7 @@ public class FakeDbConnectionFactory : IdealBridge.Infrastructure.Database.IDbCo
             cmd.CommandText = "SELECT @@SERVERNAME, DB_NAME(), @@VERSION";
             cmd.CommandType = CommandType.Text;
             await using var r = await cmd.ExecuteReaderAsync(ct);
-            string? server = null, db = null, ver = null;
+            string server = null, db = null, ver = null;
             if (await r.ReadAsync(ct))
             {
                 server = r.IsDBNull(0) ? null : r.GetString(0);
