@@ -6,33 +6,55 @@
 |---|---|
 | شاخهٔ توسعه | `ideal` (مستقل از کد رستا) |
 | مسیر | `ideal/IdealBridge/` |
-| پشته | ASP.NET Core 8 (LTS) · ADO.NET · Swagger · xUnit |
+| پشته | **.NET 10 (LTS)** · ASP.NET Core · ADO.NET (SqlClient 7) · Swagger · xUnit |
 | دیتابیس | فقط **SELECT** روی SQL Server نرم‌افزار Ideal (حساب فقط-خواندنی) |
 | احراز هویت | توکن مستقل (`ibk_...`) با انقضا و ابطال — جدا از احراز هویت Ideal |
 | سازگاری | نسخهٔ نصب‌شدهٔ **3.1.16.169.0303** و سورس **3.1.18.187** — با کاوش خودکار سازگار می‌شود |
+| سیاست دسترسی (فاز ۱۱) | حالت پیش‌فرض `Table` — **اجرای Stored Procedure به‌کلی غیرفعال** و گارد فقط-خواندنی با توکنایزر T-SQL |
+| CI | GitHub Actions روی شاخهٔ `ideal` — Build + ۱۷۴ تست + اسکن Secret |
 
 ---
 
 ## شروع سریع (۵ دقیقه)
 
 ### پیش‌نیاز
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - دسترسی شبکه به SQL Server نرم‌افزار Ideal
 - حساب SQL فقط-خواندنی (`ibk_reader`) — [ساخت در ۲ دقیقه](docs/06-sql-readonly-login.md)
+
+### روش‌های پیکربندی اتصال (یکی از دو)
+
+**روش ۱ — Connection String کامل** (متغیر محیطی؛ هرگز در فایل):
+
+```powershell
+[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+```
+
+**روش ۲ — تنظیمات تفکیکی** (`IdealBridge:Sql` — رمز باز هم فقط از متغیر محیطی):
+
+```powershell
+[Environment]::SetEnvironmentVariable("IdealBridge__Sql__Server", "SQLSRV\IDEAL", "User")
+[Environment]::SetEnvironmentVariable("IdealBridge__Sql__Database", "CRM", "User")
+[Environment]::SetEnvironmentVariable("IdealBridge__Sql__AuthMode", "Sql", "User")        # یا Windows
+[Environment]::SetEnvironmentVariable("IdealBridge__Sql__UserId", "ibk_reader", "User")
+[Environment]::SetEnvironmentVariable("IdealBridge__Sql__Password", "***", "User")
+```
+
+تفصیل کامل (Encrypt/TrustServerCertificate/ConnectTimeout/Windows Auth): [سند ۰۵](docs/05-sql-server-connection.md)
 
 ### مراحل
 
 ```powershell
 # ۱) دریافت و Build
+
 git clone -b ideal https://github.com/P3D4AM/Rasta.git
 cd Rasta\ideal\IdealBridge
 dotnet build IdealBridge.sln -c Release
 
-# ۲) Secretها (فقط متغیر محیطی — هرگز در فایل/Git)
-[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+# ۲) Secretها (فقط متغیر محیطی — هرگز در فایل/Git) — از بالا (روش ۱ یا ۲)
 [Environment]::SetEnvironmentVariable("IdealBridge__AdminKey", "کلید-ادمین-قوی", "User")
 
-# ۳) (پیشنهادی) کاوش ساختار دیتابیس واقعی قبل از اجرا
+# ۳) (پیشنهادی) کاوش ساختار دیتابیس واقعی قبل از اجرا — خروجی JSON کامل + مقایسهٔ دو نسخه
 dotnet run --project tools/IdeaSchemaDump -- --connection "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
 
 # ۴) اجرا
@@ -47,6 +69,9 @@ $resp.data.token   # ذخیره کنید — فقط یک‌بار نمایش د�
 
 # ۶) تست
 Invoke-RestMethod -Uri "http://localhost:5100/api/v1/companies?pageSize=5" -Headers @{ "X-API-Key" = $resp.data.token }
+
+# ۷) وضعیت اتصال (ادمین — بدون نیاز به توکن داده)
+Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection" -Headers @{ "X-Admin-Key" = $env:IdealBridge__AdminKey }
 ```
 
 معادل Linux: [سند ۰۸](docs/08-run-linux.md) — استقرار پایدار Windows: [سند ۰۷](docs/07-run-windows.md).
@@ -66,8 +91,9 @@ Invoke-RestMethod -Uri "http://localhost:5100/api/v1/companies?pageSize=5" -Head
 | انبار/محصول/سفارش | `GET /api/v1/warehouses` · `/products` · `/orders` · `/preorders` |
 | اطلاعات پایه | `GET /api/v1/baseinfo/{city|province|companygroup|...}` |
 | همگام‌سازی | `GET /api/v1/sync/companies|persons|conversations` — Keyset با `afterId` |
-| سلامت | `GET /health/live` (عمومی) · `GET /health/db` (توکن‌دار — گزارش سازگاری اسکیما) |
+| سلامت | `GET /health/live` (عمومی) · `GET /health/db` (توکن‌دار — گزارش سازگاری اسکیما + حالت هر موجودیت) |
 | مدیریت توکن | `POST/GET/DELETE /api/v1/tokens` (با هدر `X-Admin-Key`) |
+| وضعیت اتصال | `GET /api/v1/admin/connection` (با هدر `X-Admin-Key` — خلاصهٔ پیکربندی + آزمون زنده + دستهٔ خطا، بدون رمز) |
 
 مستند کامل: [سند ۰۳](docs/03-endpoints.md) — مستند زندهٔ تعاملی: `http://<host>:5100/swagger`
 
@@ -86,8 +112,8 @@ Invoke-RestMethod -Uri "http://localhost:5100/api/v1/companies?pageSize=5" -Head
 
 ## فقط-خواندنی: دو لایهٔ دفاعی
 
-1. **کد:** `ReadOnlyCommandGuard` — تنها نقطهٔ ساخت دستور، هر دستور را پیش از اجرا اعتبارسنجی می‌کند: فقط `SELECT`/`WITH` یا `EXEC` فهرست‌سفید SPهای خواندنی؛ بدون `;`؛ فهرست‌سیاه همهٔ فعل‌های تغییردهنده. اتصال با `ApplicationIntent=ReadOnly`.
-2. **SQL Server:** حساب `ibk_reader` فقط `db_datareader` (+EXECUTE محدود روی فهرست سفید در صورت نیاز SP) — حتی خطای برنامه‌نویسی هم قابل نوشتن نیست. [راهنمای ساخت](docs/06-sql-readonly-login.md).
+1. **کد (فاز ۱۱ — توکنایزر T-SQL):** `ReadOnlyCommandGuard` هر دستور را پیش از اجرا «توکن‌بندی» می‌کند (رشته/کامنت/براکت درست پارس می‌شود) و فقط یک `SELECT`/`WITH` تک‌دستوری بدون هیچ واژهٔ تغییردهنده (از جمله `INTO` و `SET`) مجاز است؛ **هیچ Stored Procedure — حتی با نام شناخته‌شده — اجرا نمی‌شود** و گارد در Production غیرقابل خاموش‌کردن است. اتصال همیشه با `ApplicationIntent=ReadOnly`.
+2. **SQL Server:** حساب `ibk_reader` فقط `db_datareader` — حتی خطای برنامه‌نویسی هم قابل نوشتن نیست. [راهنمای ساخت](docs/06-sql-readonly-login.md).
 
 نمونه‌های خروجی هرگز رمز عبور Ideal (کاربر/مشتری/شخص) ندارند — ستون‌های حساس حتی در SELECT نمی‌آیند.
 

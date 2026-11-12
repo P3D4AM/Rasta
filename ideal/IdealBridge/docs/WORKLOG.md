@@ -1,6 +1,13 @@
 # WORKLOG — مأموریت IdealBridge (شاخهٔ ideal)
 
-> گزارش واقعی فازبه‌فاز: کار انجام‌شده، نتایج تست، و Commitها. تاریخ‌ها: ۲۰۲۵-۱۱-۱۰ تا ۲۰۲۵-۱۱-۱۲ (UTC).
+> گزارش واقعی فازبه‌فاز: کار انجام‌شده، نتایج تست، و Commitها. تاریخ‌ها از `git log` استخراج شده (UTC) — اصلاح فاز ۱۱: تاریخ‌های قبلی ۲۰۲۵ اشتباه بودند، تاریخ واقعی همهٔ Commitها ۲۰۲۶ است.
+>
+> | دوره | تاریخ واقعی (UTC) |
+> |---|---|
+> | فازهای ۱-۲ | ۲۰۲۶-۱۱-۱۰ |
+> | فازهای ۳-۹ | ۲۰۲۶-۱۱-۱۰ |
+> | فاز ۱۰ | ۲۰۲۶-۱۱-۱۲ |
+> | فاز ۱۱ | ۲۰۲۶-۱۱-۱۲ |
 
 ## فاز صفر — بررسی Git و ایجاد شاخهٔ ideal
 
@@ -139,3 +146,107 @@ Passed! - Failed: 0, Passed: 22, Skipped: 0, Total: 22 (IntegrationTests)
 ```
 
 Build: `0 Error(s), 0 Warning(s)` — بدون تست ناموفق پنهان‌شده.
+
+---
+
+# فاز ۱۱ — Security Hardening، ارتقای .NET 10 و زیرساخت اتصال (۲۰۲۶-۱۱-۱۲)
+
+> دستور مأموریت: اصلاح DataAccessMode، بازنویسی ReadOnlyCommandGuard، زیرساخت اتصال SQL Server، تکمیل IdeaSchemaDump، ارتقا به .NET 10 LTS، CI، مستندات، Release آزمایشی. همهٔ مراحل با Build و تست واقعی اجرا شد.
+
+## مرحله A — بررسی وضعیت
+
+- شاخهٔ `ideal` با `origin/ideal` همگام بود (HEAD: `50da585`).
+- دو باگ واقعی از فازهای قبل در بررسی اولیه شناسایی شد:
+  1. `PersonRepository.Query` در حالت Sp «آرایهٔ خالی بی‌صدا» برمی‌گرداند (`_mode == "Sp" ? Array.Empty...`).
+  2. `UserRepository` شرط مردهٔ `_mode == "Sp" && false` داشت.
+- تاریخ‌های WORKLOG (۲۰۲۵) با تاریخ واقعی Commitهای Git (۲۰۲۶) مغایر بود → در همین فاز اصلاح شد.
+
+## مرحله B — اصلاح DataAccessMode و غیرفعال‌سازی کامل SP
+
+- `DataAccessMode` پیش‌فرض **Table** شد (قبلاً Auto).
+- سیاست مرکزی و یکپارچهٔ `DataAccessPolicy` جایگزین `SchemaModeProvider` + `DataAccessModeSelector`: پیش‌فرض Table؛ `Sp` در راه‌اندازی رد (خطای واضح)؛ `Auto` ≡ Table؛ موجودیت با جدول مفقود → `Blocked` = خطای شفاف ۵۰۳ (`DataAccessUnavailableException` + نگاشت در میان‌افزار خطا) — **رفع کامل «آرایهٔ خالی بی‌صدا»**.
+- **حذف کامل مسیر اجرای SP**: `IdealDb.QuerySpAsync` حذف؛ متدهای SP مخزن مشتریان (GetCompaniesSpAsync/GetCompanySpAsync/MapCompanyLegacy) حذف؛ شرط‌های مردهٔ Person/User پاک شد.
+- تست‌ها: `DataAccessPolicyTests` (۱۰) + `SourceStructureRegressionTests` (۴ تست ساختاری ضد-بازگشت: منع Array.Empty، منع بازگشت مسیر SP، پوشش سیاست مرکزی همهٔ مخازن، گارد همهٔ مسیرهای اجرای IdealDb) + ۳ تست یکپارچه (هیچ دستور StoredProcedure اجرا نمی‌شود؛ جدول مفقود → ۵۰۳ شفاف نه آرایهٔ خالی؛ حالت Sp → شکست راه‌اندازی).
+- رفع دو باگ جانبی کشف‌شده: سریال‌سازی عددی enum در پاسخ‌های خطای میان‌افزار (ناسازگار با کنترلرها) و زمان‌بندی اعتبارسنجی پیکربندی (انتقال به post-Build از کانفیگ نهایی).
+- تست: ۷۹ PASS (۵۴ واحد + ۲۵ یکپارچه).
+
+**Commit:** `17c9a87` (2026-11-12 11:48 UTC)
+
+## مرحله C — بازنویسی ReadOnlyCommandGuard با توکنایزر
+
+- **حذف فهرست سفید SP** — هیچ SP (حتی با نام معتبر خواندنی) مجاز نیست؛ `CommandType.StoredProcedure` همیشه رد.
+- توکنایزر واقعی T-SQL: رشته‌ها ('...' و N'...' با گریز '')، کامنت‌ها (-- و /* */)، شناسه‌های [براکت‌دار] و "کوتیشن‌دار" درست پارس می‌شوند — کلیدواژه داخل کامنت/رشته/براکت فریب نمی‌دهد.
+- منع‌های جدید: `INTO` (SELECT INTO)، `SET`، `WAITFOR`، `GO`، `OPENROWSET/OPENQUERY/OPENDATASOURCE/OPENXML`، `BULK`، `sp_*`/`xp_*`، رشته/کامنت/براکت نیمه‌تمام.
+- `ReadOnlyGuardPolicy.Effective`: در **Production** گارد همیشه روشن (تنظیم false نادیده + لاگ هشدار در Program.cs).
+- تست‌ها: بازنویسی کامل `ReadOnlyCommandGuardTests` — ۶۱ تست شامل ۱۷ SELECT مجاز (کامنت/رشته/براکت)، همهٔ فعل‌های تغییردهنده، SELECT INTO، batch/GO، EXEC به‌همراه اشکال دورزدن (کامنت ابتدایی، حروف مخلوط، تب/خط جدید)، ورودی‌های خراب، واژه‌های شامل زیررشته (OFFSET/SettingId)، سیاست محیطی، اثبات ساختاری IdealDb.
+
+**Commit:** `7b43644` (2026-11-12 11:50 UTC) — تست: ۱۴۰ PASS
+
+## مرحله D — زیرساخت اتصال SQL Server
+
+- **دو روش پیکربندی**: `IdealBridge:ConnectionString` کامل، یا بخش تفکیکی `IdealBridge:Sql` (Server/Database/AuthMode=Sql|Windows/UserId/Password/Encrypt/TrustServerCertificate/ConnectTimeoutSeconds) — در هر دو حالت `ApplicationName=IdealBridge` + `ApplicationIntent=ReadOnly` + مهلت اتصال اجباری؛ اولویت ConnectionString.
+- Windows Authentication با `IntegratedSecurity` (سند: Linux نیازمند Kerberos).
+- `SqlConnectionErrorClassifier`: دسته‌بندی خطا (Network/Authentication/DatabaseNotFound/Timeout/Configuration/PermissionDenied/SqlServerError/Unknown) + پیام فارسی امن برای هر دسته.
+- `SecretRedactor`: پاک‌سازی Password از هر متن لاگ‌شونده؛ `ConnectionSummary`: توصیف ساختاریافتهٔ امن.
+- `ConnectionConfigurationException` با پیام فارسی شفاف (نگاشت به ۵۰۳ در میان‌افزار).
+- `IDbConnectionFactory.TestConnectionAsync`: آزمون اتصال با CancellationToken و اندازه‌گیری تأخیر.
+- Endpoint مدیریتی **`GET /api/v1/admin/connection`** (X-Admin-Key): پیکربندی + آزمون زنده + دستهٔ خطا — بدون هیچ Secret.
+- میان‌افزار خطا از دسته‌بندی برای پیام‌های دقیق‌تر استفاده می‌کند.
+- تست‌ها: `SqlConnectionProviderTests` (۱۶: پارس هر دو روش، اعمال ReadOnly/AppName، اولویت، ۶ حالت اعتبارسنجی، عدم افشای رمز در Description/Summary، Redactor، ۱۵ نگاشت شمارهٔ خطا→دسته، پیام امن هر دسته) + ۴ تست یکپارچه (ادمین بدون کلید 401؛ خلاصه+آزمون موفق بدون Secret؛ گزارش دستهٔ خطا در شکست اتصال؛ پیکربندی ناقص → ۵۰۳ شفاف).
+
+**Commit:** `783cc07` (2026-11-12 11:54 UTC) — تست: ۱۷۴ PASS
+
+## مرحله E — IdeaSchemaDump v2.0
+
+- گارد مشترک `ReadOnlyCommandGuard` (قاعدهٔ واحد با سرویس) جایگزین regex داخلی ابزار.
+- استخراج کامل: جداول/ستون‌ها (+precision/scale/computed)، **PK، FK با نام Constraint، ایندکس‌ها (نوع/یکتا/PK/ستون‌های کلیدی و Included)، ویوها + متن تعریف، Identity Columns، Default Constraintها**، SPها (امضا + متن تعریف فقط با مجوز VIEW DEFINITION) — **هیچ SP اجرا نمی‌شود**.
+- خروجی JSON با زمان استخراج + نسخه/سطح/نسخهٔ کامل SQL Server — بدون هیچ اطلاعات اتصال.
+- **حالت مقایسه**: `--compare baseline.json current.json` بدون اتصال → diff کامل (جداول/ستون‌ها/نوع‌ها/PK/ویوها/SP/Default) — آزمون عملکردی واقعی با دو گزارش ساختگی انجام شد (تشخیص درست: +۱ جدول، -۱ جدول، ستون اضافه/حذف، PK/SPهای اضافه-حذف).
+- تفکیک خطای اتصال با پیام امن در دسته‌های مرحله D.
+
+**Commit:** `4e268aa` (2026-11-12 11:56 UTC)
+
+## مرحله F — ارتقا به .NET 10 LTS
+
+- همهٔ ۸ پروژه: net8.0 → **net10.0** (SDK 10.0.404).
+- بسته‌ها: SqlClient 5.2.2→**7.1.1**، Swashbuckle 6.6.2→**11.0.0** (اصلاح API برای OpenApi 3.x: namespace Models حذف شده؛ `OpenApiSecuritySchemeReference` + امضای Func جدید)، Logging.Abstractions 8.0.2→**10.0.15**، Test.Sdk 17.8→**18.12.0**، xunit 2.5.3→**2.9.3**، runner 2.5.3→**4.0.1**، coverlet 6.0.0→**10.1.0**، Mvc.Testing 8.0.10→**10.0.15**.
+- **رفع هشدارهای امنیتی NU1902/NU1903** (آسیب‌پذیری شناخته‌شدهٔ وابستگی انتقالی System.Security.Cryptography.Pkcs 9.0.18) با قفل نسخهٔ اصلاح‌شده 9.0.23.
+- Build: 0 Error / 0 Warning — هر ۱۷۴ تست روی net10.0 PASS.
+
+**Commit:** `2288bfb` (2026-11-12 12:01 UTC)
+
+## مرحله G — GitHub Actions CI
+
+- `.github/workflows/idealbridge-ci.yml` (تنها فایل خارج از ideal/IdealBridge — الزام GitHub Actions، در قاعدهٔ محدوده لحاظ شد).
+- Trigger: push/PR روی شاخهٔ ideal با مسیر ideal/IdealBridge/**.
+- گام‌ها: Checkout کامل → Setup .NET 10 → **بررسی محدودهٔ تغییرات** (فقط ideal/IdealBridge و workflow مجاز؛ مبنای مقایسه: PR→base، Push→event.before، fallback→main) → Restore → Build Release → تست‌های واحد → تست‌های یکپارچه → **اسکن سه‌مرحله‌ای Secret** (توکن‌های شناخته‌شده؛ مقدار غیرخالی ConnectionString/Password/AdminKey در appsettings؛ رمز در کد src/tools) → انتشار نتایج trx.
+- اسکن Secret با دادهٔ واقعی آزمون شد: False-Positive صفر روی کل سورس؛ تشخیص صحیح توکن تزریقی آزمایشی.
+- **نتیجهٔ اجرای واقعی روی GitHub:** `conclusion=success` برای commit `0139bc0` (run 43214285695).
+
+**Commit:** `0139bc0` (2026-11-12 12:02 UTC)
+
+## مرحله H — مستندات، Worklog و Release
+
+- مستندات به‌روز شد: README (net10/SP غیرفعال/روش دوم پیکربندی/endpoint اتصال)، سند ۰۲ (سیاست مرکزی + توکنایزر + نمودار لایه‌ها)، ۰۳ (endpoint مدیریتی + تغییر entityModes)، ۰۴ (.NET 10 + کلیدهای جدید + تست‌ها + CI + انتشار)، ۰۵ (پیکربندی تفکیکی + Windows Auth + دسته‌بندی خطا + خطاهای رایج)، ۰۶ (EXECUTE لازم نیست + VIEW DEFINITION اختیاری).
+- WORKLOG: اصلاح تاریخ‌های اشتباه ۲۰۲۵→۲۰۲۶ بر اساس `git log` + همین بخش فاز ۱۱ با SHAهای واقعی.
+- Release آزمایشی: انتشار win-x64 با برچسب `dev-11.1.0` (بستهٔ Self-Contained + راهنمای نصب فارسی) — جزئیات در گزارش نهایی مأموریت.
+
+## نتیجهٔ تست نهایی فاز ۱۱ (واقعی، روی net10.0)
+
+```
+Passed! - Failed: 0, Passed: 145, Skipped: 0, Total: 145 (IdealBridge.UnitTests)
+Passed! - Failed: 0, Passed: 29,  Skipped: 0, Total: 29  (IdealBridge.IntegrationTests)
+```
+Build: `0 Error(s), 0 Warning(s)` — CI GitHub Actions: **success**.
+
+## فهرست Commitهای فاز ۱۱
+
+| SHA | مرحله | عنوان |
+|---|---|---|
+| `17c9a87` | B | اصلاح DataAccessMode + حذف کامل مسیر SP + سیاست مرکزی |
+| `7b43644` | C | ReadOnlyCommandGuard با توکنایزر T-SQL |
+| `783cc07` | D | زیرساخت اتصال SQL Server + دسته‌بندی خطا + endpoint مدیریتی |
+| `4e268aa` | E | IdeaSchemaDump v2.0 + حالت مقایسه |
+| `2288bfb` | F | ارتقا به .NET 10 LTS + بسته‌ها + رفع NU1902/NU1903 |
+| `0139bc0` | G | GitHub Actions CI |
+| (این Commit) | H | مستندات + WORKLOG + Release dev-11.1.0 |

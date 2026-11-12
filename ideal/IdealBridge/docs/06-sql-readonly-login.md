@@ -132,3 +132,22 @@ REVOKE EXECUTE ON OBJECT::dbo.[ApispSelectCompany] FROM [ibk_reader];
 USE [CRM]; DROP USER [ibk_reader];
 USE [master]; DROP LOGIN [ibk_reader];
 ```
+
+---
+
+## فاز ۱۱ — نکتهٔ مهم: EXECUTE دیگر لازم نیست
+
+از فاز ۱۱ **اجرای Stored Procedure در IdealBridge به‌کلی غیرفعال** است؛ بنابراین:
+
+- **هیچ مجوز EXECUTE ندهید** — سرویس فقط `SELECT` مستقیم روی جداول می‌زند.
+- اگر قبلاً EXECUTE داده بودید، حذفش کنید: `REVOKE EXECUTE ON OBJECT::dbo.ApispSelectCompany FROM ibk_reader;` (اختیاری — بستگی به سیاست شما).
+
+### مجوز VIEW DEFINITION (فقط برای ابزار کاوش)
+
+برای آنکه `IdeaSchemaDump` بتواند متن تعریف SP/ویوها را هم استخراج کند (برای مقایسهٔ نسخه‌ها) به‌اختیار:
+
+```sql
+GRANT VIEW DEFINITION TO ibk_reader;
+```
+
+بدون این مجوز ابزار کار می‌کند ولی به‌جای متن تعریف، عبارت «بدون مجوز VIEW DEFINITION» ثبت می‌شود. این مجوز فقط «خواندن متن تعریف» است و هیچ دسترسی اجرایی اضافه نمی‌کند.

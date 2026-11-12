@@ -135,3 +135,61 @@ dotnet publish src/IdealBridge.Api -c Release -o .\publish
 | همهٔ endpointها 503 | دیتابیس وصل ولی جدول‌های Ideal نیستند → دیتابیس اشتباه؛ `/health/db` را ببینید |
 | 401 روی همهٔ درخواست‌ها | توکن اشتباه/منقضی/ابطال‌شده؛ با AdminKey توکن جدید بسازید |
 | `TablesMissing` در /health/db | دیتابیس نصب‌شده با انتظارات IdealBridge فرق دارد — سند ۰۹ (گزارش سازگاری) |
+
+---
+
+## فاز ۱۱ — تغییرات نصب
+
+### پیش‌نیاز جدید: .NET 10
+
+- SDK برای Build: [dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
+- Runtime برای اجرای Framework-Dependent: همان صفحه (ASP.NET Core Runtime 10.x)
+- نسخهٔ انتشار win-x64 **Self-Contained** است و Runtime جدا نمی‌خواهد (حجم بیشتر، نصب ساده‌تر).
+
+```powershell
+# بررسی نسخهٔ نصب‌شده
+dotnet --list-sdks
+```
+
+```cmd
+:: CMD
+dotnet --list-sdks
+```
+
+### کلیدهای پیکربندی جدید/تغییریافته
+
+| کلید | پیش‌فرض | توضیح |
+|---|---|---|
+| `IdealBridge:DataAccessMode` | **`Table`** | فقط `Table` یا `Auto` مجاز؛ مقدار `Sp` راه‌اندازی را با خطا متوقف می‌کند |
+| `IdealBridge:Sql:*` | — | روش دوم پیکربندی اتصال (سند ۰۵) |
+| `IdealBridge:CommandTimeoutSeconds` | 30 | مهلت اجرای هر دستور |
+| `IdealBridge:EnforceReadOnlyGuard` | true | در Production هر مقداری بدهید روشن است (غیرقابل خاموش‌کردن) |
+
+### اجرای تست‌ها
+
+```powershell
+dotnet test IdealBridge.sln -c Release
+# جداگانه:
+dotnet test tests/IdealBridge.UnitTests -c Release
+dotnet test tests/IdealBridge.IntegrationTests -c Release
+```
+
+```bash
+# Linux معادل
+dotnet test IdealBridge.sln -c Release
+```
+
+هیچ تستی به دیتابیس واقعی وصل نمی‌شود (دوقلوی آزمونشی ADO.NET).
+
+### CI
+
+هر Push/PR روی شاخهٔ `ideal` (مسیر `ideal/IdealBridge/**`) در GitHub Actions اجرا می‌شود: بررسی محدودهٔ تغییرات → Restore → Build → تست‌ها → اسکن Secret.
+
+### انتشار نسخهٔ آزمایشی
+
+برچسب‌های `dev-*` (مثل `dev-11.1.0`) بستهٔ win-x64 آزمایشی در صفحهٔ Releases مخزن منتشر می‌کنند. ساخت بسته:
+
+```powershell
+dotnet publish src/IdealBridge.Api -c Release -r win-x64 --self-contained true -o publish/win-x64
+Compress-Archive -Path publish/win-x64/* -DestinationPath IdealBridge-win-x64-dev.zip
+```

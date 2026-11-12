@@ -160,3 +160,38 @@ Invoke-RestMethod -Uri "$base/api/v1/companies/123" -Headers @{ "X-API-Key" = $t
 ```bash
 curl -H "X-API-Key: ibk_YOUR_TOKEN" "http://localhost:5100/api/v1/companies?page=2&pageSize=50"
 ```
+
+---
+
+## فاز ۱۱ — endpoint جدید
+
+### `GET /api/v1/admin/connection` (هدر `X-Admin-Key`)
+
+وضعیت اتصال SQL Server — بدون افشای رمز/Connection String:
+
+```json
+{
+  "data": {
+    "configuration": {
+      "configured": true, "source": "ConnectionString",
+      "server": "SQLSRV\\IDEAL", "database": "IdealCrm",
+      "authMode": "Sql", "encrypt": true, "trustServerCertificate": false,
+      "connectTimeoutSeconds": 15, "applicationIntent": "ReadOnly", "applicationName": "IdealBridge"
+    },
+    "liveTest": {
+      "ok": true, "errorKind": "None", "message": "اتصال برقرار است.",
+      "serverName": "SQLSRV", "databaseName": "IdealCrm",
+      "serverVersion": "Microsoft SQL Server 2019 ...",
+      "latencyMs": 14, "checkedAt": "2026-11-12T10:00:00Z"
+    }
+  },
+  "status": "Success", "message": "..."
+}
+```
+
+`errorKind` یکی از: `Network` / `Authentication` / `DatabaseNotFound` / `Timeout` / `Configuration` / `PermissionDenied` / `SqlServerError` / `Unknown`.
+
+### تغییر رفتار endpointهای داده (فاز ۱۱)
+
+- `entityModes` در `GET /health/db` حالا `{mode, reason}` برای هر موجودیت است و `mode` فقط `Table` یا `Blocked` می‌تواند باشد (اجرای SP غیرفعال است).
+- اگر جدول پشتیبان موجودیت مفقود باشد → پاسخ **503** با پیام «جدول X در دیتابیس Ideal یافت نشد» (نه آرایهٔ خالی).

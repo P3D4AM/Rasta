@@ -123,3 +123,50 @@ IdealBridge.sln
 | D4 | فایل JSON برای توکن‌ها | سرویس بدون وابستگی به دیتابیس جانبی قابل استقرار بماند |
 | D5 | Swagger در Production هم روشن (قابل خاموش‌کردن) | سرویس شبکهٔ داخلی است؛ مستند زنده مهم‌تر |
 | D6 | عدم بازاستفاده از رمزنگاری Ideal | TripleDES با کلید هاردکد «I Love GOD» — حکم منع مأموریت |
+
+---
+
+## فاز ۱۱ — تغییرات معماری مهم
+
+### ۱. سیاست مرکزی دسترسی به داده (`DataAccessPolicy`)
+
+جایگزین `SchemaModeProvider`/`DataAccessModeSelector` قدیمی شد. تنها مرجع تصمیم برای همهٔ Repositoryها:
+
+- مقدار پیش‌فرض `IdealBridge:DataAccessMode` = **`Table`** (قبلاً Auto).
+- مقادیر مجاز: `Table` | `Auto` (معادل Table در این نسخه). مقدار `Sp` **در راه‌اندازی با خطای واضح رد می‌شود**.
+- **مسیر اجرای Stored Procedure به‌کلی از کد حذف شد** (`IdealDb.QuerySpAsync` ندارد؛ مخازن مسیر SP ندارند؛ گارد هر `CommandType.StoredProcedure` را می‌بندد) — تا بازبینی بدنهٔ SPهای واقعی و تأیید مجوزها در فازهای بعد.
+- اگر جدول پشتیبان موجودیت مفقود/ناقص باشد → موجودیت `Blocked` و هر درخواست **خطای شفاف ۵۰۳** می‌گیرد (`DataAccessUnavailableException`) — رفع باگ تاریخی «آرایهٔ خالی بی‌صدا».
+- تست‌های ساختاری ضد-بازگشت (`SourceStructureRegressionTests`) از بازگشت هر دو رده باگ جلوگیری می‌کنند.
+
+### ۲. گارد فقط-خواندنی با توکنایزر T-SQL
+
+`ReadOnlyCommandGuard` بازنویسی شد — به‌جای جست‌وجوی رشته‌ای، متن دستور **توکن‌بندی** می‌شود (رشته‌ها، کامنت‌ها، شناسه‌های `[براکت‌دار]` درست تشخیص داده می‌شوند):
+- هیچ SP (حتی با نام معتبر) مجاز نیست — فهرست سفید قبلی حذف شد؛
+- فقط یک دستور `SELECT`/`WITH`؛ `;` و `GO` ممنوع؛
+- واژه‌های `INTO` (SELECT INTO)، `SET`، `WAITFOR`، `OPENROWSET` و `sp_*`/`xp_*` هم ممنوع؛
+- `ReadOnlyGuardPolicy`: در **Production** گارد غیرقابل خاموش‌کردن است (تنظیم `EnforceReadOnlyGuard=false` نادیده و لاگ می‌شود).
+
+### ۳. زیرساخت اتصال (فاز ۱۱)
+
+- دو روش پیکربندی: `ConnectionString` کامل یا بخش تفکیکی `IdealBridge:Sql` (با `Sql`/`Windows` Auth).
+- همیشه: `ApplicationName=IdealBridge` + `ApplicationIntent=ReadOnly` + مهلت اتصال.
+- `SqlConnectionErrorClassifier`: دسته‌بندی خطا (Network/Authentication/DatabaseNotFound/Timeout/Configuration/PermissionDenied/SqlServerError) با پیام فارسی امن.
+- `SecretRedactor`: رمز هرگز وارد لاگ نمی‌شود.
+- endpoint مدیریتی `GET /api/v1/admin/connection` (X-Admin-Key): خلاصهٔ امن پیکربندی + آزمون زنده.
+
+### ۴. پشته
+
+ارتقا به **.NET 10 LTS** (+ SqlClient 7.1.1 / Swashbuckle 11 / Mvc.Testing 10). CI در `.github/workflows/idealbridge-ci.yml`.
+
+### ۵. نمودار لایه‌ها (پس از فاز ۱۱)
+
+```
+MedPad ──X-API-Key──▶ Api (Controllers/Middleware)
+                        │  IDataAccessPolicy (مرکزی: Table|Blocked — SP غیرفعال)
+                        ▼
+                     Application (IRepositories)
+                        ▼
+                     Infrastructure: IdealDb ──ReadOnlyCommandGuard(توکنایزر)──▶ SqlCommand (فقط Text/SELECT)
+                        ▼
+                     SqlConnectionFactory (ReadOnly intent + Auth + Timeout) ──▶ Ideal SQL Server (ibk_reader: db_datareader)
+```
