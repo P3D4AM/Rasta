@@ -25,6 +25,8 @@
     <ProjectReference Include="..\..\src\IdealBridge.Security\IdealBridge.Security.csproj" />
     <ProjectReference Include="..\..\src\IdealBridge.Application\IdealBridge.Application.csproj" />
     <ProjectReference Include="..\..\src\IdealBridge.Infrastructure\IdealBridge.Infrastructure.csproj" />
+    <!-- ابزار کاوش — برای تست سیاست امنیتی اتصال (فاز ۱۱.۱) -->
+    <ProjectReference Include="..\..\tools\IdeaSchemaDump\IdeaSchemaDump.csproj" />
   </ItemGroup>
 
 </Project>

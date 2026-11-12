@@ -1,16 +1,24 @@
 // ═══════════════════════════════════════════════════════════════
-// IdeaSchemaDump v2.0 — ابزار مستقل استخراج فرادادهٔ دیتابیس Ideal CRM
+// IdeaSchemaDump v2.1 — ابزار مستقل استخراج فرادادهٔ دیتابیس Ideal CRM
 // ───────────────────────────────────────────────────────────────
 // فقط-خواندنی: تمام کوئری‌ها SELECT روی sys.* / OBJECT_DEFINITION هستند.
 // از فاز ۱۱ توکنایزر ReadOnlyCommandGuard مشترک با IdealBridge استفاده می‌کند
 // (یک قاعدهٔ اعتبارسنجی واحد) و هیچ SP اجرا نمی‌شود — فقط فراداده/متن تعریف.
 //
+// فاز ۱۱.۱ — سیاست امنیتی اتصال (SchemaDumpPolicy):
+//  - Connection String فقط از متغیر محیطی IdealBridge__ConnectionString؛
+//    دریافت از خط فرمان (به هر شکل) ممنوع و صریحاً رد می‌شود (افشای رمز در
+//    Process Arguments/تاریخچهٔ ترمینال)؛
+//  - ApplicationIntent=ReadOnly و Encrypt=true در خود ابزار اجباری؛
+//  - هیچ Connection String/رمز/Secret در پیام خطا یا لاگ بازتاب نمی‌شود.
+//
 // خروجی: JSON ساختاریافته با زمان استخراج و نسخهٔ SQL Server — قابل مقایسه
 // بین دو نسخهٔ دیتابیس با «حالت مقایسه» (نیازی به اتصال ندارد).
 //
-// اجرا (استخراج):
-//   dotnet run --project tools/IdeaSchemaDump -- --connection "Server=...;Database=...;User Id=...;Password=...;" [--out report.json]
-//   یا با متغیر محیطی: IdealBridge__ConnectionString
+// اجرا (استخراج) — تنظیم امن در PowerShell:
+//   [Environment]::SetEnvironmentVariable('IdealBridge__ConnectionString', 'Server=...;Database=...;User Id=...;Password=...;', 'User')
+//   dotnet run --project tools/IdeaSchemaDump -- --out report.json
+//   (معادل CMD:  setx IdealBridge__ConnectionString "Server=...;Database=...;..."  — سپس پنجرهٔ جدید)
 // اجرا (مقایسهٔ دو گزارش — بدون اتصال):
 //   dotnet run --project tools/IdeaSchemaDump -- --compare baseline.json current.json [--out diff.json]
 // ═══════════════════════════════════════════════════════════════
@@ -18,10 +26,22 @@
 using System.Data;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using IdeaSchemaDump;   // SchemaDumpPolicy — سیاست امنیتی فاز ۱۱.۱
 using IdealBridge.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
 
-var connString = Args("--connection") ?? Environment.GetEnvironmentVariable("IdealBridge__ConnectionString");
+// فاز ۱۱.۱: اعتبارسنجی آرگومان‌ها «پیش از» هر کاری — هیچ مسیر دورزدن سیاست اتصال باقی نماند
+var allArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
+try
+{
+    SchemaDumpPolicy.ValidateArguments(allArgs);
+}
+catch (SchemaDumpPolicyException pex)
+{
+    Console.Error.WriteLine("خطا: " + pex.Message);
+    return 2;
+}
+
 var outFile = Args("--out");
 var compareArgs = ArgsValues("--compare");   // دو فایل: baseline + current
 
@@ -36,11 +56,15 @@ if (compareArgs.Count == 1)
     return 2;
 }
 
-if (string.IsNullOrWhiteSpace(connString))
+// ─────────── حالت استخراج — اتصال فقط از متغیر محیطی (فاز ۱۱.۱) ───────────
+SqlConnectionStringBuilder connectionBuilder;
+try
 {
-    Console.Error.WriteLine("خطا: Connection String لازم است (یا دو فایل برای --compare).");
-    Console.Error.WriteLine("dotnet run -- --connection \"Server=...;Database=...;User Id=...;Password=...\" [--out report.json]");
-    Console.Error.WriteLine("dotnet run -- --compare baseline.json current.json [--out diff.json]");
+    connectionBuilder = SchemaDumpPolicy.ResolveConnection();
+}
+catch (SchemaDumpPolicyException pex)
+{
+    Console.Error.WriteLine("خطا: " + pex.Message);
     return 2;
 }
 outFile ??= "ideal-schema-report.json";
@@ -48,10 +72,10 @@ outFile ??= "ideal-schema-report.json";
 var report = new Dictionary<string, object?>
 {
     ["generatedAt"] = DateTimeOffset.UtcNow,
-    ["tool"] = "IdeaSchemaDump v2.0 (read-only; shared guard with IdealBridge)",
+    ["tool"] = "IdeaSchemaDump v2.1 (read-only; env-var connection; shared guard with IdealBridge)",
 };
 
-await using var con = new SqlConnection(connString);
+await using var con = new SqlConnection(connectionBuilder.ConnectionString);
 try
 {
     await con.OpenAsync();
