@@ -41,12 +41,20 @@ public class ErrorHandlingMiddleware
         }
         catch (System.Data.Common.DbException ex)
         {
-            // جزئیات SQL فقط در لاگ داخلی — پاسخ عمومی
-            _logger.LogError(ex, "Database error on {Path}", context.Request.Path);
-            var msg = "خطای دیتابیس در پردازش درخواست؛ وضعیت اتصال یا مجوزهای SQL Login را با مدیر سیستم بررسی کنید.";
-            if (ex is Microsoft.Data.SqlClient.SqlException se && se.Number is 4060 or 18456 or 1 or 2 or 53)
-                msg = "اتصال به دیتابیس Ideal برقرار نشد؛ تنظیمات اتصال یا مجوز SQL Login را بررسی کنید.";
+            // جزئیات SQL فقط در لاگ داخلی — پاسخ عمومی و دسته‌بندی‌شده (فاز ۱۱)
+            var (kind, safe) = IdealBridge.Infrastructure.Database.SqlConnectionErrorClassifier.Classify(ex);
+            _logger.LogError(ex, "Database error ({Kind}) on {Path}", kind, context.Request.Path);
+            var msg = kind is IdealBridge.Infrastructure.Database.ConnectionErrorKind.None
+                or IdealBridge.Infrastructure.Database.ConnectionErrorKind.SqlServerError
+                or IdealBridge.Infrastructure.Database.ConnectionErrorKind.Unknown
+                ? "خطای دیتابیس در پردازش درخواست؛ وضعیت اتصال یا مجوزهای SQL Login را با مدیر سیستم بررسی کنید."
+                : safe;
             await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, msg);
+        }
+        catch (IdealBridge.Infrastructure.Database.ConnectionConfigurationException ex)
+        {
+            _logger.LogError("Connection configuration error on {Path}: {Msg}", context.Request.Path, ex.Message);
+            await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, ex.Message);
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Connection string", StringComparison.Ordinal))
         {

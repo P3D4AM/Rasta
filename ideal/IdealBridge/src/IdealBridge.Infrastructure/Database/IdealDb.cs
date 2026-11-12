@@ -13,6 +13,12 @@ public class IdealBridgeOptions
     /// <summary>Connection String دیتابیس Ideal — مقدار واقعی فقط از Environment Variable / Secret.</summary>
     public string? ConnectionString { get; set; }
 
+    /// <summary>
+    /// تنظیمات تفکیکی اتصال (IdealBridge:Sql) — روش دوم پیکربندی (جایگزین ConnectionString).
+    /// اگر ConnectionString تنظیم شده باشد، این بخش نادیده گرفته می‌شود.
+    /// </summary>
+    public SqlSettings? Sql { get; set; }
+
     /// <summary>حالت دسترسی به داده: Table (پیش‌فرض) | Auto (معادل Table در این نسخه). مقدار Sp در راه‌اندازی رد می‌شود — اجرای SP غیرفعال است.</summary>
     public string DataAccessMode { get; set; } = "Table";
 

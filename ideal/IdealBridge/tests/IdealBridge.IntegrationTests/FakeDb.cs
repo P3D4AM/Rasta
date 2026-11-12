@@ -239,4 +239,47 @@ public class FakeDbConnectionFactory : IdealBridge.Infrastructure.Database.IDbCo
         return Task.FromResult<DbConnection>(Connection);
     }
     public string ConnectionDescription => "FAKESERVER / IdealDb (test double)";
+
+    public IdealBridge.Infrastructure.Database.ConnectionSummary Summary => new()
+    {
+        Configured = true,
+        Source = "ConnectionString",
+        Server = "FAKESERVER",
+        Database = "IdealDb",
+        AuthMode = "Sql",
+        Encrypt = true,
+        TrustServerCertificate = false,
+        ConnectTimeoutSeconds = 15,
+    };
+
+    public async Task<IdealBridge.Infrastructure.Database.ConnectionTestResult> TestConnectionAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            await using var con = await OpenConnectionAsync(ct);
+            await using var cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT @@SERVERNAME, DB_NAME(), @@VERSION";
+            cmd.CommandType = CommandType.Text;
+            await using var r = await cmd.ExecuteReaderAsync(ct);
+            string? server = null, db = null, ver = null;
+            if (await r.ReadAsync(ct))
+            {
+                server = r.IsDBNull(0) ? null : r.GetString(0);
+                db = r.IsDBNull(1) ? null : r.GetString(1);
+                ver = (r.IsDBNull(2) ? null : r.GetString(2))?.Split('\n').FirstOrDefault()?.Trim();
+            }
+            return new IdealBridge.Infrastructure.Database.ConnectionTestResult
+            {
+                Ok = true, ServerName = server, DatabaseName = db, ServerVersion = ver,
+            };
+        }
+        catch (Exception ex)
+        {
+            var (kind, safe) = IdealBridge.Infrastructure.Database.SqlConnectionErrorClassifier.Classify(ex);
+            return new IdealBridge.Infrastructure.Database.ConnectionTestResult
+            {
+                Ok = false, ErrorKind = kind, SafeMessage = safe,
+            };
+        }
+    }
 }

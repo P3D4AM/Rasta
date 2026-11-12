@@ -377,6 +377,108 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
         return t;
     }
 
+    // ─── endpoint مدیریتی وضعیت اتصال (فاز ۱۱) ───
+
+    [Fact]
+    public async Task AdminConnection_Requires_AdminKey()
+    {
+        var resp = await _client.GetAsync("/api/v1/admin/connection");
+        Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
+
+        var c2 = _factory.CreateClient();
+        c2.DefaultRequestHeaders.Add("X-Admin-Key", "wrong-key");
+        resp = await c2.GetAsync("/api/v1/admin/connection");
+        Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
+    }
+
+    [Fact]
+    public async Task AdminConnection_Returns_Summary_And_LiveTest_Without_Secrets()
+    {
+        var c = _factory.CreateClient();
+        c.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
+        var resp = await c.GetAsync("/api/v1/admin/connection");
+        Assert.True(resp.IsSuccessStatusCode);
+        var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
+        var data = json.GetProperty("data");
+
+        // خلاصهٔ پیکربندی — ساختاریافته و بدون رمز
+        var cfg = data.GetProperty("configuration");
+        Assert.Equal("FAKESERVER", cfg.GetProperty("server").GetString());
+        Assert.Equal("IdealDb", cfg.GetProperty("database").GetString());
+        Assert.Equal("Sql", cfg.GetProperty("authMode").GetString());
+
+        // آزمون زندهٔ اتصال
+        var live = data.GetProperty("liveTest");
+        Assert.True(live.GetProperty("ok").GetBoolean());
+        Assert.Equal("None", live.GetProperty("errorKind").GetString());
+        Assert.Equal("IdealDb", live.GetProperty("databaseName").GetString());
+
+        // هیچ Secret یا Connection String خام در پاسخ نیست
+        var body = await resp.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("Password", body, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("fake;", body, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task AdminConnection_Reports_ErrorKind_When_Open_Fails()
+    {
+        _factory.Fake.FailOnOpen = new SimulatedDbException("connection refused");
+        try
+        {
+            var c = _factory.CreateClient();
+            c.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
+            var resp = await c.GetAsync("/api/v1/admin/connection");
+            Assert.True(resp.IsSuccessStatusCode);
+            var live = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement
+                .GetProperty("data").GetProperty("liveTest");
+            Assert.False(live.GetProperty("ok").GetBoolean());
+            Assert.NotEqual("None", live.GetProperty("errorKind").GetString());
+            Assert.False(string.IsNullOrEmpty(live.GetProperty("message").GetString()));
+        }
+        finally
+        {
+            _factory.Fake.FailOnOpen = null;
+        }
+    }
+
+    [Fact]
+    public async Task Missing_Connection_Config_Returns_Clear_503()
+    {
+        // بدون ConnectionString و بدون Sql و بدون جایگزینی اتصال ساختگی:
+        // SqlConnectionFactory واقعی با پیکربندی ناقص → خطای شفاف پیکربندی (نه crash مبهم)
+        using var factory = new NoConfigApiFactory();
+        var client = factory.CreateClient();
+        var token = factory.Services.GetRequiredService<IdealBridge.Security.TokenService>()
+            .Create("NoConfig-Test", 1).PlainToken;
+        client.DefaultRequestHeaders.Add("X-API-Key", token);
+
+        var resp = await client.GetAsync("/api/v1/companies");
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, resp.StatusCode);
+        var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
+        var msg = json.GetProperty("message").GetString()!;
+        Assert.Contains("تنظیمات اتصال", msg, StringComparison.Ordinal);
+    }
+
+    /// <summary>کارخانهٔ بدون پیکربندی اتصال و بدون دوقلوی ساختگی — SqlConnectionFactory واقعی.</summary>
+    private sealed class NoConfigApiFactory : WebApplicationFactory<Program>
+    {
+        protected override void ConfigureWebHost(Microsoft.AspNetCore.Hosting.IWebHostBuilder builder)
+        {
+            builder.UseEnvironment("Testing");
+            builder.ConfigureAppConfiguration((_, cfg) =>
+            {
+                cfg.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["IdealBridge:ConnectionString"] = "",     // خالی — نه ConnectionString نه Sql
+                    ["IdealBridge:AdminKey"] = IdealBridgeApiFactory.AdminKey,
+                    ["IdealBridge:TokenStorePath"] = Path.Combine(Path.GetTempPath(), "ibk-nc-" + Guid.NewGuid().ToString("N") + ".json"),
+                    ["IdealBridge:DataAccessMode"] = "Table",
+                });
+            });
+            // عمداً بدون جایگزینی IDbConnectionFactory
+        }
+    }
+
     [Fact]
     public async Task Tokens_Create_Requires_AdminKey()
     {
