@@ -167,29 +167,49 @@ curl -H "X-API-Key: ibk_YOUR_TOKEN" "http://localhost:5100/api/v1/companies?page
 
 ### `GET /api/v1/admin/connection` (هدر `X-Admin-Key`)
 
-وضعیت اتصال SQL Server — بدون افشای رمز/Connection String:
+وضعیت اتصال SQL Server — بدون افشای رمز/Connection String.
+
+**فاز ۱۱.۱:** فراخوانی پیش‌فرض «هیچ اتصالی برقرار نمی‌کند» — فقط وضعیت و پیکربندی امن را گزارش می‌دهد (قابل استفاده حتی وقتی هیچ Connection String تنظیم نشده است). با `?test=true` آزمون زندهٔ اتصال انجام می‌شود و `state` به‌روز می‌شود:
+
+- `state` یکی از چهار وضعیت:
+  - `Unconfigured` — هیچ تنظیمات اتصالی وجود ندارد (سرویس بالا می‌آید ولی endpointهای داده ۵۰۳ می‌دهند)؛
+  - `Configured` — تنظیمات موجود است ولی هنوز آزمون زنده‌ای ثبت نشده (یا تنظیمات نامعتبر است — `configurationError` را ببینید)؛
+  - `Connected` — آخرین آزمون زندهٔ اتصال موفق بوده است؛
+  - `ConnectionFailed` — آخرین آزمون زنده شکست خورده (دستهٔ خطا در `lastLiveTest.errorKind`).
 
 ```json
 {
   "data": {
+    "state": "Connected",
     "configuration": {
       "configured": true, "source": "ConnectionString",
       "server": "SQLSRV\\IDEAL", "database": "IdealCrm",
       "authMode": "Sql", "encrypt": true, "trustServerCertificate": false,
       "connectTimeoutSeconds": 15, "applicationIntent": "ReadOnly", "applicationName": "IdealBridge"
     },
-    "liveTest": {
+    "configurationError": null,
+    "lastLiveTest": {
       "ok": true, "errorKind": "None", "message": "اتصال برقرار است.",
       "serverName": "SQLSRV", "databaseName": "IdealCrm",
       "serverVersion": "Microsoft SQL Server 2019 ...",
       "latencyMs": 14, "checkedAt": "2026-11-12T10:00:00Z"
-    }
+    },
+    "liveTest": { "...": "فقط با ?test=true — نتیجهٔ همین آزمون" }
   },
   "status": "Success", "message": "..."
 }
 ```
 
 `errorKind` یکی از: `Network` / `Authentication` / `DatabaseNotFound` / `Timeout` / `Configuration` / `PermissionDenied` / `SqlServerError` / `Unknown`.
+
+> در حالت `Unconfigured` پاسخ HTTP برابر **200** است (گزارش وضعیت، نه خطا) اما endpointهای داده (مثل `/api/v1/companies`) و `/health/db` پاسخ کنترل‌شدهٔ **503** با پیام دقیق می‌دهند.
+
+```powershell
+# وضعیت بدون برقراری اتصال:
+Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection" -Headers @{ "X-Admin-Key" = $env:IdealBridge__AdminKey }
+# آزمون زندهٔ اتصال:
+Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection?test=true" -Headers @{ "X-Admin-Key" = $env:IdealBridge__AdminKey }
+```
 
 ### تغییر رفتار endpointهای داده (فاز ۱۱)
 

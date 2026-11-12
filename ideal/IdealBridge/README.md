@@ -55,7 +55,10 @@ dotnet build IdealBridge.sln -c Release
 [Environment]::SetEnvironmentVariable("IdealBridge__AdminKey", "کلید-ادمین-قوی", "User")
 
 # ۳) (پیشنهادی) کاوش ساختار دیتابیس واقعی قبل از اجرا — خروجی JSON کامل + مقایسهٔ دو نسخه
-dotnet run --project tools/IdeaSchemaDump -- --connection "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+#    Connection String فقط از متغیر محیطی (فاز ۱۱.۱؛ خط فرمان ممنوع):
+[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-schema-report.json
+#    (CMD:  setx IdealBridge__ConnectionString "..."  سپس پنجرهٔ جدید)
 
 # ۴) اجرا
 $env:ASPNETCORE_URLS = "http://0.0.0.0:5100"
@@ -70,8 +73,10 @@ $resp.data.token   # ذخیره کنید — فقط یک‌بار نمایش د�
 # ۶) تست
 Invoke-RestMethod -Uri "http://localhost:5100/api/v1/companies?pageSize=5" -Headers @{ "X-API-Key" = $resp.data.token }
 
-# ۷) وضعیت اتصال (ادمین — بدون نیاز به توکن داده)
+# ۷) وضعیت اتصال (ادمین — بدون نیاز به توکن داده؛ فاز ۱۱.۱: بدون برقراری اتصال)
 Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection" -Headers @{ "X-Admin-Key" = $env:IdealBridge__AdminKey }
+#    و برای آزمون زندهٔ اتصال:
+Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection?test=true" -Headers @{ "X-Admin-Key" = $env:IdealBridge__AdminKey }
 ```
 
 معادل Linux: [سند ۰۸](docs/08-run-linux.md) — استقرار پایدار Windows: [سند ۰۷](docs/07-run-windows.md).
@@ -93,7 +98,7 @@ Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection" -Headers 
 | همگام‌سازی | `GET /api/v1/sync/companies|persons|conversations` — Keyset با `afterId` |
 | سلامت | `GET /health/live` (عمومی) · `GET /health/db` (توکن‌دار — گزارش سازگاری اسکیما + حالت هر موجودیت) |
 | مدیریت توکن | `POST/GET/DELETE /api/v1/tokens` (با هدر `X-Admin-Key`) |
-| وضعیت اتصال | `GET /api/v1/admin/connection` (با هدر `X-Admin-Key` — خلاصهٔ پیکربندی + آزمون زنده + دستهٔ خطا، بدون رمز) |
+| وضعیت اتصال | `GET /api/v1/admin/connection` (با هدر `X-Admin-Key` — چهار وضعیت Unconfigured/Configured/Connected/ConnectionFailed + خلاصهٔ پیکربندی؛ آزمون زنده با `?test=true`، بدون رمز) |
 
 مستند کامل: [سند ۰۳](docs/03-endpoints.md) — مستند زندهٔ تعاملی: `http://<host>:5100/swagger`
 
@@ -112,7 +117,7 @@ Invoke-RestMethod -Uri "http://localhost:5100/api/v1/admin/connection" -Headers 
 
 ## فقط-خواندنی: دو لایهٔ دفاعی
 
-1. **کد (فاز ۱۱ — توکنایزر T-SQL):** `ReadOnlyCommandGuard` هر دستور را پیش از اجرا «توکن‌بندی» می‌کند (رشته/کامنت/براکت درست پارس می‌شود) و فقط یک `SELECT`/`WITH` تک‌دستوری بدون هیچ واژهٔ تغییردهنده (از جمله `INTO` و `SET`) مجاز است؛ **هیچ Stored Procedure — حتی با نام شناخته‌شده — اجرا نمی‌شود** و گارد در Production غیرقابل خاموش‌کردن است. اتصال همیشه با `ApplicationIntent=ReadOnly`.
+1. **کد (فاز ۱۱ — توکنایزر T-SQL):** `ReadOnlyCommandGuard` هر دستور را پیش از اجرا «توکن‌بندی» می‌کند (رشته/کامنت/براکت درست پارس می‌شود) و فقط یک `SELECT`/`WITH` تک‌دستوری بدون هیچ واژهٔ تغییردهنده (از جمله `INTO` و `SET`) مجاز است؛ عبارت `NEXT VALUE FOR` (افزایش Sequence — فاز ۱۱.۱) هم با تطبیق دنبالهٔ توکن رد می‌شود؛ **هیچ Stored Procedure — حتی با نام شناخته‌شده — اجرا نمی‌شود** و گارد در Production غیرقابل خاموش‌کردن است. اتصال همیشه با `ApplicationIntent=ReadOnly`.
 2. **SQL Server:** حساب `ibk_reader` فقط `db_datareader` — حتی خطای برنامه‌نویسی هم قابل نوشتن نیست. [راهنمای ساخت](docs/06-sql-readonly-login.md).
 
 نمونه‌های خروجی هرگز رمز عبور Ideal (کاربر/مشتری/شخص) ندارند — ستون‌های حساس حتی در SELECT نمی‌آیند.

@@ -41,7 +41,7 @@ IdealBridge.sln
 │   ├── IdealBridge.Security        # TokenService + IdealBridgeAuthHandler
 │   ├── IdealBridge.Infrastructure  # اتصال فقط-خواندنی
 │   │   ├── Database/SqlConnectionFactory.cs   # نقطهٔ ساخت اتصال (ApplicationIntent.ReadOnly)
-│   │   ├── Database/ReadOnlyCommandGuard.cs   # گارد فهرست‌سفید/سیاه
+│   │   ├── Database/ReadOnlyCommandGuard.cs   # گارد توکنایزر T-SQL (فقط SELECT تک‌دستوری)
 │   │   ├── Database/IdealDb.cs                # اجراکنندهٔ یکپارچهٔ گارد‌شده
 │   │   ├── Database/SchemaProbe.cs            # کاوش فراداده + انتخاب حالت Auto/Sp/Table
 │   │   └── Repositories/                      # پیاده‌سازی مخازن دو-حالته
@@ -144,15 +144,17 @@ IdealBridge.sln
 - هیچ SP (حتی با نام معتبر) مجاز نیست — فهرست سفید قبلی حذف شد؛
 - فقط یک دستور `SELECT`/`WITH`؛ `;` و `GO` ممنوع؛
 - واژه‌های `INTO` (SELECT INTO)، `SET`، `WAITFOR`، `OPENROWSET` و `sp_*`/`xp_*` هم ممنوع؛
+- فاز ۱۱.۱: عبارت `NEXT VALUE FOR` (افزایش Sequence = تغییر state) با تطبیق دنبالهٔ توکن ممنوع — بدون مثبت کاذب روی متن رشته/کامنت؛
 - `ReadOnlyGuardPolicy`: در **Production** گارد غیرقابل خاموش‌کردن است (تنظیم `EnforceReadOnlyGuard=false` نادیده و لاگ می‌شود).
 
 ### ۳. زیرساخت اتصال (فاز ۱۱)
 
 - دو روش پیکربندی: `ConnectionString` کامل یا بخش تفکیکی `IdealBridge:Sql` (با `Sql`/`Windows` Auth).
 - همیشه: `ApplicationName=IdealBridge` + `ApplicationIntent=ReadOnly` + مهلت اتصال.
+- فاز ۱۱.۱: کارخانهٔ اتصال بدون Connection String هم ساخته می‌شود (وضعیت `Unconfigured`) — سرویس بالا می‌آید، endpointهای داده ۵۰۳ کنترل‌شده می‌دهند و هیچ Crash رخ نمی‌دهد.
 - `SqlConnectionErrorClassifier`: دسته‌بندی خطا (Network/Authentication/DatabaseNotFound/Timeout/Configuration/PermissionDenied/SqlServerError) با پیام فارسی امن.
 - `SecretRedactor`: رمز هرگز وارد لاگ نمی‌شود.
-- endpoint مدیریتی `GET /api/v1/admin/connection` (X-Admin-Key): خلاصهٔ امن پیکربندی + آزمون زنده.
+- endpoint مدیریتی `GET /api/v1/admin/connection` (X-Admin-Key): چهار وضعیت (Unconfigured/Configured/Connected/ConnectionFailed) + خلاصهٔ امن پیکربندی؛ فراخوانی پیش‌فرض هیچ اتصالی برقرار نمی‌کند، آزمون زنده با `?test=true`.
 
 ### ۴. پشته
 

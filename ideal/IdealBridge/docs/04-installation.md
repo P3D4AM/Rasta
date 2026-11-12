@@ -41,12 +41,22 @@ dotnet build IdealBridge.sln -c Release
 
 ## ۳) تنظیم Secretها (بدون فایل!)
 
+> **قانون طلایی:** رمز واقعی هرگز در فایل کامیت‌شده، فایل عمومی، Screenshot یا Log قرار نمی‌گیرد — فقط متغیر محیطی / Secret Store.
+
+> فاز ۱۱.۱: سرویس «بدون» Connection String هم بالا می‌آید (وضعیت `Unconfigured` از `GET /api/v1/admin/connection`) — endpointهای داده تا تنظیم اتصال پاسخ ۵۰۳ کنترل‌شده می‌دهند. برای دسترسی واقعی به داده، اتصال الزامی است.
+
 حداقل دو متغیر محیطی لازم است:
 
 ```powershell
 # PowerShell — ماندگار برای کاربر جاری
 [Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
 [Environment]::SetEnvironmentVariable("IdealBridge__AdminKey", "یک-کلید-ادمین-قوی-یکتا", "User")
+```
+
+```bat
+REM CMD — ماندگار برای کاربر جاری (پس از setx پنجرهٔ جدید باز کنید)
+setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+setx IdealBridge__AdminKey "یک-کلید-ادمین-قوی-یکتا"
 ```
 
 ```bash
@@ -57,18 +67,38 @@ export IdealBridge__AdminKey='یک-کلید-ادمین-قوی-یکتا'
 
 | متغیر | الزامی | نقش |
 |---|---|---|
-| `IdealBridge__ConnectionString` | ✔ | اتصال فقط-خواندنی به دیتابیس Ideal (سند ۰۵) |
+| `IdealBridge__ConnectionString` | ✔ (برای داده) | اتصال فقط-خواندنی به دیتابیس Ideal (سند ۰۵) — بدون آن سرویس بالا می‌آید ولی endpointهای داده ۵۰۳ می‌دهند |
 | `IdealBridge__AdminKey` | ✔ (برای مدیریت توکن) | کلید ساخت/ابطال توکن‌ها |
-| `IdealBridge__DataAccessMode` | ✖ (پیش‌فرض `Auto`) | `Auto` / `Table` / `Sp` |
+| `IdealBridge__DataAccessMode` | ✖ (پیش‌فرض `Table`) | `Table` / `Auto` (معادل Table) — مقدار `Sp` در راه‌اندازی رد می‌شود (اجرای SP غیرفعال) |
 | `IdealBridge__TokenStorePath` | ✖ (پیش‌فرض `tokens.json`) | مسیر ذخیرهٔ توکن‌ها |
 | `IdealBridge__EnableSwagger` | ✖ (پیش‌فرض `true`) | خاموش‌کردن Swagger در Production |
 | `ASPNETCORE_URLS` | ✖ | مثلاً `http://0.0.0.0:5100` |
 
 ## ۴) کاوش ساختار دیتابیس واقعی (قبل از اولین اجرا)
 
+ابزار `IdeaSchemaDump` از فاز ۱۱.۱ Connection String را «فقط از متغیر محیطی» می‌خواند — دریافت آن از خط فرمان حذف و صریحاً ممنوع شده است (رمز در Process Arguments و تاریخچهٔ ترمینال افشا می‌شد). خود ابزار هم `ApplicationIntent=ReadOnly` و `Encrypt=True` را اجباری می‌کند.
+
+**PowerShell:**
+
 ```powershell
-dotnet run --project tools/IdeaSchemaDump -- --connection "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True" --out schema-report.json
+# ۱) تنظیم امن Connection String (ماندگار برای کاربر جاری — فقط یک‌بار)
+[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+
+# ۲) اجرای ابزار — بدون هیچ Secret در خط فرمان
+dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
 ```
+
+**CMD:**
+
+```bat
+REM ۱) تنظیم امن (پس از setx پنجرهٔ جدید باز کنید)
+setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+
+REM ۲) اجرای ابزار — بدون هیچ Secret در خط فرمان
+dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+```
+
+> هشدار: رمز واقعی نباید در Git، فایل‌های عمومی، Screenshot یا Log قرار گیرد. اگر رمزی در خط فرمان تایپ شده، از تاریخچهٔ ترمینال پاکش کنید و آن را عوض کنید.
 
 خروجی: `schema-report.json` + خلاصهٔ سازگاری در کنسول (جداول/ستون‌های مفقود و SPهای موجود). این گزارش همان چیزی است که در «گزارش سازگاری نسخه» (سند ۰۹) باید ضمیمه شود.
 

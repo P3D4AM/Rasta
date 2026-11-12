@@ -105,12 +105,31 @@ Linux:
 sqlcmd -S "sqlsrv" -d "CRM" -U "ibk_reader" -P "***" -Q "SELECT TOP 3 CompanyID, cmpName FROM dbo.CrmCompany ORDER BY CompanyID"
 ```
 
-سپس اجرای کاوشگر کامل:
+سپس اجرای کاوشگر کامل — از فاز ۱۱.۱ ابزار Connection String را «فقط از متغیر محیطی» می‌خواند (خط فرمان ممنوع است؛ ابزار `ApplicationIntent=ReadOnly` و `Encrypt=True` را هم اجباری می‌کند):
+
+**PowerShell:**
 
 ```powershell
+# ۱) تنظیم امن (ماندگار — فقط یک‌بار)
+[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+
+# ۲) اجرا — بدون هیچ Secret در خط فرمان
 cd ideal\IdealBridge
-dotnet run --project tools/IdeaSchemaDump -- --connection "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True" --out schema-report.json
+dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
 ```
+
+**CMD:**
+
+```bat
+REM ۱) تنظیم امن (پس از setx پنجرهٔ جدید باز کنید)
+setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+
+REM ۲) اجرا — بدون هیچ Secret در خط فرمان
+cd ideal\IdealBridge
+dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+```
+
+> رمز واقعی هرگز در Git، فایل عمومی، Screenshot یا Log قرار نگیرد.
 
 خروجی `schema-report.json` نشان می‌دهد:
 - جدول‌ها/ستون‌های موردانتظار IdealBridge موجودند یا نه؛
@@ -125,6 +144,9 @@ dotnet run --project tools/IdeaSchemaDump -- --connection "Server=SQLSRV\IDEAL;D
 | `18456` — Login failed | کاربر/رمز اشتباه یا نداشتن دسترسی به دیتابیس | GRANT در سند ۰۶ را کامل اجرا کنید |
 | `2/53` — server not found | Instance/پورت/فایروال | `Test-NetConnection`، SQL Browser (UDP 1434) برای Instance نام‌دار |
 | اتصال OK ولی endpointها 503 | دیتابیس درست ولی جداول IdealBridge نیستند (دیتابیس اشتباه انتخاب شده) | `/health/db` را ببینید؛ `TablesMissing` را بررسی کنید |
+| 503 با پیام «تنظیمات اتصال... تنظیم نشده» (فاز ۱۱.۱) | هیچ Connection String/تنظیم Sql داده نشده — سرویس در حالت `Unconfigured` بالا آمده | متغیر محیطی `IdealBridge__ConnectionString` (یا `IdealBridge:Sql`) را تنظیم و سرویس را ری‌استارت کنید؛ وضعیت را از `/api/v1/admin/connection` ببینید |
+
+> **فاز ۱۱.۱ — چهار وضعیت اتصال:** `GET /api/v1/admin/connection` (بدون برقراری اتصال) مقدار `state` را می‌دهد: `Unconfigured` / `Configured` / `Connected` / `ConnectionFailed`؛ با `?test=true` آزمون زنده انجام و دستهٔ خطا (شبکه/احراز هویت/دیتابیس ناموجود/...) گزارش می‌شود.
 
 ---
 
