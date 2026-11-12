@@ -183,6 +183,46 @@ public class ReadOnlyCommandGuardTests
         Assert.Null(ex);
     }
 
+    // ─── ۷) NEXT VALUE FOR (فاز ۱۱.۱) — افزایش Sequence = تغییر state ───
+
+    [Theory]
+    [InlineData("SELECT NEXT VALUE FOR SeqName")]
+    [InlineData("select next value for seq1")]                          // حروف کوچک
+    [InlineData("SELECT NEXT VALUE FOR dbo.Seq1")]                      // نام کامل schema
+    [InlineData("SELECT NEXT VALUE FOR [dbo].[Seq1]")]                  // نام براکت‌دار sequence (براکت روی «نام» است نه کلیدواژه‌ها)
+    [InlineData("SELECT NEXT  VALUE   FOR s")]                          // فاصلهٔ چندتایی
+    [InlineData("SELECT NEXT\tVALUE\nFOR s")]                           // تب/خط جدید مخلوط
+    [InlineData("SELECT NEXT /* comment */ VALUE FOR s")]               // کامنت بین واژه‌ها — توکن‌ها متوالی‌اند
+    [InlineData("SELECT NEXT -- comment\r\nVALUE FOR s")]               // کامنت خطی بین واژه‌ها
+    [InlineData("WITH x AS (SELECT NEXT VALUE FOR s) SELECT * FROM x")] // داخل CTE
+    [InlineData("SELECT (SELECT NEXT VALUE FOR s) AS v, 1 AS x")]      // داخل زیرکوئری
+    [InlineData("SELECT NEXT VALUE FOR s FROM dbo.t")]                  // همراه FROM
+    public void Next_Value_For_Throws_In_All_Forms(string sql)
+    {
+        // تشخیص با تطبیق دنبالهٔ توکن انجام می‌شود — نه جست‌وجوی متنی ساده
+        var ex = Assert.Throws<ReadOnlyViolationException>(() => ReadOnlyCommandGuard.Validate(sql, CommandType.Text));
+        Assert.Contains("NEXT VALUE FOR", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData("SELECT 'NEXT VALUE FOR seq' AS demo")]                 // داخل رشته = داده
+    [InlineData("SELECT N'NEXT VALUE FOR seq' AS demo")]                // داخل رشتهٔ یونیکد
+    [InlineData("SELECT 1 -- NEXT VALUE FOR seq")]                      // کامنت خطی = غیراجرایی
+    [InlineData("SELECT 1 /* NEXT VALUE FOR seq */ AS c")]              // کامنت بلوکی = غیراجرایی
+    [InlineData("SELECT NEXT FROM dbo.t")]                              // ستونی به نام NEXT — بدون VALUE FOR
+    [InlineData("SELECT VALUE FROM dbo.t")]                             // ستونی به نام VALUE
+    [InlineData("SELECT NEXT, VALUE, FOR_X FROM dbo.t")]                // سه واژهٔ مجزا اما «غیرمتوالی» (با ویرگول)
+    [InlineData("SELECT NEXTVALUEFOR FROM dbo.t")]                      // یک واژهٔ پیوسته = شناسه
+    [InlineData("SELECT x FROM t FOR XML PATH('row')")]                 // FOR XML خواندنی است (قاعدهٔ قدیمی)
+    [InlineData("SELECT x FROM t FOR JSON PATH")]                       // FOR JSON خواندنی است
+    [InlineData("SELECT [NEXT] VALUE FOR_X FROM t")]                    // براکت‌دار = شناسه، نه کلیدواژهٔ NEXT
+    public void Next_Value_For_In_String_Comment_Or_Benign_Identifier_Passes(string sql)
+    {
+        // متن داخل کامنت/رشته هرگز به‌عنوان دستور اجرایی تفسیر نمی‌شود (مثبت کاذب ممنوع)
+        var ex = Record.Exception(() => ReadOnlyCommandGuard.Validate(sql, CommandType.Text));
+        Assert.Null(ex);
+    }
+
     // ─── ۷) سیاست محیطی گارد ───
 
     [Fact]

@@ -18,8 +18,12 @@ namespace IdealBridge.Infrastructure.Database;
 ///         CREATE/GRANT/REVOKE/DENY/BACKUP/RESTORE/KILL/SHUTDOWN/EXEC/EXECUTE/DBCC/INTO/SET/WAITFOR/
 ///         OPENROWSET/OPENQUERY/OPENDATASOURCE/OPENXML/BULK/...).
 ///         «INTO» یعنی SELECT ... INTO (ساخت جدول) → ممنوع. «SET» هم مسیر تغییر state است → ممنوع.
-///      ۵. شناسهٔ برهنهٔ sp_* یا xp_* (پروسیجرهای سیستمی) → رد.
-///      ۶. رشتهٔ نیمه‌تمام یا کامنت نیمه‌بسته → خطای توکنایزر → رد.
+///      ۵. (فاز ۱۱.۱) عبارت «NEXT VALUE FOR» (افزایش Sequence = تغییر state دیتابیس) → رد.
+///         تشخیص «تطبیق دنبالهٔ توکن‌ها» است نه جست‌وجوی متنی: سه واژهٔ برهنهٔ NEXT+VALUE+FOR
+///         باید متوالی باشند؛ متن داخل رشته/کامنت هرگز توکن Word نمی‌شود (مثبت کاذب ندارد)؛
+///         ستونی به نام NEXT یا VALUE به‌تنهایی مجاز می‌ماند و FOR XML/JSON خواندنی مجاز است.
+///      ۶. شناسهٔ برهنهٔ sp_* یا xp_* (پروسیجرهای سیستمی) → رد.
+///      ۷. رشتهٔ نیمه‌تمام یا کامنت نیمه‌بسته → خطای توکنایزر → رد.
 ///  - چیزهایی که «فریب نمی‌خورند»: واژهٔ کلیدی داخل کامنت یا رشته‌آدرس، «;» داخل رشته،
 ///    EXEC مخفی در کامنت، نام ستون [UPDATE] براکت‌دار، دستور بعد از GO، ...
 ///
@@ -77,6 +81,18 @@ public static class ReadOnlyCommandGuard
                 t.Text.StartsWith("XP_", StringComparison.Ordinal))
                 throw new ReadOnlyViolationException(
                     $"فراخوانی پروسیجر سیستمی «{t.Text}» مجاز نیست.");
+        }
+
+        // ۴) (فاز ۱۱.۱) «NEXT VALUE FOR» — افزایش Sequence، تغییردهندهٔ state است → ممنوع.
+        // تطبیق دقیق دنبالهٔ توکن (نه جست‌وجوی متنی): کامنت‌ها از قبل حذف شده‌اند، پس فاصله/خط جدید/
+        // کامنتِ بین سه واژه مانع تشخیص نمی‌شود؛ متن رشته یا شناسهٔ براکت‌دار هرگز Word نیست.
+        for (var i = 0; i + 2 < tokens.Count; i++)
+        {
+            if (tokens[i] is { Kind: TokenKind.Word, Text: "NEXT" } &&
+                tokens[i + 1] is { Kind: TokenKind.Word, Text: "VALUE" } &&
+                tokens[i + 2] is { Kind: TokenKind.Word, Text: "FOR" })
+                throw new ReadOnlyViolationException(
+                    "عبارت «NEXT VALUE FOR» مجاز نیست — افزایش Sequence تغییردهندهٔ state دیتابیس است و با سیاست فقط-خواندنی سازگار نیست.");
         }
     }
 
