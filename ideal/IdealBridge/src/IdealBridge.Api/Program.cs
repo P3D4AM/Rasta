@@ -78,22 +78,23 @@ builder.Services.AddControllers().AddJsonOptions(o =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
     {
         Title = "IdealBridge API",
         Version = "v1",
         Description = "سرویس پل فقط-خواندنی بین دیتابیس Ideal CRM و MedPad — احراز هویت با هدر X-API-Key",
     });
-    c.AddSecurityDefinition("X-API-Key", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    c.AddSecurityDefinition("X-API-Key", new Microsoft.OpenApi.OpenApiSecurityScheme
     {
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.SecuritySchemeType.ApiKey,
+        In = Microsoft.OpenApi.ParameterLocation.Header,
         Name = "X-API-Key",
         Description = "توکن IdealBridge (الگوی ibk_...)",
     });
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    c.AddSecurityRequirement(_ => new Microsoft.OpenApi.OpenApiSecurityRequirement
     {
-        { new Microsoft.OpenApi.Models.OpenApiSecurityScheme { Reference = new Microsoft.OpenApi.Models.OpenApiReference { Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "X-API-Key" } }, Array.Empty<string>() }
+        // OpenApi 3.x (Swashbuckle 11): ارجاع با شناسهٔ تعریف امنیتی
+        { new Microsoft.OpenApi.OpenApiSecuritySchemeReference("X-API-Key"), new List<string>() }
     });
 });
 
