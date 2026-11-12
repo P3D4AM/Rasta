@@ -249,4 +249,4 @@ Build: `0 Error(s), 0 Warning(s)` — CI GitHub Actions: **success**.
 | `4e268aa` | E | IdeaSchemaDump v2.0 + حالت مقایسه |
 | `2288bfb` | F | ارتقا به .NET 10 LTS + بسته‌ها + رفع NU1902/NU1903 |
 | `0139bc0` | G | GitHub Actions CI |
-| (این Commit) | H | مستندات + WORKLOG + Release dev-11.1.0 |
+| `3c8976e` | H | مستندات + WORKLOG + Release dev-11.1.0 (Release ID 442892787) |
