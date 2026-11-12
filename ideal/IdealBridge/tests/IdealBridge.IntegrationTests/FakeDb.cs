@@ -228,10 +228,17 @@ public class FakeDbDataReader : DbDataReader
     public override bool NextResult() => false;
 }
 
-/// <summary>کارخانهٔ اتصال ساختگی برای تزریق در DI.</summary>
+#nullable enable // این کلاس عضوهای nullable اینترفیس IDbConnectionFactory را پیاده می‌کند
+/// <summary>کارخانهٔ اتصال ساختگی برای تزریق در DI (فاز ۱۱.۱: State/LastLiveTest هم شبیه‌سازی می‌شود).</summary>
 public class FakeDbConnectionFactory : IdealBridge.Infrastructure.Database.IDbConnectionFactory
 {
     public FakeDbConnection Connection { get; set; } = new();
+
+    private volatile IdealBridge.Infrastructure.Database.ConnectionTestResult? _lastLiveTest;
+
+    /// <summary>بازنشانی وضعیت برای تست‌ها (State به Configured برمی‌گردد).</summary>
+    public void ResetLiveTest() => _lastLiveTest = null;
+
     public Task<DbConnection> OpenConnectionAsync(CancellationToken ct = default)
     {
         if (Connection.FailOnOpen != null) throw Connection.FailOnOpen;
@@ -239,6 +246,17 @@ public class FakeDbConnectionFactory : IdealBridge.Infrastructure.Database.IDbCo
         return Task.FromResult<DbConnection>(Connection);
     }
     public string ConnectionDescription => "FAKESERVER / IdealDb (test double)";
+
+    public IdealBridge.Infrastructure.Database.ConnectionStateKind State =>
+        _lastLiveTest is null
+            ? IdealBridge.Infrastructure.Database.ConnectionStateKind.Configured
+            : _lastLiveTest.Ok
+                ? IdealBridge.Infrastructure.Database.ConnectionStateKind.Connected
+                : IdealBridge.Infrastructure.Database.ConnectionStateKind.ConnectionFailed;
+
+    public string? ConfigurationError => null;
+
+    public IdealBridge.Infrastructure.Database.ConnectionTestResult? LastLiveTest => _lastLiveTest;
 
     public IdealBridge.Infrastructure.Database.ConnectionSummary Summary => new()
     {
@@ -261,25 +279,30 @@ public class FakeDbConnectionFactory : IdealBridge.Infrastructure.Database.IDbCo
             cmd.CommandText = "SELECT @@SERVERNAME, DB_NAME(), @@VERSION";
             cmd.CommandType = CommandType.Text;
             await using var r = await cmd.ExecuteReaderAsync(ct);
-            string server = null, db = null, ver = null;
+            string? server = null, db = null, ver = null;
             if (await r.ReadAsync(ct))
             {
                 server = r.IsDBNull(0) ? null : r.GetString(0);
                 db = r.IsDBNull(1) ? null : r.GetString(1);
                 ver = (r.IsDBNull(2) ? null : r.GetString(2))?.Split('\n').FirstOrDefault()?.Trim();
             }
-            return new IdealBridge.Infrastructure.Database.ConnectionTestResult
+            var okResult = new IdealBridge.Infrastructure.Database.ConnectionTestResult
             {
                 Ok = true, ServerName = server, DatabaseName = db, ServerVersion = ver,
             };
+            _lastLiveTest = okResult;
+            return okResult;
         }
         catch (Exception ex)
         {
             var (kind, safe) = IdealBridge.Infrastructure.Database.SqlConnectionErrorClassifier.Classify(ex);
-            return new IdealBridge.Infrastructure.Database.ConnectionTestResult
+            var failResult = new IdealBridge.Infrastructure.Database.ConnectionTestResult
             {
                 Ok = false, ErrorKind = kind, SafeMessage = safe,
             };
+            _lastLiveTest = failResult;
+            return failResult;
         }
     }
 }
+#nullable restore

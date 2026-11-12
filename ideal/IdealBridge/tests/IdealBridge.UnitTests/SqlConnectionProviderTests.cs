@@ -200,4 +200,107 @@ public class SqlConnectionProviderTests
             Assert.DoesNotContain("SQLSRV", msg, StringComparison.Ordinal);   // بدون نام سرور
         }
     }
+
+    // ─── فاز ۱۱.۱: مدیریت نبود/نقص Connection String — چهار وضعیت تفکیک‌شده ───
+
+    [Fact]
+    public void Empty_Options_Never_Crash_The_Factory_Unconfigured_State()
+    {
+        // الزام: سرویس بدون Connection String اجرا شود — سازنده هرگز خطا نمی‌دهد
+        var factory = new SqlConnectionFactory(new IdealBridgeOptions());
+        Assert.False(factory.IsConfigured);
+        Assert.Equal(ConnectionStateKind.Unconfigured, factory.State);
+        Assert.False(factory.Summary.Configured);
+        Assert.Equal("None", factory.Summary.Source);
+        Assert.Null(factory.LastLiveTest);
+        Assert.NotNull(factory.ConfigurationError);
+        Assert.Contains("تنظیمات اتصال", factory.ConfigurationError, StringComparison.Ordinal);
+        // توصیف امن هم وضعیت را نشان می‌دهد (بدون Crash و بدون Secret)
+        Assert.Contains("Unconfigured", factory.ConnectionDescription, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Unconfigured_OpenConnection_Throws_Clear_Error_Before_Any_Network_Attempt()
+    {
+        var factory = new SqlConnectionFactory(new IdealBridgeOptions());
+        // خطا «پیش از» ساخت SqlConnection رخ می‌دهد — هیچ تلاش شبکه‌ای لازم نیست
+        var ex = await Assert.ThrowsAsync<ConnectionConfigurationException>(() => factory.OpenConnectionAsync());
+        Assert.Contains("تنظیمات اتصال", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Unconfigured_TestConnection_Returns_ConfigurationError_Without_Attempt()
+    {
+        var factory = new SqlConnectionFactory(new IdealBridgeOptions());
+        var result = await factory.TestConnectionAsync();
+        Assert.False(result.Ok);
+        Assert.Equal(ConnectionErrorKind.Configuration, result.ErrorKind);
+        Assert.Contains("تنظیمات اتصال", result.SafeMessage, StringComparison.Ordinal);
+        // نتیجهٔ «اتصالِ شکست‌خورده» ثبت نمی‌شود — وضعیت Unconfigured می‌ماند
+        Assert.Equal(ConnectionStateKind.Unconfigured, factory.State);
+        Assert.Null(factory.LastLiveTest);
+    }
+
+    [Fact]
+    public void Invalid_AuthMode_Never_Crashes_State_Configured_With_Clear_Error()
+    {
+        // تنظیمات ارائه شده ولی نامعتبر — باز هم Crash نه؛ وضعیت Configured + پیام خطا
+        var options = new IdealBridgeOptions
+        {
+            Sql = new SqlSettings { Server = "s", Database = "d", AuthMode = "Kerberos", UserId = "u", Password = "p" },
+        };
+        var factory = new SqlConnectionFactory(options);
+        Assert.False(factory.IsConfigured);
+        Assert.Equal(ConnectionStateKind.Configured, factory.State);   // تنظیماتی هست — ولی نامعتبر
+        Assert.Equal("Invalid", factory.Summary.Source);
+        Assert.NotNull(factory.ConfigurationError);
+        Assert.Contains("AuthMode", factory.ConfigurationError, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Malformed_ConnectionString_Error_Never_Leaks_The_Secret()
+    {
+        // رشتهٔ خراب حاوی رمز — پیام خطا هرگز متن خام را بازتاب نمی‌دهد
+        var options = new IdealBridgeOptions
+        {
+            ConnectionString = "Server===;;this is not a valid keyword;;Password=TOPSECRET-123",
+        };
+        var factory = new SqlConnectionFactory(options);
+        Assert.False(factory.IsConfigured);
+        Assert.Equal(ConnectionStateKind.Configured, factory.State);
+        Assert.NotNull(factory.ConfigurationError);
+        Assert.DoesNotContain("TOPSECRET", factory.ConfigurationError, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Configured_Factory_Reports_Configured_State_Before_Any_Live_Test()
+    {
+        var factory = new SqlConnectionFactory(FullStringOptions());
+        Assert.True(factory.IsConfigured);
+        Assert.Equal(ConnectionStateKind.Configured, factory.State);
+        Assert.Null(factory.ConfigurationError);
+        Assert.Null(factory.LastLiveTest);
+        Assert.DoesNotContain(SamplePassword, factory.ConnectionDescription, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ComputeState_Pure_Function_Covers_All_Four_States()
+    {
+        var okTest = new ConnectionTestResult { Ok = true };
+        var failTest = new ConnectionTestResult { Ok = false, ErrorKind = ConnectionErrorKind.Network };
+
+        // هیچ تنظیماتی → Unconfigured (حتی اگر نتیجهٔ آزمونی مانده باشد — حالت ناممکن، محافظ کار)
+        Assert.Equal(ConnectionStateKind.Unconfigured, SqlConnectionFactory.ComputeState(false, false, null));
+        Assert.Equal(ConnectionStateKind.Unconfigured, SqlConnectionFactory.ComputeState(false, false, okTest));
+
+        // تنظیمات نامعتبر → Configured (خطا در ConfigurationError)
+        Assert.Equal(ConnectionStateKind.Configured, SqlConnectionFactory.ComputeState(true, false, null));
+
+        // تنظیمات سالم، بدون آزمون → Configured
+        Assert.Equal(ConnectionStateKind.Configured, SqlConnectionFactory.ComputeState(true, true, null));
+
+        // پس از آزمون زنده → Connected / ConnectionFailed
+        Assert.Equal(ConnectionStateKind.Connected, SqlConnectionFactory.ComputeState(true, true, okTest));
+        Assert.Equal(ConnectionStateKind.ConnectionFailed, SqlConnectionFactory.ComputeState(true, true, failTest));
+    }
 }

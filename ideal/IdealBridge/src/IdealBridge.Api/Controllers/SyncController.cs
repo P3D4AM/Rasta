@@ -1,6 +1,7 @@
 using IdealBridge.Application.Interfaces;
 using IdealBridge.Domain.Common;
 using IdealBridge.Domain.Dto;
+using IdealBridge.Infrastructure.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -103,12 +104,15 @@ public class HealthController : ControllerBase
 {
     private readonly ISchemaProbe _probe;
     private readonly IdealBridge.Infrastructure.Repositories.IDataAccessPolicy _policy;
+    private readonly IDbConnectionFactory _connectionFactory;
     private readonly ILogger<HealthController> _logger;
 
-    public HealthController(ISchemaProbe probe, IdealBridge.Infrastructure.Repositories.IDataAccessPolicy policy, ILogger<HealthController> logger)
+    public HealthController(ISchemaProbe probe, IdealBridge.Infrastructure.Repositories.IDataAccessPolicy policy,
+        IDbConnectionFactory connectionFactory, ILogger<HealthController> logger)
     {
         _probe = probe;
         _policy = policy;
+        _connectionFactory = connectionFactory;
         _logger = logger;
     }
 
@@ -125,6 +129,13 @@ public class HealthController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Db(CancellationToken ct)
     {
+        // فاز ۱۱.۱: در حالت Unconfigured پیام دقیق و کنترل‌شده — نه خطای عمومی
+        if (_connectionFactory.State == ConnectionStateKind.Unconfigured)
+            return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                ApiResponse<object>.Failed(
+                    "تنظیمات اتصال دیتابیس Ideal تنظیم نشده است (Unconfigured) — وضعیت را از /api/v1/admin/connection ببینید.",
+                    ResultStatus.Error));
+
         var report = await _probe.ProbeAsync(ct);
         _policy.ApplySchemaReport(report);
         report.EntityModes = new Dictionary<string, IdealBridge.Domain.Common.EntityAccessInfo>(_policy.CurrentModes());

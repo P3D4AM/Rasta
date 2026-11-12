@@ -114,24 +114,38 @@ IdealBridge.Infrastructure.Repositories.DataAccessPolicy.NormalizeConfiguredMode
     app.Configuration.GetSection(IdealBridgeOptions.SectionName)[nameof(IdealBridgeOptions.DataAccessMode)]);
 
 // کاوش اسکیما در راه‌اندازی + اعمال سیاست دسترسی (خرابی = گزارش، نه توقف)
+// فاز ۱۱.۱: بدون پیکربندی اتصال، کاوش اصلاً انجام نمی‌شود (هشدار شفاف) — سرویس بالا می‌آید؛
+// endpointهای داده تا تنظیم اتصال پاسخ ۵۰۳ کنترل‌شده می‌دهند (وضعیت: /api/v1/admin/connection).
 try
 {
-    var probe = app.Services.GetRequiredService<ISchemaProbe>();
-    var report = await probe.ProbeAsync();
-    var policy = app.Services.GetRequiredService<IdealBridge.Infrastructure.Repositories.IDataAccessPolicy>();
-    policy.ApplySchemaReport(report);
-    report.EntityModes = new Dictionary<string, IdealBridge.Domain.Common.EntityAccessInfo>(policy.CurrentModes());
-    var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogInformation("Schema probe: ConnectionOk={Ok} DB={Db} Modes={Modes} SpExecution={Sp}",
-        report.ConnectionOk, report.DatabaseName,
-        string.Join(",", report.EntityModes.Select(kv => kv.Key + "=" + kv.Value)),
-        policy.StoredProceduresSupported);
-    if (!report.ConnectionOk)
-        logger.LogWarning("اتصال به دیتابیس Ideal برقرار نشد ({Err}) — سرویس بالا می‌آید ولی endpointهای داده خطای 503 می‌دهند تا اتصال اصلاح شود.", report.ConnectionError);
-    if (report.TablesMissing.Count > 0)
-        logger.LogWarning("جدول‌های مفقود: {Tables} | ستون‌های مفقود: {Cols}",
-            string.Join(", ", report.TablesMissing),
-            string.Join("; ", report.ColumnsMissing.Select(kv => kv.Key + ": " + string.Join(",", kv.Value))));
+    var connectionFactory = app.Services.GetRequiredService<IDbConnectionFactory>();
+    if (connectionFactory.State == IdealBridge.Infrastructure.Database.ConnectionStateKind.Unconfigured ||
+        connectionFactory.ConfigurationError is not null)
+    {
+        app.Services.GetRequiredService<ILogger<Program>>().LogWarning(
+            "اتصال دیتابیس Ideal قابل استفاده نیست (State={State}) — سرویس در همین حالت بالا می‌آید. {Hint} " +
+            "endpointهای داده پاسخ ۵۰۳ می‌دهند تا اتصال تنظیم شود؛ وضعیت: GET /api/v1/admin/connection (با ?test=true برای آزمون زنده).",
+            connectionFactory.State, connectionFactory.ConfigurationError);
+    }
+    else
+    {
+        var probe = app.Services.GetRequiredService<ISchemaProbe>();
+        var report = await probe.ProbeAsync();
+        var policy = app.Services.GetRequiredService<IdealBridge.Infrastructure.Repositories.IDataAccessPolicy>();
+        policy.ApplySchemaReport(report);
+        report.EntityModes = new Dictionary<string, IdealBridge.Domain.Common.EntityAccessInfo>(policy.CurrentModes());
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("Schema probe: ConnectionOk={Ok} DB={Db} Modes={Modes} SpExecution={Sp}",
+            report.ConnectionOk, report.DatabaseName,
+            string.Join(",", report.EntityModes.Select(kv => kv.Key + "=" + kv.Value)),
+            policy.StoredProceduresSupported);
+        if (!report.ConnectionOk)
+            logger.LogWarning("اتصال به دیتابیس Ideal برقرار نشد ({Err}) — سرویس بالا می‌آید ولی endpointهای داده خطای 503 می‌دهند تا اتصال اصلاح شود.", report.ConnectionError);
+        if (report.TablesMissing.Count > 0)
+            logger.LogWarning("جدول‌های مفقود: {Tables} | ستون‌های مفقود: {Cols}",
+                string.Join(", ", report.TablesMissing),
+                string.Join("; ", report.ColumnsMissing.Select(kv => kv.Key + ": " + string.Join(",", kv.Value))));
+    }
 }
 catch (Exception ex)
 {

@@ -392,8 +392,10 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
     }
 
     [Fact]
-    public async Task AdminConnection_Returns_Summary_And_LiveTest_Without_Secrets()
+    public async Task AdminConnection_Default_Reports_State_Without_Any_Connection_Attempt()
     {
+        // فاز ۱۱.۱: GET پیش‌فرض هیچ اتصالی برقرار نمی‌کند — فقط وضعیت + پیکربندی امن
+        _factory.ConnFactory.ResetLiveTest();
         var c = _factory.CreateClient();
         c.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
         var resp = await c.GetAsync("/api/v1/admin/connection");
@@ -401,17 +403,17 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
         var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
         var data = json.GetProperty("data");
 
+        // وضعیت: تنظیمات هست ولی هنوز آزمون زنده‌ای انجام نشده = Configured
+        Assert.Equal("Configured", data.GetProperty("state").GetString());
+        // بدون ?test=true هیچ آزمون زنده‌ای انجام نمی‌شود (liveTest یا غایب است یا null)
+        Assert.False(data.TryGetProperty("liveTest", out var lt) && lt.ValueKind != JsonValueKind.Null);
+        Assert.Null(_factory.ConnFactory.LastLiveTest);
+
         // خلاصهٔ پیکربندی — ساختاریافته و بدون رمز
         var cfg = data.GetProperty("configuration");
         Assert.Equal("FAKESERVER", cfg.GetProperty("server").GetString());
         Assert.Equal("IdealDb", cfg.GetProperty("database").GetString());
         Assert.Equal("Sql", cfg.GetProperty("authMode").GetString());
-
-        // آزمون زندهٔ اتصال
-        var live = data.GetProperty("liveTest");
-        Assert.True(live.GetProperty("ok").GetBoolean());
-        Assert.Equal("None", live.GetProperty("errorKind").GetString());
-        Assert.Equal("IdealDb", live.GetProperty("databaseName").GetString());
 
         // هیچ Secret یا Connection String خام در پاسخ نیست
         var body = await resp.Content.ReadAsStringAsync();
@@ -420,17 +422,39 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
     }
 
     [Fact]
-    public async Task AdminConnection_Reports_ErrorKind_When_Open_Fails()
+    public async Task AdminConnection_LiveTest_Updates_State_To_Connected()
     {
+        _factory.ConnFactory.ResetLiveTest();
+        var c = _factory.CreateClient();
+        c.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
+        var resp = await c.GetAsync("/api/v1/admin/connection?test=true");
+        Assert.True(resp.IsSuccessStatusCode);
+        var data = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement.GetProperty("data");
+
+        // آزمون زنده با ?test=true — تنها مسیر ساخت اتصال
+        Assert.Equal("Connected", data.GetProperty("state").GetString());
+        var live = data.GetProperty("liveTest");
+        Assert.True(live.GetProperty("ok").GetBoolean());
+        Assert.Equal("None", live.GetProperty("errorKind").GetString());
+        Assert.Equal("IdealDb", live.GetProperty("databaseName").GetString());
+        // نتیجه به‌عنوان آخرین آزمون ثبت شد
+        Assert.True(data.GetProperty("lastLiveTest").GetProperty("ok").GetBoolean());
+    }
+
+    [Fact]
+    public async Task AdminConnection_Reports_ErrorKind_And_ConnectionFailed_When_Open_Fails()
+    {
+        _factory.ConnFactory.ResetLiveTest();
         _factory.Fake.FailOnOpen = new SimulatedDbException("connection refused");
         try
         {
             var c = _factory.CreateClient();
             c.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
-            var resp = await c.GetAsync("/api/v1/admin/connection");
+            var resp = await c.GetAsync("/api/v1/admin/connection?test=true");
             Assert.True(resp.IsSuccessStatusCode);
-            var live = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement
-                .GetProperty("data").GetProperty("liveTest");
+            var data = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement.GetProperty("data");
+            Assert.Equal("ConnectionFailed", data.GetProperty("state").GetString());
+            var live = data.GetProperty("liveTest");
             Assert.False(live.GetProperty("ok").GetBoolean());
             Assert.NotEqual("None", live.GetProperty("errorKind").GetString());
             Assert.False(string.IsNullOrEmpty(live.GetProperty("message").GetString()));
@@ -438,6 +462,7 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
         finally
         {
             _factory.Fake.FailOnOpen = null;
+            _factory.ConnFactory.ResetLiveTest();
         }
     }
 
@@ -457,6 +482,71 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
         var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
         var msg = json.GetProperty("message").GetString()!;
         Assert.Contains("تنظیمات اتصال", msg, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Unconfigured_Service_Starts_And_Admin_Reports_Unconfigured_State()
+    {
+        // فاز ۱۱.۱: سرویس بدون Connection String بالا می‌آید (factory واقعی، بدون دوقلو)؛
+        // endpoint مدیریتی «بدون ساخت اجباری Connection» وضعیت را گزارش می‌کند.
+        using var factory = new NoConfigApiFactory();
+        var client = factory.CreateClient();
+
+        // الف) سرویس زنده است — health/live جواب می‌دهد
+        Assert.True((await client.GetAsync("/health/live")).IsSuccessStatusCode);
+
+        // ب) endpoint مدیریتی: 200 + state=Unconfigured + بدون آزمون زنده
+        client.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
+        var resp = await client.GetAsync("/api/v1/admin/connection");
+        Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+        var data = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement.GetProperty("data");
+        Assert.Equal("Unconfigured", data.GetProperty("state").GetString());
+        Assert.False(data.GetProperty("configuration").GetProperty("configured").GetBoolean());
+        Assert.Equal("None", data.GetProperty("configuration").GetProperty("source").GetString());
+        // هیچ تلاش اتصالی انجام نشد (liveTest یا غایب است یا null)
+        Assert.False(data.TryGetProperty("liveTest", out var lt) && lt.ValueKind != JsonValueKind.Null);
+        Assert.True(data.TryGetProperty("configurationError", out var cerr) && !string.IsNullOrEmpty(cerr.GetString()));
+
+        // ج) هیچ Secret یا «مقدار» اتصال در پاسخ نیست (نام فیلدها در متن راهنمای خطا مجاز است؛ مقدار هرگز)
+        var body = await resp.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("Password=", body, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Pwd=", body, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Server=", body, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("User Id=", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task Unconfigured_Admin_LiveTest_Returns_ConfigurationError_State_Stays_Unconfigured()
+    {
+        using var factory = new NoConfigApiFactory();
+        var client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Admin-Key", IdealBridgeApiFactory.AdminKey);
+
+        // ?test=true در حالت Unconfigured: خطای پیکربندی — نه crash، نه تلاش شبکه‌ای
+        var resp = await client.GetAsync("/api/v1/admin/connection?test=true");
+        Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
+        var data = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement.GetProperty("data");
+        Assert.Equal("Unconfigured", data.GetProperty("state").GetString());   // وضعیت عوض نمی‌شود
+        var live = data.GetProperty("liveTest");
+        Assert.False(live.GetProperty("ok").GetBoolean());
+        Assert.Equal("Configuration", live.GetProperty("errorKind").GetString());
+        Assert.Contains("تنظیمات اتصال", live.GetProperty("message").GetString(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Unconfigured_HealthDb_Returns_Controlled_503_With_Specific_Message()
+    {
+        using var factory = new NoConfigApiFactory();
+        var client = factory.CreateClient();
+        var token = factory.Services.GetRequiredService<IdealBridge.Security.TokenService>()
+            .Create("NoConfig-Health", 1).PlainToken;
+        client.DefaultRequestHeaders.Add("X-API-Key", token);
+
+        var resp = await client.GetAsync("/health/db");
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, resp.StatusCode);
+        var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
+        var msg = json.GetProperty("message").GetString()!;
+        Assert.Contains("Unconfigured", msg, StringComparison.Ordinal);   // پیام دقیق، نه خطای عمومی
     }
 
     /// <summary>کارخانهٔ بدون پیکربندی اتصال و بدون دوقلوی ساختگی — SqlConnectionFactory واقعی.</summary>
@@ -513,6 +603,7 @@ public class IdealBridgeApiFactory : WebApplicationFactory<Program>
 {
     public const string AdminKey = "test-admin-key-123";
     public FakeDbConnection Fake => ((FakeDbConnectionFactory)Services.GetRequiredService<IDbConnectionFactory>()).Connection;
+    public FakeDbConnectionFactory ConnFactory => (FakeDbConnectionFactory)Services.GetRequiredService<IDbConnectionFactory>();
     private string? _testToken;
     public string TestToken => _testToken ??= Services.GetRequiredService<IdealBridge.Security.TokenService>()
         .Create("IntegrationTest-Default", 1).PlainToken;

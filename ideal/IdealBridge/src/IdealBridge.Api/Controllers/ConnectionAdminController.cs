@@ -6,8 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdealBridge.Api.Controllers;
 
 /// <summary>
-/// Endpoint مدیریتی وضعیت اتصال SQL Server (فاز ۱۱) — فقط با هدر X-Admin-Key.
-/// خروجی: خلاصهٔ امن پیکربندی (بدون رمز/Connection String) + نتیجهٔ آزمون زندهٔ اتصال با دستهٔ خطا.
+/// Endpoint مدیریتی وضعیت اتصال SQL Server — فقط با هدر X-Admin-Key.
+/// فاز ۱۱.۱:
+///  - GET پیش‌فرض «هیچ اتصالی برقرار نمی‌کند» — فقط وضعیت (State) و پیکربندی امن را گزارش می‌دهد
+///    (قابل استفاده حتی وقتی هیچ Connection String تنظیم نشده — Unconfigured).
+///  - GET ?test=true آزمون زندهٔ اتصال انجام می‌دهد و State را به Connected/ConnectionFailed به‌روز می‌کند.
+/// خروجی: وضعیت چهارگانه (Unconfigured/Configured/Connected/ConnectionFailed) + خلاصهٔ امن پیکربندی
+/// (بدون رمز/Connection String) + نتیجهٔ آزمون زنده با دستهٔ خطا.
 /// </summary>
 [ApiController]
 [Route("api/v1/admin/connection")]
@@ -37,11 +42,12 @@ public class ConnectionAdminController : ControllerBase
     }
 
     /// <summary>
-    /// وضعیت اتصال: پیکربندی (بدون مقادیر محرمانه) + آزمون زندهٔ اتصال.
-    /// برای بررسی سریع سلامت اتصال توسط ادمین — بدون نیاز به توکن دادهٔ MedPad.
+    /// وضعیت اتصال — بدون برقراری اتصال (پیش‌فرض).
+    /// state یکی از: Unconfigured | Configured | Connected | ConnectionFailed.
+    /// با ?test=true آزمون زندهٔ اتصال انجام می‌شود (تنها در این حالت Connection ساخته می‌شود).
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> Status(CancellationToken ct)
+    public async Task<IActionResult> Status(CancellationToken ct, [FromQuery] bool test = false)
     {
         if (!AdminOk())
         {
@@ -49,24 +55,34 @@ public class ConnectionAdminController : ControllerBase
             return StatusCode(StatusCodes.Status401Unauthorized, ApiResponse<object>.Failed("کلید مدیر معتبر نیست.", ResultStatus.Error));
         }
 
-        var test = await _factory.TestConnectionAsync(ct);
-        if (!test.Ok)
-            _logger.LogWarning("Connection test failed: {Kind} — {Msg}", test.ErrorKind, test.SafeMessage);
+        ConnectionTestResult? liveTest = null;
+        if (test)
+        {
+            liveTest = await _factory.TestConnectionAsync(ct);
+            if (!liveTest.Ok)
+                _logger.LogWarning("Connection test failed: {Kind} — {Msg}", liveTest.ErrorKind, liveTest.SafeMessage);
+        }
 
         return Ok(ApiResponse<object>.Ok(new
         {
+            state = _factory.State.ToString(),          // Unconfigured | Configured | Connected | ConnectionFailed
             configuration = _factory.Summary,          // Server/Database/AuthMode/Encrypt/TrustCert/Timeout — بدون رمز
-            liveTest = new
-            {
-                ok = test.Ok,
-                errorKind = test.ErrorKind.ToString(),
-                message = test.SafeMessage,            // پیام امن فارسی — بدون جزئیات داخلی
-                serverName = test.ServerName,
-                databaseName = test.DatabaseName,
-                serverVersion = test.ServerVersion,
-                latencyMs = test.LatencyMs,
-                checkedAt = test.CheckedAt,
-            },
+            configurationError = _factory.ConfigurationError,  // null یا پیام امن فارسی (بدون Secret)
+            lastLiveTest = _factory.LastLiveTest is null ? null : ToDto(_factory.LastLiveTest),   // آخرین آزمون ثبت‌شده (null = هنوز آزمونی نیست)
+            liveTest = liveTest is null ? null : ToDto(liveTest),   // فقط با ?test=true
         }));
     }
+
+    /// <summary>شکل امن و پایدار خروجی آزمون اتصال — هم‌نام با قرارداد فاز ۱۱ (message، نه SafeMessage).</summary>
+    private static object ToDto(ConnectionTestResult t) => new
+    {
+        ok = t.Ok,
+        errorKind = t.ErrorKind.ToString(),
+        message = t.SafeMessage,                        // پیام امن فارسی — بدون جزئیات داخلی
+        serverName = t.ServerName,
+        databaseName = t.DatabaseName,
+        serverVersion = t.ServerVersion,
+        latencyMs = t.LatencyMs,
+        checkedAt = t.CheckedAt,
+    };
 }

@@ -104,6 +104,13 @@ public class SchemaProbe : ISchemaProbe
 
             // حالت مؤثر هر موجودیت توسط DataAccessPolicy تعیین می‌شود (در Program/Health اعمال می‌شود)
         }
+        catch (ConnectionConfigurationException cce)
+        {
+            // فاز ۱۱.۱: خطای پیکربندی — پیام شفاف و امن (بدون تلاش شبکه‌ای که از قبل شکست خورده است)
+            report.ConnectionOk = false;
+            report.ConnectionError = "ConfigurationError: " + cce.Message;
+            _logger.LogWarning("Schema probe skipped/failed — connection not configured: {Msg}", cce.Message);
+        }
         catch (Exception ex)
         {
             report.ConnectionOk = false;

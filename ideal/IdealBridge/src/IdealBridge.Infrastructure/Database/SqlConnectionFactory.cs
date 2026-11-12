@@ -45,11 +45,26 @@ public class SqlSettings
     public int? ConnectTimeoutSeconds { get; set; }
 }
 
+/// <summary>
+/// وضعیت چرخهٔ عمر اتصال (فاز ۱۱.۱) — تفکیک صریح چهار حالت:
+///  - Unconfigured: هیچ تنظیماتی (نه ConnectionString و نه Sql) وجود ندارد؛ سرویس بالا می‌آید ولی endpointهای داده ۵۰۳ می‌دهند.
+///  - Configured: تنظیمات موجود است ولی هنوز آزمون زندهٔ موفق/ناموفقی ثبت نشده (تنظیمات نامعتبر هم اینجاست — ConfigurationError را ببینید).
+///  - Connected: آخرین آزمون زندهٔ اتصال موفق بوده است.
+///  - ConnectionFailed: آخرین آزمون زندهٔ اتصال شکست خورده (دستهٔ خطا در LastLiveTest.ErrorKind).
+/// </summary>
+public enum ConnectionStateKind
+{
+    Unconfigured,
+    Configured,
+    Connected,
+    ConnectionFailed,
+}
+
 /// <summary>خلاصهٔ ساختاریافتهٔ امن اتصال — بدون رمز و بدون Connection String خام.</summary>
 public class ConnectionSummary
 {
     public bool Configured { get; init; }
-    /// <summary>منبع پیکربندی: ConnectionString | Sql | None.</summary>
+    /// <summary>منبع پیکربندی: ConnectionString | Sql | Invalid (تنظیمات هست ولی نامعتبر) | None.</summary>
     public string Source { get; init; } = "None";
     public string? Server { get; init; }
     public string? Database { get; init; }
@@ -184,45 +199,113 @@ public class ConnectionTestResult
 ///  ۲. IdealBridge:Sql با فیلدهای تفکیکی (Server/Database/AuthMode/UserId/Password/Encrypt/
 ///     TrustServerCertificate/ConnectTimeoutSeconds) — رمز فقط از Environment Variable.
 /// در هر دو حالت: ApplicationName=IdealBridge، ApplicationIntent=ReadOnly و مهلت اتصال اعمال می‌شود.
+///
+/// فاز ۱۱.۱: سازنده «هرگز» به‌خاطر نبود/نقص تنظیمات خطا نمی‌دهد — وضعیت (State) صریحاً قابل گزارش
+/// است و تلاش اتصال فقط در OpenConnectionAsync/TestConnectionAsync انجام می‌شود؛ بنابراین سرویس
+/// بدون Connection String هم بالا می‌آید و endpoint مدیریتی بدون ساخت اجباری Connection کار می‌کند.
 /// </summary>
 public interface IDbConnectionFactory
 {
     Task<DbConnection> OpenConnectionAsync(CancellationToken ct = default);
     string ConnectionDescription { get; }
-    /// <summary>آزمون اتصال با دسته‌بندی خطا — برای Health Check و endpoint مدیریتی.</summary>
+    /// <summary>آزمون اتصال با دسته‌بندی خطا — برای Health Check و endpoint مدیریتی. در حالت Unconfigured بدون تلاش اتصال، خطای Configuration برمی‌گرداند.</summary>
     Task<ConnectionTestResult> TestConnectionAsync(CancellationToken ct = default);
     /// <summary>خلاصهٔ امن پیکربندی اتصال — بدون هیچ مقدار محرمانه.</summary>
     ConnectionSummary Summary { get; }
+    /// <summary>وضعیت چرخهٔ عمر اتصال — گزارش‌شدنی بدون برقراری هیچ اتصالی (فاز ۱۱.۱).</summary>
+    ConnectionStateKind State { get; }
+    /// <summary>خطای پیکربندی در صورت وجود — پیام امن فارسی بدون Secret؛ null = پیکربندی سالم.</summary>
+    string? ConfigurationError { get; }
+    /// <summary>نتیجهٔ آخرین آزمون زندهٔ اتصال (null = هنوز آزمونی ثبت نشده) — فقط با TestConnectionAsync به‌روز می‌شود.</summary>
+    ConnectionTestResult? LastLiveTest { get; }
 }
 
 public class SqlConnectionFactory : IDbConnectionFactory
 {
-    private readonly string _connectionString;
-    private readonly string _description;
-    private readonly ConnectionSummary _summary;
+    private readonly string? _connectionString;   // null = پیکربندی قابل استفاده نیست
+    private readonly string _description = "-";
+    private readonly ConnectionSummary _summary = new() { Configured = false, Source = "None", AuthMode = "-", Encrypt = true, ConnectTimeoutSeconds = 15 };
+    private readonly string? _configurationError;
+    private readonly bool _hasSettings;           // آیا اصلاً تنظیماتی ارائه شده؟
+    private volatile ConnectionTestResult? _lastLiveTest;
 
     public SqlConnectionFactory(IdealBridgeOptions options)
     {
-        var (builder, source, authMode) = BuildBuilder(options);
-        // در هر دو روش پیکربندی: قواعد فقط-خواندنی و شناسایی سرویس اعمال می‌شود
-        builder.ApplicationName = "IdealBridge";
-        builder.ApplicationIntent = ApplicationIntent.ReadOnly;   // intent — جایگزین مجوز SQL نیست
-        if (!builder.TryGetValue("Connect Timeout", out _))
-            builder.ConnectTimeout = 15;
-        _connectionString = builder.ConnectionString;
-        _description = $"{builder.DataSource} / {builder.InitialCatalog}";
-        _summary = new ConnectionSummary
+        _hasSettings = HasAnyConnectionSettings(options);
+        try
         {
-            Configured = true,
-            Source = source,
-            Server = builder.DataSource,
-            Database = builder.InitialCatalog,
-            AuthMode = authMode,
-            Encrypt = builder.Encrypt,
-            TrustServerCertificate = builder.TrustServerCertificate,
-            ConnectTimeoutSeconds = builder.ConnectTimeout,
-        };
+            var (builder, source, authMode) = BuildBuilder(options);
+            // در هر دو روش پیکربندی: قواعد فقط-خواندنی و شناسایی سرویس اعمال می‌شود
+            builder.ApplicationName = "IdealBridge";
+            builder.ApplicationIntent = ApplicationIntent.ReadOnly;   // intent — جایگزین مجوز SQL نیست
+            if (!builder.TryGetValue("Connect Timeout", out _))
+                builder.ConnectTimeout = 15;
+            _connectionString = builder.ConnectionString;
+            _description = $"{builder.DataSource} / {builder.InitialCatalog}";
+            _summary = new ConnectionSummary
+            {
+                Configured = true,
+                Source = source,
+                Server = builder.DataSource,
+                Database = builder.InitialCatalog,
+                AuthMode = authMode,
+                Encrypt = builder.Encrypt,
+                TrustServerCertificate = builder.TrustServerCertificate,
+                ConnectTimeoutSeconds = builder.ConnectTimeout,
+            };
+        }
+        catch (ConnectionConfigurationException ex)
+        {
+            // فاز ۱۱.۱: نبود/نقص تنظیمات هرگز سازنده را نمی‌شکند — پیام‌های این استثنا از پیش امن‌اند.
+            _configurationError = ex.Message;
+        }
+        catch (ArgumentException)
+        {
+            // Connection String ساختار نامعتبر دارد — پیام ثابت امن (متن خام ممکن است حاوی رمز باشد؛ هرگز بازتاب نمی‌شود)
+            _configurationError = "رشتهٔ Connection String ساختار معتبر ندارد — مقدار و نحوهٔ تنظیم آن را در سند ۰۵ بازبینی کنید.";
+        }
+        catch (Exception ex)
+        {
+            // هر خطای پردازش غیرمنتظرهٔ پیکربندی هم نباید سرویس را از کار بیندازد
+            _configurationError = "خطای ناشناخته در پردازش تنظیمات اتصال (" + ex.GetType().Name + ") — تنظیمات را بازبینی کنید.";
+        }
+        finally
+        {
+            if (_connectionString is null)
+            {
+                _description = "-";
+                _summary = new ConnectionSummary
+                {
+                    Configured = false,
+                    Source = _hasSettings ? "Invalid" : "None",
+                    AuthMode = "-",
+                    Encrypt = true,
+                    ConnectTimeoutSeconds = 15,
+                };
+            }
+        }
     }
+
+    /// <summary>آیا پیکربندی اتصال سالم و قابل استفاده است؟</summary>
+    public bool IsConfigured => _connectionString is not null;
+
+    public ConnectionStateKind State => ComputeState(_hasSettings, IsConfigured, _lastLiveTest);
+
+    public string? ConfigurationError => _configurationError;
+
+    public ConnectionTestResult? LastLiveTest => _lastLiveTest;
+
+    /// <summary>محاسبهٔ وضعیت از مؤلفه‌ها — تابع خالص برای تست واحد هر چهار حالت (فاز ۱۱.۱).</summary>
+    internal static ConnectionStateKind ComputeState(bool hasSettings, bool isConfigured, ConnectionTestResult? lastLiveTest)
+        => !hasSettings ? ConnectionStateKind.Unconfigured
+         : !isConfigured ? ConnectionStateKind.Configured          // تنظیمات هست ولی نامعتبر — خطا در ConfigurationError
+         : lastLiveTest is null ? ConnectionStateKind.Configured
+         : lastLiveTest.Ok ? ConnectionStateKind.Connected
+         : ConnectionStateKind.ConnectionFailed;
+
+    /// <summary>آیا کاربر اصلاً تنظیمات اتصالی (ConnectionString یا Sql.Server) ارائه کرده؟</summary>
+    internal static bool HasAnyConnectionSettings(IdealBridgeOptions options)
+        => !string.IsNullOrWhiteSpace(options.ConnectionString) || options.Sql is { Server: not null };
 
     /// <summary>ساخت SqlConnectionStringBuilder از پیکربندی — internal برای تست واحد (بدون اتصال واقعی).</summary>
     internal static (SqlConnectionStringBuilder b, string source, string authMode) BuildBuilder(IdealBridgeOptions options)
@@ -279,14 +362,25 @@ public class SqlConnectionFactory : IDbConnectionFactory
 
     /// <summary>توصیف امن اتصال — بدون رمز و بدون Connection String خام (برای لاگ/مدیریت).</summary>
     public string ConnectionDescription =>
-        $"{_description} [auth={_summary.AuthMode}, encrypt={_summary.Encrypt}, trustCert={_summary.TrustServerCertificate}, " +
-        $"timeout={_summary.ConnectTimeoutSeconds}s, readOnlyIntent={ConnectionSummary.ApplicationIntent}]";
+        _connectionString is null
+            ? "Unconfigured — تنظیمات اتصال دیتابیس Ideal تنظیم نشده/نامعتبر است"
+            : $"{_description} [auth={_summary.AuthMode}, encrypt={_summary.Encrypt}, trustCert={_summary.TrustServerCertificate}, " +
+              $"timeout={_summary.ConnectTimeoutSeconds}s, readOnlyIntent={ConnectionSummary.ApplicationIntent}]";
 
     public ConnectionSummary Summary => _summary;
 
-    public async Task<DbConnection> OpenConnectionAsync(CancellationToken ct = default)
+    public Task<DbConnection> OpenConnectionAsync(CancellationToken ct = default)
     {
-        var con = new SqlConnection(_connectionString);
+        // فاز ۱۱.۱: در حالت Unconfigured خطای شفاف پیکربندی — «پیش از» ساخت هر SqlConnection (بدون تلاش شبکه)
+        if (_connectionString is null)
+            throw new ConnectionConfigurationException(
+                _configurationError ?? "تنظیمات اتصال دیتابیس Ideal تنظیم نشده است.");
+        return OpenConfiguredAsync(ct);
+    }
+
+    private async Task<DbConnection> OpenConfiguredAsync(CancellationToken ct)
+    {
+        var con = new SqlConnection(_connectionString!);
         try
         {
             await con.OpenAsync(ct);
@@ -299,7 +393,24 @@ public class SqlConnectionFactory : IDbConnectionFactory
         }
     }
 
-    public async Task<ConnectionTestResult> TestConnectionAsync(CancellationToken ct = default)
+    public Task<ConnectionTestResult> TestConnectionAsync(CancellationToken ct = default)
+    {
+        // فاز ۱۱.۱: بدون پیکربندی سالم، هیچ تلاش اتصالی انجام نمی‌شود — نتیجهٔ شفاف پیکربندی
+        // (در State «نتیجهٔ اتصالِ شکست‌خورده» ثبت نمی‌شود؛ وضعیت Unconfigured می‌ماند)
+        if (_connectionString is null)
+        {
+            return Task.FromResult(new ConnectionTestResult
+            {
+                Ok = false,
+                ErrorKind = ConnectionErrorKind.Configuration,
+                SafeMessage = _configurationError ?? "تنظیمات اتصال دیتابیس Ideal تنظیم نشده است.",
+                LatencyMs = 0,
+            });
+        }
+        return TestConfiguredConnectionAsync(ct);
+    }
+
+    private async Task<ConnectionTestResult> TestConfiguredConnectionAsync(CancellationToken ct)
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
         try
@@ -317,7 +428,7 @@ public class SqlConnectionFactory : IDbConnectionFactory
                 version = (r.IsDBNull(2) ? null : r.GetString(2))?.Split('\n').FirstOrDefault()?.Trim();
             }
             sw.Stop();
-            return new ConnectionTestResult
+            var okResult = new ConnectionTestResult
             {
                 Ok = true,
                 ErrorKind = ConnectionErrorKind.None,
@@ -327,18 +438,22 @@ public class SqlConnectionFactory : IDbConnectionFactory
                 ServerVersion = version,
                 LatencyMs = (int)sw.ElapsedMilliseconds,
             };
+            _lastLiveTest = okResult;   // State → Connected
+            return okResult;
         }
         catch (Exception ex)
         {
             sw.Stop();
             var (kind, safe) = SqlConnectionErrorClassifier.Classify(ex);
-            return new ConnectionTestResult
+            var failResult = new ConnectionTestResult
             {
                 Ok = false,
                 ErrorKind = kind,
                 SafeMessage = safe,
                 LatencyMs = (int)sw.ElapsedMilliseconds,
             };
+            _lastLiveTest = failResult;   // State → ConnectionFailed (دستهٔ خطا داخل نتیجه)
+            return failResult;
         }
     }
 }
