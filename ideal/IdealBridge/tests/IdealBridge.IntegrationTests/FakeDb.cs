@@ -32,11 +32,15 @@ public class FakeDbConnection : DbConnection
 
     public List<string> ExecutedCommands { get; } = new();
 
+    /// <summary>نوع هر دستور اجراشده — برای اثبات اینکه هرگز StoredProcedure اجرا نمی‌شود.</summary>
+    public List<System.Data.CommandType> ExecutedCommandTypes { get; } = new();
+
     private string Normalize(string sql) => Regex.Replace(sql, @"\s+", " ").Trim();
 
-    public DataTable ExecuteScript(string sql)
+    public DataTable ExecuteScript(string sql, System.Data.CommandType commandType = System.Data.CommandType.Text)
     {
         ExecutedCommands.Add(Normalize(sql));
+        ExecutedCommandTypes.Add(commandType);
         if (!string.IsNullOrEmpty(FailWhenSqlContains) && sql.Contains(FailWhenSqlContains, StringComparison.OrdinalIgnoreCase))
             throw new SimulatedDbException("SIMULATED_SQL_FAILURE: simulated database error");
         return ScriptHandler?.Invoke(Normalize(sql)) ?? new DataTable();
@@ -78,7 +82,7 @@ public class FakeDbCommand : DbCommand
     public override int ExecuteNonQuery() => throw new NotSupportedException("IdealBridge فقط خواندنی است");
     public override object ExecuteScalar()
     {
-        var table = FakeConn!.ExecuteScript(CommandText);
+        var table = FakeConn!.ExecuteScript(CommandText, CommandType);
         if (table == null || table.Rows.Count == 0 || table.Columns.Count == 0) return 0;
         return table.Rows[0][0];
     }

@@ -10,12 +10,12 @@ namespace IdealBridge.Infrastructure.Database;
 /// کاوشگر فرادادهٔ فقط-خواندنی (sys.tables / sys.columns / sys.parameters / sys.procedures).
 /// گزارش می‌دهد کدام جدول‌ها/ستون‌های موردانتظار IdealBridge (بر اساس اسکیمای مرجع 3.1.18.187)
 /// در دیتابیس واقعی (مثلاً 3.1.16) موجودند و کدام SPها با امضای موردانتظار در دسترس‌اند.
+/// توجه: SPها فقط از نظر «موجودی/امضا» گزارش می‌شوند — در این نسخه هیچ SP اجرا نمی‌شود (سیاست DataAccessPolicy فاز ۱۱).
 /// </summary>
 public class SchemaProbe : ISchemaProbe
 {
     private readonly IDbConnectionFactory _factory;
     private readonly ILogger<SchemaProbe> _logger;
-    private readonly DataAccessModeSelector _modeSelector;
 
     /// <summary>ستون‌های موردنیاز هر جدول (فقط ستون‌هایی که IdealBridge در حالت Table می‌خواند).</summary>
     public static readonly Dictionary<string, string[]> RequiredTableColumns = new(StringComparer.OrdinalIgnoreCase)
@@ -47,11 +47,10 @@ public class SchemaProbe : ISchemaProbe
         ["ApispSelectPreOrder"] = new[] { "PreOrderID", "pordNumber", "FromPreOrderDate", "ToPreOrderDate", "FromRegisterDate", "ToRegisterDate", "FromFirstRegisterDate", "ToFirstRegisterDate", "LanguageID", "DefaultLanguageID", "CenterId", "CenterCode", "PageNumber", "PageSize" },
     };
 
-    public SchemaProbe(IDbConnectionFactory factory, ILogger<SchemaProbe> logger, DataAccessModeSelector modeSelector)
+    public SchemaProbe(IDbConnectionFactory factory, ILogger<SchemaProbe> logger)
     {
         _factory = factory;
         _logger = logger;
-        _modeSelector = modeSelector;
     }
 
     public async Task<SchemaReport> ProbeAsync(CancellationToken ct = default)
@@ -92,7 +91,7 @@ public class SchemaProbe : ISchemaProbe
                 if (missing.Count > 0) report.ColumnsMissing[table] = missing;
             }
 
-            // SPها و امضاها
+            // SPها و امضاها (فقط گزارش موجودی/امضا — نه انتخاب مسیر اجرا)
             foreach (var (sp, expected) in ExpectedSpSignatures)
             {
                 var actual = await LoadSpParamsAsync(con, sp, ct);
@@ -103,8 +102,7 @@ public class SchemaProbe : ISchemaProbe
                 else report.SpUnavailable.Add($"{sp} (امضای متفاوت: {string.Join(",", actual)})");
             }
 
-            // انتخاب حالت هر موجودیت
-            report.EntityModes = _modeSelector.Decide(report);
+            // حالت مؤثر هر موجودیت توسط DataAccessPolicy تعیین می‌شود (در Program/Health اعمال می‌شود)
         }
         catch (Exception ex)
         {
@@ -157,65 +155,5 @@ public class SchemaProbe : ISchemaProbe
         await using var r = await cmd.ExecuteReaderAsync(ct);
         while (await r.ReadAsync(ct)) list.Add(r.GetString(0));
         return list;
-    }
-}
-
-/// <summary>انتخاب حالت دسترسی (Auto/Table/Sp) بر اساس گزارش اسکیما.</summary>
-public class DataAccessModeSelector
-{
-    private readonly string _configured;
-
-    public DataAccessModeSelector(IdealBridgeOptions options) => _configured = options.DataAccessMode;
-
-    /// <summary>برای هر موجودیت: Sp یا Table. در حالت Auto، SP فقط وقتی انتخاب می‌شود که هم SP موجود باشد هم جدول هسته سالم.</summary>
-    public Dictionary<string, string> Decide(SchemaReport report)
-    {
-        var modes = new Dictionary<string, string>();
-        bool CompanyOk() => report.TablesAvailable.Contains("CrmCompany", StringComparer.OrdinalIgnoreCase)
-                            && !report.ColumnsMissing.ContainsKey("CrmCompany");
-        bool PersonsOk() => report.TablesAvailable.Contains("CrmCompanyPersons", StringComparer.OrdinalIgnoreCase)
-                            && !report.ColumnsMissing.ContainsKey("CrmCompanyPersons");
-        bool UsersOk() => report.TablesAvailable.Contains("Users", StringComparer.OrdinalIgnoreCase)
-                          && !report.ColumnsMissing.ContainsKey("Users");
-
-        void Add(string entity, string table, string sp, bool tableOk)
-        {
-            switch (_configured.ToUpperInvariant())
-            {
-                case "TABLE":
-                    modes[entity] = tableOk ? "Table" : "Blocked";
-                    return;
-                case "SP":
-                    var spOk = report.SpAvailable.Contains(sp, StringComparer.OrdinalIgnoreCase);
-                    modes[entity] = spOk ? "Sp" : "Blocked";
-                    return;
-                default: // Auto
-                    var spAvail = report.SpAvailable.Contains(sp, StringComparer.OrdinalIgnoreCase);
-                    if (tableOk && spAvail) modes[entity] = "Sp";
-                    else if (tableOk) modes[entity] = "Table";
-                    else if (spAvail) modes[entity] = "Sp";
-                    else modes[entity] = "Blocked";
-                    return;
-            }
-        }
-
-        Add("Companies", "CrmCompany", "ApispSelectCompany", CompanyOk());
-        Add("Persons", "CrmCompanyPersons", "ApispSelectCompanyPersons", PersonsOk());
-        Add("Users", "Users", "ApispSelectUsers", UsersOk());
-        Add("Conversations", "CrmConversation", "ApispSelectConversation",
-            report.TablesAvailable.Contains("CrmConversation", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("CrmConversation"));
-        Add("Projects", "CrmProjects", "ApispSelectProjects",
-            report.TablesAvailable.Contains("CrmProjects", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("CrmProjects"));
-        Add("Reminders", "CrmUserTasks", "ApispSelectReminderCartable",
-            report.TablesAvailable.Contains("CrmUserTasks", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("CrmUserTasks"));
-        Add("Warehouses", "WsWareHouse", "ApispSelectWareHouse",
-            report.TablesAvailable.Contains("WsWareHouse", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("WsWareHouse"));
-        Add("Products", "WSProducts", "ApispSelectProducts",
-            report.TablesAvailable.Contains("WSProducts", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("WSProducts"));
-        Add("Orders", "WSOrder", "ApispSelectOrder",
-            report.TablesAvailable.Contains("WSOrder", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("WSOrder"));
-        Add("PreOrders", "WSPreOrder", "ApispSelectPreOrder",
-            report.TablesAvailable.Contains("WSPreOrder", StringComparer.OrdinalIgnoreCase) && !report.ColumnsMissing.ContainsKey("WSPreOrder"));
-        return modes;
     }
 }

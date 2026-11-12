@@ -102,11 +102,13 @@ public class SyncController : ControllerBase
 public class HealthController : ControllerBase
 {
     private readonly ISchemaProbe _probe;
+    private readonly IdealBridge.Infrastructure.Repositories.IDataAccessPolicy _policy;
     private readonly ILogger<HealthController> _logger;
 
-    public HealthController(ISchemaProbe probe, ILogger<HealthController> logger)
+    public HealthController(ISchemaProbe probe, IdealBridge.Infrastructure.Repositories.IDataAccessPolicy policy, ILogger<HealthController> logger)
     {
         _probe = probe;
+        _policy = policy;
         _logger = logger;
     }
 
@@ -116,14 +118,16 @@ public class HealthController : ControllerBase
     public IActionResult Live() => Ok(new { status = "alive", service = "IdealBridge", time = DateTime.UtcNow });
 
     /// <summary>
-    /// کاوش زندهٔ دیتابیس Ideal (نیازمند توکن): اتصال + جدول‌ها/ستون‌های موجود + SPهای در دسترس + حالت هر موجودیت.
-    /// خروجی همین endpoint برای گزارش سازگاری نسخهٔ 3.1.16 نیز استفاده می‌شود.
+    /// کاوش زندهٔ دیتابیس Ideal (نیازمند توکن): اتصال + جدول‌ها/ستون‌های موجود + حالت مؤثر هر موجودیت.
+    /// پس از هر بار فراخوانی، سیاست دسترسی هم تازه می‌شود (مثلاً پس از تغییر اسکیما یا restore).
     /// </summary>
     [HttpGet("db")]
     [Authorize]
     public async Task<IActionResult> Db(CancellationToken ct)
     {
         var report = await _probe.ProbeAsync(ct);
+        _policy.ApplySchemaReport(report);
+        report.EntityModes = new Dictionary<string, IdealBridge.Domain.Common.EntityAccessInfo>(_policy.CurrentModes());
         if (!report.ConnectionOk)
             return StatusCode(StatusCodes.Status503ServiceUnavailable,
                 ApiResponse<object>.Failed("اتصال به دیتابیس Ideal برقرار نیست.", ResultStatus.Error));

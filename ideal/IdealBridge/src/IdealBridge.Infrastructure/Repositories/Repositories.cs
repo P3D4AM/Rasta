@@ -11,9 +11,8 @@ namespace IdealBridge.Infrastructure.Repositories;
 public class PersonRepository : IPersonRepository
 {
     private readonly IdealDb _db;
-    private readonly string _mode;
 
-    public PersonRepository(IdealDb db, SchemaModeProvider modeProvider) { _db = db; _mode = modeProvider.Get("Persons"); }
+    public PersonRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Persons"); }
 
     private const string Base = @"
 SELECT P.CompanyPersonID, P.prsCompanyId, CC.cmpName AS CompanyName,
@@ -74,8 +73,8 @@ WHERE 1 = 1 ";
         return rows.FirstOrDefault();
     }
 
-    private async Task<IReadOnlyList<CompanyPersonDto>> Query(string sql, Action<DbParameterCollection> bind, CancellationToken ct)
-        => _mode == "Sp" ? Array.Empty<CompanyPersonDto>() : await _db.QueryAsync(sql, bind, Map, ct);
+    private Task<IReadOnlyList<CompanyPersonDto>> Query(string sql, Action<DbParameterCollection> bind, CancellationToken ct)
+        => _db.QueryAsync(sql, bind, Map, ct);
 
     private static CompanyPersonDto Map(DbDataReader r) => new()
     {
@@ -140,9 +139,8 @@ WHERE 1 = 1 ";
 public class UserRepository : IUserRepository
 {
     private readonly IdealDb _db;
-    private readonly string _mode;
 
-    public UserRepository(IdealDb db, SchemaModeProvider modeProvider) { _db = db; _mode = modeProvider.Get("Users"); }
+    public UserRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Users"); }
 
     private const string Base = @"
 SELECT U.UserId, U.Row, U.FName, U.LName, U.PersCode, U.UserName,
@@ -166,8 +164,8 @@ WHERE 1 = 1 ";
     public async Task<CrmUserDto?> GetUserAsync(int id, CancellationToken ct = default)
         => (await Query(Base + " AND U.UserId = @id ORDER BY U.UserId", p => p.Add("@id", id), ct)).FirstOrDefault();
 
-    private async Task<IReadOnlyList<CrmUserDto>> Query(string sql, Action<DbParameterCollection> bind, CancellationToken ct)
-        => _mode == "Sp" && false ? Array.Empty<CrmUserDto>() : await _db.QueryAsync(sql, bind, Map, ct);
+    private Task<IReadOnlyList<CrmUserDto>> Query(string sql, Action<DbParameterCollection> bind, CancellationToken ct)
+        => _db.QueryAsync(sql, bind, Map, ct);
 
     private static async Task<CrmUserDto?> MapFirst(Task<IReadOnlyList<CrmUserDto>> t) => (await t).FirstOrDefault();
 
@@ -201,9 +199,8 @@ WHERE 1 = 1 ";
 public class ConversationRepository : IConversationRepository
 {
     private readonly IdealDb _db;
-    private readonly string _mode;
 
-    public ConversationRepository(IdealDb db, SchemaModeProvider modeProvider) { _db = db; _mode = modeProvider.Get("Conversations"); }
+    public ConversationRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Conversations"); }
 
     public Task<PagedResult<ConversationDto>> GetConversationsAsync(ConversationListQuery q, CancellationToken ct = default)
     {
@@ -294,7 +291,7 @@ public class ProjectRepository : IProjectRepository
 {
     private readonly IdealDb _db;
 
-    public ProjectRepository(IdealDb db) { _db = db; }
+    public ProjectRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Projects"); }
 
     public Task<PagedResult<ProjectDto>> GetProjectsAsync(ProjectListQuery q, CancellationToken ct = default)
     {
@@ -374,7 +371,7 @@ public class ReminderRepository : IReminderRepository
 {
     private readonly IdealDb _db;
 
-    public ReminderRepository(IdealDb db) { _db = db; }
+    public ReminderRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Reminders"); }
 
     public Task<PagedResult<ReminderDto>> GetRemindersAsync(ReminderListQuery q, CancellationToken ct = default)
     {
@@ -449,7 +446,7 @@ public class WarehouseRepository : IWarehouseRepository
 {
     private readonly IdealDb _db;
 
-    public WarehouseRepository(IdealDb db) { _db = db; }
+    public WarehouseRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Warehouses"); }
 
     public Task<PagedResult<WarehouseDto>> GetWarehousesAsync(bool includeDeactivated, CancellationToken ct = default)
         => _db.QueryAsync(@"
@@ -485,7 +482,7 @@ public class ProductRepository : IProductRepository
 {
     private readonly IdealDb _db;
 
-    public ProductRepository(IdealDb db) { _db = db; }
+    public ProductRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Products"); }
 
     public Task<PagedResult<ProductDto>> GetProductsAsync(ProductListQuery q, CancellationToken ct = default)
     {
@@ -555,7 +552,7 @@ public class OrderRepository : IOrderRepository
 {
     private readonly IdealDb _db;
 
-    public OrderRepository(IdealDb db) { _db = db; }
+    public OrderRepository(IdealDb db, IDataAccessPolicy policy) { _db = db; _ = policy.Resolve("Orders"); _ = policy.Resolve("PreOrders"); }
 
     public Task<PagedResult<OrderDto>> GetOrdersAsync(OrderListQuery q, CancellationToken ct = default)
     {
@@ -700,6 +697,7 @@ public class BaseInfoRepository : IBaseInfoRepository
 {
     private readonly IdealDb _db;
 
+    // جداول مرجع BaseInfo در نقشهٔ سیاست نیستند؛ اگر جدولی مفقود باشد خطای SQL شفاف (503) برمی‌گردد.
     public BaseInfoRepository(IdealDb db) { _db = db; }
 
     private static readonly Dictionary<BaseInfoKind, (string table, string id, string name)> Map = new()

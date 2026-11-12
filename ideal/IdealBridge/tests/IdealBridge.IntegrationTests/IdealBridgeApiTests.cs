@@ -223,7 +223,10 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
         Assert.Equal("Success", json.GetProperty("status").GetString());
         var report = json.GetProperty("data");
         Assert.Equal("IdealDb", report.GetProperty("databaseName").GetString());
-        Assert.Equal("Table", report.GetProperty("entityModes").GetProperty("Companies").GetString());
+        // از فاز ۱۱: هر موجودیت {mode, reason} دارد و mode همیشه Table است (SP غیرفعال)
+        var companies = report.GetProperty("entityModes").GetProperty("Companies");
+        Assert.Equal("Table", companies.GetProperty("mode").GetString());
+        Assert.False(string.IsNullOrEmpty(companies.GetProperty("reason").GetString()));
     }
 
     [Fact]
@@ -282,6 +285,97 @@ public class IdealBridgeApiTests : IClassFixture<IdealBridgeApiFactory>
     }
 
     // ─── مدیریت توکن (کلید ادمین) ───
+
+    // ─── سیاست دسترسی (فاز ۱۱) ───
+
+    [Fact]
+    public async Task No_StoredProcedure_Command_Is_Ever_Executed()
+    {
+        // اثبات رفتاری: پس از چند درخواست موفق، هیچ دستوری از نوع StoredProcedure اجرا نشده است
+        Auth();
+        await _client.GetAsync("/api/v1/companies?page=1&pageSize=5");
+        await _client.GetAsync("/api/v1/users");
+        await _client.GetAsync("/api/v1/persons");
+        await _client.GetAsync("/health/db");
+        Assert.NotEmpty(_factory.Fake.ExecutedCommandTypes);
+        Assert.All(_factory.Fake.ExecutedCommandTypes, t => Assert.Equal(CommandType.Text, t));
+    }
+
+    [Fact]
+    public async Task Missing_Core_Table_Blocks_Entity_With_Clear_503_Not_Empty_Data()
+    {
+        // جدول CrmCompany از کاوش حذف می‌شود → /health/db سیاست را تازه می‌کند → Companies مسدود
+        // انتظار: 503 با پیام شفاف — هرگز پاسخ 200 با آرایهٔ خالی (باگ تاریخی فاز‌های قبل)
+        Auth();
+        var originalHandler = _factory.Fake.ScriptHandler;
+        try
+        {
+            _factory.Fake.ScriptHandler = sql =>
+            {
+                if (sql.Contains("@@SERVERNAME"))
+                {
+                    var t = MakeQuery(("a", typeof(string)), ("b", typeof(string)), ("c", typeof(string)));
+                    t.Rows.Add("FAKESERVER", "IdealDb", "Microsoft SQL Server 2019 Fake");
+                    return t;
+                }
+                if (sql.Contains("sys.tables") && sql.Contains("sys.columns"))
+                {
+                    // هیچ جدولی موجود نیست → همهٔ موجودیت‌ها Blocked
+                    return MakeQuery(("t", typeof(string)), ("c", typeof(string)));
+                }
+                if (sql.Contains("sys.procedures") && sql.Contains("COUNT"))
+                {
+                    var t = MakeQuery(("cnt", typeof(int)));
+                    t.Rows.Add(0);
+                    return t;
+                }
+                return null;
+            };
+
+            var health = await _client.GetAsync("/health/db");
+            Assert.True(health.IsSuccessStatusCode);   // کاوش موفق؛ فقط سیاست تازه شده
+
+            var resp = await _client.GetAsync("/api/v1/companies");
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, resp.StatusCode);
+            var json = JsonDocument.Parse(await resp.Content.ReadAsStringAsync()).RootElement;
+            Assert.Equal("Error", json.GetProperty("status").GetString());
+            var msg = json.GetProperty("message").GetString()!;
+            Assert.Contains("CrmCompany", msg, StringComparison.Ordinal);
+            Assert.Contains("یافت نشد", msg, StringComparison.Ordinal);
+        }
+        finally
+        {
+            _factory.Fake.ScriptHandler = originalHandler;
+            // برگرداندن سیاست سالم برای تست‌های بعدی
+            await _client.GetAsync("/health/db");
+        }
+    }
+
+    [Fact]
+    public void DataAccessMode_Sp_Fails_Startup_With_Clear_Error()
+    {
+        // پیکربندی Sp باید ساخت هاست را با پیام واضح متوقف کند — نه اجرای SP و نه سکوت
+        using var factory = _factory.WithWebHostBuilder(b => b.ConfigureAppConfiguration((_, cfg) =>
+            cfg.AddInMemoryCollection(new Dictionary<string, string?> { ["IdealBridge:DataAccessMode"] = "Sp" })));
+        var ex = Record.Exception(() => factory.Server);
+        Assert.NotNull(ex);
+        Assert.Contains("Stored Procedure", FlattenMessages(ex), StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string FlattenMessages(Exception ex)
+    {
+        var sb = new System.Text.StringBuilder();
+        for (var e = ex; e is not null; e = e.InnerException)
+            sb.AppendLine(e.Message);
+        return sb.ToString();
+    }
+
+    private static DataTable MakeQuery(params (string name, Type type)[] cols)
+    {
+        var t = new DataTable();
+        foreach (var (name, type) in cols) t.Columns.Add(name, type);
+        return t;
+    }
 
     [Fact]
     public async Task Tokens_Create_Requires_AdminKey()

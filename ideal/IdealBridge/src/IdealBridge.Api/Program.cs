@@ -20,9 +20,13 @@ builder.Services.AddSingleton<IDbConnectionFactory>(sp =>
     return new SqlConnectionFactory(sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<IdealBridgeOptions>>().Value);
 });
 builder.Services.AddSingleton<IdealDb>();
-builder.Services.AddSingleton<SchemaModeProvider>();
+
+// سیاست مرکزی و یکپارچهٔ دسترسی به داده (فاز ۱۱: SP غیرفعال، پیش‌فرض Table، Blocked = خطای شفاف)
+// مقدار نامعتبر یا Sp در همین‌جا با پیام واضح ساخت هاست را متوقف می‌کند.
+builder.Services.AddSingleton<IdealBridge.Infrastructure.Repositories.IDataAccessPolicy>(
+    new IdealBridge.Infrastructure.Repositories.DataAccessPolicy(options));
+
 builder.Services.AddSingleton<ISchemaProbe, SchemaProbe>();
-builder.Services.AddSingleton<DataAccessModeSelector>();
 
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
@@ -95,15 +99,24 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// کاوش اسکیما در راه‌اندازی + تنظیم حالت‌ها (خرابی = گزارش، نه توقف)
+// ─── اعتبارسنجی پیکربندی — شکست زودهنگام و شفاف (شکست = توقف با پیام دقیق) ───
+// از کانفیگ نهایی خوانده می‌شود (شامل Environment Variable و منابع تزریقی تست).
+IdealBridge.Infrastructure.Repositories.DataAccessPolicy.NormalizeConfiguredMode(
+    app.Configuration.GetSection(IdealBridgeOptions.SectionName)[nameof(IdealBridgeOptions.DataAccessMode)]);
+
+// کاوش اسکیما در راه‌اندازی + اعمال سیاست دسترسی (خرابی = گزارش، نه توقف)
 try
 {
     var probe = app.Services.GetRequiredService<ISchemaProbe>();
     var report = await probe.ProbeAsync();
-    app.Services.GetRequiredService<SchemaModeProvider>().SetAll(report.EntityModes);
+    var policy = app.Services.GetRequiredService<IdealBridge.Infrastructure.Repositories.IDataAccessPolicy>();
+    policy.ApplySchemaReport(report);
+    report.EntityModes = new Dictionary<string, IdealBridge.Domain.Common.EntityAccessInfo>(policy.CurrentModes());
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogInformation("Schema probe: ConnectionOk={Ok} DB={Db} Modes={Modes}",
-        report.ConnectionOk, report.DatabaseName, string.Join(",", report.EntityModes.Select(kv => kv.Key + "=" + kv.Value)));
+    logger.LogInformation("Schema probe: ConnectionOk={Ok} DB={Db} Modes={Modes} SpExecution={Sp}",
+        report.ConnectionOk, report.DatabaseName,
+        string.Join(",", report.EntityModes.Select(kv => kv.Key + "=" + kv.Value)),
+        policy.StoredProceduresSupported);
     if (!report.ConnectionOk)
         logger.LogWarning("اتصال به دیتابیس Ideal برقرار نشد ({Err}) — سرویس بالا می‌آید ولی endpointهای داده خطای 503 می‌دهند تا اتصال اصلاح شود.", report.ConnectionError);
     if (report.TablesMissing.Count > 0)

@@ -33,6 +33,12 @@ public class ErrorHandlingMiddleware
             _logger.LogWarning("Read-only guard violation on {Path}: {Msg}", context.Request.Path, ex.Message);
             await Write(context, HttpStatusCode.Forbidden, ResultStatus.Error, "درخواست با سیاست فقط-خواندنی سرویس ناسازگار است.");
         }
+        catch (IdealBridge.Domain.Common.DataAccessUnavailableException ex)
+        {
+            // جدول پشتیبان مفقود/ناقص — پیام شفاف و بدون جزئیات داخلی SQL
+            _logger.LogWarning("Data access blocked on {Path}: {Entity} — {Msg}", context.Request.Path, ex.Entity, ex.Message);
+            await Write(context, HttpStatusCode.ServiceUnavailable, ResultStatus.Error, ex.Message);
+        }
         catch (System.Data.Common.DbException ex)
         {
             // جزئیات SQL فقط در لاگ داخلی — پاسخ عمومی
@@ -64,14 +70,20 @@ public class ErrorHandlingMiddleware
         }
     }
 
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        // هم‌خوان با کنترلرها: status به‌صورت رشته («Success»/«Fail»/«Error») نه عدد
+        Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() },
+    };
+
     private static async Task Write(HttpContext ctx, HttpStatusCode status, ResultStatus result, string message)
     {
         if (ctx.Response.HasStarted) return;
         ctx.Response.Clear();
         ctx.Response.StatusCode = (int)status;
         ctx.Response.ContentType = "application/json; charset=utf-8";
-        var body = JsonSerializer.Serialize(ApiResponse<object>.Failed(message, result),
-            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var body = JsonSerializer.Serialize(ApiResponse<object>.Failed(message, result), JsonOptions);
         await ctx.Response.WriteAsync(body);
     }
 }

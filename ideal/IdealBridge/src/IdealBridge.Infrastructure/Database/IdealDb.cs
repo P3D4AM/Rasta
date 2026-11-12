@@ -13,8 +13,11 @@ public class IdealBridgeOptions
     /// <summary>Connection String دیتابیس Ideal — مقدار واقعی فقط از Environment Variable / Secret.</summary>
     public string? ConnectionString { get; set; }
 
-    /// <summary>حالت دسترسی به داده: Auto (پیش‌فرض) | Table | Sp.</summary>
-    public string DataAccessMode { get; set; } = "Auto";
+    /// <summary>حالت دسترسی به داده: Table (پیش‌فرض) | Auto (معادل Table در این نسخه). مقدار Sp در راه‌اندازی رد می‌شود — اجرای SP غیرفعال است.</summary>
+    public string DataAccessMode { get; set; } = "Table";
+
+    /// <summary>حداکثر زمان اجرای هر دستور (ثانیه) — برای جلوگیری از کوئری‌های معلق.</summary>
+    public int CommandTimeoutSeconds { get; set; } = 30;
 
     /// <summary>حالت فقط-خواندنی را در سطح کد اعمال کن (همیشه true؛ فقط برای تست غیرفعال می‌شود).</summary>
     public bool EnforceReadOnlyGuard { get; set; } = true;
@@ -28,16 +31,20 @@ public class IdealBridgeOptions
 
 /// <summary>
 /// اجراکنندهٔ یکپارچهٔ کوئری‌های فقط-خواندنی: ساخت دستور از روی Connection موجود + گارد + اجرا + نگاشت.
+/// از فاز ۱۱ هیچ مسیر فراخوانی Stored Procedure وجود ندارد (QuerySpAsync حذف شد) —
+/// تنها مسیر اجرا، متن SELECT پارامتری است که از ReadOnlyCommandGuard می‌گذرد.
 /// </summary>
 public class IdealDb
 {
     private readonly IDbConnectionFactory _factory;
     private readonly bool _enforceGuard;
+    private readonly int _commandTimeout;
 
     public IdealDb(IDbConnectionFactory factory, IdealBridgeOptions options)
     {
         _factory = factory;
         _enforceGuard = options.EnforceReadOnlyGuard;
+        _commandTimeout = options.CommandTimeoutSeconds <= 0 ? 30 : options.CommandTimeoutSeconds;
     }
 
     public IDbConnectionFactory Factory => _factory;
@@ -55,21 +62,7 @@ public class IdealDb
         using var cmd = con.CreateCommand();
         cmd.CommandText = sql;
         cmd.CommandType = CommandType.Text;
-        if (_enforceGuard) ReadOnlyCommandGuard.Validate(cmd.CommandText, cmd.CommandType);
-        bind?.Invoke(cmd.Parameters);
-        var list = new List<T>();
-        await using var reader = await cmd.ExecuteReaderAsync(ct);
-        while (await reader.ReadAsync(ct)) list.Add(map(reader));
-        return list;
-    }
-
-    /// <summary>فراخوانی SP فقط-خواندنی از فهرست سفید.</summary>
-    public async Task<IReadOnlyList<T>> QuerySpAsync<T>(string spName, Action<DbParameterCollection>? bind, Func<DbDataReader, T> map, CancellationToken ct = default)
-    {
-        await using var con = await _factory.OpenConnectionAsync(ct);
-        using var cmd = con.CreateCommand();
-        cmd.CommandText = spName;
-        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandTimeout = _commandTimeout;
         if (_enforceGuard) ReadOnlyCommandGuard.Validate(cmd.CommandText, cmd.CommandType);
         bind?.Invoke(cmd.Parameters);
         var list = new List<T>();
@@ -85,6 +78,7 @@ public class IdealDb
         using var cmd = con.CreateCommand();
         cmd.CommandText = sql;
         cmd.CommandType = CommandType.Text;
+        cmd.CommandTimeout = _commandTimeout;
         if (_enforceGuard) ReadOnlyCommandGuard.Validate(cmd.CommandText, cmd.CommandType);
         bind?.Invoke(cmd.Parameters);
         var result = await cmd.ExecuteScalarAsync(ct);

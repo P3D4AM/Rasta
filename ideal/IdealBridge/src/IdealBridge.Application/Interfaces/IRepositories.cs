@@ -89,8 +89,8 @@ public class SchemaReport
     public string? ServerVersion { get; set; }
     public DateTime ProbedAt { get; set; } = DateTime.UtcNow;
 
-    /// <summary>حالت دسترسی انتخاب‌شده برای هر موجودیت: Sp یا Table.</summary>
-    public Dictionary<string, string> EntityModes { get; set; } = new();
+    /// <summary>حالت مؤثر دسترسی هر موجودیت + دلیل (تعیین‌شده توسط DataAccessPolicy — هرگز Sp در این نسخه).</summary>
+    public Dictionary<string, Domain.Common.EntityAccessInfo> EntityModes { get; set; } = new();
 
     /// <summary>SPهایی که وجود دارند با امضای موردانتظار.</summary>
     public List<string> SpAvailable { get; set; } = new();

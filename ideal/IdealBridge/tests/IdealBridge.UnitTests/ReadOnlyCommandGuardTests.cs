@@ -109,7 +109,8 @@ public class ReadOnlyCommandGuardTests
         var code = System.IO.File.ReadAllText(System.IO.Path.Combine(
             root, "src", "IdealBridge.Infrastructure", "Database", "IdealDb.cs"));
         var guardCalls = System.Text.RegularExpressions.Regex.Count(code, @"if \(_enforceGuard\) ReadOnlyCommandGuard\.Validate");
-        Assert.True(guardCalls >= 3, $"Expected >=3 guard calls in IdealDb, found {guardCalls}");
+        // دو مسیر اجرا: QueryOnAsync (سطرها) + CountAsync (اسکالر)؛ QueryAsync به QueryOnAsync واگذار می‌کند
+        Assert.True(guardCalls >= 2, $"Expected >=2 guard calls in IdealDb, found {guardCalls}");
         var firstExecute = code.IndexOf("ExecuteReaderAsync", StringComparison.Ordinal);
         var firstValidate = code.IndexOf("ReadOnlyCommandGuard.Validate", StringComparison.Ordinal);
         Assert.True(firstValidate >= 0 && firstValidate < firstExecute, "guard must precede first execution");

@@ -8,31 +8,28 @@ using IdealBridge.Domain.Common;
 namespace IdealBridge.Infrastructure.Repositories;
 
 /// <summary>
-/// مخزن مشتریان — دو حالت:
-///  - Table: SELECT پارامتری مستقیم روی CrmCompany + JOIN جدول‌های مرجع (پایدارترین حالت بین نسخه‌ها)
-///  - Sp: فراخوانی ApispSelectCompany (خروجی غنی‌تر؛ فقط وقتی کاوش امضا تأیید کند)
-/// انتخاب حالت توسط DataAccessModeSelector (Auto/Sp/Table) در DI تزریق می‌شود.
+/// مخزن مشتریان — تنها مسیر اجرایی: SELECT پارامتری مستقیم روی CrmCompany + JOIN جدول‌های مرجع
+/// (پایدارترین حالت بین نسخه‌های Ideal).
+/// از فاز ۱۱: مسیر SP حذف شد — اجرای Stored Procedure در کل سرویس غیرفعال است و
+/// سیاست دسترسی به‌صورت مرکزی توسط DataAccessPolicy اعمال می‌شود (Blocked = خطای شفاف، نه آرایهٔ خالی).
 /// </summary>
 public class CompanyRepository : ICompanyRepository
 {
     private readonly IdealDb _db;
-    private readonly string _mode;   // "Table" یا "Sp"
     private readonly ILogger<CompanyRepository> _logger;
 
-    public CompanyRepository(IdealDb db, SchemaModeProvider modeProvider, ILogger<CompanyRepository> logger)
+    public CompanyRepository(IdealDb db, IDataAccessPolicy policy, ILogger<CompanyRepository> logger)
     {
         _db = db;
-        _mode = modeProvider.Get("Companies");
+        _ = policy.Resolve("Companies");   // اگر Blocked باشد همین‌جا با خطای شفاف شکست می‌خورد
         _logger = logger;
     }
 
     public Task<PagedResult<CompanyDto>> GetCompaniesAsync(CompanyListQuery q, CancellationToken ct = default)
-        => _mode == "Sp" && !q.IsKeyset
-            ? GetCompaniesSpAsync(q, ct)
-            : GetCompaniesTableAsync(q, ct);
+        => GetCompaniesTableAsync(q, ct);
 
     public Task<CompanyDto?> GetCompanyAsync(int id, CancellationToken ct = default)
-        => _mode == "Sp" ? GetCompanySpAsync(id, ct) : GetCompanyTableAsync(id, ct);
+        => GetCompanyTableAsync(id, ct);
 
     // ---------------- حالت Table ----------------
 
@@ -125,51 +122,6 @@ WHERE 1 = 1 ";
     {
         var rows = await _db.QueryAsync(CompanySelectBase + " AND CC.CompanyID = @id ORDER BY CC.CompanyID",
             p => p.Add("@id", id), MapCompany, ct);
-        return rows.FirstOrDefault();
-    }
-
-    // ---------------- حالت SP ----------------
-
-    private async Task<PagedResult<CompanyDto>> GetCompaniesSpAsync(CompanyListQuery q, CancellationToken ct)
-    {
-        // فقط با پارامترهای خواندنی فراخوانی می‌شود؛ صفحه‌بندی SP برای پایداری به همان شکل پاس داده می‌شود
-        var rows = await _db.QuerySpAsync("ApispSelectCompany", p =>
-        {
-            p.Add("@CompanyId", null);
-            p.Add("@CmpCode", string.IsNullOrWhiteSpace(q.Code) ? null : q.Code.Trim());
-            p.Add("@CmpNumber", (object?)q.Number ?? DBNull.Value);
-            p.Add("@FromRegisterDate", q.RegisteredFrom);
-            p.Add("@ToRegisterDate", q.RegisteredTo);
-            p.Add("@FromFirstRegisterDate", q.FirstRegisteredFrom);
-            p.Add("@ToFirstRegisterDate", q.FirstRegisteredTo);
-            p.Add("@LanguageID", null);
-            p.Add("@DefaultLanguageID", null);
-            p.Add("@CenterId", null);
-            p.Add("@CenterCode", null);
-            p.Add("@PageNumber", q.Page);
-            p.Add("@PageSize", q.PageSize);
-        }, MapCompanyLegacy, ct);
-        return Finalize(rows, q);
-    }
-
-    private async Task<CompanyDto?> GetCompanySpAsync(int id, CancellationToken ct)
-    {
-        var rows = await _db.QuerySpAsync("ApispSelectCompany", p =>
-        {
-            p.Add("@CompanyId", id);
-            p.Add("@CmpCode", null);
-            p.Add("@CmpNumber", DBNull.Value);
-            p.Add("@FromRegisterDate", null);
-            p.Add("@ToRegisterDate", null);
-            p.Add("@FromFirstRegisterDate", null);
-            p.Add("@ToFirstRegisterDate", null);
-            p.Add("@LanguageID", null);
-            p.Add("@DefaultLanguageID", null);
-            p.Add("@CenterId", null);
-            p.Add("@CenterCode", null);
-            p.Add("@PageNumber", 0);
-            p.Add("@PageSize", 0);
-        }, MapCompanyLegacy, ct);
         return rows.FirstOrDefault();
     }
 
@@ -286,97 +238,6 @@ ORDER BY A.CompanyAddressId",
         SpecialPoint = Reader.GetStr(r, "cmpSpecialPoint"),
         Description = Reader.GetStr(r, "cmpDescription"),
     };
-
-    /// <summary>
-    /// نگاشت حالت SP (ستون‌های Api* خروجی ApispSelectCompany).
-    /// توجه: ApiCmpUserName/ApiCmpPassword عمداً نگاشت نمی‌شوند — سیاست حذف اطلاعات حساس.
-    /// </summary>
-    private static CompanyDto MapCompanyLegacy(DbDataReader r) => new()
-    {
-        Id = Reader.GetInt(r, "ApiCompanyID"),
-        Number = Reader.GetIntN(r, "ApiCmpNumber"),
-        Code = Reader.GetStr(r, "ApiCmpCode"),
-        Name = Reader.GetStr(r, "ApiCmpName") ?? string.Empty,
-        NameEnglish = Reader.GetStr(r, "ApiCmpNameEng"),
-        NameOfficial = Reader.GetStr(r, "ApiCmpNameOfficial"),
-        Fame = Reader.GetStr(r, "ApiCmpFame"),
-        ActivityType = Reader.GetStr(r, "ApiCmpActivityType"),
-        TitleId = Reader.GetIntN(r, "ApiCmpTitleId"),
-        Title = Reader.GetStr(r, "ApiCmpTitle"),
-        GroupId = Reader.GetIntN(r, "ApiCmpGroupId"),
-        Group = Reader.GetStr(r, "ApiCmpGroup"),
-        SubGroupId = Reader.GetIntN(r, "ApiCmpSubGroupId"),
-        SubGroup = Reader.GetStr(r, "ApiCmpSubGroup"),
-        GroupIiId = Reader.GetIntN(r, "ApiCmpGroupIdII"),
-        GroupIi = Reader.GetStr(r, "ApiCmpGroupII"),
-        GroupIiiId = Reader.GetIntN(r, "ApiCmpGroupIdIII"),
-        GroupIii = Reader.GetStr(r, "ApiCmpGroupIII"),
-        GroupIvId = Reader.GetIntN(r, "ApiCmpGroupIdIV"),
-        GroupIv = Reader.GetStr(r, "ApiCmpGroupIV"),
-        TypeId = Reader.GetIntN(r, "ApiCmpTypeId"),
-        Type = Reader.GetStr(r, "ApiCmpType"),
-        PresentationId = Reader.GetIntN(r, "ApiCmpPresentationId"),
-        Presentation = Reader.GetStr(r, "ApiCmpPresentation"),
-        PreTel = Reader.GetStr(r, "ApiCmpPreTel"),
-        Tel = Reader.GetStr(r, "ApiCmpTel"),
-        TelUpTo = Reader.GetStr(r, "ApiCmpTelUpTo"),
-        TelDesc = Reader.GetStr(r, "ApiCmpTelDesc"),
-        PreTel2 = Reader.GetStr(r, "ApiCmpPreTelII"),
-        Tel2 = Reader.GetStr(r, "ApiCmpTelII"),
-        Tel2UpTo = Reader.GetStr(r, "ApiCmpTelUpToII"),
-        Tel2Desc = Reader.GetStr(r, "ApiCmpTelIIDesc"),
-        Mobile = Reader.GetStr(r, "ApiCmpMobile"),
-        Fax = Reader.GetStr(r, "ApiCmpFax"),
-        FaxDesc = Reader.GetStr(r, "ApiCmpFaxDesc"),
-        CountryId = Reader.GetIntN(r, "ApiCmpCountryId"),
-        Country = Reader.GetStr(r, "ApiCmpCountry"),
-        ProvinceId = Reader.GetIntN(r, "ApiCmpProvinceId"),
-        Province = Reader.GetStr(r, "ApiCmpProvince"),
-        CityId = Reader.GetIntN(r, "ApiCmpCityId"),
-        City = Reader.GetStr(r, "ApiCmpCity"),
-        Address = Reader.GetStr(r, "ApiCmpAddress"),
-        AddressDesc = Reader.GetStr(r, "ApiCmpAddressDesc"),
-        ZipCode = Reader.GetStr(r, "ApiCmpZipCode"),
-        PostBox = Reader.GetStr(r, "ApiCmpPostBox"),
-        WebSite = Reader.GetStr(r, "ApiCmpWebSite"),
-        Email = Reader.GetStr(r, "ApiCmpEmail"),
-        Latitude = Reader.GetStr(r, "ApiCmpCoordinateLatitude"),
-        Longitude = Reader.GetStr(r, "ApiCmpCoordinateLongitude"),
-        CoordinateZoomLevel = Reader.GetIntN(r, "ApiCmpCoordinateZoomLevel"),
-        CoordinateLastDate = Reader.GetDateN(r, "ApiCmpCoordinateLastDate"),
-        RegistrationNumber = Reader.GetStr(r, "ApiCmpRegistrationNumber"),
-        EconomicCode = Reader.GetStr(r, "ApiCmpEconomicCode"),
-        NationalCode = Reader.GetStr(r, "ApiCmpNationalCode"),
-        BuyLimit = Reader.GetStr(r, "ApiCmpBuyLimit"),
-        AccountNumber = Reader.GetStr(r, "ApiCmpAccountNumber"),
-        ReferUserId = Reader.GetIntN(r, "ApiCmpReferUserId"),
-        ReferUser = Reader.GetStr(r, "ApiCmpReferUser"),
-        LastEditUserId = Reader.GetIntN(r, "ApiUserId"),
-        LastEditUser = Reader.GetStr(r, "ApiEditUser"),
-        FirstRegisterUserId = Reader.GetIntN(r, "ApiFirstRegisterUserId"),
-        FirstRegisterUser = Reader.GetStr(r, "ApiFirstRegisterUser"),
-        MainPersonId = Reader.GetIntN(r, "ApiCmpMainPersonId"),
-        MainPersonName = Reader.GetStr(r, "ApiCmpMainPerson"),
-        IsDraft = Reader.GetBoolN(r, "ApiCmpIsDraft"),
-        Kind = Reader.GetIntN(r, "ApiCmpKind"),
-        RegisterDate = GetDateLikeN(r, "ApiCmpRegisterDate"),
-        FirstRegisterDate = Reader.GetDateN(r, "ApiFirstRegisterDate"),
-        ImportDate = Reader.GetStr(r, "ApiCmpImportDate"),
-        ImportDateTime = Reader.GetDateN(r, "ApiCmpImportDateTime"),
-        Interesting = Reader.GetStr(r, "ApiCmpInteresting"),
-        SpecialPoint = Reader.GetStr(r, "ApiCmpSpecialPoint"),
-        Description = Reader.GetStr(r, "ApiCmpDescription"),
-        LegacyRowNumber = Reader.GetLongN(r, "ApiRowNumber"),
-        LegacyTotalCount = Reader.GetIntN(r, "ApiTotalCount"),
-    };
-
-    /// <summary>ApiCmpRegisterDate در SP قدیمی گاهی DateTime و گاهی رشته است — خواندن امن.</summary>
-    private static DateTime? GetDateLikeN(DbDataReader r, string col)
-    {
-        var i = r.GetOrdinal(col);
-        if (r.IsDBNull(i)) return null;
-        return r.GetFieldType(i) == typeof(DateTime) ? r.GetDateTime(i) : DateTime.TryParse(r.GetValue(i)?.ToString(), out var d) ? d : null;
-    }
 
     // ---------------- صفحه‌بندی ----------------
 
