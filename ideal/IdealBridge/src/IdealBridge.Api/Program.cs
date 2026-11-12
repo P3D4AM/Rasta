@@ -99,6 +99,14 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// ─── گارد فقط-خواندنی در Production غیرقابل خاموش‌کردن است (سیاست مستند فاز ۱۱) ───
+if (builder.Environment.IsProduction() && !options.EnforceReadOnlyGuard)
+{
+    options.EnforceReadOnlyGuard = true;
+    app.Logger.LogWarning("IdealBridge:EnforceReadOnlyGuard=false در Production نادیده گرفته شد — گارد فقط-خواندنی همیشه فعال است.");
+}
+options.EnforceReadOnlyGuard = IdealBridge.Infrastructure.Database.ReadOnlyGuardPolicy.Effective(options.EnforceReadOnlyGuard, builder.Environment.IsProduction());
+
 // ─── اعتبارسنجی پیکربندی — شکست زودهنگام و شفاف (شکست = توقف با پیام دقیق) ───
 // از کانفیگ نهایی خوانده می‌شود (شامل Environment Variable و منابع تزریقی تست).
 IdealBridge.Infrastructure.Repositories.DataAccessPolicy.NormalizeConfiguredMode(
