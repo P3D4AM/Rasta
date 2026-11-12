@@ -99,13 +99,36 @@ public class ReadOnlyCommandGuardTests
     {
         // اثبات ساختاری: IdealDb در هر سه مسیر اجرا (کوئری Text، فراخوانی SP، اسکالر COUNT)
         // پیش از اجرا گارد را صدا می‌زند؛ هیچ مسیر Execute بدون Validate وجود ندارد.
-        var code = System.IO.File.ReadAllText(
-            "/home/z/my-project/rasta-repo/ideal/IdealBridge/src/IdealBridge.Infrastructure/Database/IdealDb.cs");
+        var root = TryFindSolutionRoot();
+        if (root is null)
+        {
+            // سورس در دسترس نیست (اجرای Artifact-only) — این اثبات فقط با درخت سورس معنا دارد.
+            return;
+        }
+
+        var code = System.IO.File.ReadAllText(System.IO.Path.Combine(
+            root, "src", "IdealBridge.Infrastructure", "Database", "IdealDb.cs"));
         var guardCalls = System.Text.RegularExpressions.Regex.Count(code, @"if \(_enforceGuard\) ReadOnlyCommandGuard\.Validate");
         Assert.True(guardCalls >= 3, $"Expected >=3 guard calls in IdealDb, found {guardCalls}");
         var firstExecute = code.IndexOf("ExecuteReaderAsync", StringComparison.Ordinal);
         var firstValidate = code.IndexOf("ReadOnlyCommandGuard.Validate", StringComparison.Ordinal);
         Assert.True(firstValidate >= 0 && firstValidate < firstExecute, "guard must precede first execution");
+    }
+
+    /// <summary>
+    /// ریشهٔ Solution را از محل اجرای اسمبلی تست پیدا می‌کند (مستقل از مسیر Clone — قابل اجرا در هر محیط).
+    /// اگر درخت سورس موجود نباشد null برمی‌گرداند.
+    /// </summary>
+    private static string? TryFindSolutionRoot()
+    {
+        for (var dir = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+             dir is not null;
+             dir = dir.Parent)
+        {
+            if (System.IO.File.Exists(System.IO.Path.Combine(dir.FullName, "IdealBridge.sln")))
+                return dir.FullName;
+        }
+        return null;
     }
 }
 
