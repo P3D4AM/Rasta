@@ -8,6 +8,7 @@
 > | فازهای ۳-۹ | ۲۰۲۶-۱۱-۱۰ |
 > | فاز ۱۰ | ۲۰۲۶-۱۱-۱۲ |
 > | فاز ۱۱ | ۲۰۲۶-۱۱-۱۲ |
+> | فاز ۱۱.۱ | ۲۰۲۶-۱۱-۱۲ |
 
 ## فاز صفر — بررسی Git و ایجاد شاخهٔ ideal
 
@@ -116,7 +117,7 @@
 | `14b28c5` | فازهای ۱-۲ — سند مهندسی معکوس کامل |
 | `3d99e6a` | (مبنا — از main) کاتالوگ SQL نسخهٔ ماشین‌خوان |
 
-## فاز ۱۰ — راستی‌آزمایی مستقل و سخت‌سازی تست‌ها (۲۰۲۵-۱۱-۱۲)
+## فاز ۱۰ — راستی‌آزمایی مستقل و سخت‌سازی تست‌ها (۲۰۲۶-۱۱-۱۲)
 
 در نشستی مستقل، کل شاخهٔ `ideal` از صفر راستی‌آزمایی شد (نه صرفاً اتکا به گزارش قبلی):
 
@@ -250,3 +251,86 @@ Build: `0 Error(s), 0 Warning(s)` — CI GitHub Actions: **success**.
 | `2288bfb` | F | ارتقا به .NET 10 LTS + بسته‌ها + رفع NU1902/NU1903 |
 | `0139bc0` | G | GitHub Actions CI |
 | `3c8976e` | H | مستندات + WORKLOG + Release dev-11.1.0 (Release ID 442892787) |
+
+---
+
+# فاز ۱۱.۱ — Pre-Connection Hardening (۲۰۲۶-۱۱-۱۲)
+
+> دستور مأموریت: رفع ایرادهای باقی‌ماندهٔ بررسی فاز ۱۱، پیش از اتصال به SQL Server واقعی.
+> محدوده: اصلاحات مشخص‌شده فقط — بدون اتصال به دیتابیس واقعی، بدون بازنویسی معماری، بدون تغییر Repositoryها، بدون فعال‌سازی SP.
+
+## مرحله B — مدیریت نبود Connection String
+
+- چهار وضعیت صریح `ConnectionStateKind`: **Unconfigured / Configured / Connected / ConnectionFailed** (+ تابع خالص `ComputeState` برای تست واحد هر چهار حالت).
+- سازندهٔ `SqlConnectionFactory` **هرگز Crash نمی‌دهد** — نبود/نقص/خرابیِ تنظیمات به‌صورت خطای امن ذخیره و در `ConfigurationError` گزارش می‌شود (پیامِ Connection String ساختارنامعتبر، محتوای رمز را بازتاب نمی‌کند؛ `Summary.Source` = None/Invalid).
+- Endpoint مدیریتی `GET /api/v1/admin/connection`: فراخوانی پیش‌فرض **بدون ساخت اجباری Connection** وضعیت را می‌دهد (حتی در Unconfigured = HTTP 200 + state)؛ با `?test=true` آزمون زندهٔ اتصال انجام و State به Connected/ConnectionFailed به‌روز می‌شود (`lastLiveTest` ثبت می‌شود).
+- Endpointهای داده و `/health/db` در حالت Unconfigured → **۵۰۳ کنترل‌شده** با پیام دقیق فارسی (نه خطای عمومی/کرش).
+- کاوش اسکیما در راه‌اندازی فقط وقتی اتصال قابل استفاده است انجام می‌شود؛ در غیر این صورت هشدار شفاف لاگ می‌شود (سرویس بالا می‌آید).
+- تفکیک خطا (Network/Authentication/DatabaseNotFound/Timeout/Configuration/PermissionDenied) از فاز ۱۱ پابرجاست و در `?test=true` گزارش می‌شود.
+- تست‌ها: ۷ تست واحد جدید (هر چهار وضعیت؛ ساخت بدون Crash؛ خطای شفاف پیش از هر تلاش شبکه‌ای؛ عدم بازتاب رمز در پیام خطا) + ۴ تست یکپارچهٔ جدید (سرویس بدون اتصال بالا می‌آید؛ گزارش Unconfigured از endpoint مدیریتی؛ ۵۰۳ کنترل‌شده؛ ?test=true در Unconfigured) + به‌روزرسانی ۲ تست قبلی به قرارداد جدید (?test=true).
+
+**Commit:** `972642b` — تست: ۱۸۵ PASS
+
+## مرحله C — امنیت IdeaSchemaDump (v2.1)
+
+- **حذف کامل آرگومان `--connection`** — دریافت Connection String از خط فرمان (هر شکل: مقدار جدا، `--connection=x`، حروف بزرگ/کوچک) صریحاً و با پیام راهنما رد می‌شود (رمز در Process Arguments/تاریخچهٔ ترمینال افشا می‌شد).
+- منبع یکتای اتصال: متغیر محیطی `IdealBridge__ConnectionString` (کلاس جدید `SchemaDumpPolicy`).
+- بستن مسیرهای دورزدن: فلگ ناشناخته و آرگومان موقعیتی قاچاقی هم رد می‌شوند (فقط `--compare`/`--out` با مقادیرشان مجازند)؛ متن آرگومان‌ها هرگز در پیام خطا بازتاب نمی‌شود.
+- **اجبار `ApplicationIntent=ReadOnly` + `Encrypt=True` + `ApplicationName=IdeaSchemaDump`** در خود ابزار (حتی اگر مقدار محیطی چیز دیگری بگوید).
+- هیچ Connection String/رمز/Secret در پیام خطا یا لاگ بازتاب نمی‌شود؛ نبود متغیر محیطی → پیام خطای راهنما با مثال PowerShell و CMD (کد خروج ۲).
+- تست‌ها: ۱۲ تست واحد جدید (رد همهٔ اشکال خط فرمان؛ رد فلگ ناشناخته/موقعیتی؛ مجازبودن compare/out؛ نبود env → راهنما؛ اجبار ReadOnly/Encrypt؛ عدم افشای رمز) + آزمون عملکردی واقعی خود ابزار (رد --connection و نبود env هر دو با کد خروج ۲؛ حالت compare بدون اتصال سالم).
+
+**Commit:** `c28e2b1` — تست: ۱۹۷ PASS
+
+## مرحله D — گارد فقط-خواندنی: رد NEXT VALUE FOR
+
+- قاعدهٔ جدید: عبارت **`NEXT VALUE FOR`** (افزایش Sequence = تغییر state دیتابیس) رد می‌شود.
+- تشخیص با **تطبیق دنبالهٔ توکن** (سه واژهٔ برهنهٔ متوالی NEXT+VALUE+FOR) — نه جست‌وجوی متنی ساده: کامنت بین واژه‌ها مانع تشخیص نمی‌شود (کامنت‌ها از قبل حذف‌اند)، فاصله/تب/خط جدید بی‌اثر است.
+- **بدون مثبت کاذب:** متن داخل رشته/کامنت، ستون‌های به نام NEXT/VALUE، واژهٔ پیوستهٔ NEXTVALUEFOR و FOR XML/JSON مجاز می‌مانند.
+- تمام ۱۰۷ تست گزارمانی قبلی + جدید PASS (۲۲ مورد جدید).
+
+**Commit:** `51d0d5e` — تست: ۲۱۹ PASS
+
+## مرحله E — سند ۰۶: سیاست نهایی فقط-خواندنی SQL Server
+
+- حذف کامل GRANT EXECUTE و آموزش اجرای SP؛ `EXEC sp_helptext` → `SELECT` روی `sys.sql_modules` (بدون EXEC).
+- حذف اسکریپت قدیمی CURSOR + `sp_executesql` → تولید «متن» دستورهای GRANT قابل بازبینی.
+- حذف توصیهٔ اجرا با حساب sysadmin؛ ممنوعیت صریح sa/Administrator/حساب اصلی Ideal به‌عنوان حساب سرویس.
+- سیاست نهایی مستند: فقط SELECT روی جداول/ویوهای موردنیاز + VIEW DEFINITION اختیاری برای فراداده — **بدون EXECUTE و بدون هیچ مجوز نوشتنی**.
+- جست‌وجوی کل مستندات: **صفر** تناقض باقی‌مانده (GRANT EXECUTE/sp_executesql/sp_helptext/توصیهٔ sa).
+
+**Commit:** `c1c5aca`
+
+## مرحله F — مستندات روش اجرای ابزار و وضعیت‌های اتصال
+
+- حذف تمام دستورهای `--connection` از مستندات (۰۴/۰۵/۰۹/README) → روش متغیر محیطی با **مثال‌های جداگانهٔ PowerShell و CMD** + هشدار عدم قرارگیری رمز در Git/فایل عمومی/Screenshot/Log.
+- سند ۰۳: مدل چهار وضعیت endpoint مدیریتی + `?test=true` + رفتار ۵۰۳ در Unconfigured.
+- سند ۰۴: جدول متغیرهای محیطی اصلاح (پیش‌فرض DataAccessMode=Table، Sp رد می‌شود، رفتار بدون Connection String) + مثال CMD.
+- سند ۰۵: ردیف خطای Unconfigured در جدول خطاهای رایج + توضیح چهار وضعیت.
+- سند ۰۲ + README: گارد NEXT VALUE FOR + چهار وضعیت اتصال + ?test=true.
+
+**Commit:** `8acdca0`
+
+## انتشار
+
+- Release **`dev-11.1.1`** — win-x64 Self-Contained (net10.0) + راهنمای نصب فارسی INSTALL-FA.md؛ بدون هیچ رمز/Connection String واقعی (تأییدشده با اسکن).
+
+## نتیجهٔ تست نهایی فاز ۱۱.۱ (واقعی، روی net10.0)
+
+```
+Passed! - Failed: 0, Passed: 186, Skipped: 0, Total: 186 (IdealBridge.UnitTests)
+Passed! - Failed: 0, Passed:  33, Skipped: 0, Total:  33 (IdealBridge.IntegrationTests)
+```
+
+Build: `0 Error(s), 0 Warning(s)` — CI GitHub Actions: **success** برای هر پنج commit فاز (972642b، c28e2b1، 51d0d5e، c1c5aca، 8acdca0).
+
+## فهرست Commitهای فاز ۱۱.۱
+
+| SHA | مرحله | عنوان |
+|---|---|---|
+| `972642b` | B | مدیریت نبود Connection String — چهار وضعیت + endpoint مدیریتی بدون اتصال اجباری |
+| `c28e2b1` | C | امنیت IdeaSchemaDump — حذف --connection + env-var + اجبار ReadOnly/Encrypt |
+| `51d0d5e` | D | گارد: رد NEXT VALUE FOR با تطبیق دنبالهٔ توکن |
+| `c1c5aca` | E | سند ۰۶ — سیاست نهایی بدون EXECUTE |
+| `8acdca0` | F | مستندات — روش env-var ابزار + وضعیت‌های اتصال |
+| `(این commit)` | G | WORKLOG فاز ۱۱.۱ + اصلاح تاریخ عنوان فاز ۱۰ (۲۰۲۵→۲۰۲۶) |
