@@ -398,4 +398,7 @@ Passed! - Failed: 0, Passed:  33, Skipped: 0 (IdealBridge.IntegrationTests)
 
 - Release **`dev-12.5.1`** — بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.1.zip`: Self-contained net10.0 win-x64 + `RUN-FA.md` (راهنمای فارسی)؛ اسکن Secret قبل از publish.
 
-**Commit:** `(ثبت‌شده پس از push در همین بخش)`
+**Commit:** `b9d28fa` — feat(idealbridge): add secure live database forensics (۱۷ فایل، +۱۶۰۱/−۲۲۳)
+- CI GitHub Actions: **success** (اجرا 44042898552) — push `4dec22d..b9d28fa`
+- Release **`dev-12.5.1`** (شناسهٔ 448315677) با بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.1.zip` (۳۴,۴۲۶,۵۲۳ بایت؛ SHA256=22a92df9…3167)
+- وضعیت باز: استخراج زنده منتظر اجرای مالک؛ چهار سند ممیزی در وضعیت «در انتظار»
