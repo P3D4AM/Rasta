@@ -445,3 +445,11 @@ Passed! - Failed: 0, Passed: 33 (IdealBridge.IntegrationTests)
   **۵۲,۷۰۸,۶۸۶ بایت؛ SHA256=337aae387f46e7be429cadcd316341bb461d1de083008f1e7028be2a2871d3a6**؛
   اسکن Secret قبل از publish: **PASS (صفر یافته)**؛
   runtimeconfig بدون Invariant و با `System.Globalization.AppLocalIcu=72.1.0.3`؛ icudt72/icuin72/icuuc72.dll کنار exe.
+
+**Commit:** `c2216dd` — fix(ideadump): ریشه‌یابی و رفع خطای اتصال (۶ فایل، +۲۱۶/−۵)
+- CI GitHub Actions: **success** (اجرا 44079319429) — push `5f4ceff..c2216dd`
+- Release **`dev-12.5.2`** (شناسهٔ 448572334) با بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.2.zip`
+  (۵۲,۷۰۸,۶۸۶ بایت؛ SHA256=337aae387f46e7be429cadcd316341bb461d1de083008f1e7028be2a2871d3a6)
+- راستی‌آزمایی: برچسب dev-12.5.2 → c2216dd؛ دارایی قابل دانلود (HTTP 200) با SHA256 یکسانِ بستهٔ محلی
+- وضعیت باز: اجرای دوبارهٔ ابزار توسط مالک روی ویندوز (استخراج زنده همچنان «در انتظار»)؛
+  اگر خطای تازه‌ای دید، خروجی جدید «جزئیات فنی» نوع/پیام/HResult/پشتهٔ کامل را نشان می‌دهد.
