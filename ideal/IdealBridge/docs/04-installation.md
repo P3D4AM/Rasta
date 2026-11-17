@@ -49,13 +49,13 @@ dotnet build IdealBridge.sln -c Release
 
 ```powershell
 # PowerShell — ماندگار برای کاربر جاری
-[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+[Environment]::SetEnvironmentVariable("IdeaSchemaDump__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
 [Environment]::SetEnvironmentVariable("IdealBridge__AdminKey", "یک-کلید-ادمین-قوی-یکتا", "User")
 ```
 
 ```bat
 REM CMD — ماندگار برای کاربر جاری (پس از setx پنجرهٔ جدید باز کنید)
-setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+setx IdeaSchemaDump__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
 setx IdealBridge__AdminKey "یک-کلید-ادمین-قوی-یکتا"
 ```
 
@@ -76,31 +76,33 @@ export IdealBridge__AdminKey='یک-کلید-ادمین-قوی-یکتا'
 
 ## ۴) کاوش ساختار دیتابیس واقعی (قبل از اولین اجرا)
 
-ابزار `IdeaSchemaDump` از فاز ۱۱.۱ Connection String را «فقط از متغیر محیطی» می‌خواند — دریافت آن از خط فرمان حذف و صریحاً ممنوع شده است (رمز در Process Arguments و تاریخچهٔ ترمینال افشا می‌شد). خود ابزار هم `ApplicationIntent=ReadOnly` و `Encrypt=True` را اجباری می‌کند.
+ابزار `IdeaSchemaDump` از فاز ۱۱.۱ Connection String را «فقط از متغیر محیطی» می‌خواند — دریافت آن از خط فرمان حذف و صریحاً ممنوع شده است (رمز در Process Arguments و تاریخچهٔ ترمینال افشا می‌شد). خود ابزار هم `ApplicationIntent=ReadOnly` و `Encrypt=True` و `ApplicationName=IdeaSchemaDump` را اجباری می‌کند.
+
+**توجه فاز ۱۲.۵:** متغیر ابزار کاوش از متغیر سرویس **جدا** شده است — ابزار فقط `IdeaSchemaDump__ConnectionString` را می‌خواند و سرویس API فقط `IdealBridge__ConnectionString` را؛ هیچ‌کدام به متغیر دیگری نگاه نمی‌کند و این دو هرگز با هم اشتباه نمی‌شوند.
 
 **PowerShell:**
 
 ```powershell
 # ۱) تنظیم امن Connection String (ماندگار برای کاربر جاری — فقط یک‌بار)
-[Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
+[Environment]::SetEnvironmentVariable("IdeaSchemaDump__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
 
 # ۲) اجرای ابزار — بدون هیچ Secret در خط فرمان
-dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
 ```
 
 **CMD:**
 
 ```bat
 REM ۱) تنظیم امن (پس از setx پنجرهٔ جدید باز کنید)
-setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
+setx IdeaSchemaDump__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True"
 
 REM ۲) اجرای ابزار — بدون هیچ Secret در خط فرمان
-dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
 ```
 
 > هشدار: رمز واقعی نباید در Git، فایل‌های عمومی، Screenshot یا Log قرار گیرد. اگر رمزی در خط فرمان تایپ شده، از تاریخچهٔ ترمینال پاکش کنید و آن را عوض کنید.
 
-خروجی: `schema-report.json` + خلاصهٔ سازگاری در کنسول (جداول/ستون‌های مفقود و SPهای موجود). این گزارش همان چیزی است که در «گزارش سازگاری نسخه» (سند ۰۹) باید ضمیمه شود.
+خروجی: `ideal-live-schema-report.json` (۲۵+ بلوک: فراداده/سرور/دیتابیس/Schemaها/جدول‌ها/ستون‌ها/کلیدها/ایندکس‌ها/ویوها/SPها/توابع/تریگرها/Identity/Computed/RowVersion/Default/Temporal/Generated Always/CDC/Change Tracking/قابلیت‌های همگام‌سازی/سازگاری IdealBridge/هشدارهای استخراج) + خلاصهٔ سازگاری در کنسول. این گزارش همان چیزی است که در «گزارش سازگاری نسخه» (سند ۰۹) باید ضمیمه شود — و هرگز وارد Git نمی‌شود.
 
 ## ۵) اجرا
 

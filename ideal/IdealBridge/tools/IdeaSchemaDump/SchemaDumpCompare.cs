@@ -31,17 +31,18 @@ public static class SchemaDumpCompare
             ["comparedAt"] = DateTimeOffset.UtcNow,
             ["baseline"] = new Dictionary<string, object?>
             {
+                // v3.0 (فاز ۱۲.۵): بلوک «sqlServer»/«database» — با بازگشت به «server» قدیمی (گزارش‌های v2.1)
                 ["generatedAt"] = GetString(baseline, "generatedAt"),
-                ["server"] = GetString(baseline, "server", "serverName"),
-                ["database"] = GetString(baseline, "server", "database"),
-                ["productVersion"] = GetString(baseline, "server", "productVersion"),
+                ["server"] = GetLegacyString(baseline, "serverName") ?? GetString(baseline, "sqlServer", "serverName"),
+                ["database"] = GetLegacyString(baseline, "database") ?? GetString(baseline, "database", "name"),
+                ["productVersion"] = GetLegacyString(baseline, "productVersion") ?? GetString(baseline, "sqlServer", "productVersion"),
             },
             ["current"] = new Dictionary<string, object?>
             {
                 ["generatedAt"] = GetString(current, "generatedAt"),
-                ["server"] = GetString(current, "server", "serverName"),
-                ["database"] = GetString(current, "server", "database"),
-                ["productVersion"] = GetString(current, "server", "productVersion"),
+                ["server"] = GetLegacyString(current, "serverName") ?? GetString(current, "sqlServer", "serverName"),
+                ["database"] = GetLegacyString(current, "database") ?? GetString(current, "database", "name"),
+                ["productVersion"] = GetLegacyString(current, "productVersion") ?? GetString(current, "sqlServer", "productVersion"),
             },
         };
 
@@ -114,8 +115,8 @@ public static class SchemaDumpCompare
         File.WriteAllText(outPath, json);
 
         Console.WriteLine("═══ مقایسهٔ اسکیمای دو دیتابیس Ideal ═══");
-        Console.WriteLine($"Baseline: {GetString(baseline, "server", "serverName")} / {GetString(baseline, "server", "database")} ({GetString(baseline, "server", "productVersion")})");
-        Console.WriteLine($"Current : {GetString(current, "server", "serverName")} / {GetString(current, "server", "database")} ({GetString(current, "server", "productVersion")})");
+        Console.WriteLine($"Baseline: {GetLegacyString(baseline, "serverName") ?? GetString(baseline, "sqlServer", "serverName")} / {GetLegacyString(baseline, "database") ?? GetString(baseline, "database", "name")} ({GetLegacyString(baseline, "productVersion") ?? GetString(baseline, "sqlServer", "productVersion")})");
+        Console.WriteLine($"Current : {GetLegacyString(current, "serverName") ?? GetString(current, "sqlServer", "serverName")} / {GetLegacyString(current, "database") ?? GetString(current, "database", "name")} ({GetLegacyString(current, "productVersion") ?? GetString(current, "sqlServer", "productVersion")})");
         Console.WriteLine($"جداول: +{addedTables} اضافه، -{removedTables} حذف، {changedTables} جدول با تغییر ستون‌ها");
         foreach (var entry in columnChanges)
         {
@@ -140,6 +141,10 @@ public static class SchemaDumpCompare
         if (key is null) return root.TryGetProperty(section, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() : null;
         return root.TryGetProperty(section, out var s) && s.TryGetProperty(key, out var v2) && v2.ValueKind == JsonValueKind.String ? v2.GetString() : null;
     }
+
+    /// <summary>خواندن از بلوک «server» قدیمی (گزارش‌های v2.1) — برای سازگاری دو طرف.</summary>
+    private static string? GetLegacyString(JsonElement root, string key)
+        => GetString(root, "server", key);
 
     private static Dictionary<string, Dictionary<string, JsonElement>> TableColumns(JsonElement root)
     {

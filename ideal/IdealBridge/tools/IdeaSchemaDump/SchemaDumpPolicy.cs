@@ -1,12 +1,18 @@
 // ═══════════════════════════════════════════════════════════════
-// سیاست امنیتی IdeaSchemaDump (فاز ۱۱.۱)
+// سیاست امنیتی IdeaSchemaDump (فاز ۱۱.۱ — بازنگری فاز ۱۲.۵)
 // ───────────────────────────────────────────────────────────────
-// ۱) Connection String «فقط» از متغیر محیطی IdealBridge__ConnectionString —
+// ۱) Connection String «فقط» از متغیر محیطی IdeaSchemaDump__ConnectionString —
 //    دریافت از خط فرمان (ـ--connection و هر شکل دیگر) ممنوع و صریحاً رد می‌شود
 //    (رمز در Process Arguments/تاریخچهٔ ترمینال افشا می‌شود).
+//    تفکیک فاز ۱۲.۵: ابزار کاوش و سرویس API «دو منبع مستقل» دارند —
+//    سرویس IdealBridge همچنان فقط IdealBridge__ConnectionString را می‌خواند
+//    و ابزار کاوش فقط IdeaSchemaDump__ConnectionString را؛ هیچ‌کدام از
+//    متغیر دیگری نمی‌خواند و این دو هرگز با هم اشتباه نمی‌شوند.
 // ۲) ApplicationIntent=ReadOnly و Encrypt=true در خود ابزار اجباری می‌شود
 //    (حتی اگر مقدار دیگری در Connection String آمده باشد).
-// ۳) هیچ Connection String/رمز/Secret در پیام خطا یا لاگ بازتاب نمی‌شود.
+// ۳) ApplicationName=IdeaSchemaDump اجباری است — تمایز جلسه‌های ابزار از
+//    جلسه‌های سرویس در قاب‌های SQL Server (بدون هیچ رمز).
+// ۴) هیچ Connection String/رمز/Secret در پیام خطا یا لاگ بازتاب نمی‌شود.
 // این کلاس internal→public برای تست واحد (tests/IdealBridge.UnitTests) است.
 // ═══════════════════════════════════════════════════════════════
 
@@ -26,12 +32,17 @@ public class SchemaDumpPolicyException : Exception
 ///  - هر آرگومانی با پیشوند «--connection» (شکل مقدار جدا یا =مقدار) → رد صریح؛
 ///  - هر فلگ ناشناختهٔ دیگر → رد (جلوگیری از قاچاق پارامتر)؛
 ///  - هر آرگومان موقعیتی خارج از مقادیر --compare/--out → رد؛
-///  - تنها منبع اتصال: متغیر محیطی IdealBridge__ConnectionString.
+///  - تنها منبع اتصال: متغیر محیطی IdeaSchemaDump__ConnectionString
+///    (فاز ۱۲.۵: پیش‌تر با سرویس مشترک بود؛ تفکیک شد و دیگر هرگز به
+///    IdealBridge__ConnectionString نگاه نمی‌کند).
 /// </summary>
 public static class SchemaDumpPolicy
 {
-    /// <summary>نام متغیر محیطی منبع یکتای Connection String ابزار.</summary>
-    public const string EnvVarName = "IdealBridge__ConnectionString";
+    /// <summary>
+    /// نام متغیر محیطی منبع یکتای Connection String ابزار (فاز ۱۲.۵).
+    /// مستقل از IdealBridge__ConnectionString که «فقط» سرویس API می‌خواند.
+    /// </summary>
+    public const string EnvVarName = "IdeaSchemaDump__ConnectionString";
 
     private static readonly string[] AllowedFlags = { "--compare", "--out" };
 
@@ -55,7 +66,8 @@ public static class SchemaDumpPolicy
             if (arg.StartsWith("--connection", StringComparison.OrdinalIgnoreCase))
                 throw new SchemaDumpPolicyException(
                     "دریافت Connection String از خط فرمان ممنوع است — رمز در Process Arguments و تاریخچهٔ ترمینال افشا می‌شود. " +
-                    $"Connection String را فقط در متغیر محیطی «{EnvVarName}» قرار دهید (روش تنظیم در PowerShell و CMD: سند ۰۴ نصب).");
+                    $"Connection String را فقط در متغیر محیطی «{EnvVarName}» قرار دهید (روش تنظیم در PowerShell و CMD: سند ۰۴ نصب). " +
+                    "توجه فاز ۱۲.۵: این متغیر مخصوص ابزار کاوش است؛ سرویس IdealBridge متغیر جداگانهٔ IdealBridge__ConnectionString را می‌خواند.");
 
             if (arg.StartsWith("--", StringComparison.Ordinal))
             {
@@ -66,12 +78,12 @@ public static class SchemaDumpPolicy
                 }
                 throw new SchemaDumpPolicyException(
                     "آرگومان ناشناخته — تنها فلگ‌های مجاز: --compare <baseline> <current> و --out <فایل خروجی>؛ " +
-                    "اتصال فقط از متغیر محیطی IdealBridge__ConnectionString خوانده می‌شود.");
+                    $"اتصال فقط از متغیر محیطی {EnvVarName} خوانده می‌شود.");
             }
 
             throw new SchemaDumpPolicyException(
                 "آرگومان موقعیتی مجاز نیست — مقادیر فقط پس از --compare یا --out می‌آیند؛ " +
-                "Connection String فقط از متغیر محیطی IdealBridge__ConnectionString خوانده می‌شود.");
+                $"اتصال فقط از متغیر محیطی {EnvVarName} خوانده می‌شود.");
         }
     }
 

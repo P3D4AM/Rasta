@@ -5,9 +5,11 @@ using Xunit;
 namespace IdealBridge.UnitTests;
 
 /// <summary>
-/// تست‌های سیاست امنیتی IdeaSchemaDump (فاز ۱۱.۱):
+/// تست‌های سیاست امنیتی IdeaSchemaDump (فاز ۱۱.۱ — تفکیک متغیر فاز ۱۲.۵):
 ///  - Connection String از خط فرمان «به هیچ شکلی» پذیرفته نمی‌شود (--connection، --connection=x،
-///    فلگ ناشناخته، آرگومان موقعیتی قاچاقی) — تنها منبع: متغیر محیطی IdealBridge__ConnectionString؛
+///    فلگ ناشناخته، آرگومان موقعیتی قاچاقی) — تنها منبع: متغیر محیطی
+///    IdeaSchemaDump__ConnectionString «مخصوص ابزار» (سرویس API متغیر مستقل
+///    IdealBridge__ConnectionString را می‌خواند — هرگز برعکس)؛
 ///  - ApplicationIntent=ReadOnly و Encrypt=true اجباری؛ ApplicationName شناسنامهٔ ابزار؛
 ///  - هیچ رمز/Connection String در پیام خطا بازتاب نمی‌شود.
 /// </summary>
@@ -74,7 +76,28 @@ public class IdeaSchemaDumpPolicyTests
         Assert.Null(ex);
     }
 
-    // ─── ۲) منبع یکتای اتصال: متغیر محیطی ───
+    // ─── ۲) منبع یکتای اتصال: متغیر محیطی اختصاصی ابزار (فاز ۱۲.۵) ───
+
+    [Fact]
+    public void EnvVar_Is_The_Dedicated_Tool_Variable_Separated_From_Service()
+    {
+        // فاز ۱۲.۵ — ابزار کاوش و سرویس API دو منبع مستقل دارند؛
+        // بازگشت به متغیر مشترک قدیمی باید در تست شکست بخورد.
+        Assert.Equal("IdeaSchemaDump__ConnectionString", SchemaDumpPolicy.EnvVarName);
+        Assert.NotEqual("IdealBridge__ConnectionString", SchemaDumpPolicy.EnvVarName);
+    }
+
+    [Fact]
+    public void Tool_Never_Reads_The_Service_EnvVar()
+    {
+        // اگر فقط متغیر سرویس مقدار داشته باشد، ابزار آن را نمی‌خواند →
+        // خطای «تنظیم نشده» می‌دهد (تفکیک واقعی، نه فقط در مستندات).
+        var ex = Assert.Throws<SchemaDumpPolicyException>(
+            () => SchemaDumpPolicy.ResolveConnection(name =>
+                name == "IdealBridge__ConnectionString" ? EnvConnection() : null));
+        Assert.Contains(SchemaDumpPolicy.EnvVarName, ex.Message, StringComparison.Ordinal);
+        Assert.DoesNotContain(SecretPassword, ex.Message, StringComparison.Ordinal);
+    }
 
     [Fact]
     public void Missing_EnvVar_Throws_Clear_Guidance_With_PowerShell_And_CMD_Hints()

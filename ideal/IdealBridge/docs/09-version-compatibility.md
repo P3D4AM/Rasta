@@ -61,10 +61,10 @@
 
 ```powershell
 # ۱) با حساب فقط-خواندنی، گزارش ساختار را بگیرید —
-#    Connection String فقط از متغیر محیطی (فاز ۱۱.۱؛ خط فرمان ممنوع):
+#    Connection String فقط از متغیر محیطی «IdeaSchemaDump__ConnectionString» (فاز ۱۱.۱ + تفکیک فاز ۱۲.۵؛ خط فرمان ممنوع):
 [Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
-dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
-#    (CMD:  setx IdealBridge__ConnectionString "..."  سپس پنجرهٔ جدید)
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
+#    (CMD:  setx IdeaSchemaDump__ConnectionString "..."  سپس پنجرهٔ جدید)
 
 # ۲) سرویس را بالا بیاورید و حالت‌ها را ببینید:
 Invoke-RestMethod -Uri "$base/health/db" -Headers @{ "X-API-Key" = $tok }

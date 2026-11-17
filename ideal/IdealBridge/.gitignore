@@ -37,3 +37,9 @@ Thumbs.db
 TestResults/
 *.trx
 coverage/
+
+# گزارش‌های استخراج زندهٔ دیتابیس (فاز ۱۲.۵) — هرگز وارد Git نمی‌شوند
+ideal-live-schema-report.json
+ideal-schema-report.json
+ideal-schema-diff.json
+*live-schema-report*.json

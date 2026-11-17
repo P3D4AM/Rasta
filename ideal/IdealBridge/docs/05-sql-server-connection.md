@@ -40,7 +40,7 @@ GROUP BY d.name;
 
 ### روش ج — پرس‌وجوی مستقیم با ابزار IdealBridge
 
-پس از ساخت حساب فقط-خواندنی، ابزار `IdeaSchemaDump` (سند ۰۴) گزارش کامل ساختار را می‌دهد و همان‌جا صحت انتخاب دیتابیس را می‌بینید.
+پس از ساخت حساب فقط-خواندنی، ابزار `IdeaSchemaDump` (سند ۰۴) گزارش کامل ساختار را می‌دهد و همان‌جا صحت انتخاب دیتابیس را می‌بینید. فاز ۱۲.۵: متغیر ابزار «IdeaSchemaDump__ConnectionString» است — جدای از متغیر سرویس.
 
 ## ۲. ساخت Connection String
 
@@ -115,7 +115,7 @@ sqlcmd -S "sqlsrv" -d "CRM" -U "ibk_reader" -P "***" -Q "SELECT TOP 3 CompanyID,
 
 # ۲) اجرا — بدون هیچ Secret در خط فرمان
 cd ideal\IdealBridge
-dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
 ```
 
 **CMD:**
@@ -126,12 +126,12 @@ setx IdealBridge__ConnectionString "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk
 
 REM ۲) اجرا — بدون هیچ Secret در خط فرمان
 cd ideal\IdealBridge
-dotnet run --project tools/IdeaSchemaDump -- --out schema-report.json
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
 ```
 
 > رمز واقعی هرگز در Git، فایل عمومی، Screenshot یا Log قرار نگیرد.
 
-خروجی `schema-report.json` نشان می‌دهد:
+خروجی `ideal-live-schema-report.json` نشان می‌دهد:
 - جدول‌ها/ستون‌های موردانتظار IdealBridge موجودند یا نه؛
 - کدام SPهای `ApispSelect*` با چه امضایی در دسترس‌اند؛
 - حالت هر موجودیت چه خواهد بود.

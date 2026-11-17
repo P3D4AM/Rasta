@@ -55,10 +55,10 @@ dotnet build IdealBridge.sln -c Release
 [Environment]::SetEnvironmentVariable("IdealBridge__AdminKey", "کلید-ادمین-قوی", "User")
 
 # ۳) (پیشنهادی) کاوش ساختار دیتابیس واقعی قبل از اجرا — خروجی JSON کامل + مقایسهٔ دو نسخه
-#    Connection String فقط از متغیر محیطی (فاز ۱۱.۱؛ خط فرمان ممنوع):
+#    Connection String فقط از متغیر محیطی «IdeaSchemaDump__ConnectionString» (تفکیک فاز ۱۲.۵ از متغیر سرویس؛ خط فرمان ممنوع):
 [Environment]::SetEnvironmentVariable("IdealBridge__ConnectionString", "Server=SQLSRV\IDEAL;Database=CRM;User Id=ibk_reader;Password=***;TrustServerCertificate=True", "User")
-dotnet run --project tools/IdeaSchemaDump -- --out ideal-schema-report.json
-#    (CMD:  setx IdealBridge__ConnectionString "..."  سپس پنجرهٔ جدید)
+dotnet run --project tools/IdeaSchemaDump -- --out ideal-live-schema-report.json
+#    (CMD:  setx IdeaSchemaDump__ConnectionString "..."  سپس پنجرهٔ جدید)
 
 # ۴) اجرا
 $env:ASPNETCORE_URLS = "http://0.0.0.0:5100"

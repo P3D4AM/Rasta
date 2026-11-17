@@ -352,4 +352,50 @@ Build: `0 Error(s), 0 Warning(s)` — CI GitHub Actions: **success** برای ه
 
 Build/تست: فاز صرفاً مستندسازی است — کد دست‌نخورده؛ `dotnet build` و تست‌ها پیش از commit برای اطمینان از سلامت زنجیره اجرا شد (نتیجه در گزارش فاز).
 
-**Commit:** `(ثبت‌شده در جدول فاز ۱۲ پس از push)`
+**Commit:** `4dec22d` (docs(idealbridge): complete database intelligence and API mapping — 2026-11-15؛ CI: success، شناسهٔ اجرا 43691707145)
+
+
+## فاز ۱۲.۵ — Live Database Forensics (بازنویسی v3.0 ابزار کاوش)
+
+### ثبت صادقانهٔ رویداد تحویل (Delivery Verification)
+
+پس از فاز ۱۲، «گزارش تکمیل» فاز ۱۲.۵ با وضعیت واقعی GitHub مطابقت نداشت. بازبینی مستقل (۱۰ یافته) و راستی‌آزمایی این فاز:
+
+- **یافته‌های ۱ تا ۸ تأیید شد**: ابزار همچنان v2.1 بود؛ `SchemaDumpPolicy.EnvVarName` هنوز `IdealBridge__ConnectionString` بود؛ استخراج به `schema_id = 1` محدود بود؛ متن تعریف کامل ویو/SP از `sys.sql_modules` صادر می‌شد؛ Function/Trigger/CDC/Change Tracking/RowVersion/Temporal پیاده نشده بود؛ چهار سند ممیزی فاز ۱۲.۵ وجود نداشت؛ WORKLOG «دسترسی زنده Blocked» می‌گفت؛ هیچ Release فاز ۱۲.۵ نبود.
+- **یافتهٔ ۹ تأیید شد** و **یافتهٔ ۱۰ رد شد**: CI برای HEAD فعلی (`4dec22d`، شاخهٔ ideal) **success** است (اجرا 43691707145، 2026-11-15T07:50:10Z) — «نبود CI موفق» درست نبود.
+- **علت ریشه‌ای:** کار فاز ۱۲.۵ در محیط اجرای قبلی ساخته شده بود (از جمله بستهٔ `IdeaSchemaDump-win-x64-v3.zip` مورخ 2026-11-15) اما **هرگز commit نشد**؛ محیط بازیافت شد و کارِ commit‌نشده از بین رفت. از `4dec22d` به بعد هیچ commit جدیدی روی ideal نبود (تأیید با clone تازه: working tree تمیز، local == origin == `4dec22d`).
+- **درس ثبت‌شده:** «ساختن/تست‌کردن» ≠ «تحویل». تکمیل فقط با push + CI سبز + artifact واقعی ثبت می‌شود.
+
+### آنچه در این فاز واقعاً انجام شد (v3.0)
+
+**بازنویسی کامل ابزار `IdeaSchemaDump` از v2.1 به v3.0** (`tools/IdeaSchemaDump/`):
+
+1. **تفکیک متغیر اتصال (الزام ۲):** `SchemaDumpPolicy.EnvVarName` = `IdeaSchemaDump__ConnectionString` — ابزار دیگر به متغیر سرویس نگاه نمی‌کند؛ سرویس همچنان فقط `IdealBridge__ConnectionString` را می‌خواند. اجبار `ApplicationIntent=ReadOnly` + `Encrypt=true` + `ApplicationName=IdeaSchemaDump` در خود ابزار باقی است.
+2. **صفر متن تعریف ماژول (الزام‌های ۴/۵):** حذف کامل `sys.sql_modules` — ویوها فقط نام+ستون؛ SPها فقط نام+امضای پارامتر؛ توابع (FN/IF/TF/AF/FS/FT) فقط نام+نوع+امضا؛ تریگرها فقط نام+والد+رویداد (`sys.trigger_events`) بدون متن.
+3. **همهٔ Schemaها (الزام ۳):** حذف کامل `schema_id = 1` — کلیدها «schema.table»؛ پوشش تمام Schemaهای قابل‌مشاهده.
+4. **قابلیت‌های جدید (الزام ۶):** Identity با Seed/Increment (بدون last_value)؛ Computed با عبارت؛ RowVersion از نوع سیستمی `timestamp` (بدون مقدار واقعی)؛ Default Constraintها؛ FK کامل (onDelete/onUpdate/Disabled/NotTrusted)؛ ایندکس با Included/Filter/Disabled؛ Temporal با جدول History؛ Memory-Optimized؛ GENERATED ALWAYS؛ CDC از `is_cdc_enabled` + اشیای schema «cdc» (بدون خواندن `cdc.change_tables` — بدون درخواست مجوز جدید)؛ Change Tracking سطح دیتابیس (Retention/AutoCleanup) + سطح جدول (`is_track_columns_updated_on`).
+5. **هشدار استخراج (الزام «Record extraction warnings»):** کوئری‌های مکملِ نسخه‌محور با `TryQuery` در بلوک `extractionWarnings` ثبت می‌شوند — هرگز مقدار ساختگی.
+6. **خروجی ۲۵+ بلوکی** `ideal-live-schema-report.json` (پیش‌فرض جدید) با بلوک‌های `metadata`/`sqlServer` (بدون @@VERSION کامل)/`database`/…/`syncCapabilities`/`idealBridgeCompatibility`/`extractionWarnings`؛ فایل با `.gitignore` از Git دور مانده و **commit نمی‌شود**.
+7. **SQL در `LiveSchemaSql.cs`** (۲۴ کوئری ثابت عمومی) + **تست‌های امنیتی ساختاری** جدید `LiveSchemaSqlSecurityTests` (۱۰ قاعده روی کل مجموعه: گارد مشترک، صفر sql_modules، صفر schema_id=1، فقط sys.* در FROM/JOIN، صفر DMV/شمارش سطر، صفر cdc.change_tables، قفل ثبت All/Named، حداقل پوشش ۲۴).
+8. **مستندات هم‌راستا شد:** سندهای ۰۴/۰۵/۰۶/۰۹ و README به متغیر جدید + خروجی جدید ارجاع می‌دهند؛ سند ۰۶ گام ۳ بازنویسی شد (VIEW DEFINITION دیگر برای «متن تعریف» لازم نیست).
+9. **چهار سند ممیزی فاز ۱۲.۵** نوشته شد: `IDEAL_LIVE_SCHEMA_AUDIT.md`، `IDEAL_QUERY_COMPATIBILITY_REPORT.md`، `IDEAL_SYNC_CAPABILITY_AUDIT.md`، `IDEAL_PII_AUDIT.md` — همه با برچسب منبع ([زنده]/[ایستا-SSDL187]/[کد-IdealBridge]/[در انتظار]) و **وضعیت صریح: استخراج زنده هنوز انجام نشده**.
+
+### وضعیت استخراج زنده — صادقانه
+
+**استخراج زنده انجام نشده است.** این پروژه به ویندوز مالک دسترسی ندارد؛ ابزار Self-contained (win-x64، بدون نیاز به .NET SDK/Runtime) منتشر شده و دستور دقیق PowerShell در `IDEAL_LIVE_SCHEMA_AUDIT.md` §۵ و راهنمای RUN-FA داخل بسته آماده است. **تا رسیدن `ideal-live-schema-report.json` واقعی، هیچ «استخراج شدی» گزارش نمی‌شود و چهار سند ممیزی در وضعیت «در انتظار» می‌مانند.** هیچ مجوز جدیدی روی SQL Server درخواست/تغییر نشد (حساب `ibk_schema_reader` همان است که مالک آزموده: فراداده ✔، SELECT جدول واقعی ✖، VIEW DEFINITION=1، بدون عضویت در Role).
+
+### Build/تست واقعی این فاز (net10.0)
+
+```
+Build: 0 Error(s), 0 Warning(s)
+Passed! - Failed: 0, Passed: 210, Skipped: 0 (IdealBridge.UnitTests)   [+۲۴ نسبت به ۱۸۶]
+Passed! - Failed: 0, Passed:  33, Skipped: 0 (IdealBridge.IntegrationTests)
+```
+
+(۲۱۰ = ۱۸۶ قبلی + ۲ تست تفکیک متغیر + ۲۲ مورد LiveSchemaSqlSecurityTests.)
+
+### انتشار
+
+- Release **`dev-12.5.1`** — بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.1.zip`: Self-contained net10.0 win-x64 + `RUN-FA.md` (راهنمای فارسی)؛ اسکن Secret قبل از publish.
+
+**Commit:** `(ثبت‌شده پس از push در همین بخش)`
