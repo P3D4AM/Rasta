@@ -93,7 +93,9 @@ catch (Exception ex)
 {
     var (kind, safe) = SqlConnectionErrorClassifier.Classify(ex);
     Console.Error.WriteLine($"خطای اتصال ({kind}): {safe}");
-    Console.Error.WriteLine("جزئیات فنی: " + ex.GetType().Name);
+    // فاز ۱۲.۵.۱: زنجیرهٔ کامل استثنا (Type/Message/HResult/Stack) — پیام واقعی
+    // استثنا دیگر گم نمی‌شود؛ Messageها پیش از چاپ از SecretRedactor می‌گذرند.
+    Console.Error.WriteLine(ConnectionDiagnostics.Describe(ex));
     return 1;
 }
 Console.WriteLine($"متصل (فقط-خواندنی/رمزنگاری‌شده): {SecretRedactor.Redact(con.DataSource)} / {con.Database}");

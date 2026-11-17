@@ -5,11 +5,23 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- InvariantGlobalization حذف شد (فاز ۱۲.۵.۱): Microsoft.Data.SqlClient در حالت
+         Globalization-Invariant هنگام Open با NotSupportedException شکست می‌خورد. -->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <!-- ICU app-local (فاز ۱۲.۵.۱): ویندوزهای بدون ICU سیستمی (Win10 < 1903 / Server 2016-2019)
+         به‌صورت خاموش به Globalization-Invariant برمی‌گردند و همان خطای SqlClient بازمی‌گردد؛
+         با ICU کنار exe، فرهنگ‌ها همیشه در دسترس‌اند — مستقل از نسخهٔ ویندوز. -->
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- فعال‌سازی بارگذاری همان ICU کنار exe — .NET ابتدا icuuc72/icuin72/icudt72.dll را
+         از پوشهٔ برنامه می‌خواند (سپس System32). مستند رسمی:
+         learn.microsoft.com/dotnet/core/extensions/globalization-icu -->
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

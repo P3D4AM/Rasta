@@ -402,3 +402,46 @@ Passed! - Failed: 0, Passed:  33, Skipped: 0 (IdealBridge.IntegrationTests)
 - CI GitHub Actions: **success** (اجرا 44042898552) — push `4dec22d..b9d28fa`
 - Release **`dev-12.5.1`** (شناسهٔ 448315677) با بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.1.zip` (۳۴,۴۲۶,۵۲۳ بایت؛ SHA256=22a92df9…3167)
 - وضعیت باز: استخراج زنده منتظر اجرای مالک؛ چهار سند ممیزی در وضعیت «در انتظار»
+
+## فاز ۱۲.۵.۱ — ریشه‌یابی و رفع خطای اتصال ابزار کاوش (dev-12.5.1 → dev-12.5.2)
+
+### مشکل گزارش‌شده توسط مالک
+اجرای بستهٔ self-contained «dev-12.5.1» روی ویندوز، هنگام اتصال واقعی به SQL Server با خروج ۱ شکست خورد:
+`خطای اتصال (Unknown)` + `جزئیات فنی: NotSupportedException`.
+همان Connection String با System.Data.SqlClient در PowerShell 5.1 (.NET Framework) موفق بود — یعنی سرور/شبکه/حساب سالم‌اند.
+
+### ریشه‌یابی (با شواهد — بدون حدس)
+1. خروجی قبلی «پیام» استثنا را چاپ نمی‌کرد (فقط نام نوع) — طبقه‌بندی مشترک برای NotSupportedException دسته‌ای ندارد → Unknown.
+2. تنها تفاوت csproj ابزار با بقیهٔ پروژه‌ها: `InvariantGlobalization=true`.
+3. بازتولید کنترل‌شده (net10.0 + SqlClient 7.1.1 — همان مسیر کدِ SchemaDumpPolicy): با Invariant=true →
+   `System.NotSupportedException: «Globalization Invariant Mode is not supported.»` (HResult=0x80131515)
+   از `SqlConnection.TryOpen` — پیش از هر ترافیک شبکه؛ با تغییر فقط همین یک کلید به false → اتصال عادی به لایهٔ شبکه رفت.
+4. بازتولید سرتاسری روی ابزار دست‌نخوردهٔ HEAD خروجی کاربر را عیناً بازتولید کرد (Unknown + NotSupportedException).
+5. منابع بالادستی: dotnet/SqlClient #220 و #662، dotnet-docker #2346 — SqlClient در Globalization-Invariant پشتیبانی نمی‌شود.
+
+**ریشه در یک خط:** `InvariantGlobalization=true` در csproj ابزار → SqlClient در `Open` با NotSupportedException می‌شکند.
+
+### تغییرات (کوچک و بازبین‌پذیر)
+- `tools/IdeaSchemaDump/IdeaSchemaDump.csproj`: حذف `InvariantGlobalization=true`؛ افزودن `Microsoft.ICU.ICU4C.Runtime 72.1.0.3`
+  + `System.Globalization.AppLocalIcu=72.1.0.3` — چون ویندوزهای بدون ICU سیستمی (Win10 < 1903 / Server 2016-2019)
+  به‌صورت خاموش به Invariant برمی‌گردند؛ ICU کنار exe مستقل از نسخهٔ ویندوز کار می‌کند
+  (learn.microsoft.com/dotnet/core/extensions/globalization-icu).
+- `tools/IdeaSchemaDump/ConnectionDiagnostics.cs` (جدید): زنجیرهٔ کامل استثنا (Type/Message/HResult/Stack) — همهٔ Messageها از SecretRedactor می‌گذرند.
+- `tools/IdeaSchemaDump/Program.cs`: catch اتصال از این پس `ConnectionDiagnostics.Describe` چاپ می‌کند (به‌جای فقط نام نوع).
+- `tests/IdealBridge.UnitTests/IdeaSchemaDumpConnectionDiagnosticsTests.cs` (جدید): ۷ تست — رمزمحوشدگی (Password=/Pwd=)، زنجیرهٔ داخلی به‌ترتیب، HResult، تک‌خطی‌شدن پیام چندخطی، پشته.
+- `docs/05-sql-server-connection.md`: ردیف خطای Invariant در جدول خطاهای رایج + توضیح خروجی جدید + اصلاح مثال‌های §۴
+  (متغیر ابزار «IdeaSchemaDump__ConnectionString» به‌جای متغیر سرویس — ناسازگاری مستندات فاز ۱۲.۵).
+- همین WORKLOG.
+
+### Build/تست واقعی این فاز (net10.0)
+```
+Build: 0 Error(s), 0 Warning(s)
+Passed! - Failed: 0, Passed: 217 (+۷ نسبت به ۲۱۰) (IdealBridge.UnitTests)
+Passed! - Failed: 0, Passed: 33 (IdealBridge.IntegrationTests)
+```
+
+### انتشار
+- Release **`dev-12.5.2`** — بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.2.zip` (Self-contained net10.0 win-x64 + `RUN-FA.md`):
+  **۵۲,۷۰۸,۶۸۶ بایت؛ SHA256=337aae387f46e7be429cadcd316341bb461d1de083008f1e7028be2a2871d3a6**؛
+  اسکن Secret قبل از publish: **PASS (صفر یافته)**؛
+  runtimeconfig بدون Invariant و با `System.Globalization.AppLocalIcu=72.1.0.3`؛ icudt72/icuin72/icuuc72.dll کنار exe.
