@@ -167,4 +167,37 @@ public class LiveSchemaSqlSecurityTests
         Assert.True(LiveSchemaSql.All.Length >= 24,
             $"پوشش ناکافی: {LiveSchemaSql.All.Length} کوئری — حداقل ۲۴");
     }
+
+    // ─── ۸) فاز ۱۲.۵.۳ — تریگر: Schema فقط از مسیر sys.objects ───
+    // نمای sys.triggers (برخلاف sys.tables/views) هیچ ستون schema_id
+    // ندارد؛ ارجاع tr.schema_id روی دیتابیس واقعی در زمان کامپایل batch
+    // با خطای 207 «Invalid column name 'schema_id'» رد می‌شود و TryQuery
+    // بلوک را به «هشدار استخراج» + آرایهٔ خالی تبدیل می‌کند (خالی ≠ نبودِ
+    // تریگر). مسیر مجاز: sys.triggers → sys.objects (روی object_id) →
+    // sys.schemas (روی o.schema_id).
+
+    [Fact]
+    public void Triggers_Schema_Is_Resolved_Only_Via_Objects_Join_Never_Tr_SchemaId()
+    {
+        var sql = LiveSchemaSql.Triggers;
+
+        // فشرده‌سازی فاصله‌ها — قفل مسیر Join مستقل از قالب‌بندی متن SQL
+        var flat = Regex.Replace(sql, @"\s+", " ");
+
+        // مسیر جدید (الزام فاز ۱۲.۵.۳): Schema از sys.objects، نه از sys.triggers.
+        // هر دو LEFT: DDL triggerهای سطح دیتابیس schema-scoped نیستند و در
+        // sys.objects نیستند — INNER JOIN آن‌ها را بی‌صدا حذف می‌کرد.
+        Assert.Contains("LEFT JOIN sys.objects o ON o.object_id = tr.object_id",
+            flat, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("LEFT JOIN sys.schemas s ON s.schema_id = o.schema_id",
+            flat, StringComparison.OrdinalIgnoreCase);
+
+        // اتصال جدول والد — همان مسیر قبل از فاز ۱۲.۵.۳، دست‌نخورده
+        Assert.Contains("LEFT JOIN sys.tables pt ON pt.object_id = tr.parent_id",
+            flat, StringComparison.OrdinalIgnoreCase);
+
+        // ممنوعیت مطلق: sys.triggers ستونی به نام schema_id ندارد
+        // (SELECT و ON و هر جای دیگر کوئری Triggers).
+        Assert.DoesNotContain("tr.schema_id", sql, StringComparison.OrdinalIgnoreCase);
+    }
 }

@@ -453,3 +453,61 @@ Passed! - Failed: 0, Passed: 33 (IdealBridge.IntegrationTests)
 - راستی‌آزمایی: برچسب dev-12.5.2 → c2216dd؛ دارایی قابل دانلود (HTTP 200) با SHA256 یکسانِ بستهٔ محلی
 - وضعیت باز: اجرای دوبارهٔ ابزار توسط مالک روی ویندوز (استخراج زنده همچنان «در انتظار»)؛
   اگر خطای تازه‌ای دید، خروجی جدید «جزئیات فنی» نوع/پیام/HResult/پشتهٔ کامل را نشان می‌دهد.
+
+## فاز ۱۲.۵.۳ — رفع خطای استخراج تریگرها (ارجاع به ستونِ ناموجود `tr.schema_id` در کوئری `Triggers`)
+
+### یافتهٔ استخراج زنده (dev-12.5.2 روی دیتابیس واقعی)
+اجرای بستهٔ dev-12.5.2 توسط مالک روی ویندوز: **اتصال برقرار شد** — رفع فاز ۱۲.۵.۱ در محیط واقعی
+تأیید شد — و استخراج زنده انجام شد، اما بلوک `triggers` استخراج نشد: `TryQuery` شکست کوئری را
+به‌صورت «هشدار استخراج» ثبت می‌کند و آرایهٔ `triggers` در JSON خالی ماند.
+**نکتهٔ صادقانه:** تا اجرای مجدد ابزار روی دیتابیس واقعی، «تعداد واقعی تریگرها نامشخص است» —
+آرایهٔ خالی قبلی حاصلِ خطای کوئری بود، نه غیبت تریگر؛ به‌عنوان «نبودِ تریگر» گزارش نمی‌شود.
+
+### علت خطا (با شواهد)
+1. نمای کاتالوگ `sys.triggers` برخلاف `sys.tables`/`sys.views`/`sys.procedures` **هیچ ستون
+   `schema_id` ندارد** — فهرست رسمی ستون‌ها: name، object_id، parent_class، parent_class_desc،
+   parent_id، type، type_desc، create_date، modify_date، is_ms_shipped، is_disabled،
+   is_not_for_replication، is_instead_of_trigger (learn.microsoft.com → sys-triggers-transact-sql).
+2. کوئری v3.0 با `LEFT JOIN sys.schemas s ON s.schema_id = tr.schema_id` در زمان کامپایل batch
+   با خطای 207 «Invalid column name 'schema_id'» رد می‌شود → `TryQuery` آن را به «هشدار استخراج»
+   تبدیل می‌کند و بلوک خالی می‌ماند (خالی ≠ صفر تریگر).
+3. مسیر درست: DML triggerها (type ‏`TR`/`TA`) در `sys.objects` هستند و `sys.objects` ستون
+   `schema_id` دارد؛ در مقابل، DDL triggerهای سطح دیتابیس schema-scoped نیستند و در `sys.objects`
+   **نیستند** («sys.objects doesn't show DDL triggers, because they aren't schema-scoped» —
+   learn.microsoft.com → sys-objects-transact-sql) → JOIN باید LEFT بماند تا این تریگرها حذف
+   نشوند (Schema = null — Program.cs با `V()` این را به‌درستی به null نگاشت می‌کند).
+
+**ریشه در یک خط:** ارجاع مستقیم به ستونِ ناموجود `tr.schema_id` در کوئری `Triggers` — خطای 207
+در کامپایل batch روی هر SQL Server واقعی، در هر دیتابیسی، با هر تعداد تریگر.
+
+### اصلاح (کوچک و بازبین‌پذیر)
+- `tools/IdeaSchemaDump/LiveSchemaSql.cs` — فقط JOIN عوض شد:
+  - حذف: `LEFT JOIN sys.schemas s ON s.schema_id = tr.schema_id`
+  - افزودن: `LEFT JOIN sys.objects o ON o.object_id = tr.object_id` +
+    `LEFT JOIN sys.schemas s ON s.schema_id = o.schema_id`
+- فهرست ستون‌های SELECT، ORDER BY، اتصال جدول والد
+  (`LEFT JOIN sys.tables pt ON pt.object_id = tr.parent_id` + `LEFT JOIN sys.schemas ps`) و
+  کوئری `TriggerEvents`: **دست‌نخورده**.
+- `tests/IdealBridge.UnitTests/LiveSchemaSqlSecurityTests.cs` (قاعدهٔ ۸، جدید): قفل مسیر Join جدید
+  (sys.objects روی `object_id` → sys.schemas روی `o.schema_id`، هر دو LEFT تا DDL triggerهای سطح
+  دیتابیس حذف نشوند) + والد روی `parent_id` + **ممنوعیت مطلق `tr.schema_id`** در کوئری Triggers.
+- همین WORKLOG.
+
+### وضعیت اعتبارسنجی
+- Build (net10.0, Release): `0 Error(s), 0 Warning(s)`.
+- تست‌ها (واقعی، روی net10.0):
+  `Passed! - Failed: 0, Passed: 218, Skipped: 0 (IdealBridge.UnitTests)` ‏(+۱ نسبت به ۲۱۷ — تست ساختاری جدید)
+  `Passed! - Failed: 0, Passed: 33, Skipped: 0 (IdealBridge.IntegrationTests)`
+- اسکن Secret سورس (سه‌مرحله‌ای، همان CI): صفر یافته در هر سه مرحله.
+- **در انتظار (صادقانه):** اجرای مجدد ابزار روی دیتابیس واقعی با بستهٔ جدید — تا آن زمان
+  تعداد و محتوای واقعی تریگرها نامشخص است و چهار سند ممیزی فاز ۱۲.۵ همچنان به‌روزرسانی
+  بلوک `triggers` را «در انتظار» دارند. رفع این فاز فقط «قابلیت استخراج تریگرها» را ترمیم
+  می‌کند؛ هیچ ادعایی دربارهٔ تعداد تریگرهای crmideal مطرح نیست.
+
+### انتشار
+- Release **`dev-12.5.3`** — بستهٔ `IdeaSchemaDump-win-x64-dev-12.5.3.zip` (Self-contained
+  net10.0 win-x64 + `RUN-FA.md` به‌روزشده):
+  **۵۲,۷۰۸,۹۰۲ بایت؛ SHA256=dbfdfbf99305d2ba1b6ced80477bc22e64ce475e20ae86ca8af4339a3f2fa794**؛
+  اسکن Secret قبل از publish: **PASS (صفر یافته)**؛ ۲۵۳ فایل، ساختار مسطح مانند نسخهٔ قبل.
+- SHA فاز، نتیجهٔ CI و شناسهٔ Release پس از push در commit ثبت‌کنندهٔ بعدی درج می‌شود.
+

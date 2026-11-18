@@ -245,6 +245,13 @@ ORDER BY s.name, o.name, pr.parameter_id";
     // ─────────────────────────────────────────────
     // ۱۲) تریگرها + رویدادها — نام/والد/نوع رویداد/Disabled.
     //     «بدون متن تعریف».
+    //     فاز ۱۲.۵.۳: نمای sys.triggers برخلاف sys.tables/views
+    //     «هیچ ستون schema_id ندارد» — Schema تریگر فقط از مسیر
+    //     sys.objects به‌دست می‌آید (o.object_id = tr.object_id ←
+    //     s.schema_id = o.schema_id). DDL triggerهای سطح دیتابیس
+    //     schema-scoped نیستند و در sys.objects نیستند → JOIN باید
+    //     LEFT بماند تا حذف نشوند (Schema = null). اتصال جدول والد
+    //     (parent_id) و کوئری TriggerEvents دست‌نخورده.
     // ─────────────────────────────────────────────
     public const string Triggers = @"
 SELECT tr.object_id,
@@ -256,7 +263,8 @@ SELECT tr.object_id,
        tr.type_desc AS TriggerType,
        tr.is_disabled AS IsDisabled
 FROM sys.triggers tr
-LEFT JOIN sys.schemas s  ON s.schema_id = tr.schema_id
+LEFT JOIN sys.objects o  ON o.object_id = tr.object_id
+LEFT JOIN sys.schemas s  ON s.schema_id = o.schema_id
 LEFT JOIN sys.tables  pt ON pt.object_id = tr.parent_id
 LEFT JOIN sys.schemas ps ON ps.schema_id = pt.schema_id
 ORDER BY s.name, tr.name";
