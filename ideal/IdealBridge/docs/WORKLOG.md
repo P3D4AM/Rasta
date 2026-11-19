@@ -521,3 +521,35 @@ Passed! - Failed: 0, Passed: 33 (IdealBridge.IntegrationTests)
 - وضعیت باز: اجرای مجدد ابزار توسط مالک روی دیتابیس واقعی با بستهٔ dev-12.5.3 — تا آن زمان
   «تعداد واقعی تریگرها نامشخص است» و آرایهٔ خالی قبلی به‌عنوان نبودِ تریگر گزارش نمی‌شود
 
+
+## نقطهٔ کنترل ممیزی امنیتی عملیات نوشتنی — ثبت یافته‌های Static Audit (۲۰۲۶-۱۱-۱۹)
+
+> **ماهیت این مرحله: مستندسازی یافته‌های Static Audit است. هیچ SQL نوشتنی روی دیتابیس واقعی اجرا نشده، هیچ دادهٔ تجاری خوانده نشده و هیچ کد/دیتابیس/تنظیمات اتصالی تغییر نکرده است.**
+
+### کار انجام‌شده
+
+- ایجاد سند مرجع **`ideal/IdealBridge/docs/IDEAL_WRITE_API_SECURITY_AUDIT.md`** — تجمیع و تثبیت ممیزی امنیتی **عملیات نوشتنی** Ideal CRM تا تاریخ ۲۰۲۶-۱۱-۱۹، مستقل از تاریخچهٔ گفتگو.
+- منابع پایه (بدون بازنویسی/حذف): چهار دور استخراج فقط-فرادادهٔ SQL (`ideal/ideal-write-audit-definitions.txt` با ۱۹ ماژول؛ `…next-definitions.txt` با ۳۶؛ `…third-definitions.txt` با ۴۰۶ + `third-part-1..7` با ۳۶۱ ماژول بازبینی‌شده؛ `…fourth-definitions.txt` + `fourth-fixed.sql` + `fourth-part-1..13` با ۱۳۵ ماژول یکتا) و `ideal/procedure-definitions/` (۱۸ SP خواندنی + manifest).
+- همهٔ یافته‌ها با یکی از وضعیت‌های «Confirmed Static Finding / Potential Risk / Controller Mitigation Observed / SQL Definition Pending / Runtime Verification Pending» علامت‌گذاری و با مسیر فایل/خط ثبت شدند؛ اصل صادقانه: نبودِ کنترل به‌تنهایی اثبات بهره‌برداری‌پذیری نیست.
+
+### خلاصهٔ یافته‌های کلیدی ثبت‌شده در سند
+
+- حداقل ۱۰ پروسیجر Update با SQL پویا و الحاق رشته (`EXECUTE(@QRY + @Columns + @Conditions)`) + ۳ Helper بررسی تکراری با همان الگو؛
+- دو یافتهٔ BOLA/IDOR قطعی در بازبینی ایستا: `MobspUpdateCompanyPerson` و `MobspUpdateCompanyProject` (کنترل دسترسی به شرکتِ ورودی هست، اما تطبیق `prsCompanyId`/`prjCompanyId` رکورد با شرکت ورودی در UPDATE مشاهده نشد)؛
+- `MobspCheckCmpDataPermissionForUser`: عدم مقداردهی اولیهٔ `@IsAccess` به صفر در ابتدای بدنه؛
+- جدول `CrmsysDBTempInfo`: فقط PK روی ID، بدون Unique Index روی `(UserId, TypeId)` و بدون تریگر — نقشهٔ TypeIdهای 1/20/30/40/50/60/70/80/90 با Producerهای هر یک ثبت شد؛
+- عملیات گروهی پیش‌سفارش (TypeId=30): حذف گروهی با ۱۸ DELETE بدون تراکنش/TRY-CATCH یکپارچه — از API عمومی خارج تا بازطراحی؛
+- عملیات سند/انبار/خرید/تأمین و تبدیل خرید به فروش: مدیریتی/مسدود تا تکمیل کنترل‌ها؛
+- سیاست معماری هدف (MedPad Backend API با AuthN/AuthZ/Adapterهای Ideal و Holoo/Audit/Idempotency/Sync)، اصول اجباری ۱۰گانه و اولویت‌بندی اصلاحات P0-P3.
+
+### تحول میان تدوین: استخراج مالک (e6968a0) و تعارض حل‌شده
+
+- در میانهٔ تدوین سند، مالک کامیت `e6968a0` را push کرد: `order-preorder-procedure-parameters.txt` (+ `-definitions.txt` و `-parameters - Copy.txt`) شامل تعریف کامل و امضای ۴ پروسیجر (`MobspOrderVerifyWithPreChecks`، `MobspPreOrderVerifyWithPreChecks`، `MobspUpdateOrder`، `MobspUpdatePreOrder`) — دقیقاً خواستهٔ بند ۱ کارهای بعدی. این تعاریف در بخش ۱۳ سند لحاظ و تحلیل اولیهٔ آن‌ها ثبت شد (آپدیت فقط با شناسهٔ رکورد و بدون شرط مالکیت؛ قالب `|#|`؛ نبود TRY/CATCH؛ الگوی @@ERROR).
+- تعارض ثبت‌شده دربارهٔ «شش SP گمشده» با همین شواهد **حل شد**: دو پروسیجر تأیید از قبل در استخراج سوم تعریف داشتند (نسخهٔ مالک آن را تأیید می‌کند — یکسان پس از نرمال‌سازی فاصله‌ها)؛ چهار مورد دیگر تا این کامیت واقعاً غایب بودند. هر دو روایت در پیوست ب سند حفظ شد. `MobspUpdateOrderItem` و `MobspUpdatePreOrderItem` همچنان `SQL Definition Pending` هستند.
+- `MobspCheckCompanyDataPermissionForUser` در اهداف استخراج چهارم بود اما در خروجی نیامد — موجودیت آن نیازمند تأیید.
+
+### کارهای باقی‌مانده (ارجاع به §۱۶ سند)
+
+استخراج فقط-خواندنی دو SP باقی‌مانده (`MobspUpdateOrderItem`، `MobspUpdatePreOrderItem`)؛ تکمیل ممیزی مالکیت و روابط سفارش/پیش‌سفارش (شامل ممیزی عمیق دو پروسیجر اصلاح جدید)؛ بررسی Callerهای تأیید/اصلاح؛ Workflow و Idempotency پس از تأیید؛ ماتریس دسترسی نقش‌ها؛ همسان‌سازی مستند Endpointها/Allowlist با کد فعلی IdealBridge.
+
+**تغییرات این مرحله فقط دو فایل مستنداتی است:** `IDEAL_WRITE_API_SECURITY_AUDIT.md` (جدید) + همین WORKLOG. پیام کامیت: `docs(ideal): checkpoint write API security audit through 2026-11-19`
