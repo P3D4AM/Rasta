@@ -39,6 +39,7 @@
 - [۲۵. مرز معماری MedPad ↔ IdealBridge — رفع ابهام بخش ۱۴.۱](#۲۵-مرز-معماری-medpad--idealbridge--رفع-ابهام-بخش-۱۴۱)
 - [۲۶. Continuation State — وضعیت ادامه (۲۰۲۶-۱۱-۱۹، پس از Checkpoint `9033b94`)](#۲۶-continuation-state--وضعیت-ادامه-۲۰۲۶-۱۱-۱۹-پس-از-checkpoint-9033b94)
 - [۲۷. Next Chat Instructions — دستورالعمل چت بعدی](#۲۷-next-chat-instructions--دستورالعمل-چت-بعدی)
+- [فاز ۱۳ — ممیزی Schema و سازگاری Queryهای IdealBridge برای MedPad](#فاز-۱۳--ممیزی-schema-و-سازگاری-queryهای-idealbridge-برای-medpad)
 - [پیوست الف — ارجاع به اسناد موجود و مرز اطلاعات تکراری](#پیوست-الف--ارجاع-به-اسناد-موجود-و-مرز-اطلاعات-تکراری)
 - [پیوست ب — ثبت تعارض‌ها و موارد نیازمند تأیید](#پیوست-ب--ثبت-تعارض‌ها-و-موارد-نیازمند-تأیید)
 - [پیوست ج — تاریخچهٔ Git استخراج‌های این ممیزی](#پیوست-ج--تاریخچه-git-استخراج‌های-این-ممیزی)
@@ -954,6 +955,142 @@ MedPad Backend API
 وضعیت ورودی: اگر مالک خروجی اسکریپت پنجم را push کرده باشد → فاز ۲۶.۶-بند ۱ تا ۴ را اجرا کن. اگر نه → قبل از آن، این کارهای بدون دیتابیس را انجام بده: (الف) ممیزی عمیق endpoint-به-endpoint Controllerهای بررسی‌نشدهٔ فهرست ۲۶.۴ (FO*/HRM*/Ticket/DyForms) با همان قالب ماتریس بخش ۲۰؛ (ب) تکمیل نگاشت مسیرهای غیرمستقیم SP→SP از فرادادهٔ وابستگی استخراج چهارم؛ (ج) تدوین پیش‌نویس «مشخصات قابل پیاده‌سازی API جدید» (قراردادها، DTO حداقلی، لایه‌های مجوز چهارگانهٔ AUTH-03، Idempotency/Audit) به‌عنوان بخش جدید سند؛ در هر حالت پس از اتمام، بخش ۲۶ را به‌روزرسانی و این بخش را بازنویسی کن.
 
 پس از هر مرحله: Diff را بازبینی کن، فقط فایل‌های مستنداتی مرتبط را commit/push کن، SHA و لینک مستقیم گزارش را اعلام کن.
+
+---
+
+## فاز ۱۳ — ممیزی Schema و سازگاری Queryهای IdealBridge برای MedPad
+
+> **تاریخ ثبت:** ۲۰۲۶-۱۱-۲۱ · **SHA مبنای بررسی:** `9812159dc408a066a6b6a517a8421673b3ccd22e` (HEAD شاخهٔ `ideal` در زمان ثبت؛ راستی‌آزمایی مستقل این فاز روی همین SHA انجام شد)
+> **ماهیت:** نخستین فاز برنامهٔ «تکمیل API اتصال Ideal CRM به MedPad» — ثبت و راستی‌آزمایی یافته‌های ممیزی Schema و سازگاری Queryهای IdealBridge در سند مرجع. **این فاز صرفاً مستندسازی است: هیچ سورس کد، SQL، DTO، تنظیمات یا تستی تغییر نکرد و هیچ کوئری‌ای روی دیتابیس زنده اجرا نشد.**
+> **تفاوت دامنه با بخش‌های ۱ تا ۲۷:** بخش‌های قبلی این سند، سورس قدیمی (`Mobile.dll` دیکامپایل‌شده) و SPهای خانوادهٔ Write را ممیزی کردند. این فاز برای نخستین بار **پیاده‌سازی جدید IdealBridge خودِ مخزن** (متن SQL مخازن، دیکشنری تولید SQL در زمان اجرا و SchemaProbe) را در برابر اسکیمای مرجع ممیزی و ثبت می‌کند — ادامهٔ مسیر فاز ۲۴ (بخش ۲۴) که فقط «مستندات ↔ کد» را سنجید، نه «کد ↔ دیتابیس».
+> **برچسب‌های وضعیت این فاز (چهارگانهٔ برنامهٔ تکمیل API):** `CONFIRMED_STATIC` = تأیید ایستا در سورس/SSDL (هم‌ارز «Confirmed Static Finding» بخش ۰) · `UNVERIFIED_LIVE` = نیازمند تأیید روی نصب واقعی (هم‌ارز «Runtime Verification Pending» بخش ۰) · `POTENTIAL` = ریسک محتمل بدون حلقهٔ نهایی شواهد (هم‌ارز «Potential Risk» بخش ۰) · `FIXED_AND_TESTED` = اصلاح‌شده همراه با تست قفل‌کننده (**هیچ یافتهٔ این فاز این وضعیت را ندارد — هیچ اصلاحی انجام نشد**).
+> **سری شناسه‌های جدید:** `SCH-01` تا `SCH-07` (Schema). در زمان ثبت، هیچ شناسهٔ `SCH-` در این سند وجود نداشت؛ سری‌های قبلی (AUTH/ORD/WF) به سورس قدیمی مربوط‌اند و بازنویسی نشدند.
+
+### ۱۳.۱ منشأ کشف، روش و منابع این فاز
+
+- **منشأ کشف:** ممیزی ایستای فاز ۱۲ (`ideal/IdealBridge/docs/IDEAL_SCHEMA_AUDIT.md` — یافته‌های §۲/§۳/§۴/§۵ آن) و رده‌بندی چهارسطحی فاز ۱۲.۵ (`ideal/IdealBridge/docs/IDEAL_QUERY_COMPATIBILITY_REPORT.md`). آن اسناد مرجع جزئیات فنی‌اند و محتوایشان اینجا حذف یا خلاصه نشد؛ این بخش، ثبت رسمی همان یافته‌ها در سند مرجع Write است.
+- **راستی‌آزمایی مستقل این فاز:** هیچ یافته‌ای صرفاً به دلیل ثبت در سند قبلی، اصلاح‌شده یا تأییدشده فرض نشد. همهٔ ادعاها مجدداً روی کد در SHA مبنا بررسی شد: (۱) تطبیق ماشینی همهٔ نام‌های ادعاشده با `CRMTabel.ssdl` نسخهٔ 3.1.18.187 (`project-analysis/decompiled/Models/CRMTabel.ssdl` — ۶۳۳ EntityType) — نتیجه: ۴۸/۴۸ ادعای نام (وجود نام صحیح / عدم وجود نام غلط) سبز؛ (۲) بیرون‌کشی شمارهٔ خط دقیق همهٔ نام‌ها از سورس IdealBridge در همان SHA.
+- **مرجع ایستا:** SSDL نسخهٔ 3.1.18.187 + شواهد فاز ۱۲ مبنی بر اینکه نام‌های غلط در متن کامل ۳۶۱MB دستورات نصاب (کاتالوگ V1→V8) هیچ‌گاه به‌عنوان نام واقعی جدول/ستون ظاهر نشده‌اند.
+- **محدودیت اصلی شواهد:** گزارش زندهٔ `ideal-live-schema-report.json` هنوز تولید و بررسی نشده است (بند ۱۳.۷ / SCH-07).
+
+### ۱۳.۲ SCH-01 — مغایرت نام جدول/ستون در Queryهای فعلی و دیکشنری تولید SQL در `BaseInfoRepository.Map` (CONFIRMED_STATIC)
+
+۱۹ مغایرت یکتای نام جدول/ستون، هم در Queryهای literal مخازن و هم در دیکشنری تولید SQL زمان اجرا (`BaseInfoRepository.Map`) دیده می‌شوند و بر اساس ممیزی ایستای SSDL نسخهٔ 3.1.18.187 مغایرند. چون نام‌های غلط در هیچ نسخه‌ای از Ideal وجود نداشته‌اند، هر ۱۹ مورد در **هر** دیتابیسی — از جمله نصب 3.1.16 و 3.1.18 — به `SqlException` (Invalid column/table name) در زمان اجرا می‌شکنند؛ یعنی این رده به راستی‌آزمایی زنده وابسته نیست، هرچند مشاهدهٔ عملی شکست هنوز انجام نشده (اتصال زنده مسدود است).
+
+قرارداد مسیرها: `Repositories.cs` = `ideal/IdealBridge/src/IdealBridge.Infrastructure/Repositories/Repositories.cs` · `CompanyRepository.cs` = همان پوشه · `SSDL` = `project-analysis/decompiled/Models/CRMTabel.ssdl` (شمارهٔ خط = خطِ `<EntityType>` مربوط). ستون «Map» یعنی همان نام غلط در دیکشنری `BaseInfoRepository.Map` (Repositories.cs:703-728) هم ظاهر می‌شود.
+
+| # | بخش | نام فعلی (غلط) | محل در سورس | نام صحیح (ممیزی SSDL 187) | شاهد SSDL |
+|---|---|---|---|---|---|
+| ۱ | Person | `dbo.CrmPersonJob` (جدول JOIN) | Repositories.cs:34 | `dbo.CrmPersonJobs` | SSDL:6186 |
+| ۲ | Person | `J.JobID` (شرط JOIN) | Repositories.cs:34 | `J.PersonJobID` | SSDL:6188-6190 |
+| ۳ | Person | `J.Job` | Repositories.cs:20 (+Map:716) | `J.Jobs` | SSDL:6191 |
+| ۴ | Person | `PG.GroupName` | Repositories.cs:21 (+Map:718) | `PG.PersonGroup` | SSDL:6159 |
+| ۵ | Person | `SX.Sex` | Repositories.cs:21 (+Map:720) | `SX.SexType` | SSDL:9411 |
+| ۶ | Person | `DP.DepartmentID` (شرط JOIN) | Repositories.cs:39 (+Map:717) | `DP.PersonDepartmentId` | SSDL:6132 |
+| ۷ | Person | `DP.Department` | Repositories.cs:22 (+Map:717) | `DP.PersonDepartment` | SSDL:6132 |
+| ۸ | Conversation | `T.TopicName` | Repositories.cs:231 | `T.Topic` | SSDL:3186 |
+| ۹ | Conversation | `T.TopicID` (شرط JOIN) | Repositories.cs:240 | `T.ConversationTopicsID` | SSDL:3186 |
+| ۱۰ | Conversation | `S.ConversationStatus` | Repositories.cs:234 | `S.Status` | SSDL:2946 |
+| ۱۱ | Project | `G.GradeName` | Repositories.cs:324 (+Map:726) | `G.ProjectGrade` | SSDL:6399 |
+| ۱۲ | Project | `PG.GroupName` | Repositories.cs:324 (+Map:725) | `PG.ProjectGroup` | SSDL:6426 |
+| ۱۳ | Reminder | `PR.PriorityName` | Repositories.cs:399 | `PR.Priority` | SSDL:8110 |
+| ۱۴ | Reminder | `G.GroupName` | Repositories.cs:400 | `G.UserTaskGroup` | SSDL:8083 |
+| ۱۵ | Product | `dbo.WSProductUnit` (جدول JOIN) | Repositories.cs:519 | `dbo.WSProductUnits` | SSDL:14720 |
+| ۱۶ | Product | `UN.UnitName` | Repositories.cs:512 | `UN.Unit` | SSDL:14720 |
+| ۱۷ | Product | `G.GroupName` | Repositories.cs:511 | `G.FGName` | SSDL:13695 |
+| ۱۸ | Product | `G.ProductFirstGroupID` (شرط JOIN) | Repositories.cs:517 | `G.PrdFirstGroupID` | SSDL:13695 |
+| ۱۹ | Company Address | `T.CompanyAddressType` (ستون نام) | CompanyRepository.cs:132 (+Map:713) | `T.CompanyAddressTypeName` | SSDL:1213 |
+
+نکات تکمیلی:
+
+- **دیکشنری Map (SQL تولیدی runtime):** هفت kind از `BaseInfoRepository.Map` درگیرند: `PersonJob` (Repositories.cs:716 — هر سه مؤلفه table/id/name غلط)، `PersonDepartment` (۷۱۷)، `PersonGroup` (۷۱۸)، `Sex` (۷۲۰)، `ProjectGroup` (۷۲۵)، `ProjectGrade` (۷۲۶)، `CompanyAddressType` (۷۱۳) — یعنی علاوه بر endpointهای دادهٔ اصلی، endpointهای BaseInfo هم درگیر شکست‌اند.
+- **اثر شکست به تفکیک endpoint (بر اساس JOINها):** persons (ردیف‌های ۱-۷)، baseinfo (شخص/شغل/واحد سازمانی/گروه/جنسیت/گروه و درجهٔ پروژه/نوع آدرس)، conversations (۸-۱۰)، projects (۱۱-۱۲)، reminders (۱۳-۱۴)، products (۱۵-۱۸)، آدرس‌های شرکت (۱۹). مجموعهٔ این ۱۹ مورد با فهرست §۲ سند `IDEAL_SCHEMA_AUDIT.md` منطبق است (ترتیب ردیف‌ها در اینجا دامنه‌محور است و با ترتیب آن سند تفاوت دارد؛ نگاشت یک‌به‌یک با شماره‌گذاری آن سند در §۱۳.۹ ثبت نشد و برای ارجاع باید از «نام» استفاده شد نه شماره).
+- **نکتهٔ ردیف ۱۹:** کلید JOIN در CompanyRepository.cs:137 (`T.CompanyAddressTypeID`) با PK جدول (`CompanyAddressTypeId` — SSDL:1213) تطبیق می‌کند (case-insensitive)؛ فقط ستون نام غلط است. ردیف‌های ۱/۱۵ برعکس، خطای «جدول» هستند (شکست پیش از ارزیابی ستون‌ها).
+- **وضعیت:** `CONFIRMED_STATIC` (نسبت به SSDL187 و متن کامل نصاب). مشاهدهٔ عملی روی دیتابیس واقعی: `UNVERIFIED_LIVE` — اما طبق شواهد فاز ۱۲ نتیجه در هر نسخه یکسان است.
+- **ارتباط با یافته‌های قبلی سند:** مستقل از سری‌های AUTH/ORD/WF (سورس قدیمی)؛ نزدیک‌ترین زمینهٔ قبلی بخش ۲۴ (همسان‌سازی IdealBridge) است که فقط انطباق مستندات↔کد را بررسی کرده بود — اینجا لایهٔ سوم (کد↔دیتابیس) ممیزی و نقص‌نگاری شد.
+
+### ۱۳.۳ SCH-02 — ستون‌های استفاده‌شده در Queryها بدون پوشش `SchemaProbe.RequiredTableColumns` (CONFIRMED_STATIC)
+
+هفت ستون در SELECTهای فعال مصرف می‌شوند اما در فهرست `SchemaProbe.RequiredTableColumns` (`ideal/IdealBridge/src/IdealBridge.Infrastructure/Database/SchemaProbe.cs:21-34`) نیستند؛ در نتیجه سازوکار «کاوش زودهنگام → Block با پیام 503 تمیز» (`DataAccessPolicy.ApplySchemaReport` — `DataAccessPolicy.cs:89-102`: جدول مفقود → «جدول «X» در دیتابیس Ideal یافت نشد»؛ ستون مفقود → «ستون‌های لازم در «X» مفقودند: …»؛ سیم‌کابی در `Program.cs:143-147`) آن‌ها را پوشش نمی‌دهد و شکستشان در زمان اجرا به‌صورت `SqlException` خام ظاهر می‌شود، نه خطای کنترل‌شده و زودهنگام 503:
+
+| ستون | مصرف در سورس (SHA مبنا) | غیاب در Probe | ردهٔ نسخه (فاز ۱۲ §۳) |
+|---|---|---|---|
+| `CrmConversation.cnvsIsTicket` | Repositories.cs:236 | در لیست CrmConversation (SchemaProbe.cs:26) نیست | ستون پایه — اما Probe ندارد |
+| `CrmConversation.cnvsIsTicketNew` | Repositories.cs:236 | نیست (SchemaProbe.cs:26) | V7 — در 169 احتمالاً ناموجود |
+| `CrmProjects.prjSubject` | Repositories.cs:321 | نیست (SchemaProbe.cs:27) | V6 — در 169 احتمالاً ناموجود |
+| `CrmUserTasks.UserTaskRemindDate` | Repositories.cs:401 | نیست (SchemaProbe.cs:28 — فقط `UserTaskRemindDateTime` هست) | — |
+| `CrmUserTasks.UserTaskRemindTime` | Repositories.cs:401 | نیست (SchemaProbe.cs:28) | — |
+| `Users.UserIsActiveInMobApp` | Repositories.cs:147 | نیست (SchemaProbe.cs:25 — فقط `UserIsActiveInWebApp` هست) | — |
+| `Users.UserIsActiveInWinApp` | Repositories.cs:147 | نیست (SchemaProbe.cs:25) | — |
+
+وضعیت: `CONFIRMED_STATIC`. اثر عملی روی نصب فرضی 3.1.16.169 در صورت نبود ستون‌های V6/V7: `UNVERIFIED_LIVE` — اما جهت ریسک روشن است: conversations و projects (و به تبع آن reminders/users در ستون‌های خودشان) مستقیم SqlException خام می‌گیرند، در حالی که همان سازوکار برای ستون‌های Probeشده (نمونهٔ `WSPreOrder.pordChangeStatusDate` — V8) پیام تمیز 503 می‌دهد.
+
+### ۱۳.۴ SCH-03 — نبود پوشش کامل و منسجم جدول‌های فرهنگ‌نامه (Lookup) در Probe (CONFIRMED_STATIC)
+
+- فهرست Probe فقط ۱۱ جدول اصلی را پوشش می‌دهد (SchemaProbe.cs:23-33): CrmCompany، CrmCompanyPersons، Users، CrmConversation، CrmProjects، CrmUserTasks، WsWareHouse، WSProducts، WSOrder، WSPreOrder، CrmCompanyAddresses.
+- **هیچ‌یک از جدول‌های فرهنگ‌نامه‌ای که در JOINهای Queryهای فعلی مصرف می‌شوند در Probe نیستند** (استخراج این فاز از متن Queryها در SHA مبنا): CrmPersonTitle، CrmPersonJobs، CrmPersonType، CrmPersonGroups، Sex، Education، CrmPersonDepartments، Country، Province، City (مسیر Person)؛ CrmConversationTopics، CrmConversationStatus (Conversation)؛ CrmProjectGrade، CrmProjectPriority، CrmProjectGroups (Project)؛ CrmUserTaskPriorities، CrmUserTaskGroups (Reminder)؛ WSProductFirstGroup، WSProductColor، WSProductUnits (Product)؛ CrmCompanyAddressType (آدرس‌ها)؛ WSOrderOpr (Order/PreOrder) — هم‌خوان با شمارش فاز ۱۲ §۴.۱: «تمام ۳۱ جدول فرهنگ‌نامه بدون هیچ پوشش Probe» (شامل جداول مسیرهای آینده مانند `WSPreOrderOpr`).
+- پیامد: غیبت هر جدول lookup روی دیتابیس هدف → خطای خام SQL در زمان اجرا به‌جای خطای کنترل‌شده و زودهنگام 503؛ یعنی حتی پس از اصلاح کامل SCH-01، کلاس خطای «جدول فرهنگ مفقود» روی نصب‌های ناقص همچنان خام باقی می‌ماند.
+- وضعیت: `CONFIRMED_STATIC` (هر دو فهرست — Probe و JOINهای Query — در SHA مبنا).
+
+### ۱۳.۵ یافته‌های معنایی که هنوز قطعی نیستند
+
+#### ۱۳.۵.۱ SCH-04 — رابطهٔ گروه محصول: `PrdGroupID` به گروه دوم اشاره دارد (POTENTIAL)
+
+- شواهد ایستا: `WSProducts` (SSDL:14132) تنها یک ستون گروه به نام `PrdGroupID` دارد؛ دو جدول فرهنگی مستقل وجود دارند: `WSProductFirstGroup` (PK: `PrdFirstGroupID`؛ نام: `FGName` — SSDL:13695) و `WSProductSecondGroup` (PK: `PrdSecondGroupID`؛ ستون والد: `FirstGroupId`؛ نام: `SGName`). شاهد SP بومی `WSspSelectProductsByFSGId` (فاز ۱۲ §۵.۱) و ردیف `Product.Group` در `ideal/IdealBridge/docs/IDEAL_API_MAPPING.md`: مسیر صحیح `PrdGroupID → WSProductSecondGroup.PrdSecondGroupID` و سپس `SecondGroup.FirstGroupId → WSProductFirstGroup.PrdFirstGroupID`.
+- کد فعلی: Repositories.cs:517 مقدار `PrdGroupID` را به `WSProductFirstGroup` JOIN می‌زند (با کلید ناموجود `ProductFirstGroupID` — SCH-01 ردیف ۱۸).
+- نتیجهٔ ثبت‌شده: **اصلاح JOIN باید زنجیرهٔ گروه اول و دوم را درست مدل کند؛ صرفاً تغییر نام ستون به `PrdFirstGroupID` کافی نیست** — با اصلاحِ نام به‌تنهایی، Query از نظر شناسه‌ها معتبر می‌شود اما از نظر معنایی، مقدارِ ID گروه دوم را با PK گروه اول تطبیق می‌دهد (JOIN بی‌نتیجهٔ گسترده یا تطبیق اشتباه). انتخاب «نمایش مستقیم گروه دوم» یا «زنجیرهٔ دوم→اول» یک تصمیم محصولی است که نیازمندی MedPad تعیین‌گر آن است.
+- وضعیت: `POTENTIAL` (معناشناسی) + `UNVERIFIED_LIVE` (رفتار واقعی با دادهٔ زنده).
+
+#### ۱۳.۵.۲ SCH-05 — فرهنگ عملیات پیش‌سفارش: فرهنگ مستقل `WSPreOrderOpr` (POTENTIAL)
+
+- کد فعلی: Repositories.cs:659 — `WSPreOrder.PreOrderOprID` به `WSOrderOpr.OrderOprID` JOIN و نام عملیات از `OP.Name` خوانده می‌شود (Repositories.cs:651).
+- شواهد ایستا: جدول فرهنگی مستقل `WSPreOrderOpr` (PK: `PreOrderOprID`؛ نام: `PreOrderOpr` — SSDL:13352) وجود دارد و ساختار ستون‌هایش با `WSOrderOpr` (SSDL:12549 — `OrderOprID, Name, GUId, OprType, …`) متفاوت است.
+- ریسک: اگر IDهای دو فرهنگ هم‌پوشان اما متفاوت باشند، نام عملیات پیش‌سفارش غلط نمایش داده می‌شود (JOIN بی‌نتیجه یا تطبیق اشتباه). **تا بررسی ساختار و دادهٔ معتبر، این مورد خطای قطعی اعلام نمی‌شود** — این امکان نیز هست که دو فرهنگ در عمل هم‌مقدار باشند.
+- وضعیت: `POTENTIAL` + `UNVERIFIED_LIVE` (راستی‌آزمایی فقط-خواندنی پیشنهادی: فرمان‌های §۱۰ سند `IDEAL_SCHEMA_AUDIT.md` — SELECT روی دو فرهنگ کوچک `WSOrderOpr`/`WSPreOrderOpr` روی دیتابیس مالک).
+
+### ۱۳.۶ SCH-06 — شکاف تست: کنترل جامع مغایرت نام جدول/ستون SQL مخازن در برابر Schema مرجع وجود ندارد (CONFIRMED_STATIC)
+
+- مجموعهٔ تست در SHA مبنا: ۱۲۶ شناسهٔ `[Fact]`/`[Theory]` در ۱۰ فایل (۹۳ Unit در `tests/IdealBridge.UnitTests/` + ۳۳ Integration در `tests/IdealBridge.IntegrationTests/IdealBridgeApiTests.cs`). هیچ‌یک متن SQL مخازن را با اسکیمای مرجع تطبیق نمی‌دهد.
+- شواهد ساختاری شکاف:
+  1. تست‌های یکپارچه با FakeDb اسکریپت‌شده کار می‌کنند (`tests/IdealBridge.IntegrationTests/FakeDb.cs`؛ ساخت در `IdealBridgeApiTests.cs:629/655`)؛ اجرای واقعی SQL روی SQL Server شبیه‌سازی نمی‌شود.
+  2. خودارجاعی: در `IdealBridgeApiTests.cs:786-794`، فرادادهٔ ساختگی‌ای که به SchemaProbe برگردانده می‌شود **دقیقاً از خودِ `SchemaProbe.RequiredTableColumns`** ساخته می‌شود؛ جداول دادهٔ دستی (CompanyTable()/UsersTable()/…) نیز جداگانه و منطبق با نام‌های خودِ Query اسکریپت شده‌اند. در نتیجه هیچ مسیر تستی، شناسه‌های SQL مخازن را با منبعی مستقل (SSDL/گزارش زنده) مقایسه نمی‌کند.
+  3. به همین دلیل هر ۱۹ مغایرت SCH-01 از کل مجموعهٔ تست فعلی عبور کرده‌اند (تأیید نقل فاز ۱۲: «تست‌ها با دیتابیس fake کار می‌کنند و اجرای واقعی SQL روی SQL Server را شبیه‌سازی نمی‌کنند»).
+- راهکار پیشنهادی برای فاز اصلاح:
+  1. تست رگرسیون تطبیق متن SQL مخازن با Schema مرجع (استخراج شناسه‌های جدول/ستون از SQLهای literal و تطبیق با SSDL187 و/یا گزارش زنده)؛
+  2. پوشش Queryهای تولیدشده در `BaseInfoRepository` (اعتبارسنجی سه‌تایی table/id/name دیکشنری Map در برابر مرجع)؛
+  3. پوشش جدول‌ها و ستون‌های JOINشده — نه فقط جدول اصلی هر Repository؛
+  4. تست SchemaProbe برای همهٔ ستون‌های واقعاً استفاده‌شده (رفع خودارجاعی FakeDb — اسکیمای ساختگی باید از منبعی مستقل از خود Probe ساخته شود)؛
+  5. تستی که اطمینان دهد نبود جدول یا ستون ضروری به خطای کنترل‌شدهٔ 503 منجر می‌شود، نه SqlException خام.
+- وضعیت: `CONFIRMED_STATIC`.
+
+### ۱۳.۷ SCH-07 — محدودیت شواهد: گزارش زندهٔ Schema هنوز بررسی نشده (UNVERIFIED_LIVE)
+
+- `ideal-live-schema-report.json` در مخزن نیست (جست‌وجوی این فاز؛ هم‌راستا با پیوست ب بند ۵ همین سند) — ابزار `IdeaSchemaDump v3.0` آماده و منتشرشده است اما استخراج زنده توسط مالک انجام نشده (`ideal/IdealBridge/docs/IDEAL_LIVE_SCHEMA_AUDIT.md` §۲: «استخراج زنده: انجام‌نشده»).
+- بنابراین در این فاز همهٔ شواهد اسکیما با برچسب منبع ایستا `[ایستا-SSDL187]` ثبت شدند؛ **وضعیت واقعی نصب Ideal نسخهٔ 3.1.16.169.0303 تأییدشده اعلام نمی‌شود** (این شمارهٔ نسخه از تحلیل فاز ۱۲ آمده و تأیید ساختاری‌اش بدون اتصال ممکن نیست).
+- موارد نیازمند اتصال زنده (کارهای باز): اجرای گزارش Schema زنده روی دیتابیس مالک؛ راستی‌آزمایی ستون‌های V6/V7/V8 (§۱۳.۳)؛ تعیین‌تکلیف SCH-04/SCH-05 با دادهٔ واقعی. فرمان‌های فقط-خواندنی آماده در `IDEAL_SCHEMA_AUDIT.md` §۱۰.
+- وضعیت: `UNVERIFIED_LIVE`.
+
+### ۱۳.۸ جدول پیگیری — برنامهٔ تکمیل API (MedPad)
+
+| # | مورد | وضعیت | شواهد | وابستگی | فاز هدف |
+|---|---|---|---|---|---|
+| ۱ | اصلاح نام‌های اشتباه SQL و BaseInfo (۱۹ مورد SCH-01) | باز — اصلاح نشده (`FIXED_AND_TESTED` نیست) | §۱۳.۲ (شمارهٔ خط Repositories.cs/CompanyRepository.cs/Map + شاهد SSDL) | ندارد (پایه) — پیشنهاد: یک commit کوچک بدون تغییر رفتار قراردادی | فاز اصلاح — P0 |
+| ۲ | تکمیل `RequiredTableColumns` (۷ ستون SCH-02) | باز | §۱۳.۳ | همراه با مورد ۱ (تا فهرست با نام‌های صحیح قفل شود) | فاز اصلاح — P0 |
+| ۳ | پوشش جدول‌های Lookup در Probe (SCH-03) | باز | §۱۳.۴ | فهرست lookup از SSDL/گزارش زنده | فاز اصلاح — P0/P1 |
+| ۴ | افزودن تست رگرسیون Schema | باز | §۱۳.۶ | اسکیمای مرجع (SSDL187 و/یا گزارش زنده) | فاز اصلاح — P1 |
+| ۵ | بررسی معنایی گروه محصولات (SCH-04) | باز — `POTENTIAL` | §۱۳.۵.۱ + ردیف `Product.Group` در `IDEAL_API_MAPPING.md` | تصمیم محصولی MedPad + دادهٔ زنده | فاز تحلیل — P2 |
+| ۶ | بررسی فرهنگ عملیات پیش‌سفارش (SCH-05) | باز — `POTENTIAL` | §۱۳.۵.۲ + فرمان‌های §۱۰ سند ممیزی اسکیما | دادهٔ زنده (دو فرهنگ کوچک) | فاز تحلیل — P2 |
+| ۷ | اجرای گزارش Schema زنده روی دیتابیس مالک | باز — اقدام مالک | §۱۳.۷ + `IDEAL_LIVE_SCHEMA_AUDIT.md` §۲ | مالک (ابزار v3.0 آماده/تست‌شده) | پیش‌نیاز نهایی‌سازی موارد ۲/۳/۴ |
+| ۸ | بررسی مجدد Queryهای تمام Endpointها پس از اصلاح | باز | — | تکمیل موارد ۱-۴ (+ ۷ برای نسخهٔ واقعی) | فاز پایش پس از اصلاح |
+
+### ۱۳.۹ تصمیم‌های این فاز و یادداشت‌های ثبت
+
+- **هیچ اصلاحی انجام نشد** — حتی SCH-01 که P0 است؛ طبق قواعد فازهای مستندسازی، اصلاح باید همراه با تست‌های قفل‌کنندهٔ §۱۳.۶ در commit مجزای فاز اصلاح بیاید (توصیهٔ §۲/§۹ سند `IDEAL_SCHEMA_AUDIT.md` عیناً حفظ شد).
+- **شماره‌گذاری فاز:** عنوان «فاز ۱۳» از شماره‌گذاری برنامهٔ تکمیل API پیروی می‌کند (۱۲ = ممیزی اسکیما — `IDEAL_SCHEMA_AUDIT.md`؛ ۱۲.۵ = ابزار استخراج و رده‌بندی سازگاری — `IDEAL_QUERY_COMPATIBILITY_REPORT.md` و `IDEAL_LIVE_SCHEMA_AUDIT.md`؛ ۱۳ = نخستین فاز تکمیل API اتصال MedPad). سند `IDEAL_SCHEMA_AUDIT.md` در متن خود «فاز ۱۳» را برای اصلاحات رزرو کرده بود — مرحلهٔ «ثبت و راستی‌آزمایی» آن فاز، همین بخش است و مرحلهٔ اصلاح در §۱۳.۸ دنبال می‌شود.
+- **مرز با اسناد تخصصی:** `IDEAL_SCHEMA_AUDIT.md` (جزئیات ۱۹ مورد + تحول ستون‌ها در V1→V8)، `IDEAL_QUERY_COMPATIBILITY_REPORT.md` (رده‌بندی چهارسطحی CONFIRMED ERROR / VERSION DIFFERENCE / POTENTIAL ERROR / VERIFIED و بلوک‌های راستی‌آزمایی زنده) و `IDEAL_LIVE_SCHEMA_AUDIT.md` (وضعیت ابزار و برچسب‌های منبع) مرجع باقی می‌مانند؛ این بخش جمع‌بندی ثبت‌شده در سند مرجع Write است و در تداخل آتی هر دو روایت حفظ می‌شوند (قاعدهٔ پیوست ب).
+- **فایل‌های بررسی‌شده در این فاز (همه در SHA مبنا):** `ideal/IdealBridge/src/IdealBridge.Infrastructure/Repositories/Repositories.cs` (۷۵۲ خط — همهٔ Queryها و Map)، `.../Repositories/CompanyRepository.cs`، `.../Repositories/DataAccessPolicy.cs`، `.../Database/SchemaProbe.cs` (۱۶۷ خط)، `ideal/IdealBridge/src/IdealBridge.Api/Program.cs` (سیم‌کابی 503)، `tests/IdealBridge.UnitTests/*` و `tests/IdealBridge.IntegrationTests/*` (شمارش و ساختار تست‌ها)، `project-analysis/decompiled/Models/CRMTabel.ssdl` (مرجع ایستا) و اسناد `IDEAL_SCHEMA_AUDIT.md`، `IDEAL_QUERY_COMPATIBILITY_REPORT.md`، `IDEAL_LIVE_SCHEMA_AUDIT.md`، `IDEAL_API_MAPPING.md`.
+- **یافتهٔ جانبی (ثبت بدون اقدام):** در `IDEAL_QUERY_COMPATIBILITY_REPORT.md` §۴ یک مورد POTENTIAL دیگر (قیمت ردیف ≠ قیمت نهایی — `WSfnReturnProductPrice`) ثبت است که به endpointهای آیندهٔ قیمت مربوط می‌شود و خارج از دامنهٔ این بخش (Queryهای فعلی) ماند؛ در فاز طراحی endpointهای قیمت دوباره مرور شود.
+- **یادداشت مسیرها (ثبت هنگام تحویل):** در جریان همین فاز، مالک کامیت `8373002` («مستندات ساخت API ایده آل») را push کرد که کل پوشهٔ `ideal/IdealBridge/` را به `ideal/مستندات ساخت API/IdealBridge/` منتقل کرد (برای فایل‌های ممیزی‌شدهٔ این بخش، تغییرنام خالص/R100 بود — محتوا و شمارهٔ خط‌ها بدون تغییر ماند؛ blob این سند نیز پیش از افزودن فاز ۱۳ یکسان بود: `01a2ef3`). همهٔ مسیرهای ثبت‌شده در این بخش به SHA مبنا (`9812159`، پیش از انتقال) اشاره دارند و در مسیر جدید نیز معتبرند؛ در جلسات آتی برای یافتن این فایل‌ها از مسیر جدید استفاده شود.
 
 ---
 
