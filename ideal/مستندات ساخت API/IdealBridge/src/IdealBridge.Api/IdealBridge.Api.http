@@ -1,0 +1,6 @@
+@IdealBridge.Api_HostAddress = http://localhost:5237
+
+GET {{IdealBridge.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
