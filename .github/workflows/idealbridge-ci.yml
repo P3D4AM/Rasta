@@ -1,19 +1,21 @@
 name: IdealBridge CI
 
 # CI مخصوص پروژهٔ IdealBridge (شاخهٔ ideal) — فاز ۱۱
-# توجه: فایل workflow عمداً بیرون از ideal/IdealBridge است (الزام GitHub Actions)
+# توجه: فایل workflow عمداً بیرون از ideal/مستندات ساخت API/IdealBridge است (الزام GitHub Actions)
 # و در «بررسی محدوده» به‌عنوان مسیر مجاز لحاظ شده است.
+# ۲۰۲۶-۱۱-۲۲: مسیرها پس از جابه‌جایی پوشه توسط مالک (کامیت 8373002) از ideal/IdealBridge
+# به ideal/مستندات ساخت API/IdealBridge به‌روزرسانی شد — بدون تغییر منطق گام‌ها.
 
 on:
   push:
     branches: [ ideal ]
     paths:
-      - 'ideal/IdealBridge/**'
+      - 'ideal/مستندات ساخت API/IdealBridge/**'
       - '.github/workflows/idealbridge-ci.yml'
   pull_request:
     branches: [ ideal ]
     paths:
-      - 'ideal/IdealBridge/**'
+      - 'ideal/مستندات ساخت API/IdealBridge/**'
       - '.github/workflows/idealbridge-ci.yml'
 
 jobs:
@@ -22,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ideal/IdealBridge
+        working-directory: "ideal/مستندات ساخت API/IdealBridge"
 
     steps:
       - name: Checkout (تاریخچهٔ کامل برای بررسی محدوده)
@@ -35,7 +37,7 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: بررسی محدودهٔ تغییرات (خارج از ideal/IdealBridge ممنوع)
+      - name: بررسی محدودهٔ تغییرات (خارج از ideal/مستندات ساخت API/IdealBridge ممنوع)
         shell: bash
         run: |
           # در PR: مقایسهٔ با شاخهٔ مبدا؛ در Push: مقایسهٔ با commit قبلی
@@ -50,9 +52,9 @@ jobs:
             git fetch origin main --depth=1 || true
             BASE="origin/main"
           fi
-          CHANGED=$(git diff --name-only "$BASE"...HEAD | grep -v '^ideal/IdealBridge/' | grep -v '^\.github/workflows/' || true)
+          CHANGED=$(git diff --name-only "$BASE"...HEAD | grep -v '^ideal/مستندات ساخت API/IdealBridge/' | grep -v '^\.github/workflows/' || true)
           if [ -n "$CHANGED" ]; then
-            echo "::error::تغییرات خارج از محدودهٔ مجاز شناسایی شد (فقط ideal/IdealBridge و .github/workflows مجاز است):"
+            echo "::error::تغییرات خارج از محدودهٔ مجاز شناسایی شد (فقط ideal/مستندات ساخت API/IdealBridge و .github/workflows مجاز است):"
             echo "$CHANGED"
             exit 1
           fi
@@ -72,7 +74,7 @@ jobs:
 
       - name: بررسی نبود Secret در سورس
         shell: bash
-        working-directory: ideal/IdealBridge
+        working-directory: "ideal/مستندات ساخت API/IdealBridge"
         run: |
           set -e
           FAIL=0
@@ -103,5 +105,5 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ideal/IdealBridge/test-results/
+          path: "ideal/مستندات ساخت API/IdealBridge/test-results/"
           retention-days: 7
