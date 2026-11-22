@@ -40,6 +40,7 @@
 - [۲۶. Continuation State — وضعیت ادامه (۲۰۲۶-۱۱-۱۹، پس از Checkpoint `9033b94`)](#۲۶-continuation-state--وضعیت-ادامه-۲۰۲۶-۱۱-۱۹-پس-از-checkpoint-9033b94)
 - [۲۷. Next Chat Instructions — دستورالعمل چت بعدی](#۲۷-next-chat-instructions--دستورالعمل-چت-بعدی)
 - [فاز ۱۳ — ممیزی Schema و سازگاری Queryهای IdealBridge برای MedPad](#فاز-۱۳--ممیزی-schema-و-سازگاری-queryهای-idealbridge-برای-medpad)
+- [فاز ۱۴ — ممیزی قرارداد موجودیت‌های CRM و شکاف‌های API برای MedPad](#فاز-۱۴--ممیزی-قرارداد-موجودیتهای-crm-و-شکافهای-api-برای-medpad)
 - [پیوست الف — ارجاع به اسناد موجود و مرز اطلاعات تکراری](#پیوست-الف--ارجاع-به-اسناد-موجود-و-مرز-اطلاعات-تکراری)
 - [پیوست ب — ثبت تعارض‌ها و موارد نیازمند تأیید](#پیوست-ب--ثبت-تعارض‌ها-و-موارد-نیازمند-تأیید)
 - [پیوست ج — تاریخچهٔ Git استخراج‌های این ممیزی](#پیوست-ج--تاریخچه-git-استخراج‌های-این-ممیزی)
@@ -1091,6 +1092,218 @@ MedPad Backend API
 - **فایل‌های بررسی‌شده در این فاز (همه در SHA مبنا):** `ideal/IdealBridge/src/IdealBridge.Infrastructure/Repositories/Repositories.cs` (۷۵۲ خط — همهٔ Queryها و Map)، `.../Repositories/CompanyRepository.cs`، `.../Repositories/DataAccessPolicy.cs`، `.../Database/SchemaProbe.cs` (۱۶۷ خط)، `ideal/IdealBridge/src/IdealBridge.Api/Program.cs` (سیم‌کابی 503)، `tests/IdealBridge.UnitTests/*` و `tests/IdealBridge.IntegrationTests/*` (شمارش و ساختار تست‌ها)، `project-analysis/decompiled/Models/CRMTabel.ssdl` (مرجع ایستا) و اسناد `IDEAL_SCHEMA_AUDIT.md`، `IDEAL_QUERY_COMPATIBILITY_REPORT.md`، `IDEAL_LIVE_SCHEMA_AUDIT.md`، `IDEAL_API_MAPPING.md`.
 - **یافتهٔ جانبی (ثبت بدون اقدام):** در `IDEAL_QUERY_COMPATIBILITY_REPORT.md` §۴ یک مورد POTENTIAL دیگر (قیمت ردیف ≠ قیمت نهایی — `WSfnReturnProductPrice`) ثبت است که به endpointهای آیندهٔ قیمت مربوط می‌شود و خارج از دامنهٔ این بخش (Queryهای فعلی) ماند؛ در فاز طراحی endpointهای قیمت دوباره مرور شود.
 - **یادداشت مسیرها (ثبت هنگام تحویل):** در جریان همین فاز، مالک کامیت `8373002` («مستندات ساخت API ایده آل») را push کرد که کل پوشهٔ `ideal/IdealBridge/` را به `ideal/مستندات ساخت API/IdealBridge/` منتقل کرد (برای فایل‌های ممیزی‌شدهٔ این بخش، تغییرنام خالص/R100 بود — محتوا و شمارهٔ خط‌ها بدون تغییر ماند؛ blob این سند نیز پیش از افزودن فاز ۱۳ یکسان بود: `01a2ef3`). همهٔ مسیرهای ثبت‌شده در این بخش به SHA مبنا (`9812159`، پیش از انتقال) اشاره دارند و در مسیر جدید نیز معتبرند؛ در جلسات آتی برای یافتن این فایل‌ها از مسیر جدید استفاده شود.
+
+---
+
+## فاز ۱۴ — ممیزی قرارداد موجودیت‌های CRM و شکاف‌های API برای MedPad
+
+> **تاریخ ثبت:** ۲۰۲۶-۱۱-۲۲ · **SHA مبنای بررسی:** `6962be1d8d88ba5d92ef600225936066a6c5f468` (HEAD شاخهٔ `ideal`؛ پیش از شروع، `fetch` انجام شد و تأیید شد شاخهٔ `ideal` دقیقاً روی همین SHA است و کامیت جدیدتری وجود ندارد — مبنای ثبت همین SHA است)
+> **ماهیت:** دومین فاز برنامهٔ «تکمیل API اتصال Ideal CRM به MedPad» — ممیزی **قرارداد (Contract) موجودیت‌های CRM و شکاف‌های API** از منظر نیاز MedPad. **این فاز صرفاً مستندسازی است: هیچ سورس کد، SQL، DTO، Controller، Repository، تنظیمات یا تستی تغییر نکرد؛ هیچ Stored Procedure اجرا یا فعال نشد؛ معماری فقط-خواندنی IdealBridge دست‌نخورده ماند؛ و هیچ کوئری‌ای روی دیتابیس زنده اجرا نشد.** همهٔ شواهد این فاز ایستا هستند: خواندن سورس IdealBridge و اسناد، `CRMTabel.ssdl` و جست‌وجوی متنی کاتالوگ SQL مخزن (`ideal/data.zip`) و سورس دیکامپایل‌شدهٔ دسکتاپ.
+> **تفاوت دامنه با فاز ۱۳:** فاز ۱۳ (`SCH-01..07`) مغایرت‌های **نام جدول/ستون** Queryها را در برابر اسکیمای مرجع ثبت کرد. این فاز لایهٔ بالاتر را می‌سنجد: تطبیق **DTO ↔ SELECT واقعی ↔ Mapper**، فیلدهای مرده (هرگز مقداردهی‌نشده)، فیلدهای غایب، معناشناسی ستون‌های زمانی/انتسابی، پوشش Endpoint/Sync و تناقض‌های میان اسناد. یافته‌های `SCH-01..07` در این فاز **بازنویسی نمی‌شوند و فقط ارجاع می‌شوند**.
+> **برچسب‌های وضعیت:** همان چهارگانهٔ فاز ۱۳ — `CONFIRMED_STATIC` / `UNVERIFIED_LIVE` / `POTENTIAL` / `FIXED_AND_TESTED`. **هیچ یافتهٔ این فاز `FIXED_AND_TESTED` نیست — هیچ اصلاحی انجام نشد.**
+> **سری شناسه‌های جدید:** `API-01` تا `API-35`. در زمان ثبت، هیچ شناسهٔ `API-` در این سند وجود نداشت (جست‌وجو انجام شد)؛ سری‌های `SCH-` (فاز ۱۳) و `AUTH/ORD/WF` (سورس قدیمی) دست‌نخورده ماندند.
+> **نکتهٔ مسیر:** پس از انتقال پوشه در کامیت `8373002`، مسیر فعلی سورس و مستندات `ideal/مستندات ساخت API/IdealBridge/` است؛ همهٔ ارجاع‌های این فاز به همین مسیر جدید اشاره دارند و شمارهٔ خط‌ها مربوط به فایل‌ها در SHA مبناست.
+
+### ۱۴.۱ منشأ، روش و منابع این فاز
+
+- **منابع بررسی‌شده (همه در SHA مبنا):**
+  - **مستندات:** `docs/03-endpoints.md`، `docs/10-sync-design.md`، `docs/IDEAL_API_MAPPING.md`، `docs/IDEAL_DATABASE_MAP.md`، `docs/IDEAL_PII_AUDIT.md`، `docs/02-architecture.md`، `docs/IDEAL_WRITE_API_SECURITY_AUDIT.md` (همین سند).
+  - **سورس:** `src/IdealBridge.Domain/Dto/CompanyDto.cs`، `src/IdealBridge.Domain/Dto/CompanyPersonDto.cs`، `src/IdealBridge.Domain/Dto/CrmUserDto.cs`، `src/IdealBridge.Domain/Dto/DomainDtos.cs`، `src/IdealBridge.Domain/Dto/QueryDtos.cs`، `src/IdealBridge.Application/Interfaces/IRepositories.cs`، `src/IdealBridge.Api/Controllers/CompaniesController.cs`، `src/IdealBridge.Api/Controllers/PersonsAndUsersController.cs`، `src/IdealBridge.Api/Controllers/HistoryController.cs`، `src/IdealBridge.Api/Controllers/CommercialController.cs`، `src/IdealBridge.Api/Controllers/SyncController.cs`، `src/IdealBridge.Infrastructure/Repositories/CompanyRepository.cs`، `src/IdealBridge.Infrastructure/Repositories/Repositories.cs`، `src/IdealBridge.Infrastructure/Repositories/DataAccessPolicy.cs`.
+  - **مرجع ساختاری:** `project-analysis/decompiled/Models/CRMTabel.ssdl` (نسخهٔ 3.1.18.187).
+  - **کاتالوگ SQL و رفتار برنامه:** `ideal/data.zip` → `data/catalog.tsv` + `data/statements.pack` (۵۹٬۱۲۴ دستور؛ کامیت `3d99e6a`) برای بدنهٔ SPهای نوشتن، و `project-analysis/decompiled/CRMIdeal/` برای جریان ذخیرهٔ دسکتاپ.
+- **روش:** برای هر موجودیت (۱) DTO با SELECT واقعی و Mapper تطبیق داده شد — فیلد DTO که در Mapper مقداردهی نمی‌شود «فیلد مرده» ثبت شد؛ (۲) فیلترهای Query و مسیرهای Sync با کد مقایسه شد؛ (۳) ادعاهای اسناد (به‌ویژه معنای `RegisterDate` و وضعیت PII) با شواهد مستقل SSDL/کاتالوگ/دیکامپایل راستی‌آزمایی شد. **هیچ ادعایی صرفاً به استناد سند دیگر، تأییدشده فرض نشد.**
+- **محدودیت شواهد:** مثل فاز ۱۳، گزارش زندهٔ اسکیمای نصب واقعی 3.1.16.169 (`ideal-live-schema-report.json`) هنوز تولید نشده (SCH-07)؛ هر نتیجهٔ رفتاری دربارهٔ نصب واقعی `UNVERIFIED_LIVE` می‌ماند.
+- **ثبت تعارض‌های اسناد:** طبق یادآوری پایانی این سند، تعارض‌ها به پیوست ب تعلق دارند؛ اما دامنهٔ این مأموریت «افزودن فقط یک بخش مستقل در انتهای سند» است، بنابراین دو تعارض کشف‌شدهٔ این فاز (بند‌های ۱۴.۲ و ۱۴.۴) **در همین بخش ثبت و مستند شدند** و پیوست‌ها دست‌نخورده ماندند؛ افزودن خلاصهٔ آن‌ها به پیوست ب در فاز مستندسازی بعدی پیشنهاد می‌شود.
+
+### ۱۴.۲ یافتهٔ A — تعارض مهم در معنای `RegisterDate` (API-01)
+
+**دو روایت ناسازگار در اسناد مخزن (هر دو در SHA مبنا موجودند):**
+
+| روایت | سند/محل | متن کلیدی |
+|---|---|---|
+| `RegisterDate` = **زمان آخرین ویرایش**؛ `FirstRegisterDate` = زمان ایجاد | `IDEAL_DATABASE_MAP.md` §۲ (جدول قراردادهای نام‌گذاری، با استناد به بدنهٔ UPDATEها) و §۹؛ `IDEAL_API_MAPPING.md` §۱ ردیف Timestamps | «`RegisterDate` … **زمان آخرین ویرایش**» / «RegisterDate = آخرین ویرایش (اثبات‌شده)» |
+| `RegisterDate` = **تاریخ ایجاد** (نه ویرایش)؛ ویرایش‌ها قابل تشخیص نیستند | `10-sync-design.md` §۲؛ `IDEAL_SYNC_CAPABILITY_AUDIT.md` §۲؛ (به‌تبع آن) کامنت `CompanyDto.cs:89` («تاریخ ثبت (ایجاد)») و کامنت سرکلاس `SyncController.cs:13-15` و `QueryDtos.cs:17-21` («از تاریخ ثبت») | «`RegisterDate` = تاریخ **ایجاد** رکورد (نه ویرایش)» / «ویرایش‌ها با هیچ ستونی قابل تشخیص نیستند» |
+
+نشانهٔ جانبی کهن‌شدگی روایت دوم: `10-sync-design.md` §۲ شمار ستون‌های `CrmCompany` را **۱۱۷** می‌دهد؛ شمارش مستقیم SSDL187 در همین فاز = **۱۲۰** (هم‌ارز §۳.۱ نقشهٔ دیتابیس).
+
+**راستی‌آزمایی مستقل این فاز — شواهد جدید از بدنهٔ SPها (کاتالوگ `statements.pack`) و جریان ذخیرهٔ دسکتاپ:**
+
+| # | شاهد | محل دقیق | متن/اثر |
+|---|---|---|---|
+| ۱ | `CRMspUpdateCompanyReportOperation` — ویرایش گروه‌های مشتری (گزارش عملیات) | کاتالوگ، دستور id `1167` (سبد V2؛ آفست ۲٬۳۵۰٬۲۴۱) | `UPDATE dbo.CRMCompany SET cmpGroupIdII/… = …, UserId = @UserId, RegisterDatePersian = @RegisterDatePersian, RegisterDate = getdate()` — تازه‌سازی `RegisterDate` با زمان جاری هنگام ویرایش |
+| ۲ | `MobspUpdateCompany` — مسیر ویرایش موبایل | کاتالوگ، دستور id `56239` (سبد V8؛ آفست ۳۳۳٬۱۲۵٬۵۳۰) | خط ۱۳۵ متنِ دستور: `SET @RegisterDate = GETDATE()` (بازنویسی مقدار تماس‌گیرنده؛ بلوک «REGISTER DATE») و سپس خطوط ۱۲۸۵-۱۳۶۶: `UPDATE [dbo].[CrmCompany] SET … [UserId] = @UserId … [RegisterDate] = @RegisterDate … WHERE CompanyID = @CompanyId` — **عیناً همان شاهدی که `IDEAL_DATABASE_MAP.md` §۲ به آن استناد کرده بود** |
+| ۳ | `ApispUpdateCompany` — مسیر ویرایش API رسمی | کاتالوگ، دستور id `56125` (سبد V8؛ آفست ۳۳۱٬۴۹۹٬۰۹۵) | SET پویای به‌روزرسانی شامل `[UserId] = @UserId` و `[RegisterDate] = @RegisterDate` و `[RegisterDatePersian] = @RegisterDatePersian` (مقدار از تماس‌گیرنده) |
+| ۴ | `ApispInsertCompany` — مسیر درج | کاتالوگ، دستور id `56101` (سبد V8؛ آفست ۳۳۱٬۲۶۱٬۱۳۹) | فهرست ستون‌های INSERT **هر دو** ستون `RegisterDate` و `FirstRegisterDate` را مقدار می‌دهد (در درج، هر دو = زمان ایجاد) |
+| ۵ | برنامهٔ دسکتاپ `CRMIdeal` — مسیر **ویرایش** مشتری | `project-analysis/decompiled/CRMIdeal/CRMIdeal/Areas/Company/Controllers/CompanyInfoController.cs:43024-43033` و `:44318-44327` | در مسیر ویرایش (`Entry(crmCompany).State = EntityState.Modified; SaveChanges()`): `crmCompany.UserId = UserLogin.CurrentUser.UserId; crmCompany.RegisterDate = now; crmCompany.RegisterDatePersian = …` — **بدون دست‌زدن به `FirstRegisterDate`** |
+| ۶ | برنامهٔ دسکتاپ `CRMIdeal` — مسیر **درج** مشتری | همان فایل، `:35752-35768` و `:35840-35852` | در درج، هر دو `RegisterDate` و `FirstRegisterDate` (به‌همراه `FirstRegisterUserId` و GUId جدید) مقداردهی می‌شوند |
+
+**نتیجهٔ تعیین‌شده با شواهد ایستا:** سه مسیر نوشتن مستقل (دسکتاپ، موبایل، SP عملیات گروهی/گزارشی) به‌طور سازگار `RegisterDate` را هنگام **ویرایش** تازه می‌کنند و `FirstRegisterDate` را فقط هنگام **درج** می‌نویسند. پس روایت «آخرین ویرایش» (`IDEAL_DATABASE_MAP.md`/`IDEAL_API_MAPPING.md`) با شواهد کد سازگار است و روایت «تاریخ ایجاد» (`10-sync-design.md` §۲ و `IDEAL_SYNC_CAPABILITY_AUDIT.md` §۲) **با بدنهٔ واقعی مسیرهای نوشتن در تضاد است**.
+
+**محدودیت‌های صادقانهٔ این نتیجه (چرا حکم نهایی باز می‌ماند):**
+1. همهٔ شواهد از نسخهٔ ۱۸۷ (کاتالوگ/SSDL/دیکامپایل) است؛ رفتار نصب واقعی 3.1.16.169 `UNVERIFIED_LIVE` است.
+2. نوشتن مستقیم SQL توسط مدیر/ابزارهای Import خارج از این سه مسیر می‌تواند بدون تازه‌کردن `RegisterDate` انجام شود — کاتالوگ نصاب خودش UPDATEهای مهاجرتی تک‌ستونی دارد (نمونه: دستور id `23552` فقط `cmpNameOfficial` را تغییر می‌دهد)؛ پس `RegisterDate` یک **watermark بهترین‌تلاش** است، نه تضمین.
+3. در `ApispUpdateCompany` مقدار از تماس‌گیرنده می‌آید؛ اگر تماس‌گیرنده مقدار کهسته بفرستد ستون تازه نمی‌شود (برخلاف `MobspUpdateCompany` که با `GETDATE()` بازنویسی می‌کند).
+
+**رفتار واقعی فیلترهای `registeredFrom/registeredTo` در کد (SHA مبنا):**
+- `CompanyRepository.cs:104-105`: `AND CC.RegisterDate >= @regFrom` / `AND CC.RegisterDate <= @regTo` — فیلتر روی خودِ `RegisterDate`.
+- `firstRegisteredFrom/To` → `AND CC.FirstRegisterDate >= / <=` (`CompanyRepository.cs:106-107`) — فقط در endpoint فهرست مشتریان (`/api/v1/companies`)، **نه** در مسیر Sync.
+- `SyncController.cs:42-44`: `s.RegisteredFrom/To` مستقیم به `CompanyListQuery.RegisteredFrom/To` نگاشت می‌شود؛ یعنی پنجرهٔ `/api/v1/sync/companies` هم روی `RegisterDate` است. `03-endpoints.md` (جدول فیلترهای companies) هم پنجره را «بازهٔ `RegisterDate`» توصیف کرده است.
+
+**اثر این تعارض بر دریافت تغییرات و طراحی Snapshot در MedPad:**
+- **اگر روایت «آخرین ویرایش» در نصب واقعی برقرار باشد (جهت شواهد ایستا):**
+  - پنجرهٔ `registeredFrom/To` در `/sync/companies` «مشتریان **ایجادشده یا ویرایش‌شده** در پنجره» را برمی‌گرداند، نه صرفاً «مشتریان جدید» — توصیف سند ۱۰ §۳ («تازه‌ایجادشده») با این معنا سازگار نیست و MedPad نباید برای تشخیص «جدید» به آن تکیه کند؛ ستون درست برای «فقط جدید» پنجره‌بندی `FirstRegisterDate` است که در مسیر Sync وجود ندارد (→ API-02).
+  - ادعای «ویرایش‌ها با هیچ ستونی قابل تشخیص نیستند» (`IDEAL_SYNC_CAPABILITY_AUDIT.md` §۲) رد می‌شود: `RegisterDate` می‌تواند watermark کشف ویرایش باشد و لایهٔ ۲ سند ۱۰ (Snapshot کامل + هش برای تشخیص ویرایش) را برای مشتریان سبک‌تر کند — مشروط بر پذیرش محدودیت‌های بند قبل.
+  - محدودیت عملی: طبق `IDEAL_DATABASE_MAP.md` §۸.۲ هیچ ایندکسی روی `RegisterDate` وجود ندارد؛ پنجره‌بندی بدون ایندکس خطر Full Scan دارد.
+- **اگر روایت دوم در نصب واقعی برقرار باشد** (مثلاً به دلیل نوشتن انبوه خارج از برنامه): سناریوی محافظه‌کارانهٔ سند ۱۰ (Snapshot دوره‌ای + مقایسه) تنها راه باقی می‌ماند.
+- **تصمیم پیشنهادی ثبت‌شده:** تا تأیید زنده، طراحی MedPad محافظه‌کارانه بماند (سند ۱۰)، اما یک آزمون زندهٔ کوچک (ویرایش یک رکورد آزمایشی از طریق برنامه و مقایسهٔ `RegisterDate`) برای رد/تأیید watermark در نصب مالک، در فهرست اقدامات آینده ثبت شد (جدول ۱۴.۱۰، ردیف API-01).
+
+### ۱۴.۳ یافتهٔ B — مشتریان و آدرس‌ها (API-02..API-05)
+
+**تطبیق قرارداد `CompanyDto` ↔ SELECT واقعی `CompanyRepository`:** همهٔ فیلدهای `CompanyDto` در `MapCompany` (`CompanyRepository.cs:164-240`) مقداردهی می‌شوند — **هیچ فیلد مرده‌ای در `CompanyDto` وجود ندارد**. SELECT پایه (`CompanyRepository.cs:36-80`) پوشش کامل دارد: هویت (`CompanyID/cmpNumber/cmpCode/cmpName/cmpNameEng/cmpNameOfficial/cmpFame/cmpActivityType`)، دسته‌بندی (`cmpTitleId/cmpGroupId/cmpSubGroupId/cmpGroupIdII/III/IV/cmpTypeId/cmpPresentationId` + نام‌های JOINشده)، تماس (دو خط تلفن + موبایل/فکس)، جغرافیا (کشور/استان/شهر + نشانی)، مختصات (`cmpCoordinate*`)، شناسه‌های ثبتی (`cmpRegistrationNumber/cmpEconomicCode/cmpNationalCode/cmpBuyLimit/cmpAccountNumber`)، انتساب‌ها و تاریخ‌ها.
+
+- **معنای مستقل ستون‌های انتساب (هر سه ستون جداگانه در SELECT هستند و نباید یکی فرض شوند):**
+  - `cmpReferUserId` → `Users` **[FK V4]** — «بازاریاب/معرف» مشتری؛ در `MobspUpdateCompany` هم ستونی مستقل از `UserId` است (خط ۱۳۳۷ همان دستور).
+  - `UserId` → `Users` [FK] — **آخرین ویراستر** (شواهد بند ۱۴.۲، ردیف‌های ۲ و ۵).
+  - `FirstRegisterUserId` → `Users` [FK] — سازندهٔ رکورد (فقط در درج نوشته می‌شود — بند ۱۴.۲، ردیف‌های ۴ و ۶).
+  - تحلیل تفکیک این ستون‌ها از `ordSellerId`/`ordReferUserId` سفارش در بند ۱۴.۵ و ۱۴.۸ ادامه دارد.
+- **نبود وضعیت حذف نرم:** `CrmCompany` در SSDL187 (۱۲۰ ستون؛ بلوک EntityType از خط ۱۰۲۴) **هیچ ستون `IsDeleted` یا `InActive` عمومی ندارد** — تنها پرچم‌های وضعیت: `cmpIsDraft` (V5)، `cmpKind` (V5)، `cmpEffectiveDate*`، `cmpCRMShop*`، `cmpFO*`. حذف مشتری فیزیکی است (خانوادهٔ SPهای `CRMspDelete*` در کاتالوگ، رکوردها را DELETE می‌کنند — نمونه در `ideal-write-audit-third-part-2.txt:6180-6216`) → MedPad حذف‌ها را فقط با Snapshot/آشتی‌سازی دوره‌ای کشف می‌کند (هم‌راستا با سند ۱۰ §۳ لایهٔ ۲).
+- **فیلدهای وابسته به نسخه‌های جدید در قرارداد:** `cmpNameOfficial` (افزودهٔ V6) و `cmpIsDraft`/`cmpKind` (V5) در SELECT هستند. هر سه در `SchemaProbe.RequiredTableColumns` (`SchemaProbe.cs:23`) الزامی‌اند؛ پس در صورت نبودِ ستون روی 169، موجودیت Companies به‌صورت کنترل‌شده Blocked/503 می‌شود (نه خطای خام) — ریسک نسخه ثبت است ولی کلاس شکست «پاک» است.
+- **آدرس‌ها:** تنها مسیر `GET /api/v1/companies/{id}/addresses` است (`CompaniesController.cs:45-50`؛ SELECT در `CompanyRepository.cs:131-140`). **هیچ مسیر Sync مستقلی برای آدرس‌ها وجود ندارد** و `CompanyAddressDto.RegisterDate` هم از همان ستون `RegisterDate` جدول `CrmCompanyAddresses` خوانده می‌شود (`CompanyRepository.cs:135,158`) — یعنی همان ابهام معنایی بند ۱۴.۲ در این موجودیت هم هست. مغایرت نام ستون نوع آدرس (`T.CompanyAddressType` به‌جای `CompanyAddressTypeName`) و ریسک V7 بودن کلید `cmpaddTypeId` **قبلاً در SCH-01 (ردیف ۱۹) و §۳.۳ نقشهٔ دیتابیس ثبت شده است و اینجا بازنویسی نمی‌شود**؛ نتیجهٔ عملی: تا اصلاح SCH-01، endpoint آدرس‌ها روی هر نصب با SqlException خام می‌شکند (و Probe هم این جدول را پوشش ستونی کامل می‌دهد اما نام ستونِ نامعتبر در متن Query اصلاً نمی‌شود — SCH-01 مقدم بر هر استفاده است).
+
+### ۱۴.۴ یافتهٔ C — اشخاص مرتبط با مشتری و PII (API-06..API-08)
+
+**تطبیق DTO و SELECT واقعی `PersonRepository`:** تمام فیلدهای `CompanyPersonDto` در Mapper (`Repositories.cs:79-135`) مقداردهی می‌شوند — **فیلد مرده‌ای وجود ندارد**؛ برعکس، SELECT واقعاً «سیرتر» از نیاز پایه است. SELECT پایه: `Repositories.cs:17-43`؛ فیلترها: `Repositories.cs:58-62` (فقط `companyId/name/mobile/workingOut` + Keyset).
+
+- **مغایرت JOIN فرهنگ‌های شغل/گروه/جنسیت/دپارتمان:** در **SCH-01 ردیف‌های ۱-۷** ثبت است (جدول `dbo.CrmPersonJob` و ستون‌های `JobID/Job`، `PG.GroupName` به‌جای `PersonGroup`، `SX.Sex` به‌جای `SexType`، `DP.DepartmentID/Department` به‌جای `PersonDepartmentId/PersonDepartment`) — **بازنویسی نمی‌شود**؛ نتیجه: endpoint اشخاص روی هر نصب Ideal با SqlException خام می‌شکند و جدول‌های فرهنگ در Probe هم پوشش ندارند (SCH-03).
+- **فهرست دقیق PIIهایی که واقعاً در SELECT و DTO هستند** (`Repositories.cs:27-30` + `CompanyPersonDto.cs:50-65`):
+  - **حساس فردی:** `prsNationalCode` (کد ملی)، `prsIdentityNumber` (شماره شناسنامه)، `prsFatherName`، `prsBirthDate`، `prsBirthPlace`، `prsIsMarried`، `prsMarriageDate`، و نیز `prsSkill`، `prsStudyField`، `prsInteresting`، `prsSpecialPoint`، `prsDescription`.
+  - **تماس/نشانی:** `prsMobile/prsTel/prsTelII/prsFax/prsEmail/prsEmailII/prsWebSite/prsAddress/prsZipCode/prsPostBox` + کشور/استان/شهر.
+  - یعنی عملاً کل بلوک «Personal» نگاشت (§۲ سند `IDEAL_API_MAPPING.md`) افشا می‌شود.
+- **تناقض با `IDEAL_PII_AUDIT.md` (تأیید شد):** بند §۲.۳ آن سند مدعی است `prsFatherName`/`prsBirthDate` و «تاریخ‌های شخصی و ستون‌های مشابه» «در هیچ SELECT فعلی نیستند» و ممیزی برای «تثبیت همین وضعیت» انجام شده؛ **این ادعا با کد فعلی در SHA مبنا در تضاد است** — ستون‌های فوق در `Repositories.cs:27-28` خوانده و در DTO برمی‌گردند. همچنین §۲.۱ همان سند «فیلتر nationalCode (persons) در WHERE» را فهرست کرده، در حالی که `PersonListQuery` (`QueryDtos.cs:39-45`) چنین فیلتری ندارد و WHERE واقعی فقط چهار شرط بالا دارد. این دو مورد به‌عنوان **کهن‌شدگی سند PII نسبت به کد** ثبت می‌شوند (اصلاح سند در فاز مستندسازی آینده؛ طبق قاعدهٔ پیوست الف، تعارض ثبت می‌شود نه حذف خاموش).
+- **پیشنهاد حداقل‌سازی داده برای MedPad (ثبت تصمیم، نه اقدام):** طبق توصیهٔ §۴ خودِ سند PII، DTO اشخاص در نسخهٔ عملیاتی به فیلدهای تماس+ساختاری محدود شود. **حذف هر PII (به‌ویژه کد ملی/شناسنامه/تاریخ تولد/وضعیت تأهل) تصمیم محصولی/مالک داده است، نه اصلاح خودسرانهٔ فنی.** نکتهٔ فنی ثبت‌شده: ستون‌های PII اشخاص در `SchemaProbe.RequiredTableColumns` (`SchemaProbe.cs:24`) الزامی‌اند؛ هر حداقل‌سازی باید هم‌زمان Probe را بازبینی کند وگرنه موجودیت به‌درستی Blocked می‌شود.
+
+### ۱۴.۵ یافتهٔ D — کاربران و انتساب‌ها (API-09..API-12)
+
+**تطبیق `CrmUserDto` ↔ `UserRepository` با نقشهٔ دیتابیس:** SELECT (`Repositories.cs:145-151`) بدون هیچ JOIN است؛ همهٔ فیلدهای DTO در Mapper (`Repositories.cs:172-195`) مقداردهی می‌شوند (فیلد مرده ندارد).
+
+- **فیلدهای فرهنگ بدون نام:** `PositionId` و `UserGroupId` فقط شناسهٔ خام برمی‌گردند؛ JOIN به `UserPositions.PositionName` (SSDL:10219) و `UserGroups.GroupName` (SSDL:10087) **وجود ندارد** — و فهرست baseinfo فعلی (`03-endpoints.md`، kindهای مجاز) هم kindی برای سمت/گروه کاربر ندارد؛ MedPad باید نگاشت Id→نام را خودش بسازد.
+- **فیلدهای نقشهٔ دیتابیس که در DTO/SELECT غایب‌اند:** `Users.ResponsibleUserId` (خودارجاع **[FK V4]**، SSDL بلوک Users از خط ۱۰۲۵۵) — غایب. ستون‌های ممنوع (`Password/IPAddress/ComputerName/InsuranceCode/Mob*Imei*/MobHRM*/UserLoginCheck*/LinkAccUserCode`) عمداً غایب‌اند (Denylist — سند PII §۲.۲) و این غیبت صحیح و تضمین‌شده است.
+- **PII:** `Users.NationalCode` در SELECT و DTO هست (`Repositories.cs:149,191`؛ `CrmUserDto.cs:23`) — افشای کد ملی کارمندان؛ هم‌ارز ثبت §۲.۱ سند PII و مشمول همان تصمیم حداقل‌سازی.
+- **جداول محدودسازی دسترسی مشتری↔کاربر که API اعمال نمی‌کند (تأیید ساختاری):** ۱۶ موجودیت SSDL در این فاحه شناسایی و تأیید شد: `CrmCompanyForbidden{City,Company,Department,Group,GroupIV,Province,SubGroup}`، `CrmCompanyJustAccess{City,Company,Department,Group,GroupIV,Province,SubGroup}`، `CrmCompanyUserForbidden` (ستون‌ها: `CrmUserId/ForbiddenCompanyId/CanSee/CanEdit/CanDel/Reason`) و `CrmProjectsForbiddenForUser{,_Lang}`. **هیچ Query فعلی IdealBridge به هیچ‌یک از این جداول اشاره نمی‌کند و هیچ فیلتری بر مبنای آن‌ها اعمال نمی‌شود** — توکن MedPad کل دامنهٔ مشتریان/پروژه‌ها را می‌بیند. این موضوع در §۳.۵ نقشهٔ دیتابیس و §۴ سند نگاشت نیز ثبت بوده و از منظر MedPad یک **تصمیم محصولی** باز است (نمای سیستم یا نمای کاربر — بند ۱۴.۱۱ قاعدهٔ ۳).
+- **تفکیک نقش‌های انتسابی (عدم یکی‌فرضی):** `cmpReferUserId` (بازاریاب/معرفِ مشتری)، `ordSellerId` (فروشندهٔ سفارش)، `ordReferUserId` (معرفِ سفارش) و `UserId` (آخرین ویراستر) **چهار ستون مستقل‌اند**؛ هیچ شاهدی برای هم‌ارزی آن‌ها وجود ندارد. در کد فعلی فقط `cmpReferUserId` و `ordReferUserId` خوانده می‌شوند؛ `ordSellerId` اصلاً در SELECT سفارش نیست (بند ۱۴.۸).
+- **ارتباط احتمالی دیگر — ستون واقعی `cmpSuppUserId` (معنای تأییدنشده):** ستون `cmpSuppUserId` روی `CrmCompany` در SSDL تأیید شد و هم به‌عنوان پارامتر `@cmpSuppUserId` در `MobspUpdateCompany` و هم در فراخوانی `GenerateAutoUPController.ActUpdateCompanyFOInfo` (دسکتاپ؛ `GenerateAutoUPController.cs:1478`) کنار `referUserId` ظاهر می‌شود — احتمالاً «مسئول تأمین/پشتیبانی» مشتری؛ **اما معنای دقیق آن با شواهد فعلی تأییدنشده است و قطعی اعلام نمی‌شود**؛ فقط به‌عنوان نام ستون واقعی با معنای نامعلوم ثبت می‌شود (در DTO/SELECT فعلی نیست).
+
+### ۱۴.۶ یافتهٔ E — مکالمات، پروژه‌ها و یادآوری‌ها (API-13..API-20)
+
+**Conversations — تطبیق `ConversationDto` با SELECT و Mapper (`Repositories.cs:205-278`):**
+- **`IsTicketRead` از `cnvsIsTicketNew` خوانده می‌شود** (`Repositories.cs:274`: `IsTicketRead = Reader.GetBoolN(r, "cnvsIsTicketNew")`)، در حالی که در نقشهٔ دیتابیس (§۷.۱) و SSDL هر دو ستون `cnvsIsTicketNew` و **`cnvsTicketIsRead`** وجود دارند؛ یعنی فیلد DTO با معنای «جدید بودن تیکت» (ستون V7 — ریسک 169، SCH-02 ردیف ۲) پر می‌شود نه «خوانده‌شده» — هم مغایرت معنایی و هم ریسک نسخه در یک فیلد.
+- **`Priority` هرگز پر نمی‌شود:** DTO فیلد `Priority` دارد ولی Mapper فقط `PriorityId` را می‌نویسد (`Repositories.cs:269`) و JOIN به `CrmConversationPriority` (نام ستون `Priority` — SSDL:2895) در SELECT وجود ندارد.
+- **`RemindDate`/`RemindTime` هرگز پر نمی‌شوند:** فقط `RemindDateTime` از `cnvsRemindDateTime` مقدار می‌گیرد (`Repositories.cs:270`)؛ ستون‌های `cnvsRemindDate/cnvsRemindTime` (SSDL) در SELECT نیستند.
+- **متن `cnvsDesc` (nvarchar(max)) در SELECT نیست** — بدنهٔ مکالمه/یادداشت پیگیری از API فعلی قابل دریافت نیست و فقط `cnvsSubject` (عنوان کوتاه) برمی‌گردد.
+- مغایرت‌های نام `T.TopicName` و `S.ConversationStatus` در **SCH-01 ردیف‌های ۸-۱۰** ثبت‌اند و بازنویسی نمی‌شوند.
+- **نبود Endpoint برای `CrmCallHistory`** (۴۶ ستون؛ طبق §۷.۳ نقشهٔ دیتابیس تنها جدول فعالیت با FK واقعی به مشتری/شخص — SSDL:338) **و مجموعهٔ `CrmConversationReferUsers`** (۱۵ ستون؛ ارجاع چندکاربرهٔ مکالمه — SSDL:2926) — هیچ مسیر API برای این دو وجود ندارد.
+
+**Projects — تطبیق `ProjectDto` با SELECT واقعی (`Repositories.cs:296-366`):**
+- موجود: شناسه/شرکت/عنوان (`prjTitle`)/موضوع (`prjSubject`)/توضیح/زمان شروع/کاربر شروع‌کننده و تمام‌کننده (فقط Id)/وضعیت پایان و تاریخ آن/درجه-اولویت-گروه (Id + نام از JOINهای معیوب)/شماره‌گذاری (`prjNumRef/prjNumR/prjPostFix`)/تاریخ‌ها/آخرین ویراستر (`UserId AS LastEditUserId`).
+- **فیلد مرده با شاهد ساختاری:** `ProjectDto.ReferUserId` (`DomainDtos.cs:67`) — **هیچ ستونی به نام `prjReferUserId` در SSDL وجود ندارد** (ستون‌های کاربر پروژه عبارت‌اند از: `prjStarterUserId/prjFinishedUserId/prjReadUserId/prjResponseUserId/prjFirstDoingUserId/prjTicketStopUserId`)؛ این فیلد همیشه null است. `StatusGroupId` (`DomainDtos.cs:63`) هم هرگز پر نمی‌شود (`prjcnvsStatusGroupId` در SELECT نیست؛ در Probe هست).
+- **ستون‌های کاربر غایب از قرارداد:** `prjReadUserId`، `prjResponseUserId`، `prjFirstDoingUserId`، `prjTicketStopUserId`.
+- **ریسک ستون‌های نسخه‌ای:** `prjSubject/prjNumRef/prjNumR` (هر سه افزودهٔ V6) در SELECT هستند؛ `prjSubject` در Probe نیست (**SCH-02 ردیف ۳** — شکست خام) و `prjNumRef/prjNumR` Probe شده‌اند (شکست پاک).
+- مغایرت نام فرهنگ درجه و گروه پروژه (`G.GradeName`/`PG.GroupName`) → **SCH-01 ردیف‌های ۱۱-۱۲** (بازنویسی نمی‌شود).
+
+**Reminders — تطبیق `ReminderDto` با SELECT/Mapper (`Repositories.cs:376-441`):**
+- **`Object` و `Companies` هرگز پر نمی‌شوند:** Mapper این دو فیلد DTO (`DomainDtos.cs:98,100`) را مقداردهی نمی‌کند؛ `ObjectTypeId/ObjectId` خام برمی‌گردند (معنای دقیق typeهای چندریختی طبق §۷.۴ نقشهٔ دیتابیس Unverified) و `UserTaskCompanyIds` به‌صورت رشتهٔ خام csv در `CompanyIds` افشا می‌شود (ستون **V7 — پرریسک برای 169**؛ در Probe هست).
+- **دامنهٔ endpoint فقط با `userId`:** کوئری همیشه `AND T.UserId = @uid` دارد (`Repositories.cs:378`)؛ یعنی endpoint فقط وظایف «مالک‌شده توسط همان userId» را برمی‌گرداند. **اما `userId` پارامتر تماس‌گیرنده است و از توکن مشتق نمی‌شود** (`HistoryController.cs:47-63` — کنترل فقط `q.UserId <= 0` است) — هیچ محدودسازی کاربر در سطح API وجود ندارد؛ هر توکن معتبر می‌تواند وظایف هر کاربری را بخواند. این یافته با مدل Scope توکن‌ها (بخش ۱۷ همین سند) هم‌خانواده است اما مستقل و جدید است.
+- **نبود Sync اختصاصی یادآوری‌ها:** در `SyncController` مسیری برای reminders وجود ندارد (بند ۱۴.۹)؛ فیلتر تاریخ (`fromDate/toDate` روی `UserTaskDate`) و Keyset (`afterId`) فقط در endpoint فهرست موجودند. ستون‌های `UserTaskRemindDate/RemindTime` در Probe نیستند (**SCH-02 ردیف‌های ۴-۵**).
+
+### ۱۴.۷ یافتهٔ F — محصولات، قیمت، موجودی و انبار (API-21..API-24)
+
+**قرارداد `ProductDto` ↔ Query فعلی (`Repositories.cs:487-547`):** همهٔ فیلدهای DTO به‌جز `Description` مقداردهی می‌شوند؛ **`ProductDto.Description` فیلد مرده است** — در حالی که ستون واقعی `PrdDescription` روی `WSProducts` وجود دارد (SSDL تأیید شد) و خوانده نمی‌شود. فیلترهای موجود: `code` (دقیق)، `name` (LIKE)، `groupId` (دقیق روی `PrdGroupID`)، `registeredFrom/To` (روی `RegisterDate`)، Keyset.
+
+- **ایراد زنجیرهٔ گروه محصول — ارجاع به SCH-01 (ردیف‌های ۱۵-۱۸) و SCH-04، با تأکید مأموریت:** JOIN فعلی مقدار `PrdGroupID` را به `WSProductFirstGroup` با کلید ناموجود `ProductFirstGroupID` می‌زند (`Repositories.cs:517`). **`PrdGroupID` به گروه دوم محصول مربوط است** (شاهد بومی `WSspSelectProductsByFSGId`؛ §۵.۱ نقشهٔ دیتابیس) و زنجیرهٔ صحیح `PrdGroupID → WSProductSecondGroup.PrdSecondGroupID` و سپس `SecondGroup.FirstGroupId → WSProductFirstGroup.PrdFirstGroupID` است؛ **تعویض نام ستون به‌تنهایی کافی نیست** — با اصلاحِ نام صرف، Query از نظر شناسه‌ها معتبر می‌شود اما مقدار Id گروه دوم را با PK گروه اول تطبیق می‌دهد (JOIN بی‌نتیجهٔ گسترده یا تطبیق اشتباه). انتخاب «گروه دوم مستقیم» یا «زنجیرهٔ دوم→اول» تصمیم محصولی است (SCH-04 — بازنویسی نمی‌شود).
+- **فیلدهای غایب از قرارداد:** توضیحات (`PrdDescription` — موجود در جدول، ناخوانده)، مشخصات فنی (`WSProductSpecification` — ۱۸ ستون SSDL)، تصاویر (`WSProductPicture` — ۲۹ ستون SSDL)، بارکد دوم/سوم (`PrdSecondBarcode/...`)، آستانه‌های پایهٔ نسخهٔ قدیمی (`PrdMinQty/PrdMaxQty`) و سریال‌ها.
+- **نبود Endpoint قیمت:** هیچ مسیری برای `WSProductPrice`/`WSProductPriceGroup` وجود ندارد (نگاشت مسیر آینده: §۶ سند نگاشت؛ ستون‌های کلیدی هر دو جدول در SSDL تأیید شد). **هشدار (قاعدهٔ طلایی فاز ۱۲):** `WSProductPrice.Price` الزاماً قیمت نهایی فروش نیست — رزولوشن آن «آخرین ردیف قیمتِ محصول در گروه-قیمت بر اساس DocDate» است (متن `WSfnReturnProductPrice`)؛ قیمت قلم سفارش توسط خانوادهٔ `WSspAutoCalcOrderItemPrice`/`MobspAutoCalcOrderItemPrice` و قیمت‌گذاری مشتری-خصیص/نرخ گروه II (`WSspCmpPrdSalePriceHistory`، `WSspReturnPricePartRateFromCmpGroupII`) محاسبه می‌شود؛ **منطق قیمت مشتری/گروه قیمت باید پیش از هر طراحی endpoint قیمت از SPهای Ideal استخراج و بررسی شود.**
+- **نبود Endpoint موجودی:** موجودی محاسبه‌ای است — `SUM(In) − SUM(Out)` از `WSDoc JOIN WSDocItems` با جهت `WSDocOpr.OprType` (1=ورود، 2=خروج) به تفکیک دورهٔ مالی/انبار/محصول (§۵.۳ نقشهٔ دیتابیس؛ جداول در SSDL تأیید شد). **Endpoint فعلی `GET /api/v1/warehouses` صرفاً فهرست انبارهاست** (`CommercialController.cs:26-31`؛ SELECT از `WsWareHouse` در `Repositories.cs:452-458`) و **معادل موجودی نیست**.
+
+### ۱۴.۸ یافتهٔ G — سفارش و پیش‌سفارش (API-25..API-31)
+
+**تطبیق `OrderDto` با Query واقعی (`Repositories.cs:557-625`):**
+- **فیلدهای DTO که در SELECT یا Mapper مقداردهی نمی‌شوند (فیلدهای مرده):**
+  - `Status` (`DomainDtos.cs:176`) — فقط `StatusId` برمی‌گردد؛ JOIN به `WSOrderStatus.OrderStatus` (SSDL:12810) وجود ندارد.
+  - `SellerId` (`DomainDtos.cs:181`) — `ordSellerId` نه در SELECT است و نه Map می‌شود (در `SchemaProbe` هست؛ نگاشت §۹ سند نگاشت همین را گفته بود).
+  - `LastEditDate` (`DomainDtos.cs:184` — `TspOrdLastEditDate`) — در SELECT نیست.
+- **نبود `OprType` در خروجی سفارش:** SELECT فقط `OP.Name AS OprName` را از `WSOrderOpr` می‌گیرد (`Repositories.cs:585,593`)؛ ستون `OprType` (SSDL:12549؛ طبق seed کاتالوگ §۶.۱ نقشهٔ دیتابیس: OprType=۱ **برگشت از فروش**، ۲ فروش غیررسمی/امانی) خوانده نمی‌شود → **MedPad نمی‌تواند برگشت از فروش را از فروش تفکیک کند؛ جمع‌زدن سادهٔ سفارش‌ها فروش را متورم می‌کند.**
+- **نبود `PreOrderId` در DTO سفارش:** `WSOrder.PreOrderId` (SSDL بلوک WSOrder از خط ۱۱۷۷۸؛ رابطهٔ ۱:N با پیش‌سفارش — شاهد `WSfnReturnOrderFromPreOrder`) نه در SELECT است و نه در DTO — زنجیرهٔ پیش‌سفارش→سفارش از API فعلی قابل بازسازی نیست.
+- **هشدار «وجود رکورد در `WSOrder` به‌تنهایی اثبات فروش قطعی نیست»:** وضعیت واقعی = ترکیب `ordIsVerified` + `WSOrderOpr.OprType` + `ordStatusId` + صدور سند انبار متناظر در `WSDoc` (§۶.۳ نقشهٔ دیتابیس) — این ترکیب از API فعلی قابل محاسبه نیست (OprType غایب؛ اسناد انبار خارج دامنهٔ فعلی).
+- **نبود Endpointهای وابسته (همگی در SSDL تأیید شدند):** اقلام سفارش (`WSOrderItems` — ۱۲۵ ستون)، اقلام پیش‌سفارش (`WSPreOrderItems` — ۹۵ ستون)، پرداخت‌ها (`WSOrderPayments` — ۸۳ / `WSPreOrderPayments` — ۶۶ ستون)، تخفیف‌ها (`WSOrderDiscounts`/`WSPreOrderDiscounts`) و پورسانت‌ها (`WSOrderCommissions`/`WSPreOrderCommissions`) — هیچ‌کدام مسیر API ندارند (نگاشت مسیر: §۱۰ سند نگاشت).
+- **تطبیق `PreOrderDto` (`Repositories.cs:627-692`):** فیلد `Status` مرده است (فقط `StatusId`)؛ `pordSellerId`/`pordSaleCenterId`/`pordExpireDate` در DTO نیستند (نگاشت §۸). **`PreOrderListQuery` هیچ پنجرهٔ `registeredFrom/To` ندارد** (`QueryDtos.cs:93-100` — فیلترها: `number/companyId/fromDate/toDate/isVerified` + Keyset) برخلاف ادعای `03-endpoints.md` («`GET /api/v1/preorders` مشابه سفارش‌ها») — ناسازگاری سند↔کد ثبت می‌شود.
+- **اتصال `PreOrderOprID` به `WSOrderOpr`:** SELECT فعلی `OP.Name` را از JOIN به `WSOrderOpr` می‌گیرد (`Repositories.cs:659`) در حالی که فرهنگ مستقل `WSPreOrderOpr` (SSDL:13352) وجود دارد — **این مورد همان SCH-05 است؛ بدون دادهٔ زنده خطای قطعی اعلام نمی‌شود و به‌عنوان POTENTIAL باقی می‌ماند.**
+- **تفکیک نیازمندی‌ها (ثابت شد):** نبود Endpoint قیمت و موجودی (بند ۱۴.۷) از نیازمندی‌های «تکمیل تحلیل فروش» جداست — هر دو برای تحلیل مالی کامل لازم‌اند اما مسیر طراحی، مالکیت داده و ریسک متفاوتی دارند.
+
+### ۱۴.۹ یافتهٔ H — شکاف Sync (API-32..API-35)
+
+مقایسهٔ Endpointهای واقعی `/api/v1/sync/*` (`SyncController.cs:37-94`) با قابلیت Keyset در Queryها، پنجرهٔ تاریخ، شناسه‌های پایدار و ترتیب وابستگی MedPad (سند ۱۰):
+
+| بعد | وضعیت واقعی در SHA مبنا |
+|---|---|
+| مسیرهای Sync اختصاصی | فقط **سه** مسیر: `companies` (afterId + registeredFrom/To + limit)، `persons` (afterId + companyId + limit)، `conversations` (afterId + companyId + limit) |
+| موجودیت‌های بدون Sync اختصاصی | **users، projects، reminders، products، orders، preorders** (و آدرس‌های مشتری) — مسیر فهرست عمومی با `afterId` (PagedQuery) برای همهٔ این‌ها موجود است، اما بستهٔ Sync (`limit` + `nextAfterId` + `nextPageUrl`) فقط برای سه موجودیت بالا ساخته شده است |
+| پنجرهٔ تاریخ در Sync | فقط companies پنجرهٔ `registeredFrom/To` دارد؛ **sync اشخاص و مکالمات پنجرهٔ تاریخ نمی‌پذیرند** (اشخاص: حتی در endpoint فهرست هم فیلتر تاریخ ندارد — `PersonListQuery` فقط companyId/name/mobile/workingOut؛ مکالمات: `fromDate/toDate` در فهرست هست ولی در Sync منتقل نمی‌شود) |
+| شناسه‌های پایدار | همهٔ جداول هسته PK اینت identity دارند (`CompanyID/CompanyPersonID/UserId/ConversationID/ProjectID/UserTaskId/ProductID/OrderID/PreOrderID/CompanyAddressId/WareHouseID`) — Keyset روی آن‌ها امن است (§۲ نقشهٔ دیتابیس) |
+| ترتیب وابستگی MedPad (سند ۱۰ §۶) | اطلاعات پایه → کاربران → مشتریان → اشخاص → آدرس‌ها → پروژه‌ها → مکالمات → یادآوری‌ها → محصولات → سفارش‌ها — توجه: دو حلقهٔ ابتدایی (baseinfo/users) و آدرس‌ها مسیر Sync اختصاصی ندارند |
+
+- **عدم خلط با `LastModifiedDate`/CDC:** نبود rowversion/CT/CDC (فاز ۱۲.۵) یک واقعیت ساختاری جداست از معنای `RegisterDate`؛ حتی اگر روایت «آخرین ویرایش» تأیید شود (بند ۱۴.۲)، `RegisterDate` جایگزین یک `LastModifiedDate` تضمینی/ایندکس‌دار نیست — یک watermark بهترین‌تلاش است.
+- **حذف فیزیکی:** هیچ IsDeleted/CDC وجود ندارد؛ حذف‌ها در Ideal ردیابی نمی‌شوند و MedPad باید Snapshot/آشتی‌سازی دوره‌ای (شمارش/بیشینهٔ PK/هش — سند ۱۰ §۳ لایهٔ ۲) را اجرا کند.
+
+### ۱۴.۱۰ جدول یافته‌ها و شکاف‌های این فاز (API-01..API-35)
+
+ستون «وضعیت شواهد» از برچسب‌های چهارگانهٔ بخش ۰/فاز ۱۳ است؛ **هیچ ردیفی `FIXED_AND_TESTED` نیست** (مأموریت مستندسازی بود و هیچ اصلاحی انجام نشد). اولویت‌ها: **P0** = مانع صحت یا امنیت داده · **P1** = لازم برای اتصال عملیاتی MedPad · **P2** = توسعهٔ تکمیلی/قابلیت آینده.
+
+| شناسه | موجودیت | شکاف/یافته | وضعیت شواهد | اثر بر MedPad | اولویت | وابستگی/اقدام بعدی |
+|---|---|---|---|---|---|---|
+| API-01 | Company/اسناد | تعارض معنای `RegisterDate` میان اسناد؛ تعیین ایستای این فاز با شواهد کاتالوگ/دسکتاپ: آخرین ویرایش (`FirstRegisterDate`=ایجاد) — بند ۱۴.۲ | `CONFIRMED_STATIC` (وجود تعارض + جهت حل) / `UNVERIFIED_LIVE` (نصب واقعی) | مبنای «پنجرهٔ ثبت» و کشف ویرایش در طراحی Sync تغییر می‌کند | P0 | آزمون زندهٔ کوچک روی نصب مالک؛ اصلاح سند ۱۰ و سند قابلیت Sync در فاز مستندسازی |
+| API-02 | Company/Sync | پنجرهٔ `/sync/companies` روی `RegisterDate` است؛ پنجرهٔ `FirstRegisterDate` فقط در فهرست (`firstRegisteredFrom/To`) هست، نه در Sync | `CONFIRMED_STATIC` | «مشتری جدید» از «مشتری ویرایش‌شده» تفکیک نمی‌شود | P1 | افزودن پنجرهٔ firstRegistered* به sync در فاز اصلاح (پس از تعیین‌تکلیف API-01) |
+| API-03 | Company | نبود IsDeleted/حذف نرم در `CrmCompany` (۱۲۰ ستون SSDL؛ حذف فیزیکی) | `CONFIRMED_STATIC` | حذف مشتری فقط با Snapshot/آشتی‌سازی کشف می‌شود | P1 | پیاده‌سازی لایهٔ ۲ سند ۱۰ در MedPad |
+| API-04 | Company | فیلدهای نسخه‌دار در قرارداد: `cmpNameOfficial` (V6)، `cmpIsDraft`/`cmpKind` (V5) — هر سه Probe شده‌اند (شکست پاک 503) | `CONFIRMED_STATIC` (ریسک) / `UNVERIFIED_LIVE` (169) | در صورت نبود ستون روی 169، کل موجودیت Companies مسدود می‌شود | P2 | تعیین نسخهٔ هدف؛ گزارش زنده (SCH-07) |
+| API-05 | Address | نبود Sync مستقل آدرس‌ها + نام ستون نوع آدرس غلط (SCH-01 ردیف ۱۹؛ `cmpaddTypeId` افزودهٔ V7) | `CONFIRMED_STATIC` | آدرس‌ها فقط به‌تفکیک مشتری قابل دریافت‌اند؛ endpoint فعلی روی هر نصب می‌شکند | P1 | اصلاح SCH-01 (جدول ۱۳.۸ ردیف ۱)؛ سپس مسیر sync آدرس‌ها |
+| API-06 | Person | افشای بلوک کامل PII فردی در SELECT/DTO: کد ملی، شناسنامه، نام پدر، تولد/محل تولد، تأهل + مهارت/علاقه/نکته + تماس/نشانی (بند ۱۴.۴) | `CONFIRMED_STATIC` | انتقال حجم بزرگی از PII غیرضروری به MedPad | P0 | تصمیم مالک داده برای حداقل‌سازی؛ بازبینی هم‌زمان Probe |
+| API-07 | Person | مغایرت JOIN فرهنگ‌های شغل/گروه/جنسیت/دپارتمان — ارجاع به SCH-01 ردیف‌های ۱-۷ (بدون بازنویسی) | `CONFIRMED_STATIC` | endpoint اشخاص روی هر نصب SqlException خام می‌گیرد | P0 | فاز اصلاح SCH-01 (جدول ۱۳.۸ ردیف ۱) |
+| API-08 | Person/سند PII | تناقض `IDEAL_PII_AUDIT.md` با کد فعلی: §۲.۳ (PIIها «در SELECT نیستند» — خلاف واقع) و §۲.۱ (فیلتر کد ملی که وجود ندارد) | `CONFIRMED_STATIC` | ممیزی PII صورتحساب وضعیت نیست؛ تصمیم حداقل‌سازی بدون نقشهٔ درست ریسک‌دار است | P1 | به‌روزرسانی سند PII در فاز مستندسازی (قاعدهٔ پیوست الف/ب) |
+| API-09 | User | نبود نام سمت/گروه (فقط `PositionId`/`UserGroupId` خام؛ بدون JOIN به `UserPositions`/`UserGroups`) | `CONFIRMED_STATIC` | MedPad باید نگاشت Id→نام را خودش بسازد؛ baseinfo هم kind کاربر ندارد | P2 | افزودن kind یا JOIN در فاز توسعه |
+| API-10 | User | افشای `Users.NationalCode` (PII کارمندان) | `CONFIRMED_STATIC` | PII کارمندان در مصرف MedPad باید توجیه شود | P1 | تصمیم مالک داده (هم‌راستا با سند PII §۴) |
+| API-11 | User/Access | اعمال‌نشدن ۱۶ جدول `CrmCompanyForbidden*`/`JustAccess*`/`CrmCompanyUserForbidden` در API (بند ۱۴.۵) | `CONFIRMED_STATIC` | توکن MedPad کل دامنه را می‌بیند؛ «مشتریانِ هر نماینده» دقیق بازسازی نمی‌شود | P1 | تصمیم محصولی: نمای سیستم یا نمای کاربر (بند ۱۴.۱۱ قاعدهٔ ۳) |
+| API-12 | User | غیبت `Users.ResponsibleUserId` از DTO/SELECT (ستون‌های ممنوع عمداً غایب‌اند — درست) | `CONFIRMED_STATIC` | ساختار سرپرستی کاربران از API در دسترس نیست | P2 | در صورت نیاز محصولی، افزودن آگاهانه |
+| API-13 | Conversation | `IsTicketRead` از `cnvsIsTicketNew` خوانده می‌شود نه `cnvsTicketIsRead` (هر دو در SSDL؛ V7) | `CONFIRMED_STATIC` | معنای «خوانده‌شده» غلط منتقل می‌شود؛ ریسک نسخه | P1 | اصلاح نگاشت در فاز اصلاح؛ تفکیک دو فیلد |
+| API-14 | Conversation | `Priority`/`RemindDate`/`RemindTime` هرگز پر نمی‌شوند؛ متن `cnvsDesc` غایب است | `CONFIRMED_STATIC` | اولویت مکالمه و بدنهٔ متن از API قابل دریافت نیست | P1 | تصمیم محصول: افزودن به SELECT/Mapper یا حذف فیلد مرده |
+| API-15 | Conversation | نبود Endpoint برای `CrmCallHistory` و `CrmConversationReferUsers` | `CONFIRMED_STATIC` | سوابق تماس و ارجاع چندکاربره در MedPad نیست | P2 | فاز توسعه (نگاشت §۱۱) |
+| API-16 | Project | فیلدهای مرده: `ReferUserId` (ستون `prjReferUserId` در SSDL وجود ندارد!)، `StatusGroupId`؛ غیبت `prjReadUserId`/`prjResponseUserId`/… | `CONFIRMED_STATIC` | قرارداد گمراه‌کننده است؛ فیلد همیشه null | P2 | پاک‌سازی DTO یا پیاده‌سازی آگاهانه |
+| API-17 | Project | ستون‌های نسخه‌دار: `prjSubject` (در Probe نیست — SCH-02 ردیف ۳)، `prjNumRef`/`prjNumR` (V6، Probe شده) | `CONFIRMED_STATIC` (ریسک) / `UNVERIFIED_LIVE` (169) | شکست خام projects روی 169 در صورت نبود `prjSubject` | P2 | گزارش زنده (SCH-07)؛ تکمیل Probe (جدول ۱۳.۸ ردیف ۲) |
+| API-18 | Reminder | فیلدهای مرده `Object`/`Companies`؛ افشای خام `UserTaskCompanyIds` (V7) | `CONFIRMED_STATIC` | دادهٔ csv خام بی‌تفسیر؛ فیلدهای وعده‌داده‌شده null | P1 | تصمیم محصول + اصلاح Mapper در فاز اصلاح |
+| API-19 | Reminder | `userId` پارامتر تماس‌گیرنده است؛ محدودسازی کاربر در سطح API وجود ندارد (بند ۱۴.۶) | `CONFIRMED_STATIC` | هر توکن، وظایف هر کاربر را می‌خواند | P1 | تصمیم امنیتی: اتصال userId به scope توکن (هم‌خانوادهٔ بخش ۱۷) |
+| API-20 | Reminder | نبود Sync اختصاصی یادآوری‌ها | `CONFIRMED_STATIC` | دریافت افزایشی وظایف باید از فهرست عمومی ساخته شود | P1 | فاز توسعه: مسیر sync/reminders |
+| API-21 | Product | زنجیرهٔ گروه: `PrdGroupID`→گروه دوم؛ JOIN فعلی به گروه اول با کلید ناموجود — ارجاع به SCH-01 ردیف‌های ۱۵-۱۸ + SCH-04 (تعویض نام کافی نیست) | `CONFIRMED_STATIC` (نام‌ها) / `POTENTIAL` (معنا — SCH-04) | دسته‌بندی محصول معتبر دریافت نمی‌شود | P0 | فاز اصلاح SCH-01 + تصمیم محصولی SCH-04 |
+| API-22 | Product | غیبت توضیحات (`PrdDescription` موجود ولی ناخوانده)، مشخصات فنی، تصاویر، بارکدهای بعدی | `CONFIRMED_STATIC` | کاتالوگ غنی‌تر محصول در MedPad ممکن نیست | P2 | فاز توسعه |
+| API-23 | Price | نبود Endpoint قیمت؛ `WSProductPrice.Price` ≠ قیمت نهایی فروش (منطق قیمت مشتری/گروه از SPها) | `CONFIRMED_STATIC` (نبود مسیر) / `UNVERIFIED_LIVE` (منطق قیمت روی داده) | هر تحلیل درآمدی بدون قیمت مؤثر ناقص است | P1 | استخراج منطق قیمت از SPها؛ طراحی endpoint (§۶ نگاشت) |
+| API-24 | Stock | نبود Endpoint موجودی؛ `warehouses` فقط فهرست انبار است (موجودی = محاسبه از WSDoc/WSDocItems) | `CONFIRMED_STATIC` | موجودی باید خارج از API فعلی محاسبه شود | P1 | فاز توسعه (§۷ نگاشت) |
+| API-25 | Order | فیلدهای مرده `Status`/`SellerId`/`LastEditDate` در `OrderDto` | `CONFIRMED_STATIC` | فیلدهای وعده‌داده‌شده همیشه null؛ نام وضعیت و فروشنده غایب | P1 | اصلاح SELECT/Mapper یا حذف فیلد در فاز اصلاح |
+| API-26 | Order | نبود `OprType` در خروجی سفارش → برگشت از فروش تفکیک نمی‌شود | `CONFIRMED_STATIC` | جمع سادهٔ سفارش‌ها فروش را متورم می‌کند | P0 | افزودن OprType (ستون موجود در `WSOrderOpr`) |
+| API-27 | Order | نبود `PreOrderId` در DTO/SELECT (رابطهٔ ۱:N با پیش‌سفارش) | `CONFIRMED_STATIC` | زنجیرهٔ پیش‌سفارش→سفارش بازسازی نمی‌شود | P1 | افزودن ستون موجود |
+| API-28 | Order | هشدار: وجود رکورد `WSOrder` ≠ فروش قطعی (نیاز به isVerified+OprType+Status+سند انبار) | `CONFIRMED_STATIC` | تحلیل مالی بر مبنای Header خام گمراه‌کننده است | P0 | ترکیب API-26 + داده‌های تکمیلی |
+| API-29 | Order/PreOrder | نبود Endpoint اقلام/پرداخت/تخفیف/پورسانت (۶ جدول تأییدشده در SSDL) | `CONFIRMED_STATIC` | تحلیل فروش/مالی بدون اقلام و پرداخت ناممکن است | P1 | فاز توسعه (§۱۰ نگاشت) |
+| API-30 | PreOrder | `OprName` از `WSOrderOpr` خوانده می‌شود؛ فرهنگ مستقل `WSPreOrderOpr` — همان SCH-05 | `POTENTIAL` / `UNVERIFIED_LIVE` | نام عملیات پیش‌سفارش ممکن است غلط باشد | P2 | راستی‌آزمایی زندهٔ دو فرهنگ کوچک (فرمان‌های §۱۰ سند ممیزی اسکیما) |
+| API-31 | PreOrder | `PreOrderListQuery` پنجرهٔ registeredFrom/To ندارد برخلاف «مشابه سفارش‌ها» در سند ۰۳ | `CONFIRMED_STATIC` | ناسازگاری سند↔کد؛ پنجره‌بندی پیش‌سفارش فقط با fromDate/toDate | P2 | اصلاح سند ۰۳ یا افزودن فیلتر در فاز توسعه |
+| API-32 | Sync | مسیرهای Sync فقط companies/persons/conversations؛ users/projects/reminders/products/orders/preorders بدون Sync اختصاصی | `CONFIRMED_STATIC` | دریافت یکنواخت/قابل‌ازسرگیری برای ۶ موجودیت باید دستی ساخته شود | P1 | فاز توسعه: بسته‌های sync باقی موجودیت‌ها |
+| API-33 | Sync | sync اشخاص و مکالمات پنجرهٔ تاریخ نمی‌پذیرند | `CONFIRMED_STATIC` | پنجره‌بندی دریافت جدیدها برای این دو ممکن نیست (فقط afterId) | P1 | افزودن پنجره در فاز توسعه |
+| API-34 | Sync | تفکیک `LastModifiedDate`/CDC از معنای `RegisterDate` — watermark بهترین‌تلاش، نه تضمین | `CONFIRMED_STATIC` | طراحی Sync نباید به watermark تضمینی تکیه کند | P1 | رعایت در طراحی MedPad؛ آزمون API-01 |
+| API-35 | Sync | حذف فیزیکی بدون ردیابی → الزام Snapshot/آشتی‌سازی دوره‌ای | `CONFIRMED_STATIC` | MedPad باید حذف‌ها را با مقایسهٔ کلید/هش کشف کند | P1 | پیاده‌سازی لایهٔ ۲ سند ۱۰ در MedPad |
+
+### ۱۴.۱۱ جمع‌بندی معماری و تصمیم‌های ثبت‌شدهٔ این فاز
+
+1. **API فعلی برای دریافت پایهٔ CRM شروع مناسبی است، اما قرارداد کامل عملیاتی MedPad نیست.** پوشش موجودیت‌ها (مشتری/شخص/کاربر/مکالمه/پروژه/یادآوری/انبار/محصول/سفارش/پیش‌سفارش + baseinfo) هستهٔ خواندن را می‌سازد؛ اما فیلدهای مرده (API-14/16/18/25)، نام‌های غلط SCH-01 و نبود Sync برای شش موجودیت (API-32) نشان می‌دهد قرارداد هنوز قفل‌شدهٔ عملیاتی نیست.
+2. **برای فروش و تحلیل مالی، Header سفارش کافی نیست.** بدون `OprType` (API-26)، اقلام، پرداخت‌ها، تخفیف‌ها، پورسانت‌ها، وضعیت‌ها و روابط (API-25/27/28/29) و منطق قیمت (API-23)، هر عدد فروشی از API فعلی یا ناقص یا متورم است؛ تحلیل مالی MedPad تا رسیدن این قابلیت‌ها باید به «فاز پایهٔ CRM» محدود بماند.
+3. **برای انتساب نمایندگان، `cmpReferUserId` به‌تنهایی معادل سیستم کامل دسترسی Ideal نیست.** Ideal دید کاربر به مشتریان را با ۱۶ جدول Forbidden/JustAccess (API-11) و ساختار سمت/گروه/سرپرست (API-09/12) کنترل می‌کند؛ تصمیم «نمای سیستم یا نمای کاربر» یک تصمیم محصولی است و تا تعیین آن، هر گزارش «مشتریانِ نمایندهٔ X» بر مبنای `cmpReferUserId` فقط «مشتریانِ معرف‌شده توسط X» است، نه «قلمرو دید X».
+4. **PII باید پیش از مصرف MedPad بر اساس نیاز واقعی حداقل‌سازی شود.** فهرست واقعی افشا (بند‌های ۱۴.۴ و ۱۴.۵) بسیار فراتر از نیاز پایه است؛ حذف هر ستون PII تصمیم مالک داده/محصول است، نه اصلاح خودسرانهٔ فنی — و سند PII فعلی با کد به‌روز نیست (API-08) و نباید مبنای تصمیم باشد.
+5. **IdealBridge فعلی فقط-خواندنی باقی می‌ماند؛ این یافته‌ها مجوز فعال‌کردن Write یا اجرای SP نیستند.** در این فاز هیچ SP اجرا نشد و هیچ کوئری زنده‌ای انجام نشد؛ شواهد همگی از خواندن ایستای مخزن (SSDL/کاتالوگ SQL/سورس/اسناد) به دست آمده‌اند و سیاست فقط-SELECT (سند ۰۶ و Allowlist) دست‌نخورده است.
+6. **طراحی نهایی API باید میان سه لایه تفکیک ایجاد کند: «دادهٔ موجود در Ideal» (نقشهٔ دیتابیس)، «دادهٔ قابل دریافت از API فعلی» (این فاز) و «نیاز واقعی MedPad» (سند ۱۰).** جدول ۱۴.۱۰ همین شکاف سه‌لایه‌ای را ردیف‌به‌ردیف ثبت کرد؛ فاز اصلاح باید هر ردیف را یا در قرارداد برطرف کند یا در نیازمندی MedPad حذف/به‌تعویق بیندازد، و ردیف‌های P0 پیش از اتصال عملیاتی MedPad تعیین‌تکلیف شوند.
 
 ---
 
