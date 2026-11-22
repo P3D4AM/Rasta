@@ -52,7 +52,9 @@ jobs:
             git fetch origin main --depth=1 || true
             BASE="origin/main"
           fi
-          CHANGED=$(git diff --name-only "$BASE"...HEAD | grep -v '^ideal/مستندات ساخت API/IdealBridge/' | grep -v '^\.github/workflows/' || true)
+          # core.quotepath=off: مسیرهای یونیکد (فارسی) بدون quoting/octal-escape
+          # چاپ شوند تا الگوی grep بخش پایین بتواند آن‌ها را تطبیق دهد (رفع شکست run #21).
+          CHANGED=$(git -c core.quotepath=off diff --name-only "$BASE"...HEAD | grep -v '^ideal/مستندات ساخت API/IdealBridge/' | grep -v '^\.github/workflows/' || true)
           if [ -n "$CHANGED" ]; then
             echo "::error::تغییرات خارج از محدودهٔ مجاز شناسایی شد (فقط ideal/مستندات ساخت API/IdealBridge و .github/workflows مجاز است):"
             echo "$CHANGED"
